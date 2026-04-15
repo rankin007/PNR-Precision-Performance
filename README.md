@@ -34,6 +34,15 @@ The workspace has now been initiated locally:
 
 External services have not been connected yet. That step should only happen from brand-new project-specific accounts.
 
+## Deployment and Backend Readiness
+
+The repository now includes:
+
+- `supabase/config.toml` for local Supabase project scaffolding
+- `vercel.json` for Vercel project scaffolding
+- `/api/health` for deployment health checks
+- `/api/setup/status` for environment and integration readiness checks
+
 ## How this workspace is intended to work
 
 1. Business and website inputs are added into the repository over time.
