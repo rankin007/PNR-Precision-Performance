@@ -6,12 +6,13 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "db:bundle": "powershell -ExecutionPolicy Bypass -File scripts/export-supabase-bootstrap.ps1"
   },
   "dependencies": {
     "@supabase/ssr": "0.5.2",
     "@supabase/supabase-js": "2.49.8",
-    "next": "15.3.1",
+    "next": "15.3.8",
     "react": "19.1.0",
     "react-dom": "19.1.0"
   },

@@ -39,6 +39,7 @@ External services have not been connected yet. That step should only happen from
 The repository now includes:
 
 - `supabase/config.toml` for local Supabase project scaffolding
+- `npm run db:bundle` to generate a one-shot Supabase activation SQL file
 - `vercel.json` for Vercel project scaffolding
 - `/api/health` for deployment health checks
 - `/api/setup/status` for environment and integration readiness checks

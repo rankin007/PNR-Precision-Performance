@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import { createServerClient } from "@supabase/ssr";
 import { bootstrapAuthenticatedUser } from "@/lib/auth/bootstrap";
-import { createSupabaseServerClient } from "@/lib/supabase/server";
-import { hasSupabaseEnv } from "@/lib/supabase/env";
+import { hasSupabaseEnv, supabaseEnv } from "@/lib/supabase/env";
 
 export async function GET(request: NextRequest) {
   const requestUrl = new URL(request.url);
@@ -15,8 +15,23 @@ export async function GET(request: NextRequest) {
     );
   }
 
+  const redirectResponse = NextResponse.redirect(new URL(next, request.url));
+
   if (code) {
-    const supabase = await createSupabaseServerClient();
+    const supabase = createServerClient(supabaseEnv.url!, supabaseEnv.anonKey!, {
+      cookies: {
+        getAll() {
+          return request.cookies.getAll();
+        },
+        setAll(cookiesToSet) {
+          cookiesToSet.forEach(({ name, value, options }) => {
+            request.cookies.set(name, value);
+            redirectResponse.cookies.set(name, value, options);
+          });
+        },
+      },
+    });
+
     await supabase.auth.exchangeCodeForSession(code);
 
     const {
@@ -43,5 +58,5 @@ export async function GET(request: NextRequest) {
     }
   }
 
-  return NextResponse.redirect(new URL(next, request.url));
+  return redirectResponse;
 }

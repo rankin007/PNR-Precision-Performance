@@ -6,6 +6,7 @@ This document records the intended first connection path for the new Supabase pr
 
 - local Supabase config scaffold exists at `supabase/config.toml`
 - migrations are ready in `supabase/migrations/`
+- bundled activation SQL can be generated with `npm run db:bundle`
 - auth callback route exists at `/auth/callback`
 - setup verification endpoint exists at `/api/setup/status`
 - health endpoint exists at `/api/health`

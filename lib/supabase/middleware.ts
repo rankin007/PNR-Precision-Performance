@@ -26,14 +26,13 @@ export async function updateSupabaseSession(request: NextRequest) {
   });
 
   const {
-    data: { session },
-  } = await supabase.auth.getSession();
+    data: { user },
+  } = await supabase.auth.getUser();
 
   return {
     response,
-    session,
-    user: session?.user ?? null,
+    session: user ? { user } : null,
+    user: user ?? null,
     envReady: true,
   };
 }
-
