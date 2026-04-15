@@ -41,3 +41,5 @@ This document records the intended first connection path for the new Vercel proj
 - production should track `main`
 - preview deployments may later track pull requests or `develop`
 - keep this Vercel project isolated from all previous workspaces and accounts
+- current live alias is `https://pnr-precision-performance.vercel.app`
+- `precisionperformance.com.au` is already present on the Vercel team and should be assigned deliberately during domain cutover
