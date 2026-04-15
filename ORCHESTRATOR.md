@@ -256,6 +256,7 @@ Recommended documents to add next:
 - feature priorities
 - integration requirements
 - fresh-account launch sequence
+- branch strategy
 
 ## Decision Standard
 
