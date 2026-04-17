@@ -14,8 +14,44 @@ export type AppAuthContext = {
   permissionCodes: string[];
 };
 
+type MembershipLevelRow = {
+  membership_levels?: { code?: string | null } | Array<{ code?: string | null }> | null;
+};
+
+type PermissionMembershipLevel = {
+  membership_level_permissions?:
+    | Array<{
+        permissions?: { code?: string | null } | Array<{ code?: string | null }> | null;
+      }>
+    | null;
+};
+
+type PermissionRow = {
+  membership_levels?: PermissionMembershipLevel | Array<PermissionMembershipLevel> | null;
+};
+
 function uniqueStrings(values: Array<string | null | undefined>) {
   return [...new Set(values.filter((value): value is string => Boolean(value)))];
+}
+
+function pickFirstMembershipCodeValue(
+  value: { code?: string | null } | Array<{ code?: string | null }> | null | undefined,
+): { code?: string | null } | undefined {
+  if (Array.isArray(value)) {
+    return value[0];
+  }
+
+  return value ?? undefined;
+}
+
+function pickFirstMembershipLevel(
+  value: PermissionMembershipLevel | Array<PermissionMembershipLevel> | null | undefined,
+) {
+  if (Array.isArray(value)) {
+    return value[0];
+  }
+
+  return value ?? undefined;
 }
 
 export async function getAppAuthContext(): Promise<AppAuthContext> {
@@ -84,25 +120,27 @@ export async function getAppAuthContext(): Promise<AppAuthContext> {
         .from("user_membership_levels")
         .select("membership_levels(code)")
         .eq("user_id", appUserId)
-    : { data: [] as any[] };
+    : { data: [] as MembershipLevelRow[] };
 
   const { data: permissionRows } = appUserId
     ? await supabase
         .from("user_membership_levels")
         .select("membership_levels!inner(membership_level_permissions!inner(permissions!inner(code)))")
         .eq("user_id", appUserId)
-    : { data: [] as any[] };
+    : { data: [] as PermissionRow[] };
 
   const membershipLevelCodes = uniqueStrings(
-    (membershipRows ?? []).map((row: any) => row.membership_levels?.code),
+    (membershipRows ?? []).map((row) => pickFirstMembershipCodeValue(row.membership_levels)?.code),
   );
 
   const permissionCodes = uniqueStrings(
-    (permissionRows ?? []).flatMap((row: any) =>
-      ((row.membership_levels?.membership_level_permissions as any[]) ?? []).map(
-        (permissionRow: any) => permissionRow.permissions?.code,
-      ),
-    ),
+    (permissionRows ?? []).flatMap((row) => {
+      const membershipLevel = pickFirstMembershipLevel(row.membership_levels);
+
+      return (membershipLevel?.membership_level_permissions ?? []).map(
+        (permissionRow) => pickFirstMembershipCodeValue(permissionRow.permissions)?.code,
+      );
+    }),
   );
 
   return {

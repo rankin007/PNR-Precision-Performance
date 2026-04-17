@@ -75,17 +75,22 @@ export default async function ProductDetailPage({
   }
 
   const message = checkoutMessage(checkout, reason);
+  const commerceMode = !result.envReady
+    ? "Preview detail"
+    : result.product.checkoutReady
+      ? "Checkout live"
+      : "Checkout staging";
 
   return (
     <main className="section-wrap px-4 py-16 md:px-8">
       <SectionCard
         eyebrow="Product Detail"
         title={result.product.name}
-        description="This product page is now ready for direct Stripe checkout and future post-purchase fulfilment flows."
+        description="Use this page as the direct decision point for purchase, member sign-in, and the next fulfilment-ready commerce steps."
       >
         {!result.envReady ? (
           <div className="rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
-            Supabase is not configured yet, so fallback preview data is shown.
+            This product page is currently running in preview mode, so curated fallback product data is being shown while the live catalogue connection is still being completed.
           </div>
         ) : null}
         {loadError ? (
@@ -105,12 +110,57 @@ export default async function ProductDetailPage({
           </div>
         ) : null}
 
-        <div className="mt-8 grid gap-6 lg:grid-cols-[minmax(0,1fr)_320px]">
-          <div className="rounded-[2rem] border border-ink/10 bg-white p-6 shadow-panel">
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-ember">Overview</p>
-            <p className="mt-4 text-base leading-8 text-steel">
+        <div className="grid gap-4 lg:grid-cols-4">
+          <div className="rounded-[1.75rem] border border-ink/10 bg-sand p-5 lg:col-span-2">
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-ember">Product</p>
+            <p className="mt-4 font-display text-4xl text-ink">{result.product.name}</p>
+            <p className="mt-3 text-sm leading-7 text-steel">
               {result.product.description ?? "Awaiting product description."}
             </p>
+          </div>
+          <div className="rounded-[1.75rem] border border-ink/10 bg-sand p-5">
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-ember">Price</p>
+            <p className="mt-4 font-display text-4xl text-ink">{result.product.priceLabel}</p>
+            <p className="mt-3 text-sm leading-7 text-steel">Currency: {result.product.currencyCode}</p>
+          </div>
+          <div className="rounded-[1.75rem] border border-ink/10 bg-sand p-5">
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-ember">Checkout</p>
+            <p className="mt-4 text-sm font-semibold text-ink">
+              {result.product.checkoutReady ? "Ready to launch" : "Waiting on setup"}
+            </p>
+            <p className="mt-3 text-sm leading-7 text-steel">
+              {result.product.checkoutReady
+                ? "Stripe can start a payment session for this product."
+                : "Checkout will activate once platform keys and persistence are fully ready."}
+            </p>
+          </div>
+          <div className="rounded-[1.75rem] border border-ink/10 bg-sand p-5">
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-ember">Commerce mode</p>
+            <p className="mt-4 text-sm font-semibold uppercase tracking-[0.14em] text-ink">{commerceMode}</p>
+            <p className="mt-3 text-sm leading-7 text-steel">
+              {!result.envReady
+                ? "This route is presentation-ready for review before the live catalogue and order persistence path is fully connected."
+                : result.product.checkoutReady
+                  ? "This product can move directly from detail page to checkout."
+                  : "This offer is visible, but checkout still depends on setup completion."}
+            </p>
+          </div>
+        </div>
+
+        <div className="mt-8 grid gap-6 lg:grid-cols-[minmax(0,1fr)_340px]">
+          <div className="rounded-[2rem] border border-ink/10 bg-white p-6 shadow-panel">
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-ember">Offer Summary</p>
+            <div className="mt-4 grid gap-4 text-sm leading-7 text-steel">
+              <p className="rounded-2xl border border-ink/10 bg-sand px-4 py-4">
+                This page is positioned as the direct handoff from product discovery to purchase intent.
+              </p>
+              <p className="rounded-2xl border border-ink/10 bg-sand px-4 py-4">
+                It supports both preview catalogue review and live Supabase-backed product records without changing the route structure.
+              </p>
+              <p className="rounded-2xl border border-ink/10 bg-sand px-4 py-4">
+                The next fulfilment layer can plug in after checkout confirmation and webhook processing.
+              </p>
+            </div>
           </div>
 
           <div className="rounded-[2rem] border border-ink/10 bg-sand p-6">

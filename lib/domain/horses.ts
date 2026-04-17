@@ -22,6 +22,18 @@ export type HorseDetail = HorseSummary & {
   }>;
 };
 
+type HorseSummaryRow = {
+  id: string;
+  name: string;
+  status: string | null;
+  stables?: { name?: string | null } | Array<{ name?: string | null }> | null;
+};
+
+type HorseTimelineRow = {
+  record_date: string;
+  notes: string | null;
+};
+
 const fallbackHorses: HorseSummary[] = [
   {
     id: "sample-horse-1",
@@ -115,7 +127,7 @@ export async function getAccessibleHorseSummaries() {
   return {
     envReady: true,
     horses:
-      data?.map((horse: any) => ({
+      (data as HorseSummaryRow[] | null)?.map((horse) => ({
         id: horse.id,
         name: horse.name,
         status: horse.status ?? null,
@@ -203,7 +215,7 @@ export async function getAccessibleHorseDetail(horseId: string) {
   ].filter((metric): metric is { label: string; value: string } => Boolean(metric));
 
   const recentTimeline =
-    dailyRecords?.map((record: any) => ({
+    (dailyRecords as HorseTimelineRow[] | null)?.map((record) => ({
       date: record.record_date,
       summary: record.notes || "Daily record captured.",
     })) ?? [];

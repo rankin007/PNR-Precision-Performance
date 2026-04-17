@@ -1,24 +1,24 @@
 const pillars = [
   {
-    title: "Structured Horse Data",
+    title: "Horse Performance Data",
     description: "Capture racehorse performance, physiology, and operational records in a database-backed workflow.",
   },
   {
-    title: "Permission-Aware Membership",
+    title: "Member Access Control",
     description: "Support owners, trainers, staff, and administrators with role-aware visibility and control.",
   },
   {
     title: "Commerce And Growth",
-    description: "Prepare the public site for products, paid tiers, and future hybrid revenue models.",
+    description: "Present products, member offers, and future hybrid revenue paths through a connected storefront.",
   },
 ];
 
 export function PlatformPillars() {
   return (
-    <section className="px-4 py-8 md:px-8 md:py-14">
+    <section id="capabilities" className="px-4 py-8 md:px-8 md:py-14">
       <div className="section-wrap">
         <div className="rounded-[2rem] border border-ink/10 bg-white/85 p-8 shadow-panel">
-          <span className="eyebrow">Platform Pillars</span>
+          <span className="eyebrow">Platform Capabilities</span>
           <div className="mt-6 grid gap-4 lg:grid-cols-3">
             {pillars.map((pillar) => (
               <div key={pillar.title} className="rounded-[1.75rem] border border-ink/10 bg-sand p-6">
@@ -32,4 +32,3 @@ export function PlatformPillars() {
     </section>
   );
 }
-

@@ -22,7 +22,7 @@ export function AppShell({
   children,
 }: AppShellProps) {
   return (
-    <div className="min-h-screen bg-[linear-gradient(180deg,#f8f3eb_0%,#f1ede5_100%)]">
+    <div className="min-h-screen bg-[linear-gradient(180deg,#eef8ef_0%,#dcefdc_100%)]">
       <div className="section-wrap grid min-h-screen gap-6 px-4 py-6 md:grid-cols-[260px_minmax(0,1fr)] md:px-8">
         <aside className="rounded-[2rem] border border-ink/10 bg-[#18212b] p-6 text-white shadow-panel">
           <div className="space-y-4">
@@ -55,7 +55,7 @@ export function AppShell({
                 <h2 className="mt-2 font-display text-3xl text-ink">{area}</h2>
                 <p className="mt-2 text-sm leading-7 text-steel">
                   {memberDisplayName
-                    ? `Signed in as ${memberDisplayName}${userEmail ? ` · ${userEmail}` : ""}`
+                    ? `Signed in as ${memberDisplayName}${userEmail ? ` / ${userEmail}` : ""}`
                     : userEmail
                       ? `Signed in as ${userEmail}`
                       : "Awaiting live Supabase session"}

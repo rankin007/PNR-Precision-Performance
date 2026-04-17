@@ -18,6 +18,16 @@ export type ProductDetail = ProductSummary & {
   status: string;
 };
 
+type ProductRow = {
+  id: string;
+  name: string;
+  slug: string;
+  description: string | null;
+  price_amount: number | string | null;
+  currency_code: string | null;
+  status?: string | null;
+};
+
 const fallbackProducts: ProductSummary[] = [
   {
     id: "product-1",
@@ -45,11 +55,23 @@ const fallbackProducts: ProductSummary[] = [
   },
 ];
 
-function formatPriceLabel(currencyCode: string | null | undefined, priceAmount: number | null | undefined) {
+function formatPriceLabel(
+  currencyCode: string | null | undefined,
+  priceAmount: number | string | null | undefined,
+) {
   const amount = typeof priceAmount === "number" ? priceAmount : Number(priceAmount ?? 0);
   const currency = currencyCode ?? "AUD";
+  const normalizedAmount = Number.isFinite(amount) ? amount : 0;
 
-  return `${currency} ${amount}`;
+  try {
+    return new Intl.NumberFormat("en-AU", {
+      style: "currency",
+      currency,
+      maximumFractionDigits: normalizedAmount % 1 === 0 ? 0 : 2,
+    }).format(normalizedAmount);
+  } catch {
+    return `${currency} ${normalizedAmount}`;
+  }
 }
 
 export async function getPublicProductSummaries() {
@@ -83,7 +105,7 @@ export async function getPublicProductSummaries() {
   return {
     envReady: true,
     products:
-      data?.map((product: any) => ({
+      (data as ProductRow[] | null)?.map((product) => ({
         id: product.id,
         name: product.name,
         slug: product.slug,

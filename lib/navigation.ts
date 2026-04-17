@@ -29,6 +29,16 @@ export const adminNavigation: NavigationItem[] = [
     description: "Membership, permissions, and operations control.",
   },
   {
+    href: "/admin/setup",
+    label: "Setup",
+    description: "Environment and integration readiness.",
+  },
+  {
+    href: "/admin/commerce",
+    label: "Commerce",
+    description: "Orders, payments, and checkout activity.",
+  },
+  {
     href: "/admin/memberships",
     label: "Memberships",
     description: "Level setup and assignment controls.",

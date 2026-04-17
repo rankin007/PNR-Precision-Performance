@@ -8,6 +8,23 @@ type AuthUserBootstrapInput = {
   lastName?: string | null;
 };
 
+type AdminProfileRow = {
+  user_id: string;
+  display_name: string | null;
+  organisation_name: string | null;
+};
+
+type AdminUserMembershipRow = {
+  user_id: string;
+  membership_levels?: { code?: string | null } | Array<{ code?: string | null }> | null;
+};
+
+type AdminUserRow = {
+  id: string;
+  email: string;
+  status: string;
+};
+
 export async function bootstrapAuthenticatedUser(input: AuthUserBootstrapInput) {
   if (!hasSupabaseAdminEnv()) {
     return {
@@ -191,7 +208,7 @@ export async function getAdminUserSnapshot() {
   ]);
 
   const profileByUserId = new Map(
-    (profiles ?? []).map((profile: any) => [
+    ((profiles ?? []) as AdminProfileRow[]).map((profile) => [
       profile.user_id,
       {
         displayName: profile.display_name ?? null,
@@ -204,7 +221,7 @@ export async function getAdminUserSnapshot() {
 
   for (const row of userMemberships ?? []) {
     const existing = membershipLevelsByUserId.get(row.user_id) ?? [];
-    const membershipLevels = row.membership_levels as any;
+    const membershipLevels = (row as AdminUserMembershipRow).membership_levels;
     const nextCode = Array.isArray(membershipLevels)
       ? membershipLevels[0]?.code
       : membershipLevels?.code;
@@ -218,7 +235,7 @@ export async function getAdminUserSnapshot() {
 
   return {
     envReady: true,
-    users: (users ?? []).map((user: any) => {
+    users: ((users ?? []) as AdminUserRow[]).map((user) => {
       const profile = profileByUserId.get(user.id);
 
       return {

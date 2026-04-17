@@ -3,7 +3,7 @@ import { createServerClient } from "@supabase/ssr";
 import { hasSupabaseEnv, supabaseEnv } from "@/lib/supabase/env";
 
 export async function updateSupabaseSession(request: NextRequest) {
-  let response = NextResponse.next({
+  const response = NextResponse.next({
     request,
   });
 

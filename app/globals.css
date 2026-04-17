@@ -11,6 +11,8 @@
   --color-ember: #b45a3c;
   --color-mist: #e5ebf2;
   --color-white: #ffffff;
+  --color-canvas-top: #eef8ef;
+  --color-canvas-bottom: #dcefdc;
   --site-max-width: 1200px;
   --section-padding: clamp(4rem, 7vw, 7rem);
 }
@@ -27,8 +29,8 @@ body {
   margin: 0;
   min-width: 320px;
   background:
-    radial-gradient(circle at top, rgba(180, 90, 60, 0.1), transparent 24%),
-    linear-gradient(180deg, #fcfaf7 0%, #f4efe7 100%);
+    radial-gradient(circle at top, rgba(120, 164, 122, 0.16), transparent 24%),
+    linear-gradient(180deg, var(--color-canvas-top) 0%, var(--color-canvas-bottom) 100%);
   color: var(--color-ink);
   font-family: var(--font-sans), sans-serif;
   text-rendering: optimizeLegibility;
@@ -87,4 +89,3 @@ img {
 .balanced-text {
   text-wrap: balance;
 }
-

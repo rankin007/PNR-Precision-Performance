@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import type Stripe from "stripe";
 import { createPendingOrderForCheckout, attachCheckoutSessionToOrder, markOrderCheckoutFailed, resolveCheckoutUserContext } from "@/lib/stripe/commerce";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { hasSupabaseEnv } from "@/lib/supabase/env";

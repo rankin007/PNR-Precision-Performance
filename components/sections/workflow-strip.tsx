@@ -1,8 +1,8 @@
 const steps = [
-  "Inputs land in structured content folders",
-  "The orchestrator assigns the correct product or platform workstream",
-  "Existing agents are selected or new ones are defined",
-  "Architecture, data, and frontend decisions stay aligned to one source of truth",
+  "Operational data moves into structured portal and ops workflows",
+  "Authenticated members land in permission-aware views",
+  "Administration controls access levels and user assignments",
+  "Commerce, reporting, and integrations stay aligned through one platform",
 ];
 
 export function WorkflowStrip() {
@@ -14,7 +14,7 @@ export function WorkflowStrip() {
             <div className="max-w-xl">
               <span className="eyebrow">Operational Flow</span>
               <h2 className="mt-5 font-display text-3xl text-ink md:text-4xl">
-                The workspace is prepared for platform delivery, not just a one-off marketing site.
+                One platform can now support the public site, member experience, operations, and administration.
               </h2>
             </div>
             <div className="grid gap-3 md:max-w-xl">
