@@ -40,7 +40,7 @@ The platform is expected to support:
 
 ## External Account Rule
 
-All external platforms for this project must be created and used from brand-new, project-specific accounts.
+Core platform infrastructure for this project should be created and used from brand-new, project-specific accounts.
 
 This applies to:
 
@@ -48,9 +48,9 @@ This applies to:
 - Vercel
 - Railway
 - Supabase
-- Stripe
+- Stripe, unless the Stripe account belongs to the website owner and is the intended business account for this platform
 
-Do not connect, reuse, import, or reference accounts, projects, environments, credentials, deployments, or configurations from any previous workspace or past project.
+Do not connect, reuse, import, or reference accounts, projects, environments, credentials, deployments, or configurations from any previous workspace or past project, except for the approved Stripe-owner exception above.
 
 ## Workflow
 

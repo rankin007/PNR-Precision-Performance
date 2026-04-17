@@ -32,7 +32,7 @@ The workspace has now been initiated locally:
 - environment contract expanded in `.env.example`
 - fresh-account launch sequence documented in `content/requirements/fresh-account-launch-sequence.md`
 
-External services have not been connected yet. That step should only happen from brand-new project-specific accounts.
+External services have not been connected yet. Core infrastructure should come from brand-new project-specific accounts, with Stripe allowed to use the website owner's existing business account when intentionally approved.
 
 ## Deployment and Backend Readiness
 
@@ -43,6 +43,7 @@ The repository now includes:
 - `vercel.json` for Vercel project scaffolding
 - `/api/health` for deployment health checks
 - `/api/setup/status` for environment and integration readiness checks
+- initial Stripe checkout scaffolding through `/api/checkout` and `/api/stripe/webhook`
 
 ## How this workspace is intended to work
 

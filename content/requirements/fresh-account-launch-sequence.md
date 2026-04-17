@@ -1,11 +1,12 @@
 # Fresh Account Launch Sequence
 
-This document defines the exact order for bringing the platform online using brand-new project-specific accounts only.
+This document defines the exact order for bringing the platform online using brand-new project-specific infrastructure, with Stripe allowed to use the website owner's existing business account when approved for this platform.
 
 ## Non-Negotiable Rule
 
-- GitHub, Vercel, Supabase, Railway, and Stripe must each be created fresh for this project.
-- Do not reuse prior repositories, tokens, webhooks, databases, projects, or billing integrations from any earlier workspace or business.
+- GitHub, Vercel, Supabase, and Railway must each be created fresh for this project.
+- Stripe may use the website owner's existing Stripe account when that account is the intended business owner account for this website.
+- Do not reuse prior repositories, tokens, webhooks, databases, or projects from any earlier workspace or unrelated business.
 
 ## Local Repository First
 
@@ -41,7 +42,7 @@ This document defines the exact order for bringing the platform online using bra
 - Do not duplicate frontend deployment concerns that already belong to Vercel.
 
 5. Stripe
-- Create a brand-new Stripe account.
+- Use the website owner's approved Stripe account for this business.
 - Start in test mode.
 - Create products and prices only after the commercial model is finalized in live detail.
 - Configure webhook endpoints after Vercel preview or production URLs exist.
