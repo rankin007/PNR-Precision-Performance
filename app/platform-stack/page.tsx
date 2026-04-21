@@ -12,7 +12,7 @@ export default function PlatformStackPage() {
       >
         <div className="overflow-hidden rounded-[1.75rem] border border-ink/10 bg-[#11211a] shadow-panel">
           <Image
-            src="/phone app.jpg"
+            src="/phone-app.jpg"
             alt="Precision Performance phone app preview"
             width={1200}
             height={1600}

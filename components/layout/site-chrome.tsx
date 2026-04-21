@@ -10,6 +10,7 @@ type SiteChromeProps = {
 
 const publicNavigation = [
   { href: "/", label: "Home" },
+  { href: "/platform-stack", label: "Platform Stack" },
   { href: "/shop", label: "Shop" },
   { href: "/member-experience", label: "Member Experience" },
   { href: "/contact", label: "Contact" },
