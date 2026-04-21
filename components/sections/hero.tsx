@@ -19,13 +19,16 @@ export function Hero() {
             </div>
 
             <div className="grid gap-4 self-end">
-              <div className="rounded-[1.5rem] bg-[#1d2732] p-6 text-white">
+              <Link
+                href="/platform-stack"
+                className="rounded-[1.5rem] bg-[#1d2732] p-6 text-white transition hover:bg-[#243140]"
+              >
                 <p className="text-sm uppercase tracking-[0.2em] text-white/60">Platform Stack</p>
                 <p className="mt-4 text-2xl font-semibold">Next.js, Supabase, Railway</p>
                 <p className="mt-2 text-sm leading-7 text-white/75">
                   Built for public web experiences, authenticated portals, and data-backed operational workflows.
                 </p>
-              </div>
+              </Link>
               <Link
                 href="/member-experience"
                 className="rounded-[1.5rem] border border-ink/10 bg-[#f7f2ea] p-6 transition hover:border-ink/20 hover:bg-[#f2ebdf]"
