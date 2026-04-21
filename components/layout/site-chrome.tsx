@@ -106,7 +106,12 @@ export function SiteChrome({ children }: SiteChromeProps) {
             </div>
           </div>
 
-          <form className="rounded-[2rem] border border-white/10 bg-white/5 p-6 backdrop-blur-sm">
+          <form
+            action="mailto:philliprankin007@gmail.com"
+            method="post"
+            encType="text/plain"
+            className="rounded-[2rem] border border-white/10 bg-white/5 p-6 backdrop-blur-sm"
+          >
             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#d88b70]">Email Enquiry</p>
             <div className="mt-5 grid gap-4 md:grid-cols-2">
               <label className="grid gap-2 text-sm text-white/80">
@@ -145,6 +150,20 @@ export function SiteChrome({ children }: SiteChromeProps) {
                   placeholder="Tell us a little about your enquiry"
                 />
               </label>
+            </div>
+            <div className="mt-5 flex flex-wrap gap-3">
+              <button
+                type="submit"
+                className="rounded-full bg-white px-5 py-3 text-sm font-semibold text-[#18212b] transition hover:bg-white/90"
+              >
+                Submit
+              </button>
+              <Link
+                href="/"
+                className="rounded-full border border-white/20 bg-transparent px-5 py-3 text-sm font-semibold text-white transition hover:border-white/40"
+              >
+                Return to Home page
+              </Link>
             </div>
           </form>
         </div>

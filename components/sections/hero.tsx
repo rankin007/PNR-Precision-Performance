@@ -23,10 +23,10 @@ export function Hero() {
                 href="/platform-stack"
                 className="rounded-[1.5rem] bg-[#1d2732] p-6 text-white transition hover:bg-[#243140]"
               >
-                <p className="text-sm uppercase tracking-[0.2em] text-white/60">Platform Stack</p>
-                <p className="mt-4 text-2xl font-semibold">Next.js, Supabase, Railway</p>
+                <p className="text-sm uppercase tracking-[0.2em] text-white/60">Phone App Preview</p>
+                <p className="mt-4 text-2xl font-semibold">Unlock Elite Performance through Precison Analysis</p>
                 <p className="mt-2 text-sm leading-7 text-white/75">
-                  Built for public web experiences, authenticated portals, and data-backed operational workflows.
+                  Phone App Preview
                 </p>
               </Link>
               <Link

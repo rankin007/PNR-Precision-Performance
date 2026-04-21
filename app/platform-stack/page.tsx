@@ -6,7 +6,7 @@ export default function PlatformStackPage() {
   return (
     <main className="section-wrap px-4 py-16 md:px-8">
       <SectionCard
-        eyebrow="Platform Stack"
+        eyebrow=""
         title="Phone App Preview"
         description="A visual preview of the mobile app experience connected to the wider Precision Performance platform."
       >
