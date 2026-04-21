@@ -28,7 +28,7 @@ const getTransporter = () => {
   });
 };
 
-const sendHtmlEmail = async (to: string, subject: string, html: string) => {
+const sendHtmlEmail = async (to: string, subject: string, html: string, replyTo?: string) => {
   const transporter = getTransporter();
   const fromAddress = process.env.SMTP_FROM || "noreply@precisionperformance.com.au";
 
@@ -45,7 +45,15 @@ const sendHtmlEmail = async (to: string, subject: string, html: string) => {
     to,
     subject,
     html,
+    replyTo,
   });
+};
+
+type ContactEnquiry = {
+  name: string;
+  email: string;
+  mobile: string;
+  comments: string;
 };
 
 export async function sendApplicantConfirmationEmail(application: OnboardingApplication) {
@@ -106,6 +114,32 @@ export async function sendAdminNotificationEmail(application: OnboardingApplicat
   `;
 
   await sendHtmlEmail(adminNotificationEmail, `New Client Application: ${application.client_name}`, html);
+}
+
+export async function sendContactEnquiryEmail(enquiry: ContactEnquiry) {
+  const enquiryRecipient = process.env.CONTACT_ENQUIRY_EMAIL || process.env.ADMIN_NOTIFICATION_EMAIL;
+
+  if (!enquiryRecipient) {
+    throw new Error("CONTACT_ENQUIRY_EMAIL or ADMIN_NOTIFICATION_EMAIL must be configured.");
+  }
+
+  const html = `
+    <h2>New Website Enquiry</h2>
+    <p>A new enquiry has been submitted through the contact page.</p>
+    <ul>
+      <li><strong>Name:</strong> ${escapeHtml(enquiry.name)}</li>
+      <li><strong>Email:</strong> ${escapeHtml(enquiry.email)}</li>
+      <li><strong>Mobile:</strong> ${escapeHtml(enquiry.mobile)}</li>
+      <li><strong>Comments:</strong> ${escapeHtml(enquiry.comments || "No comments provided")}</li>
+    </ul>
+  `;
+
+  await sendHtmlEmail(
+    enquiryRecipient,
+    `Website Enquiry: ${enquiry.name}`,
+    html,
+    enquiry.email
+  );
 }
 
 function escapeHtml(unsafe: string) {
