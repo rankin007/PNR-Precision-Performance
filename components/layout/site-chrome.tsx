@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { siteConfig } from "@/lib/site-config";
 
 type SiteChromeProps = {
   children: React.ReactNode;
@@ -14,25 +13,6 @@ const publicNavigation = [
   { href: "/shop", label: "Shop" },
   { href: "/member-experience", label: "Member Experience" },
   { href: "/contact", label: "Contact" },
-];
-
-const footerGroups = [
-  {
-    heading: "Platform",
-    links: [
-      { href: "/portal", label: "Portal" },
-      { href: "/admin", label: "Admin" },
-      { href: "/data-entry", label: "Data Entry" },
-    ],
-  },
-  {
-    heading: "Public Routes",
-    links: [
-      { href: "/shop", label: "Product Catalogue" },
-      { href: "/onboarding", label: "Client Onboarding" },
-      { href: "/sign-in", label: "Sign In" },
-    ],
-  },
 ];
 
 function isProtectedPath(pathname: string) {
@@ -107,31 +87,66 @@ export function SiteChrome({ children }: SiteChromeProps) {
       {children}
 
       <footer className="mt-16 border-t border-ink/10 bg-[#18212b] text-white">
-        <div className="section-wrap grid gap-8 px-4 py-12 md:px-8 lg:grid-cols-[1.2fr_0.8fr_0.8fr]">
+        <div className="section-wrap grid gap-8 px-4 py-12 md:px-8 lg:grid-cols-[1.05fr_0.95fr]">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#d88b70]">Website Footer</p>
-            <h2 className="mt-3 font-display text-3xl">{siteConfig.name}</h2>
+            <h2 className="font-display text-3xl">Precision Performance</h2>
             <p className="mt-4 max-w-xl text-sm leading-7 text-white/70">
-              Racehorse performance, member access, operations, and commerce in one structured platform environment.
+              A world first in understanding accurate Performance and Recovery of Elite Equine Athletes
             </p>
+            <div className="mt-6 space-y-2 text-sm leading-7 text-white/80">
+              <p>Contact: Phillip Rankin, Founder: 044 888 3838</p>
+              <p>
+                <a
+                  href="mailto:phillip@balanceenergyaustralia.com"
+                  className="transition hover:text-white"
+                >
+                  phillip@balanceenergyaustralia.com
+                </a>
+              </p>
+            </div>
           </div>
 
-          {footerGroups.map((group) => (
-            <div key={group.heading}>
-              <h3 className="text-sm font-semibold uppercase tracking-[0.18em] text-white/80">{group.heading}</h3>
-              <div className="mt-4 grid gap-3">
-                {group.links.map((link) => (
-                  <Link
-                    key={link.href}
-                    href={link.href}
-                    className="text-sm text-white/70 transition hover:text-white"
-                  >
-                    {link.label}
-                  </Link>
-                ))}
-              </div>
+          <form className="rounded-[2rem] border border-white/10 bg-white/5 p-6 backdrop-blur-sm">
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#d88b70]">Email Enquiry</p>
+            <div className="mt-5 grid gap-4 md:grid-cols-2">
+              <label className="grid gap-2 text-sm text-white/80">
+                <span className="font-semibold uppercase tracking-[0.12em]">Name</span>
+                <input
+                  type="text"
+                  name="name"
+                  className="rounded-2xl border border-white/10 bg-white/10 px-4 py-3 text-white placeholder:text-white/35 focus:border-white/30 focus:outline-none"
+                  placeholder="Your name"
+                />
+              </label>
+              <label className="grid gap-2 text-sm text-white/80">
+                <span className="font-semibold uppercase tracking-[0.12em]">Email</span>
+                <input
+                  type="email"
+                  name="email"
+                  className="rounded-2xl border border-white/10 bg-white/10 px-4 py-3 text-white placeholder:text-white/35 focus:border-white/30 focus:outline-none"
+                  placeholder="Your email"
+                />
+              </label>
+              <label className="grid gap-2 text-sm text-white/80 md:col-span-2">
+                <span className="font-semibold uppercase tracking-[0.12em]">Mobile</span>
+                <input
+                  type="tel"
+                  name="mobile"
+                  className="rounded-2xl border border-white/10 bg-white/10 px-4 py-3 text-white placeholder:text-white/35 focus:border-white/30 focus:outline-none"
+                  placeholder="Your mobile number"
+                />
+              </label>
+              <label className="grid gap-2 text-sm text-white/80 md:col-span-2">
+                <span className="font-semibold uppercase tracking-[0.12em]">Comments</span>
+                <textarea
+                  name="comments"
+                  rows={5}
+                  className="rounded-2xl border border-white/10 bg-white/10 px-4 py-3 text-white placeholder:text-white/35 focus:border-white/30 focus:outline-none"
+                  placeholder="Tell us a little about your enquiry"
+                />
+              </label>
             </div>
-          ))}
+          </form>
         </div>
       </footer>
     </div>
