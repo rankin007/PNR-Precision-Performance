@@ -55,9 +55,16 @@ export function SiteChrome({ children }: SiteChromeProps) {
     <div className="min-h-screen">
       <header className="border-b border-ink/10 bg-white/80 backdrop-blur">
         <div className="section-wrap flex flex-col gap-4 px-4 py-4 md:px-8 lg:flex-row lg:items-center lg:justify-between">
-          <Link href="/" className="max-w-[18rem]">
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-ember">Precision Performance</p>
-            <h1 className="mt-2 font-display text-2xl leading-tight text-ink">{siteConfig.name}</h1>
+          <Link href="/" className="max-w-[34rem]">
+            <h1 className="font-display text-4xl leading-none text-black md:text-5xl">
+              PRECISION PERFORMANCE
+            </h1>
+            <p className="mt-3 text-sm font-semibold uppercase tracking-[0.14em] text-black md:text-base">
+              Biochemistry Analysis for Elite Equine
+            </p>
+            <p className="mt-2 max-w-2xl text-sm leading-6 text-black/80 md:text-base">
+              An advanced Urine and Saliva Analysis to optimize Equine Performance and Recovery.
+            </p>
           </Link>
 
           <nav className="flex flex-wrap gap-2">

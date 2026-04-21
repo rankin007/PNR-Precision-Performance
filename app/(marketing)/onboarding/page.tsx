@@ -1,5 +1,7 @@
 "use client";
 
+import Image from "next/image";
+import Link from "next/link";
 import { useState } from "react";
 import { submitOnboardingForm } from "./actions";
 import { SectionCard } from "@/components/layout/section-card";
@@ -30,18 +32,38 @@ export default function OnboardingPage() {
     <main className="section-wrap px-4 py-16 md:px-8">
       <SectionCard
         eyebrow="Apply Now"
-        title="Client Onboarding Application"
+        title="Onboarding Application"
         description="Join Precision Performance. Complete the form below to begin tracking elite equine metrics with an unparalleled degree of detail."
       >
         {status === "success" ? (
-          <div className="rounded-2xl border border-ink/10 bg-sand p-8 text-center text-ink">
+          <div className="overflow-hidden rounded-[2rem] border border-ink/10 bg-sand text-center text-ink shadow-panel">
+            <div className="overflow-hidden border-b border-ink/10 bg-[#11211a]">
+              <Image
+                src="/Horse barrier images.jfif"
+                alt="Horse barrier banner"
+                width={1600}
+                height={900}
+                className="h-64 w-full object-cover"
+                priority
+              />
+            </div>
+            <div className="p-8">
               <h2 className="mb-4 font-display text-2xl">Application Received</h2>
               <p className="text-steel">
                 Thank you for your application. We&apos;ve sent a verification email to your direct email address.
-              <br />
-              <br />
-              <strong>Please check your inbox</strong> and click the link to confirm your application and agree to the clinical disclaimer.
-            </p>
+                <br />
+                <br />
+                <strong>Please check your inbox</strong> and click the link to confirm your application and agree to the clinical disclaimer.
+              </p>
+              <div className="mt-8 flex justify-center">
+                <Link
+                  href="/"
+                  className="rounded-full bg-ink px-5 py-3 text-sm font-semibold text-white transition hover:bg-ink/90"
+                >
+                  Return to Home Page
+                </Link>
+              </div>
+            </div>
           </div>
         ) : (
           <form action={handleSubmit} className="mx-auto max-w-xl space-y-5">
