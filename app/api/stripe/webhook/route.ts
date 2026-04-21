@@ -78,7 +78,6 @@ export async function POST(request: NextRequest) {
       message: readErrorMessage(error),
       signaturePresent: Boolean(signature),
       payloadLength: payload.length,
-      secretPrefix: stripeEnv.webhookSecret?.slice(0, 12) ?? null,
       error,
     });
 

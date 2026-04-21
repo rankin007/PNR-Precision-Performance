@@ -35,9 +35,9 @@ export default function OnboardingPage() {
       >
         {status === "success" ? (
           <div className="rounded-2xl border border-ink/10 bg-sand p-8 text-center text-ink">
-            <h2 className="mb-4 font-display text-2xl">Application Received</h2>
-            <p className="text-steel">
-              Thank you for your application. We've sent a verification email to your direct email address.
+              <h2 className="mb-4 font-display text-2xl">Application Received</h2>
+              <p className="text-steel">
+                Thank you for your application. We&apos;ve sent a verification email to your direct email address.
               <br />
               <br />
               <strong>Please check your inbox</strong> and click the link to confirm your application and agree to the clinical disclaimer.

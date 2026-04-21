@@ -6,7 +6,22 @@ import {
   sendAdminNotificationEmail 
 } from "@/lib/email/service";
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
+
+function readErrorMessage(error: unknown) {
+  if (error && typeof error === "object" && "message" in error) {
+    const message = (error as { message?: unknown }).message;
+
+    if (typeof message === "string" && message.trim()) {
+      return message;
+    }
+  }
+
+  if (typeof error === "string" && error.trim()) {
+    return error;
+  }
+
+  return "Unknown error";
+}
 
 export async function submitOnboardingForm(formData: FormData) {
   const clientName = formData.get("clientName") as string;
@@ -25,8 +40,8 @@ export async function submitOnboardingForm(formData: FormData) {
   let supabase;
   try {
     supabase = await createSupabaseAdminClient();
-  } catch (err: any) {
-    console.error("Local configuration missing:", err.message);
+  } catch (error) {
+    console.error("Local configuration missing:", readErrorMessage(error));
     return { error: "Local Database is not configured yet. Missing SUPABASE_SERVICE_ROLE_KEY." };
   }
 
@@ -72,8 +87,8 @@ export async function confirmOnboardingApplication(token: string) {
   let supabase;
   try {
     supabase = await createSupabaseAdminClient();
-  } catch (err: any) {
-    console.error("Local configuration missing:", err.message);
+  } catch (error) {
+    console.error("Local configuration missing:", readErrorMessage(error));
     return { error: "Local Database is not configured yet. Missing SUPABASE_SERVICE_ROLE_KEY." };
   }
 

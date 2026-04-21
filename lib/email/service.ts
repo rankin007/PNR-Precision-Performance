@@ -30,7 +30,7 @@ const getTransporter = () => {
 
 const sendHtmlEmail = async (to: string, subject: string, html: string) => {
   const transporter = getTransporter();
-  const fromAddress = process.env.SMTP_FROM || 'noreply@precisionperformance.com.au';
+  const fromAddress = process.env.SMTP_FROM || "noreply@precisionperformance.com.au";
 
   if (!transporter) {
     console.log(`\n\n--- MOCK EMAIL TO: ${to} ---`);
@@ -84,6 +84,13 @@ export async function sendApplicantConfirmationEmail(application: OnboardingAppl
 }
 
 export async function sendAdminNotificationEmail(application: OnboardingApplication) {
+  const adminNotificationEmail = process.env.ADMIN_NOTIFICATION_EMAIL;
+
+  if (!adminNotificationEmail) {
+    console.warn("ADMIN_NOTIFICATION_EMAIL is not configured. Admin onboarding notifications will be skipped.");
+    return;
+  }
+
   const html = `
     <h2>New Onboarding Application Received</h2>
     <p>A new client has submitted the onboarding form.</p>
@@ -98,7 +105,7 @@ export async function sendAdminNotificationEmail(application: OnboardingApplicat
     <p>Status: Application recorded and verification email sent.</p>
   `;
 
-  await sendHtmlEmail("phillip@balanceenergyaustralia.com", "New Client Application: " + application.client_name, html);
+  await sendHtmlEmail(adminNotificationEmail, `New Client Application: ${application.client_name}`, html);
 }
 
 function escapeHtml(unsafe: string) {
