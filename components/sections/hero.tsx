@@ -36,6 +36,12 @@ export function Hero() {
                   The platform is designed to support role-aware access, horse visibility, and future reporting growth.
                 </p>
               </Link>
+              <Link
+                href="/onboarding"
+                className="flex items-center justify-center rounded-[1.5rem] bg-ember px-6 py-4 text-sm font-semibold text-white shadow-lg shadow-ember/25 transition hover:bg-[#a14e30]"
+              >
+                Let&apos;s Get Started
+              </Link>
             </div>
           </div>
         </div>

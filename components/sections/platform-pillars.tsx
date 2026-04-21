@@ -1,14 +1,17 @@
 const pillars = [
   {
     title: "Horse Performance Data",
+    subtitle: null,
     description: "Capture racehorse performance, physiology, and operational records in a database-backed workflow.",
   },
   {
-    title: "Member Access Control",
-    description: "Support owners, trainers, staff, and administrators with role-aware visibility and control.",
+    title: "Member Experience",
+    subtitle: "Owners · Trainers · Staff",
+    description: "Your platform is accurate metrics for an insight into your horse's performance and recovery biochemistry. No Guessing!",
   },
   {
     title: "Commerce And Growth",
+    subtitle: null,
     description: "Present products, member offers, and future hybrid revenue paths through a connected storefront.",
   },
 ];
@@ -23,6 +26,9 @@ export function PlatformPillars() {
             {pillars.map((pillar) => (
               <div key={pillar.title} className="rounded-[1.75rem] border border-ink/10 bg-sand p-6">
                 <h2 className="font-display text-3xl text-ink">{pillar.title}</h2>
+                {pillar.subtitle && (
+                  <p className="mt-1 text-xs font-bold uppercase tracking-[0.2em] text-ember">{pillar.subtitle}</p>
+                )}
                 <p className="mt-3 text-sm leading-7 text-steel">{pillar.description}</p>
               </div>
             ))}
