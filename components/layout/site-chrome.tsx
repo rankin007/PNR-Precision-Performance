@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { submitFooterEnquiryAction } from "@/app/contact/actions";
 
 type SiteChromeProps = {
   children: React.ReactNode;
@@ -106,12 +107,7 @@ export function SiteChrome({ children }: SiteChromeProps) {
             </div>
           </div>
 
-          <form
-            action="mailto:philliprankin007@gmail.com"
-            method="post"
-            encType="text/plain"
-            className="rounded-[2rem] border border-white/10 bg-white/5 p-6 backdrop-blur-sm"
-          >
+          <form action={submitFooterEnquiryAction} className="rounded-[2rem] border border-white/10 bg-white/5 p-6 backdrop-blur-sm">
             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#d88b70]">Email Enquiry</p>
             <div className="mt-5 grid gap-4 md:grid-cols-2">
               <label className="grid gap-2 text-sm text-white/80">
@@ -119,6 +115,7 @@ export function SiteChrome({ children }: SiteChromeProps) {
                 <input
                   type="text"
                   name="name"
+                  required
                   className="rounded-2xl border border-white/10 bg-white/10 px-4 py-3 text-white placeholder:text-white/35 focus:border-white/30 focus:outline-none"
                   placeholder="Your name"
                 />
@@ -128,6 +125,7 @@ export function SiteChrome({ children }: SiteChromeProps) {
                 <input
                   type="email"
                   name="email"
+                  required
                   className="rounded-2xl border border-white/10 bg-white/10 px-4 py-3 text-white placeholder:text-white/35 focus:border-white/30 focus:outline-none"
                   placeholder="Your email"
                 />
@@ -137,6 +135,7 @@ export function SiteChrome({ children }: SiteChromeProps) {
                 <input
                   type="tel"
                   name="mobile"
+                  required
                   className="rounded-2xl border border-white/10 bg-white/10 px-4 py-3 text-white placeholder:text-white/35 focus:border-white/30 focus:outline-none"
                   placeholder="Your mobile number"
                 />
@@ -156,14 +155,8 @@ export function SiteChrome({ children }: SiteChromeProps) {
                 type="submit"
                 className="rounded-full bg-white px-5 py-3 text-sm font-semibold text-[#18212b] transition hover:bg-white/90"
               >
-                Submit
+                Submit and Return to Home page
               </button>
-              <Link
-                href="/"
-                className="rounded-full border border-white/20 bg-transparent px-5 py-3 text-sm font-semibold text-white transition hover:border-white/40"
-              >
-                Return to Home page
-              </Link>
             </div>
           </form>
         </div>
