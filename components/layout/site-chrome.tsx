@@ -97,10 +97,10 @@ export function SiteChrome({ children }: SiteChromeProps) {
               <p>Contact: Phillip Rankin, Founder: 044 888 3838</p>
               <p>
                 <a
-                  href="mailto:phillip@balanceenergyaustralia.com"
+                  href="mailto:philliprankin007@gmail.com"
                   className="transition hover:text-white"
                 >
-                  phillip@balanceenergyaustralia.com
+                  philliprankin007@gmail.com
                 </a>
               </p>
             </div>

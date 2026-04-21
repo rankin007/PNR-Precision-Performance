@@ -30,10 +30,10 @@ export default async function ContactPage({ searchParams }: ContactPageProps) {
                 <p>044 888 3838</p>
                 <p>
                   <a
-                    href="mailto:phillip@balanceenergyaustralia.com"
+                    href="mailto:philliprankin007@gmail.com"
                     className="font-semibold text-ink transition hover:text-ember"
                   >
-                    phillip@balanceenergyaustralia.com
+                    philliprankin007@gmail.com
                   </a>
                 </p>
               </div>
