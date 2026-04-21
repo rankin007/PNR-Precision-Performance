@@ -39,7 +39,7 @@ export default function OnboardingPage() {
           <div className="overflow-hidden rounded-[2rem] border border-ink/10 bg-sand text-center text-ink shadow-panel">
             <div className="overflow-hidden border-b border-ink/10 bg-[#11211a]">
               <Image
-                src="/Horse barrier images.jfif"
+                src="/horse-barrier-images.jpeg"
                 alt="Horse barrier banner"
                 width={1600}
                 height={900}
