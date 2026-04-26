@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { SignInForm } from "@/components/auth/sign-in-form";
 import { SectionCard } from "@/components/layout/section-card";
+import { normalizeNextPath } from "@/lib/auth/next-path";
 import { hasSupabaseEnv } from "@/lib/supabase/env";
 
 type SignInPageProps = {
@@ -16,7 +17,7 @@ export default async function SignInPage({ searchParams }: SignInPageProps) {
   const setup = pickValue(params.setup);
   const sent = pickValue(params.sent) === "true";
   const error = pickValue(params.error);
-  const nextPath = pickValue(params.next) ?? "/portal";
+  const nextPath = normalizeNextPath(pickValue(params.next));
   const envReady = hasSupabaseEnv();
 
   const description =

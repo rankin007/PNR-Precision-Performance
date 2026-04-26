@@ -32,7 +32,7 @@ export function WorkflowStrip() {
               <h2 className="mt-5 font-display text-3xl text-ink md:text-4xl">
                 Testimonials
               </h2>
-              <p className="mt-4 max-w-lg text-sm leading-8 text-steel">
+              <p className="mt-4 max-w-lg text-[14pt] leading-8 text-steel">
                 Precision Performance combines scientific data with stable knowledge to support clearer training,
                 recovery, and raceday decisions.
               </p>
@@ -59,17 +59,37 @@ export function WorkflowStrip() {
                   </div>
 
                   {testimonial.videoSrc ? (
-                    <video
-                      controls
-                      className="mt-4 w-full rounded-2xl border border-ink/10 bg-black"
-                      preload="metadata"
-                    >
-                      <source src={testimonial.videoSrc} type="video/quicktime" />
-                      Your browser does not support the video tag.
-                    </video>
+                    <div className="mt-4">
+                      <video
+                        controls
+                        playsInline
+                        className="w-full rounded-2xl border border-ink/10 bg-black"
+                        preload="metadata"
+                      >
+                        <source src={testimonial.videoSrc} />
+                        Your browser does not support the video tag.
+                      </video>
+                      <div className="mt-3 flex flex-wrap gap-3">
+                        <a
+                          href={testimonial.videoSrc}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="rounded-full border border-ink/10 bg-sand px-4 py-2 text-xs font-semibold uppercase tracking-[0.14em] text-ink"
+                        >
+                          Open video
+                        </a>
+                        <a
+                          href={testimonial.videoSrc}
+                          download
+                          className="rounded-full border border-ink/10 bg-sand px-4 py-2 text-xs font-semibold uppercase tracking-[0.14em] text-ink"
+                        >
+                          Download video
+                        </a>
+                      </div>
+                    </div>
                   ) : null}
 
-                  <p className="mt-4">{testimonial.description}</p>
+                  <p className="mt-4 text-[14pt] leading-8">{testimonial.description}</p>
                 </div>
               ))}
             </div>

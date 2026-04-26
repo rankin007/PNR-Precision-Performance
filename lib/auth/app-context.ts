@@ -1,6 +1,8 @@
 import { redirect } from "next/navigation";
 import type { User } from "@supabase/supabase-js";
 import { bootstrapAuthenticatedUser } from "@/lib/auth/bootstrap";
+import { isAdminBypassActive } from "@/lib/auth/bypass";
+import { normalizeNextPath } from "@/lib/auth/next-path";
 import { hasSupabaseEnv } from "@/lib/supabase/env";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
@@ -12,6 +14,7 @@ export type AppAuthContext = {
   memberDisplayName: string | null;
   membershipLevelCodes: string[];
   permissionCodes: string[];
+  bypassActive: boolean;
 };
 
 type MembershipLevelRow = {
@@ -64,6 +67,20 @@ export async function getAppAuthContext(): Promise<AppAuthContext> {
       memberDisplayName: null,
       membershipLevelCodes: [],
       permissionCodes: [],
+      bypassActive: false,
+    };
+  }
+
+  if (await isAdminBypassActive()) {
+    return {
+      envReady: true,
+      sessionUser: null,
+      appUserId: null,
+      memberProfileId: null,
+      memberDisplayName: "Admin bypass active",
+      membershipLevelCodes: ["admin"],
+      permissionCodes: ["platform.admin"],
+      bypassActive: true,
     };
   }
 
@@ -81,6 +98,7 @@ export async function getAppAuthContext(): Promise<AppAuthContext> {
       memberDisplayName: null,
       membershipLevelCodes: [],
       permissionCodes: [],
+      bypassActive: false,
     };
   }
 
@@ -151,6 +169,7 @@ export async function getAppAuthContext(): Promise<AppAuthContext> {
     memberDisplayName: memberProfile?.display_name ?? user.email ?? null,
     membershipLevelCodes,
     permissionCodes,
+    bypassActive: false,
   };
 }
 
@@ -159,20 +178,48 @@ export function hasAppPermission(context: AppAuthContext, permissionCode: string
 }
 
 export async function requireSignedInAppContext(nextPath = "/portal") {
+  const normalizedNextPath = normalizeNextPath(nextPath);
+
+  if (await isAdminBypassActive()) {
+    return {
+      envReady: true,
+      sessionUser: null,
+      appUserId: null,
+      memberProfileId: null,
+      memberDisplayName: "Admin bypass active",
+      membershipLevelCodes: ["admin"],
+      permissionCodes: ["platform.admin"],
+      bypassActive: true,
+    } satisfies AppAuthContext;
+  }
+
   const context = await getAppAuthContext();
 
   if (!context.envReady) {
-    redirect(`/sign-in?setup=supabase&next=${encodeURIComponent(nextPath)}`);
+    redirect(`/sign-in?setup=supabase&next=${encodeURIComponent(normalizedNextPath)}`);
   }
 
   if (!context.sessionUser) {
-    redirect(`/sign-in?next=${encodeURIComponent(nextPath)}`);
+    redirect(`/sign-in?next=${encodeURIComponent(normalizedNextPath)}`);
   }
 
   return context;
 }
 
 export async function requireAdminAppContext(nextPath = "/admin") {
+  if (await isAdminBypassActive()) {
+    return {
+      envReady: true,
+      sessionUser: null,
+      appUserId: null,
+      memberProfileId: null,
+      memberDisplayName: "Admin bypass active",
+      membershipLevelCodes: ["admin"],
+      permissionCodes: ["platform.admin"],
+      bypassActive: true,
+    } satisfies AppAuthContext;
+  }
+
   const context = await requireSignedInAppContext(nextPath);
 
   if (!hasAppPermission(context, "platform.admin")) {

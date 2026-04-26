@@ -193,6 +193,12 @@ export default async function DataEntryPage({ searchParams }: DataEntryPageProps
             <h2 className="mt-3 font-display text-2xl text-ink">Move between workflows</h2>
             <div className="mt-6 flex flex-wrap gap-3">
               <Link
+                href="/data-entry/horses"
+                className="rounded-full border border-ink/10 bg-sand px-5 py-3 text-sm font-semibold text-ink"
+              >
+                Horse workspace
+              </Link>
+              <Link
                 href="/data-entry/feeding"
                 className="rounded-full border border-ink/10 bg-sand px-5 py-3 text-sm font-semibold text-ink"
               >

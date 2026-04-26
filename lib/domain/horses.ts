@@ -22,6 +22,15 @@ export type HorseDetail = HorseSummary & {
   }>;
 };
 
+export const exampleHorseId = "southern-trial-demo";
+
+export const exampleHorseSummary: HorseSummary = {
+  id: exampleHorseId,
+  name: "Southern Trial",
+  status: "active",
+  stableName: "Precision Performance Demo Stable",
+};
+
 type HorseSummaryRow = {
   id: string;
   name: string;
@@ -35,6 +44,7 @@ type HorseTimelineRow = {
 };
 
 const fallbackHorses: HorseSummary[] = [
+  exampleHorseSummary,
   {
     id: "sample-horse-1",
     name: "Northern Comet",
@@ -126,13 +136,15 @@ export async function getAccessibleHorseSummaries() {
 
   return {
     envReady: true,
-    horses:
-      (data as HorseSummaryRow[] | null)?.map((horse) => ({
+    horses: [
+      exampleHorseSummary,
+      ...(((data as HorseSummaryRow[] | null)?.map((horse) => ({
         id: horse.id,
         name: horse.name,
         status: horse.status ?? null,
         stableName: extractStableName(horse.stables),
-      })) ?? [],
+      })) ?? []).filter((horse) => horse.id !== exampleHorseId)),
+    ],
   };
 }
 

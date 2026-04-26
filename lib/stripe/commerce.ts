@@ -2,6 +2,7 @@ import type Stripe from "stripe";
 import type { SupabaseClient, User } from "@supabase/supabase-js";
 import { bootstrapAuthenticatedUser } from "@/lib/auth/bootstrap";
 import { createSupabaseAdminClient, hasSupabaseAdminEnv } from "@/lib/supabase/admin";
+import { getStripeServerClient } from "@/lib/stripe/server";
 
 type ProductSnapshot = {
   id: string;
@@ -43,6 +44,14 @@ function normalisePaymentIntentId(session: Stripe.Checkout.Session) {
   return session.payment_intent?.id ?? null;
 }
 
+function normaliseSubscriptionId(session: Stripe.Checkout.Session) {
+  if (typeof session.subscription === "string") {
+    return session.subscription;
+  }
+
+  return session.subscription?.id ?? null;
+}
+
 function mapOrderStatusFromSession(session: Stripe.Checkout.Session) {
   if (session.payment_status === "paid") {
     return "paid";
@@ -73,6 +82,82 @@ function paymentTimestamp(session: Stripe.Checkout.Session) {
   }
 
   return new Date(session.created * 1000).toISOString();
+}
+
+function timestampFromUnix(value: number | null | undefined) {
+  if (typeof value !== "number" || Number.isNaN(value)) {
+    return null;
+  }
+
+  return new Date(value * 1000).toISOString();
+}
+
+function readStripeSubscriptionPeriods(subscription: Stripe.Subscription) {
+  const value = subscription as Stripe.Subscription & {
+    current_period_start?: number;
+    current_period_end?: number;
+  };
+
+  return {
+    currentPeriodStart: timestampFromUnix(value.current_period_start),
+    currentPeriodEnd: timestampFromUnix(value.current_period_end),
+  };
+}
+
+async function upsertStripeSubscriptionRecord(input: {
+  providerSubscriptionId: string;
+  appUserId: string | null;
+  status: string;
+  currentPeriodStart?: string | null;
+  currentPeriodEnd?: string | null;
+}) {
+  if (!hasSupabaseAdminEnv()) {
+    throw new Error("Missing Supabase service role configuration for subscription persistence.");
+  }
+
+  const admin = createSupabaseAdminClient();
+  const { data: existing, error: existingError } = await admin
+    .from("subscriptions")
+    .select("id")
+    .eq("billing_provider", "stripe")
+    .eq("provider_subscription_id", input.providerSubscriptionId)
+    .maybeSingle();
+
+  if (existingError) {
+    throw existingError;
+  }
+
+  const payload = {
+    user_id: input.appUserId,
+    billing_provider: "stripe",
+    provider_subscription_id: input.providerSubscriptionId,
+    status: input.status,
+    current_period_start: input.currentPeriodStart ?? null,
+    current_period_end: input.currentPeriodEnd ?? null,
+    updated_at: new Date().toISOString(),
+  };
+
+  if (existing?.id) {
+    const { error } = await admin.from("subscriptions").update(payload).eq("id", existing.id);
+
+    if (error) {
+      throw error;
+    }
+
+    return existing.id;
+  }
+
+  const { data: inserted, error } = await admin
+    .from("subscriptions")
+    .insert(payload)
+    .select("id")
+    .single();
+
+  if (error) {
+    throw error;
+  }
+
+  return inserted.id;
 }
 
 export async function resolveCheckoutUserContext(
@@ -210,6 +295,7 @@ export async function syncCheckoutSessionToCommerce(session: Stripe.Checkout.Ses
   const appUserId = optionalUuid(session.metadata?.app_user_id);
   const productId = optionalUuid(session.metadata?.product_id);
   const paymentIntentId = normalisePaymentIntentId(session);
+  const subscriptionId = normaliseSubscriptionId(session);
   const amount = normaliseAmountFromMinorUnits(session.amount_total);
   const currencyCode = session.currency?.toUpperCase() ?? "AUD";
   const paidAt = paymentTimestamp(session);
@@ -311,8 +397,43 @@ export async function syncCheckoutSessionToCommerce(session: Stripe.Checkout.Ses
     }
   }
 
+  if (subscriptionId) {
+    const stripe = getStripeServerClient();
+    const subscription = await stripe.subscriptions.retrieve(subscriptionId);
+    const periods = readStripeSubscriptionPeriods(subscription);
+    await upsertStripeSubscriptionRecord({
+      providerSubscriptionId: subscription.id,
+      appUserId,
+      status: subscription.status,
+      currentPeriodStart: periods.currentPeriodStart,
+      currentPeriodEnd: periods.currentPeriodEnd,
+    });
+  }
+
   return {
     orderId: resolvedOrderId,
     paymentIntentId,
+  };
+}
+
+export async function syncStripeSubscriptionToCommerce(subscription: Stripe.Subscription) {
+  if (!hasSupabaseAdminEnv()) {
+    throw new Error("Missing Supabase service role configuration for Stripe subscription persistence.");
+  }
+
+  const appUserId = optionalUuid(subscription.metadata?.app_user_id);
+
+  const periods = readStripeSubscriptionPeriods(subscription);
+
+  await upsertStripeSubscriptionRecord({
+    providerSubscriptionId: subscription.id,
+    appUserId,
+    status: subscription.status,
+    currentPeriodStart: periods.currentPeriodStart,
+    currentPeriodEnd: periods.currentPeriodEnd,
+  });
+
+  return {
+    subscriptionId: subscription.id,
   };
 }

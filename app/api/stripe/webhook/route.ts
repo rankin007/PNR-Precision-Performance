@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import type Stripe from "stripe";
-import { syncCheckoutSessionToCommerce } from "@/lib/stripe/commerce";
+import { syncCheckoutSessionToCommerce, syncStripeSubscriptionToCommerce } from "@/lib/stripe/commerce";
 import { stripeEnv, hasStripeServerEnv, hasStripeWebhookEnv } from "@/lib/stripe/env";
 import { getStripeServerClient } from "@/lib/stripe/server";
 
@@ -63,6 +63,11 @@ export async function POST(request: NextRequest) {
       case "checkout.session.async_payment_failed":
       case "checkout.session.expired":
         await syncCheckoutSessionToCommerce(event.data.object as Stripe.Checkout.Session);
+        break;
+      case "customer.subscription.created":
+      case "customer.subscription.updated":
+      case "customer.subscription.deleted":
+        await syncStripeSubscriptionToCommerce(event.data.object as Stripe.Subscription);
         break;
       default:
         break;

@@ -1267,3 +1267,218 @@ set
 
 -- <<< END 0007_test_product_seeds.sql
 
+-- >>> BEGIN 0008_client_applications.sql
+-- Migration to add client onboarding tracking
+
+create table if not exists public.client_applications (
+  id uuid primary key default gen_random_uuid(),
+  client_name text not null,
+  business_name text,
+  stable_address text not null,
+  direct_email text not null,
+  admin_email text,
+  mobile_number text not null,
+  status text not null default 'pending_email_verification',
+  confirmation_token uuid default gen_random_uuid(),
+  email_verified_at timestamptz,
+  disclaimer_agreed_at timestamptz,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+-- Enable RLS and add basic policies
+alter table public.client_applications enable row level security;
+
+-- Allow anonymous submissions (public endpoint)
+create policy "Allow anonymous inserts to client_applications"
+  on public.client_applications
+  for insert
+  to public
+  with check (true);
+
+-- Allow server action / service role to read/update
+create policy "Allow service role full access to client_applications"
+  on public.client_applications
+  for all
+  using (true)
+  with check (true);
+
+-- <<< END 0008_client_applications.sql
+
+-- >>> BEGIN 0008_professional_equipment_products.sql
+with category_map as (
+  select id, slug
+  from public.product_categories
+  where slug in ('performance-services', 'operations-resources')
+)
+insert into public.products (
+  product_category_id,
+  name,
+  slug,
+  description,
+  sku,
+  price_amount,
+  currency_code,
+  status
+)
+values
+  (
+    (select id from category_map where slug = 'performance-services'),
+    'Professional Kit',
+    'professional-kit',
+    'Professional Urine and Saliva Analysis BE Kit with certified instruments, onboarding, protocols, and in-house setup support.',
+    'PNR-PK-001',
+    2500.00,
+    'AUD',
+    'active'
+  ),
+  (
+    (select id from category_map where slug = 'performance-services'),
+    'Monthly Service',
+    'monthly-performance-service',
+    'Monthly elite equine performance monitoring service with unlimited testing, weekly reporting, and supplement guidance per horse.',
+    'PNR-MS-001',
+    600.00,
+    'AUD',
+    'active'
+  )
+on conflict (slug) do update
+set
+  product_category_id = excluded.product_category_id,
+  name = excluded.name,
+  description = excluded.description,
+  sku = excluded.sku,
+  price_amount = excluded.price_amount,
+  currency_code = excluded.currency_code,
+  status = excluded.status,
+  updated_at = now();
+
+-- <<< END 0008_professional_equipment_products.sql
+
+-- >>> BEGIN 0009_client_applications_policy_fix.sql
+drop policy if exists "Allow service role full access to client_applications"
+  on public.client_applications;
+
+create policy "Allow service role full access to client_applications"
+  on public.client_applications
+  for all
+  to service_role
+  using (true)
+  with check (true);
+
+-- <<< END 0009_client_applications_policy_fix.sql
+
+-- >>> BEGIN 0010_trainer_biochemistry_capture.sql
+create table if not exists public.horse_gallery_items (
+  id uuid primary key default gen_random_uuid(),
+  horse_id uuid not null references public.horses(id) on delete cascade,
+  image_url text not null,
+  caption text,
+  taken_at timestamptz,
+  created_by_user_id uuid references public.users(id) on delete set null,
+  created_at timestamptz not null default now()
+);
+
+create index if not exists idx_horse_gallery_items_horse_id
+  on public.horse_gallery_items (horse_id);
+
+create table if not exists public.horse_biochemistry_results (
+  id uuid primary key default gen_random_uuid(),
+  horse_id uuid not null references public.horses(id) on delete cascade,
+  daily_record_id uuid references public.daily_records(id) on delete set null,
+  sampled_at timestamptz not null default now(),
+  sample_type text not null default 'urine_saliva',
+  health_score numeric(10,2),
+  hydration_litres numeric(10,2),
+  hydration_score numeric(10,2),
+  electrolyte_score numeric(10,2),
+  recovery_score numeric(10,2),
+  carbs_percentage numeric(10,2),
+  salts_ms numeric(10,2),
+  salts_c numeric(10,2) generated always as (
+    case
+      when salts_ms is null then null
+      else round((salts_ms * 1.43)::numeric, 2)
+    end
+  ) stored,
+  urine_ph numeric(10,2),
+  saliva_ph numeric(10,2),
+  urea_level numeric(10,2),
+  blue_square_score numeric(10,2),
+  notes text,
+  created_by_user_id uuid references public.users(id) on delete set null,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+create index if not exists idx_horse_biochemistry_results_horse_id_sampled_at
+  on public.horse_biochemistry_results (horse_id, sampled_at desc);
+
+alter table public.horse_gallery_items enable row level security;
+alter table public.horse_biochemistry_results enable row level security;
+
+create policy "horses_update_trainers_or_admin"
+on public.horses
+for update
+using (
+  public.is_admin()
+  or public.can_manage_horse_records(id)
+)
+with check (
+  public.is_admin()
+  or public.can_manage_horse_records(id)
+);
+
+create policy "horse_gallery_items_select_accessible"
+on public.horse_gallery_items
+for select
+using (public.can_access_horse(horse_id));
+
+create policy "horse_gallery_items_insert_manageable"
+on public.horse_gallery_items
+for insert
+with check (public.can_manage_horse_records(horse_id));
+
+create policy "horse_gallery_items_update_manageable"
+on public.horse_gallery_items
+for update
+using (public.can_manage_horse_records(horse_id))
+with check (public.can_manage_horse_records(horse_id));
+
+create policy "horse_gallery_items_delete_manageable"
+on public.horse_gallery_items
+for delete
+using (public.can_manage_horse_records(horse_id) or public.is_admin());
+
+create policy "horse_biochemistry_results_select_accessible"
+on public.horse_biochemistry_results
+for select
+using (public.can_access_horse(horse_id));
+
+create policy "horse_biochemistry_results_insert_manageable"
+on public.horse_biochemistry_results
+for insert
+with check (public.can_manage_horse_records(horse_id));
+
+create policy "horse_biochemistry_results_update_manageable"
+on public.horse_biochemistry_results
+for update
+using (public.can_manage_horse_records(horse_id))
+with check (public.can_manage_horse_records(horse_id));
+
+create policy "horse_biochemistry_results_delete_manageable"
+on public.horse_biochemistry_results
+for delete
+using (public.can_manage_horse_records(horse_id) or public.is_admin());
+
+-- <<< END 0010_trainer_biochemistry_capture.sql
+
+-- >>> BEGIN 0011_biochemistry_session_context.sql
+alter table public.horse_biochemistry_results
+  add column if not exists weight_kg numeric(10,2),
+  add column if not exists training_session text,
+  add column if not exists horse_attitude text,
+  add column if not exists jockey_comments text;
+
+-- <<< END 0011_biochemistry_session_context.sql
+

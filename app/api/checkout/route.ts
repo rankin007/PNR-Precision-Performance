@@ -7,6 +7,8 @@ import { hasSupabaseAdminEnv } from "@/lib/supabase/admin";
 import { getStripeServerClient } from "@/lib/stripe/server";
 import { hasStripeServerEnv } from "@/lib/stripe/env";
 
+const recurringMonthlyProductSlugs = new Set(["monthly-performance-service"]);
+
 function resolveSiteUrl(request: NextRequest) {
   return process.env.NEXT_PUBLIC_SITE_URL || request.nextUrl.origin;
 }
@@ -64,6 +66,7 @@ export async function POST(request: NextRequest) {
   const userContext = await resolveCheckoutUserContext(supabase);
   const amount = typeof product.price_amount === "number" ? product.price_amount : Number(product.price_amount ?? 0);
   const currencyCode = (product.currency_code ?? "AUD").toUpperCase();
+  const isRecurringSubscription = recurringMonthlyProductSlugs.has(product.slug);
   const pendingOrder = await createPendingOrderForCheckout({
     product: {
       id: product.id,
@@ -77,8 +80,16 @@ export async function POST(request: NextRequest) {
   });
 
   try {
+    const checkoutMetadata = {
+      order_id: pendingOrder.id,
+      app_user_id: userContext.appUserId ?? "",
+      auth_user_id: userContext.authUser?.id ?? "",
+      product_id: product.id,
+      product_slug: product.slug,
+    };
+
     const session = await stripe.checkout.sessions.create({
-      mode: "payment",
+      mode: isRecurringSubscription ? "subscription" : "payment",
       success_url: `${siteUrl}/shop/${product.slug}?checkout=success`,
       cancel_url: `${siteUrl}/shop/${product.slug}?checkout=cancelled`,
       customer_email: userContext.email ?? undefined,
@@ -88,6 +99,13 @@ export async function POST(request: NextRequest) {
           price_data: {
             currency: currencyCode.toLowerCase(),
             unit_amount: Math.round(amount * 100),
+            ...(isRecurringSubscription
+              ? {
+                  recurring: {
+                    interval: "month" as const,
+                  },
+                }
+              : {}),
             product_data: {
               name: product.name,
               description: product.description ?? undefined,
@@ -100,13 +118,14 @@ export async function POST(request: NextRequest) {
           quantity: 1,
         },
       ],
-      metadata: {
-        order_id: pendingOrder.id,
-        app_user_id: userContext.appUserId ?? "",
-        auth_user_id: userContext.authUser?.id ?? "",
-        product_id: product.id,
-        product_slug: product.slug,
-      },
+      metadata: checkoutMetadata,
+      ...(isRecurringSubscription
+        ? {
+            subscription_data: {
+              metadata: checkoutMetadata,
+            },
+          }
+        : {}),
     });
 
     await attachCheckoutSessionToOrder({

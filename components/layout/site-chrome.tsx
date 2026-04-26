@@ -10,10 +10,11 @@ type SiteChromeProps = {
 
 const publicNavigation = [
   { href: "/", label: "Home" },
-  { href: "/platform-stack", label: "Platform Stack" },
+  { href: "/#workflow", label: "Testimonials" },
   { href: "/shop", label: "Shop" },
-  { href: "/member-experience", label: "Member Experience" },
   { href: "/contact", label: "Contact" },
+  { href: "/sign-in?next=%2Fdata-entry%2Fhorses", label: "EQUINE APP" },
+  { href: "/member-experience", label: "Members Experience" },
 ];
 
 function isProtectedPath(pathname: string) {
@@ -27,6 +28,7 @@ function isProtectedPath(pathname: string) {
 
 export function SiteChrome({ children }: SiteChromeProps) {
   const pathname = usePathname();
+  const isHomePage = pathname === "/";
 
   if (isProtectedPath(pathname)) {
     return <>{children}</>;
@@ -34,7 +36,8 @@ export function SiteChrome({ children }: SiteChromeProps) {
 
   return (
     <div className="min-h-screen">
-      <header className="border-b border-ink/10 bg-white/80 backdrop-blur">
+      {!isHomePage ? (
+        <header className="border-b border-ink/10 bg-white/80 backdrop-blur">
         <div className="section-wrap flex flex-col gap-4 px-4 py-4 md:px-8 lg:flex-row lg:items-center lg:justify-between">
           <Link href="/" className="max-w-[34rem]">
             <h1 className="font-display text-4xl leading-none text-black md:text-5xl">
@@ -50,7 +53,12 @@ export function SiteChrome({ children }: SiteChromeProps) {
 
           <nav className="flex flex-wrap gap-2">
             {publicNavigation.map((item) => {
-              const active = pathname === item.href;
+              const active =
+                item.href === "/"
+                  ? pathname === "/"
+                  : item.href.startsWith("/#")
+                    ? pathname === "/"
+                    : pathname === item.href;
 
               return (
                 <Link
@@ -79,22 +87,23 @@ export function SiteChrome({ children }: SiteChromeProps) {
               href="/sign-in"
               className="rounded-full bg-ink px-4 py-2 text-sm font-semibold text-white transition hover:bg-ink/90"
             >
-              Member Sign In
+              Members Signin
             </Link>
           </div>
         </div>
-      </header>
+        </header>
+      ) : null}
 
       {children}
 
       <footer className="mt-16 border-t border-ink/10 bg-[#18212b] text-white">
         <div className="section-wrap grid gap-8 px-4 py-12 md:px-8 lg:grid-cols-[1.05fr_0.95fr]">
           <div>
-            <h2 className="font-display text-3xl">Precision Performance</h2>
-            <p className="mt-4 max-w-xl text-sm leading-7 text-white/70">
+            <h2 className="font-display text-[24pt]">Precision Performance</h2>
+            <p className="mt-4 max-w-xl text-[16pt] leading-8 text-white/70">
               A world first in understanding accurate Performance and Recovery of Elite Equine Athletes
             </p>
-            <div className="mt-6 space-y-2 text-sm leading-7 text-white/80">
+            <div className="mt-6 space-y-2 text-[16pt] leading-8 text-white/80">
               <p>Contact: Phillip Rankin, Founder: 044 888 3838</p>
               <p>
                 <a

@@ -1,12 +1,30 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { isProtectedPath } from "@/lib/auth/access";
+import {
+  isAccessControlPath,
+  isAdminBypassActiveForRequest,
+  isPreviewAccessActiveForRequest,
+  isSiteLockEnabled,
+} from "@/lib/auth/bypass";
 import { updateSupabaseSession } from "@/lib/supabase/middleware";
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
+  const adminBypassActive = isAdminBypassActiveForRequest(request);
+  const previewAccessActive = isPreviewAccessActiveForRequest(request);
+
+  if (isSiteLockEnabled() && !previewAccessActive && !isAccessControlPath(pathname)) {
+    const previewUrl = new URL("/preview-access", request.url);
+    previewUrl.searchParams.set("next", pathname);
+    return NextResponse.redirect(previewUrl);
+  }
 
   if (!isProtectedPath(pathname)) {
+    return NextResponse.next();
+  }
+
+  if (adminBypassActive) {
     return NextResponse.next();
   }
 
@@ -30,5 +48,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/portal/:path*", "/admin/:path*", "/data-entry/:path*"],
+  matcher: ["/((?!api|_next/static|_next/image|favicon.ico|.*\\..*).*)"],
 };

@@ -1,7 +1,10 @@
 "use server";
 
+import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { ADMIN_BYPASS_COOKIE, PREVIEW_ACCESS_COOKIE } from "@/lib/auth/bypass";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { normalizeNextPath } from "@/lib/auth/next-path";
 import { hasSupabaseEnv } from "@/lib/supabase/env";
 
 function readString(formData: FormData, key: string) {
@@ -11,7 +14,7 @@ function readString(formData: FormData, key: string) {
 
 export async function signInWithOtpAction(formData: FormData) {
   const email = readString(formData, "email");
-  const next = readString(formData, "next") || "/portal";
+  const next = normalizeNextPath(readString(formData, "next"));
 
   if (!hasSupabaseEnv()) {
     redirect(`/sign-in?setup=supabase&next=${encodeURIComponent(next)}`);
@@ -39,6 +42,10 @@ export async function signInWithOtpAction(formData: FormData) {
 }
 
 export async function signOutAction() {
+  const cookieStore = await cookies();
+  cookieStore.delete(ADMIN_BYPASS_COOKIE);
+  cookieStore.delete(PREVIEW_ACCESS_COOKIE);
+
   if (hasSupabaseEnv()) {
     const supabase = await createSupabaseServerClient();
     await supabase.auth.signOut();

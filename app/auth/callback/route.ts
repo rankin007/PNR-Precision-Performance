@@ -2,12 +2,13 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { createServerClient } from "@supabase/ssr";
 import { bootstrapAuthenticatedUser } from "@/lib/auth/bootstrap";
+import { normalizeNextPath } from "@/lib/auth/next-path";
 import { hasSupabaseEnv, supabaseEnv } from "@/lib/supabase/env";
 
 export async function GET(request: NextRequest) {
   const requestUrl = new URL(request.url);
   const code = requestUrl.searchParams.get("code");
-  const next = requestUrl.searchParams.get("next") || "/portal";
+  const next = normalizeNextPath(requestUrl.searchParams.get("next"));
 
   if (!hasSupabaseEnv()) {
     return NextResponse.redirect(

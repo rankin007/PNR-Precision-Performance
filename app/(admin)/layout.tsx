@@ -2,6 +2,8 @@ import { AppShell } from "@/components/layout/app-shell";
 import { requireAdminAppContext } from "@/lib/auth/session";
 import { adminNavigation } from "@/lib/navigation";
 
+export const dynamic = "force-dynamic";
+
 export default async function AdminLayout({
   children,
 }: Readonly<{
@@ -17,6 +19,7 @@ export default async function AdminLayout({
       userEmail={context.sessionUser?.email ?? null}
       memberDisplayName={context.memberDisplayName}
       membershipLevelCodes={context.membershipLevelCodes}
+      bypassActive={context.bypassActive}
     >
       {children}
     </AppShell>

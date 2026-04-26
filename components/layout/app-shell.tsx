@@ -9,6 +9,7 @@ type AppShellProps = {
   userEmail?: string | null;
   memberDisplayName?: string | null;
   membershipLevelCodes?: string[];
+  bypassActive?: boolean;
   children: React.ReactNode;
 };
 
@@ -19,6 +20,7 @@ export function AppShell({
   userEmail,
   memberDisplayName,
   membershipLevelCodes,
+  bypassActive,
   children,
 }: AppShellProps) {
   return (
@@ -53,8 +55,15 @@ export function AppShell({
               <div>
                 <p className="text-sm uppercase tracking-[0.2em] text-ember">Platform Area</p>
                 <h2 className="mt-2 font-display text-3xl text-ink">{area}</h2>
+                {bypassActive ? (
+                  <div className="mt-3 inline-flex items-center rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-xs font-semibold uppercase tracking-[0.14em] text-amber-800">
+                    Admin Preview Mode
+                  </div>
+                ) : null}
                 <p className="mt-2 text-sm leading-7 text-steel">
-                  {memberDisplayName
+                  {bypassActive
+                    ? "Admin bypass session is active"
+                    : memberDisplayName
                     ? `Signed in as ${memberDisplayName}${userEmail ? ` / ${userEmail}` : ""}`
                     : userEmail
                       ? `Signed in as ${userEmail}`

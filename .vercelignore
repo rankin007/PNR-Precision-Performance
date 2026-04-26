@@ -1,0 +1,13 @@
+.git
+.github
+.next
+.logs
+.agents
+node_modules
+build
+build.zip
+*.docx
+env.download
+env.vercel.production
+.env.local
+.env.production.local

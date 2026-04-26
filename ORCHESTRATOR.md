@@ -4,7 +4,38 @@ This file is the operating guide for building and evolving the standalone platfo
 
 ## Mission
 
-Build a polished, high-performing digital platform for the equine industry, centered on racehorse performance and biochemistry data, with this file acting as the single source of orchestration truth.
+Build a polished, phone-first platform for Elite Equine Performance and Recovery, where trainers can capture urine, saliva, hydration, and performance data for their own stable, review trend history clearly, and turn scientific readings into practical daily decisions.
+
+This file is the single source of orchestration truth for that outcome.
+
+## End-Game Product Profile
+
+The target product is a secure trainer app behind the public website.
+
+The finished platform should deliver:
+
+- a premium public website that explains the service, products, and member value
+- a secure trainer login where each trainer can access only horses in their own stable
+- unlimited horse creation and management within each trainer account
+- fast smartphone-first test entry for urine and saliva readings
+- structured capture of carbohydrate, conductivity/salts, urine pH, saliva pH, hydration, health, recovery, and related notes
+- automatic score generation for hydration and health from scientific meter inputs
+- clear per-horse summary dashboards with latest results, trend charts, and complete history views
+- spreadsheet-style review tables plus chart-based interpretation on desktop and laptop
+- support for future API ingestion from systems such as `ETrakka` and other biometric sources
+
+## Product Success Criteria
+
+The platform should be considered on target only when all of the following are true:
+
+- trainers can sign in securely without using developer bypasses
+- trainer accounts are isolated by stable through enforceable row-level security
+- trainers can create and manage horses without admin intervention
+- trainers can add new tests in under a minute on a smartphone
+- hover or tap interactions reveal the note context behind each chart result
+- complete horse history is visible in both summary-chart and table-review formats
+- the data model is ready for direct API ingestion, queueing, and reconciliation
+- public website, member app, and reporting views all use the same canonical horse data
 
 ## Core Rules
 
@@ -28,6 +59,13 @@ The platform is expected to support:
 - multi-level member access for owners, trainers, and future roles
 - e-commerce capability
 - future integrations and background processing
+
+More specifically, the current confirmed focus is:
+
+- Elite Equine Performance and Recovery for Thoroughbred racehorses
+- urine and saliva testing using a pH meter, conductivity meter, and refractometer
+- trainer-facing interpretation support for hydration and health
+- smartphone-first input with longer-form review on desktop and laptop
 
 ## Recommended Platform Stack
 
@@ -112,6 +150,7 @@ Do not connect, reuse, import, or reference accounts, projects, environments, cr
 - sync records directly into Supabase
 - create edit history and submission logging
 - optimise the interface for both phone and PC use
+- add a summary-analysis workflow with horse selector, new-test flow, result review, trend charts, and table history
 
 ### Phase 7 - Membership Administration
 
@@ -183,6 +222,8 @@ Confirmed access rules:
 - owners can access only their own horses
 - owner access is assigned by trainers or administrators
 - users may hold multiple membership levels as assigned by administrators
+- trainers must not be able to view or query horses belonging to other trainers
+- the app should support unlimited horses per trainer account
 
 The access model should remain extensible for future roles such as:
 
@@ -198,6 +239,7 @@ The access model should remain extensible for future roles such as:
 - horse profiles and records
 - performance tracking
 - biochemistry capture and interpretation support
+- hydration and health scoring from scientific inputs
 - member dashboards
 - role-based access control
 - content management
@@ -235,6 +277,8 @@ Confirmed commercial and measurement decisions:
 
 - payment model supports products, subscriptions, and hybrid operation
 - canonical units are `C`, `kg`, `L`, and `m`
+- canonical test inputs currently include carbs `%`, salts `ms` with stored conversion to `C`, urine `pH`, saliva `pH`, and urea
+- design priority is smartphone-first usability without sacrificing desktop review depth
 
 ## Active Inputs
 
