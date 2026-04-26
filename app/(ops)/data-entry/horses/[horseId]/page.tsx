@@ -451,12 +451,19 @@ export default async function TrainerHorseWorkspacePage({
                   <p className="mt-1 text-steel">
                     Carbs {entry.carbsPercentage ?? "-"}% / Salts {entry.saltsC ?? "-"} C / Urine pH {entry.urinePh ?? "-"} / Saliva pH {entry.salivaPh ?? "-"} / Urea {entry.ureaLevel ?? "-"}
                   </p>
-                  {entry.trainingSession || entry.attitude || entry.jockeyComments ? (
-                    <p className="mt-2 text-steel">
-                      {entry.trainingSession ? `${entry.trainingSession}. ` : ""}
-                      {entry.attitude ? `Attitude: ${entry.attitude}. ` : ""}
-                      {entry.jockeyComments ? `Jockey: ${entry.jockeyComments}.` : ""}
-                    </p>
+                  {entry.trainingSession || entry.attitude || entry.jockeyComments || entry.notes ? (
+                    <details className="mt-3 group">
+                      <summary className="cursor-pointer text-xs font-semibold uppercase tracking-[0.1em] text-ember hover:text-ink outline-none select-none flex items-center justify-between">
+                        <span>Session Notes</span>
+                        <svg className="w-4 h-4 transition-transform group-open:rotate-180 text-ink/40" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
+                      </summary>
+                      <p className="mt-2 text-steel leading-relaxed">
+                        {entry.trainingSession ? `${entry.trainingSession}. ` : ""}
+                        {entry.attitude ? `Attitude: ${entry.attitude}. ` : ""}
+                        {entry.jockeyComments ? `Jockey: ${entry.jockeyComments}. ` : ""}
+                        {entry.notes && !entry.trainingSession ? entry.notes : ""}
+                      </p>
+                    </details>
                   ) : null}
                 </div>
               ))
@@ -475,8 +482,15 @@ export default async function TrainerHorseWorkspacePage({
             ) : (
               operationalHistory.slice(0, 8).map((item) => (
                 <div key={item.id} className="rounded-2xl border border-ink/10 bg-sand px-4 py-4 text-sm text-ink">
-                  <p className="font-semibold">{item.source} / {item.dateLabel}</p>
-                  <p className="mt-1 text-steel">{item.summary}</p>
+                  <details className="group">
+                    <summary className="cursor-pointer font-semibold outline-none flex items-center justify-between select-none">
+                      <span className="capitalize">{item.source} / {item.dateLabel}</span>
+                      <svg className="w-4 h-4 transition-transform group-open:rotate-180 text-ink/40" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
+                    </summary>
+                    <div className="mt-3 pt-3 border-t border-ink/5 text-steel leading-relaxed">
+                      {item.summary}
+                    </div>
+                  </details>
                 </div>
               ))
             )}
