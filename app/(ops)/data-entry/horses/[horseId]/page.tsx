@@ -259,7 +259,7 @@ export default async function TrainerHorseWorkspacePage({
         </form>
       </div>
 
-      <div className="mt-8">
+      <div id="etrakka-import" className="mt-8 scroll-mt-24">
         <EtrakkaUploader />
       </div>
 

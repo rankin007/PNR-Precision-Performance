@@ -41,6 +41,9 @@ export function HorseWorkspaceToolbar({
           <a href="#summary-analysis" className="rounded-full border border-ink/10 bg-sand px-4 py-2 text-sm font-semibold text-ink">
             Summary Analysis
           </a>
+          <a href="#etrakka-import" className="rounded-full bg-teal-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-teal-700 transition">
+            Import E-Trakka
+          </a>
           <a href="#new-test" className="rounded-full bg-ink px-4 py-2 text-sm font-semibold text-white">
             Add New Test
           </a>
