@@ -80,7 +80,7 @@ export async function importEtrakkaSession(payload: EtrakkaImportPayload) {
          return { success: false, error: "This eTrakka session has already been imported for this horse on this date." };
       }
       
-      return { success: false, error: "Failed to save E-Trakka session to database." };
+      return { success: false, error: "Database rejected the file: " + insertError.message };
     }
 
     return { success: true };
