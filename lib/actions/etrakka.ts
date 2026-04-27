@@ -74,7 +74,8 @@ export async function importEtrakkaSession(payload: EtrakkaImportPayload) {
     }
 
     return { success: true };
-  } catch (err: any) {
-    return { success: false, error: err.message || "An unexpected error occurred." };
+  } catch (err: unknown) {
+    const errorMsg = err instanceof Error ? err.message : "An unexpected error occurred.";
+    return { success: false, error: errorMsg };
   }
 }

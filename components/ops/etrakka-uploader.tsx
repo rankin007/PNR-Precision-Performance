@@ -30,8 +30,6 @@ export function EtrakkaUploader() {
       const text = await file.text();
       // Since CSVs can be messy, we extract cleanly using Regex over the raw text file
       
-      const lines = text.split("\n").map(l => l.trim()).filter(Boolean);
-      
       // 1. Look for the top row format: "Dancing Man Saturday, April 25, 2026 (Mary Bray)"
       // Alternatively, we use flexible regex matches anywhere in the file.
       
@@ -104,7 +102,7 @@ export function EtrakkaUploader() {
         setMessage({ text: result.error || "Failed to upload", type: "error" });
       }
 
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error(err);
       setMessage({ text: "Error parsing the CSV file. Please ensure it's a valid eTrakka text/CSV document.", type: "error" });
     } finally {
