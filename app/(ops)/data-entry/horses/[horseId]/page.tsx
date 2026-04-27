@@ -3,6 +3,7 @@ import { SectionCard } from "@/components/layout/section-card";
 import { SimpleMetricChart } from "@/components/charts/simple-metric-chart";
 import { HorseWorkspaceToolbar } from "@/components/ops/horse-workspace-toolbar";
 import { EtrakkaUploader } from "@/components/ops/etrakka-uploader";
+import { NewTestModal } from "@/components/ops/new-test-modal";
 import { getAccessibleHorseSummaries } from "@/lib/domain/horses";
 import { getTrainerHorseWorkspace } from "@/lib/domain/trainer-horses";
 import {
@@ -263,167 +264,12 @@ export default async function TrainerHorseWorkspacePage({
         <EtrakkaUploader horseId={horse.id} horseName={horse.name} />
       </div>
 
-      <form id="new-test" action={addHorseBiochemistryResultAction} className="mt-8 grid gap-6 rounded-[2rem] border border-ink/10 bg-white p-6 shadow-panel">
-        <div>
-          <p className="eyebrow">Modify Tests</p>
-          <h2 className="mt-3 font-display text-2xl text-ink">Simple new test window</h2>
-          <p className="mt-3 max-w-3xl text-sm leading-7 text-steel">
-            Enter new carbs, salts, urine pH, and saliva pH results quickly, then submit and return to the updated results panel.
-          </p>
-        </div>
-
-        <input type="hidden" name="horseId" value={horse.id} />
-
-        <div className="grid gap-4 xl:grid-cols-[1.05fr_0.95fr]">
-          <div className="rounded-[1.75rem] border border-ink/10 bg-sand p-5">
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-ember">Session details</p>
-            <div className="mt-5 grid gap-4 md:grid-cols-2">
-              <label className="grid gap-2 text-sm font-medium text-ink">
-                Sampled at
-                <input name="sampledAt" type="datetime-local" className="rounded-2xl border border-ink/10 bg-white px-4 py-3 text-base text-ink outline-none" />
-              </label>
-              <label className="grid gap-2 text-sm font-medium text-ink">
-                Sample type
-                <select name="sampleType" defaultValue="urine_saliva" className="rounded-2xl border border-ink/10 bg-white px-4 py-3 text-base text-ink outline-none">
-                  <option value="urine_saliva">Urine and saliva</option>
-                  <option value="urine">Urine only</option>
-                  <option value="saliva">Saliva only</option>
-                </select>
-              </label>
-            </div>
-          </div>
-
-          <div className="rounded-[1.75rem] border border-ink/10 bg-sand p-5">
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-ember">Horse reference</p>
-            <div className="mt-5 grid gap-3 md:grid-cols-3 xl:grid-cols-1">
-              {latestReferenceMetrics.length === 0 ? (
-                <div className="rounded-2xl border border-ink/10 bg-white px-4 py-4 text-sm text-steel">
-                  Weight, temperature, and hydration references will appear here after daily data is recorded.
-                </div>
-              ) : (
-                latestReferenceMetrics.map((metric) => (
-                  <div key={metric.label} className="rounded-2xl border border-ink/10 bg-white px-4 py-4">
-                    <p className="text-xs font-semibold uppercase tracking-[0.14em] text-ember">{metric.label}</p>
-                    <p className="mt-2 text-lg font-semibold text-ink">{metric.value}</p>
-                  </div>
-                ))
-              )}
-            </div>
-          </div>
-        </div>
-
-        <div className="grid gap-6 xl:grid-cols-[1.05fr_0.95fr]">
-          <div className="grid gap-6">
-            <div className="rounded-[1.75rem] border border-ink/10 bg-sand p-5">
-              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-ember">Core markers</p>
-              <div className="mt-5 grid gap-4 md:grid-cols-2">
-                <label className="grid gap-2 text-sm font-medium text-ink md:col-span-2">
-                  <span>Weight kg</span>
-                  <input name="weightKg" type="number" step="0.1" placeholder="481.1" className="rounded-2xl border border-ink/10 bg-white px-4 py-3 text-base text-ink outline-none" />
-                </label>
-                <label className="grid gap-2 text-sm font-medium text-ink">
-                  <span>Carbs %</span>
-                  <input name="carbsPercentage" type="number" min="0" max="15" step="0.1" placeholder="3.5" className="rounded-2xl border border-ink/10 bg-white px-4 py-3 text-base text-ink outline-none" />
-                </label>
-                <label className="grid gap-2 text-sm font-medium text-ink">
-                  <span>Salts ms</span>
-                  <input name="saltsMs" type="number" min="0" step="0.1" placeholder="12.0" className="rounded-2xl border border-ink/10 bg-white px-4 py-3 text-base text-ink outline-none" />
-                </label>
-                <label className="grid gap-2 text-sm font-medium text-ink">
-                  <span>Urine pH</span>
-                  <input name="urinePh" type="number" step="0.01" placeholder="7.2" className="rounded-2xl border border-ink/10 bg-white px-4 py-3 text-base text-ink outline-none" />
-                </label>
-                <label className="grid gap-2 text-sm font-medium text-ink">
-                  <span>Saliva pH</span>
-                  <input name="salivaPh" type="number" step="0.01" placeholder="7.1" className="rounded-2xl border border-ink/10 bg-white px-4 py-3 text-base text-ink outline-none" />
-                </label>
-                <label className="grid gap-2 text-sm font-medium text-ink md:col-span-2">
-                  <span>Urea</span>
-                  <input name="ureaLevel" type="number" min="15" max="40" step="0.1" placeholder="20" className="rounded-2xl border border-ink/10 bg-white px-4 py-3 text-base text-ink outline-none" />
-                </label>
-              </div>
-            </div>
-
-            <div className="rounded-[1.75rem] border border-ink/10 bg-sand p-5">
-              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-ember">Health support values</p>
-              <div className="mt-5 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-                <label className="grid gap-2 text-sm font-medium text-ink"><span>Health score</span><input name="healthScore" type="number" step="0.1" className="rounded-2xl border border-ink/10 bg-white px-4 py-3 text-base text-ink outline-none" /></label>
-                <label className="grid gap-2 text-sm font-medium text-ink"><span>Hydration litres</span><input name="hydrationLitres" type="number" step="0.1" className="rounded-2xl border border-ink/10 bg-white px-4 py-3 text-base text-ink outline-none" /></label>
-                <label className="grid gap-2 text-sm font-medium text-ink"><span>Hydration score</span><input name="hydrationScore" type="number" step="0.1" className="rounded-2xl border border-ink/10 bg-white px-4 py-3 text-base text-ink outline-none" /></label>
-                <label className="grid gap-2 text-sm font-medium text-ink"><span>Electrolyte score</span><input name="electrolyteScore" type="number" step="0.1" className="rounded-2xl border border-ink/10 bg-white px-4 py-3 text-base text-ink outline-none" /></label>
-                <label className="grid gap-2 text-sm font-medium text-ink"><span>Recovery score</span><input name="recoveryScore" type="number" step="0.1" className="rounded-2xl border border-ink/10 bg-white px-4 py-3 text-base text-ink outline-none" /></label>
-                <label className="grid gap-2 text-sm font-medium text-ink"><span>Blue square score</span><input name="blueSquareScore" type="number" step="0.1" className="rounded-2xl border border-ink/10 bg-white px-4 py-3 text-base text-ink outline-none" /></label>
-              </div>
-            </div>
-          </div>
-
-          <div className="grid gap-4">
-            <div className="rounded-[1.75rem] border border-ink/10 bg-sand p-5">
-              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-ember">Healing guide</p>
-              <div className="mt-5 grid gap-3">
-                <div className="rounded-2xl border border-ink/10 bg-white px-4 py-4 text-sm text-ink">
-                  <p className="font-semibold">Carbs</p>
-                  <p className="mt-1 text-steel">Range 0-15% / Healing range 3-4%</p>
-                </div>
-                <div className="rounded-2xl border border-ink/10 bg-white px-4 py-4 text-sm text-ink">
-                  <p className="font-semibold">Salts</p>
-                  <p className="mt-1 text-steel">Range 0-70 C / Healing range 15-20 C</p>
-                  <p className="mt-1 text-steel">Enter in `ms`. The stored `C` result is calculated as `ms x 1.43`.</p>
-                </div>
-                <div className="rounded-2xl border border-ink/10 bg-white px-4 py-4 text-sm text-ink">
-                  <p className="font-semibold">Urine pH</p>
-                  <p className="mt-1 text-steel">Range 4-14 / Healing range 7-7.5 pH</p>
-                </div>
-                <div className="rounded-2xl border border-ink/10 bg-white px-4 py-4 text-sm text-ink">
-                  <p className="font-semibold">Saliva pH</p>
-                  <p className="mt-1 text-steel">Range 4-14 / Healing range 7-7.5 pH</p>
-                </div>
-                <div className="rounded-2xl border border-ink/10 bg-white px-4 py-4 text-sm text-ink">
-                  <p className="font-semibold">Urea</p>
-                  <p className="mt-1 text-steel">Range 15-40 / Healing range 20</p>
-                </div>
-              </div>
-            </div>
-
-            <label className="grid gap-2 rounded-[1.75rem] border border-ink/10 bg-sand p-5 text-sm font-medium text-ink">
-              <span className="text-xs font-semibold uppercase tracking-[0.18em] text-ember">Trainer notes</span>
-              <input
-                name="trainingSession"
-                placeholder="Training session summary"
-                className="rounded-2xl border border-ink/10 bg-white px-4 py-3 text-base text-ink outline-none"
-              />
-              <input
-                name="horseAttitude"
-                placeholder="Horse attitude"
-                className="rounded-2xl border border-ink/10 bg-white px-4 py-3 text-base text-ink outline-none"
-              />
-              <input
-                name="jockeyComments"
-                placeholder="Jockey comments"
-                className="rounded-2xl border border-ink/10 bg-white px-4 py-3 text-base text-ink outline-none"
-              />
-              <textarea
-                name="notes"
-                rows={7}
-                placeholder="Add context for the session, horse attitude, and jockey comments."
-                className="rounded-[1.5rem] border border-ink/10 bg-white px-4 py-3 text-base text-ink outline-none"
-              />
-            </label>
-          </div>
-        </div>
-
-        <div className="flex flex-wrap gap-3">
-          <button type="submit" className="rounded-full bg-ink px-5 py-3 text-sm font-semibold text-white">
-            Submit and return to results
-          </button>
-          <Link
-            href={`/data-entry/horses/${horse.id}/history`}
-            className="rounded-full border border-ink/10 bg-sand px-5 py-3 text-sm font-semibold text-ink"
-          >
-            Review full result table
-          </Link>
-        </div>
-      </form>
+      <div id="new-test" className="mt-8 flex flex-col items-center justify-center py-6">
+        <NewTestModal horseId={horse.id} latestReferenceMetrics={latestReferenceMetrics} />
+        <p className="mt-3 text-sm text-steel text-center max-w-sm">
+          Tap to open the dedicated full-screen panel for rapid testing insertion.
+        </p>
+      </div>
 
       <div id="review-results" className="mt-8 grid gap-6 xl:grid-cols-[1.05fr_0.95fr]">
         <div className="rounded-[2rem] border border-ink/10 bg-white p-6 shadow-panel">
