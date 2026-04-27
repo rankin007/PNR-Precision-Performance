@@ -317,13 +317,6 @@ export async function getTrainerHorseWorkspace(horseId: string): Promise<{
   workspace: HorseTrainerWorkspace | null;
   error?: string;
 }> {
-  if (horseId === exampleHorseId) {
-    return {
-      envReady: true,
-      workspace: getExampleHorseWorkspace(),
-    };
-  }
-
   if (!hasSupabaseEnv()) {
     return {
       envReady: false,

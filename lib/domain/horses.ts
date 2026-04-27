@@ -136,15 +136,13 @@ export async function getAccessibleHorseSummaries() {
 
   return {
     envReady: true,
-    horses: [
-      exampleHorseSummary,
-      ...(((data as HorseSummaryRow[] | null)?.map((horse) => ({
+    horses: 
+      ((data as HorseSummaryRow[] | null)?.map((horse) => ({
         id: horse.id,
         name: horse.name,
         status: horse.status ?? null,
         stableName: extractStableName(horse.stables),
-      })) ?? []).filter((horse) => horse.id !== exampleHorseId)),
-    ],
+      })) ?? []),
   };
 }
 
