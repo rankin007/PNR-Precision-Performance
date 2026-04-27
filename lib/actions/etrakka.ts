@@ -3,63 +3,73 @@
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 export type EtrakkaImportPayload = {
-  horseName: string;
+  horseId: string;
   sessionDateIso: string; 
   riderName: string;
-  track: string;
+  trackName: string;
   etrakkaDevice: string;
   sessionType: string;
-  temperatureC: number | null;
-  humidityPercentage: number | null;
-  work1_200mTime: number | null;
-  work1_400mTime: number | null;
-  work2_200mTime: number | null;
-  work2_400mTime: number | null;
+  bt200: number | null;
+  bt400: number | null;
+  bt600: number | null;
+  bt800: number | null;
+  bt1000: number | null;
+  s200: number | null;
+  s400: number | null;
+  s600: number | null;
+  s800: number | null;
+  s1000: number | null;
   hrMaxBpm: number | null;
+  hr45: number | null;
   trotMeanHrBpm: number | null;
   canterMeanHrBpm: number | null;
+  gallopMeanHrBpm: number | null;
   vmaxKph: number | null;
-  gallopMetres: number | null;
+  v200: number | null;
+  sl50: number | null;
+  gallopOver60kph: number | null;
+  secsOver60kph: number | null;
   recoveryAvgHr2_5minBpm: number | null;
+  gallopMetres: number | null;
+  note: string | null;
 };
 
 export async function importEtrakkaSession(payload: EtrakkaImportPayload) {
   try {
     const supabase = await createSupabaseServerClient();
 
-    // 1. Resolve Horse ID from the exact Name
-    const { data: horse, error: horseError } = await supabase
-      .from("horses")
-      .select("id")
-      .ilike("name", payload.horseName)
-      .maybeSingle();
-
-    if (horseError || !horse) {
-      return { success: false, error: `Could not find horse with name: ${payload.horseName}` };
-    }
-
-    // 2. Insert the parsed payload into our new etrakka_sessions table
     const { error: insertError } = await supabase
       .from("etrakka_sessions")
       .insert({
-        horse_id: horse.id,
+        horse_id: payload.horseId,
         session_date: payload.sessionDateIso,
-        rider_name: payload.riderName || null,
-        track: payload.track || null,
-        etrakka_device: payload.etrakkaDevice || null,
+        rider: payload.riderName || null,
+        track_name: payload.trackName || null,
+        blanket: payload.etrakkaDevice || null,
         session_type: payload.sessionType || null,
-        temperature_c: payload.temperatureC,
-        humidity_percentage: payload.humidityPercentage,
-        work_1_200m_time: payload.work1_200mTime,
-        work_1_400m_time: payload.work1_400mTime,
-        work_2_200m_time: payload.work2_200mTime,
-        work_2_400m_time: payload.work2_400mTime,
-        hr_max_bpm: payload.hrMaxBpm,
-        trot_mean_hr_bpm: payload.trotMeanHrBpm,
-        canter_mean_hr_bpm: payload.canterMeanHrBpm,
-        vmax_kph: payload.vmaxKph,
+        bt200: payload.bt200,
+        bt400: payload.bt400,
+        bt600: payload.bt600,
+        bt800: payload.bt800,
+        bt1000: payload.bt1000,
+        s200: payload.s200,
+        s400: payload.s400,
+        s600: payload.s600,
+        s800: payload.s800,
+        s1000: payload.s1000,
+        hr_max: payload.hrMaxBpm,
+        hr_45: payload.hr45,
+        trot_mean_hr: payload.trotMeanHrBpm,
+        canter_mean_hr: payload.canterMeanHrBpm,
+        gallop_mean_hr: payload.gallopMeanHrBpm,
+        vmax: payload.vmaxKph,
+        v200: payload.v200,
+        sl_50: payload.sl50,
+        gallop_over_60kph: payload.gallopOver60kph,
+        secs_over_60kph: payload.secsOver60kph,
+        avg_hr_2_5min: payload.recoveryAvgHr2_5minBpm,
         gallop_metres: payload.gallopMetres,
-        recovery_avg_hr_2_5min_bpm: payload.recoveryAvgHr2_5minBpm,
+        note: payload.note || null,
       });
 
     if (insertError) {

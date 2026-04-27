@@ -3,14 +3,12 @@
 import { useState } from "react";
 import { importEtrakkaSession, type EtrakkaImportPayload } from "@/lib/actions/etrakka";
 
-export function EtrakkaUploader() {
+export function EtrakkaUploader({ horseId, horseName }: { horseId: string; horseName: string }) {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<{ text: string; type: "error" | "success" } | null>(null);
 
-  // Helper to convert "Saturday, April 25, 2026" and "08:03" into a valid ISO string
   const parseDateTime = (dateStr: string, timeStr: string) => {
     try {
-      // Strips day of week "Saturday," -> "April 25, 2026"
       const cleanDate = dateStr.replace(/^[a-zA-Z]+,\s*/, "").trim(); 
       const d = new Date(`${cleanDate} ${timeStr}`);
       return isNaN(d.getTime()) ? new Date().toISOString() : d.toISOString();
@@ -28,76 +26,133 @@ export function EtrakkaUploader() {
 
     try {
       const text = await file.text();
-      // Since CSVs can be messy, we extract cleanly using Regex over the raw text file
-      
-      // 1. Look for the top row format: "Dancing Man Saturday, April 25, 2026 (Mary Bray)"
-      // Alternatively, we use flexible regex matches anywhere in the file.
-      
-      // Fallback object
+      // Remove quotes and carriage returns, then split by lines
+      const cleanText = text.replace(/'/g, "").replace(/"/g, "").replace(/\r/g, "");
+      const lines = cleanText.split("\n").map(l => l.trim()).filter(Boolean);
+
       const data: Partial<EtrakkaImportPayload> = {
-        temperatureC: null, humidityPercentage: null,
-        work1_200mTime: null, work1_400mTime: null,
-        work2_200mTime: null, work2_400mTime: null,
-        hrMaxBpm: null, trotMeanHrBpm: null, canterMeanHrBpm: null,
-        vmaxKph: null, gallopMetres: null, recoveryAvgHr2_5minBpm: null
+        horseId, // Direct context insertion
+        bt200: null, bt400: null, bt600: null, bt800: null, bt1000: null,
+        s200: null, s400: null, s600: null, s800: null, s1000: null,
+        hrMaxBpm: null, hr45: null, trotMeanHrBpm: null, canterMeanHrBpm: null, gallopMeanHrBpm: null,
+        vmaxKph: null, v200: null, sl50: null, gallopOver60kph: null, secsOver60kph: null,
+        recoveryAvgHr2_5minBpm: null, gallopMetres: null,
+        note: null, trackName: "", etrakkaDevice: "", sessionType: "", riderName: ""
       };
 
-      // Best effort text parse:
-      const nameMatch = text.match(/^([a-zA-Z\s]+)\s+(?:Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday)/i);
-      if (nameMatch) data.horseName = nameMatch[1].trim();
-      
-      const trackMatch = text.match(/(Goulburn|Randwick|Rosehill)/i); // Adjust your typical track names
-      if (trackMatch) data.track = trackMatch[1];
-      
-      const tempMatch = text.match(/Temp\s*(\d+)C/i);
-      if (tempMatch) data.temperatureC = parseFloat(tempMatch[1]);
-      
-      const humMatch = text.match(/Humidity\s*(\d+)%/i);
-      if (humMatch) data.humidityPercentage = parseFloat(humMatch[1]);
-      
-      const hrMaxMatch = text.match(/HR Max[,\s]+(\d+)/i);
-      if (hrMaxMatch) data.hrMaxBpm = parseFloat(hrMaxMatch[1]);
-      
-      const canterMatch = text.match(/Canter Mean HR[,\s]+(\d+)/i);
-      if (canterMatch) data.canterMeanHrBpm = parseFloat(canterMatch[1]);
-      
-      const vmaxMatch = text.match(/Vmax[,\s]+([\d.]+)/i);
-      if (vmaxMatch) data.vmaxKph = parseFloat(vmaxMatch[1]);
+      let sessionDateRaw = "";
+      let sessionTimeRaw = "";
 
-      const recoveryMatch = text.match(/AvgHR2_5min[,\s]+(\d+)/i);
-      if (recoveryMatch) data.recoveryAvgHr2_5minBpm = parseFloat(recoveryMatch[1]);
+      // Smart Parser: Handles either vertical keys ("Track Name, Goulburn") OR horizontal table arrays
+      // Look for the "Date" header to determine if it's horizontal
+      const headerLineIndex = lines.findIndex(l => l.toLowerCase().includes("track name") || l.toLowerCase().includes("session type"));
+      
+      if (headerLineIndex !== -1 && lines[headerLineIndex + 1]) {
+        // Appears to be horizontal CSV. Parse exactly via columns.
+        const headers = lines[headerLineIndex].split(",").map(h => h.trim().toLowerCase());
+        const rowData = lines[headerLineIndex + 1].split(",").map(c => c.trim());
+        
+        const getValue = (keyAliases: string[]) => {
+          const idx = headers.findIndex(h => keyAliases.some(alias => h === alias || h.includes(alias)));
+          return idx !== -1 && rowData[idx] ? rowData[idx] : null;
+        };
+        const getNum = (aliases: string[]) => {
+          const val = getValue(aliases);
+          if (!val || val === "N/A" || val === "") return null;
+          const parsed = parseFloat(val);
+          return isNaN(parsed) ? null : parsed;
+        };
 
-      // Example checking split rows (this looks for line starting with 1 or 2, then picking numbers)
-      const split1 = text.match(/1[,\s]+Best Time[,\s]+([\d.]+)[,\s]+([\d.]+)/i);
-      if (split1) {
-        data.work1_200mTime = parseFloat(split1[1]);
-        data.work1_400mTime = parseFloat(split1[2]);
+        sessionDateRaw = getValue(["date"]) || "";
+        sessionTimeRaw = getValue(["start time"]) || "";
+        data.trackName = getValue(["track name", "track"]) || "";
+        data.riderName = getValue(["rider"]) || "";
+        data.etrakkaDevice = getValue(["blanket"]) || "";
+        data.sessionType = getValue(["session type"]) || "";
+        
+        data.bt200 = getNum(["bt200"]);
+        data.bt400 = getNum(["bt400"]);
+        data.bt600 = getNum(["bt600"]);
+        data.bt800 = getNum(["bt800"]);
+        data.bt1000 = getNum(["bt1000"]);
+        
+        // Exact matches needed so we don't accidentally pull bt200 for 200
+        const getExactNum = (exactHeader: string) => {
+          const idx = headers.findIndex(h => h === exactHeader);
+          if (idx === -1 || !rowData[idx] || rowData[idx] === "N/A") return null;
+          return parseFloat(rowData[idx]) || null;
+        };
+
+        data.s200 = getExactNum("200");
+        data.s400 = getExactNum("400");
+        data.s600 = getExactNum("600");
+        data.s800 = getExactNum("800");
+        data.s1000 = getExactNum("1000");
+
+        data.hrMaxBpm = getNum(["hr max"]);
+        data.hr45 = getNum(["hr 45"]);
+        data.trotMeanHrBpm = getNum(["trot mean hr"]);
+        data.canterMeanHrBpm = getNum(["canter mean hr"]);
+        data.gallopMeanHrBpm = getNum(["gallop mean hr"]);
+        data.vmaxKph = getNum(["vmax"]);
+        data.v200 = getNum(["v200"]);
+        data.sl50 = getNum(["sl 50"]);
+        data.gallopOver60kph = getNum(["gallop>60kph"]);
+        data.secsOver60kph = getNum(["secs>60kph"]);
+        data.recoveryAvgHr2_5minBpm = getNum(["avghr2_5min"]);
+        data.gallopMetres = getNum(["gallop metres"]);
+        data.note = getValue(["note"]) || null;
+
+      } else {
+        // Fallback Vertical Parser
+        lines.forEach(line => {
+          const parts = line.split(",").map(p => p.trim());
+          if (parts.length < 2) return;
+          const key = parts[0].toLowerCase();
+          const val = parts[1];
+          const num = parseFloat(val);
+
+          if (key.includes("date")) sessionDateRaw = val;
+          if (key.includes("start time")) sessionTimeRaw = val;
+          if (key.includes("track name")) data.trackName = val;
+          if (key.includes("rider")) data.riderName = val;
+          if (key.includes("blanket")) data.etrakkaDevice = val;
+          if (key.includes("session type")) data.sessionType = val;
+          
+          if (key === "bt200" && !isNaN(num)) data.bt200 = num;
+          if (key === "bt400" && !isNaN(num)) data.bt400 = num;
+          if (key === "bt600" && !isNaN(num)) data.bt600 = num;
+          if (key === "bt800" && !isNaN(num)) data.bt800 = num;
+          if (key === "bt1000" && !isNaN(num)) data.bt1000 = num;
+          
+          if (key === "200" && !isNaN(num)) data.s200 = num;
+          if (key === "400" && !isNaN(num)) data.s400 = num;
+          if (key === "600" && !isNaN(num)) data.s600 = num;
+          if (key === "800" && !isNaN(num)) data.s800 = num;
+          if (key === "1000" && !isNaN(num)) data.s1000 = num;
+
+          if (key.includes("hr max") && !isNaN(num)) data.hrMaxBpm = num;
+          if (key.includes("hr 45") && !isNaN(num)) data.hr45 = num;
+          if (key.includes("trot mean hr") && !isNaN(num)) data.trotMeanHrBpm = num;
+          if (key.includes("canter mean hr") && !isNaN(num)) data.canterMeanHrBpm = num;
+          if (key.includes("gallop mean hr") && !isNaN(num)) data.gallopMeanHrBpm = num;
+          if (key === "vmax" && !isNaN(num)) data.vmaxKph = num;
+          if (key === "v200" && !isNaN(num)) data.v200 = num;
+          if (key === "sl 50" && !isNaN(num)) data.sl50 = num;
+          if (key.includes("gallop>60kph") && !isNaN(num)) data.gallopOver60kph = num;
+          if (key.includes("secs>60kph") && !isNaN(num)) data.secsOver60kph = num;
+          if (key.includes("avghr2_5min") && !isNaN(num)) data.recoveryAvgHr2_5minBpm = num;
+          if (key.includes("gallop metres") && !isNaN(num)) data.gallopMetres = num;
+          if (key === "note") data.note = val;
+        });
       }
-      const split2 = text.match(/2[,\s]+Best Time[,\s]+([\d.]+)[,\s]+([\d.]+)/i);
-      if (split2) {
-        data.work2_200mTime = parseFloat(split2[1]);
-        data.work2_400mTime = parseFloat(split2[2]);
-      }
 
-      // Hardcode missing values as a fallback if regex fails
-      if (!data.horseName) {
-         // Ask user to fix format if completely unrecognized
-         setMessage({ text: "Could not auto-detect Horse Name from the file. Please check the format.", type: "error" });
-         setLoading(false);
-         return;
-      }
+      data.sessionDateIso = parseDateTime(sessionDateRaw || new Date().toDateString(), sessionTimeRaw || "12:00");
 
-      // Finalize ISO Date
-      data.sessionDateIso = parseDateTime(
-        text.match(/[a-zA-Z]+,\s*[a-zA-Z]+\s*\d{1,2},\s*\d{4}/)?.[0] || "",
-        text.match(/\b([0-1]?[0-9]|2[0-3]):([0-5][0-9])\b/)?.[0] || ""
-      );
-
-      // Call Server Action
       const result = await importEtrakkaSession(data as EtrakkaImportPayload);
       
       if (result.success) {
-        setMessage({ text: `Successfully imported E-Trakka session for ${data.horseName}!`, type: "success" });
+        setMessage({ text: `Successfully imported E-Trakka session for ${horseName}!`, type: "success" });
       } else {
         setMessage({ text: result.error || "Failed to upload", type: "error" });
       }
@@ -107,7 +162,6 @@ export function EtrakkaUploader() {
       setMessage({ text: "Error parsing the CSV file. Please ensure it's a valid eTrakka text/CSV document.", type: "error" });
     } finally {
       setLoading(false);
-      // Reset input
       e.target.value = '';
     }
   };
@@ -116,7 +170,7 @@ export function EtrakkaUploader() {
     <div className="bg-white p-6 rounded-lg border border-slate-200 mt-6 max-w-xl">
       <h3 className="text-lg font-medium text-slate-900 mb-2">Import E-Trakka CSV</h3>
       <p className="text-sm text-slate-500 mb-6">
-        Upload the raw E-Trakka Export file here. We will auto-detect the horse, track variables, and splits to link against Biochemistry results.
+        Upload the E-Trakka CSV file here. The data will be automatically assigned and locked to <strong>{horseName}</strong>.
       </p>
 
       <div className="flex flex-col gap-4">
@@ -128,7 +182,7 @@ export function EtrakkaUploader() {
             <p className="mb-2 text-sm text-slate-500">
               <span className="font-semibold text-teal-600">Click to upload</span> or drag and drop
             </p>
-            <p className="text-xs text-slate-400">CSV, TXT exports</p>
+            <p className="text-xs text-slate-400">CSV export file</p>
           </div>
           <input 
             type="file" 

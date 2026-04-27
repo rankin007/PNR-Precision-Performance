@@ -260,7 +260,7 @@ export default async function TrainerHorseWorkspacePage({
       </div>
 
       <div id="etrakka-import" className="mt-8 scroll-mt-24">
-        <EtrakkaUploader />
+        <EtrakkaUploader horseId={horse.id} horseName={horse.name} />
       </div>
 
       <form id="new-test" action={addHorseBiochemistryResultAction} className="mt-8 grid gap-6 rounded-[2rem] border border-ink/10 bg-white p-6 shadow-panel">
