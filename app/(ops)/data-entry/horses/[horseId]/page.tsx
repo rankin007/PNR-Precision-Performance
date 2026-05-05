@@ -1,13 +1,13 @@
+import Image from "next/image";
 import Link from "next/link";
 import { SectionCard } from "@/components/layout/section-card";
 import { SimpleMetricChart } from "@/components/charts/simple-metric-chart";
-import { HorseWorkspaceToolbar } from "@/components/ops/horse-workspace-toolbar";
 import { EtrakkaUploader } from "@/components/ops/etrakka-uploader";
+import { HorseGalleryForm } from "@/components/ops/horse-gallery-form";
 import { NewTestModal } from "@/components/ops/new-test-modal";
 import { getAccessibleHorseSummaries } from "@/lib/domain/horses";
 import { getTrainerHorseWorkspace } from "@/lib/domain/trainer-horses";
 import {
-  addHorseBiochemistryResultAction,
   addHorseGalleryItemAction,
   updateHorseProfileAction,
 } from "@/app/(ops)/data-entry/horses/actions";
@@ -21,6 +21,22 @@ function pickValue(value: string | string[] | undefined) {
   return Array.isArray(value) ? value[0] : value;
 }
 
+function buildSessionNotePreview(entry: {
+  trainingSession: string | null;
+  attitude: string | null;
+  jockeyComments: string | null;
+  notes: string | null;
+}) {
+  const parts = [
+    entry.trainingSession,
+    entry.attitude ? `Attitude: ${entry.attitude}` : null,
+    entry.jockeyComments ? `Jockey: ${entry.jockeyComments}` : null,
+    entry.notes,
+  ].filter(Boolean);
+
+  return parts.join(" • ");
+}
+
 export default async function TrainerHorseWorkspacePage({
   params,
   searchParams,
@@ -29,6 +45,7 @@ export default async function TrainerHorseWorkspacePage({
   const query = searchParams ? await searchParams : {};
   const saved = pickValue(query.saved);
   const error = pickValue(query.error);
+  const openTest = pickValue(query.openTest) === "1";
   const [result, horseList] = await Promise.all([
     getTrainerHorseWorkspace(horseId),
     getAccessibleHorseSummaries(),
@@ -64,14 +81,38 @@ export default async function TrainerHorseWorkspacePage({
 
   return (
     <SectionCard
-      eyebrow="Horse Workspace"
+      eyebrow="The Stable"
       title={horse.name}
-      description="A trainer-facing summary panel for profile review, new test entry, trend analysis, hover notes, and full result history in one mobile-friendly workspace."
+      description="Open the horse workspace, add a new test, review the latest notes, and move directly into daily records, feeding, track sessions, or submissions."
     >
-      <HorseWorkspaceToolbar
-        horses={horseList.horses.map((item) => ({ id: item.id, name: item.name }))}
-        currentHorseId={horse.id}
-      />
+      <div className="flex flex-wrap items-start justify-between gap-4">
+        <div className="flex flex-wrap gap-3">
+        <Link
+          href="/data-entry/horses"
+          className="rounded-full border border-ink/10 bg-sand px-4 py-2 text-sm font-semibold text-ink"
+        >
+          Back to The Stable
+        </Link>
+        <Link
+          href={`/data-entry/horses/${horse.id}/history`}
+          className="rounded-full border border-ink/10 bg-sand px-4 py-2 text-sm font-semibold text-ink"
+        >
+          Full History
+        </Link>
+        <Link
+          href={`/data-entry/horses/${horse.id}/etrakka`}
+          className="rounded-full border border-ink/10 bg-sand px-4 py-2 text-sm font-semibold text-ink"
+        >
+          E-Trakka Data
+        </Link>
+        <div className="rounded-full border border-ink/10 bg-white px-4 py-2 text-sm font-semibold text-ink">
+          {horseList.horses.find((item) => item.id === horse.id)?.name ?? horse.name}
+        </div>
+        </div>
+        <div id="new-test" className="flex justify-end">
+          <NewTestModal horseId={horse.id} horseName={horse.name} latestReferenceMetrics={latestReferenceMetrics} startOpen={openTest} />
+        </div>
+      </div>
 
       {saved ? (
         <div className="mt-6 rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800">
@@ -92,11 +133,23 @@ export default async function TrainerHorseWorkspacePage({
         <section id="horse-profile" className="grid gap-4">
           <div className="overflow-hidden rounded-[2rem] border border-ink/10 bg-white shadow-panel">
             {galleryItems[0] ? (
-              <img
-                src={galleryItems[0].imageUrl}
-                alt={galleryItems[0].caption ?? horse.name}
-                className="h-64 w-full object-cover"
-              />
+              <div className="relative h-64 w-full">
+                <a
+                  href={galleryItems[0].imageUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="block h-full w-full"
+                  aria-label={`Open ${galleryItems[0].caption ?? horse.name} image`}
+                >
+                  <Image
+                    src={galleryItems[0].imageUrl}
+                    alt={galleryItems[0].caption ?? horse.name}
+                    fill
+                    unoptimized
+                    className="object-cover"
+                  />
+                </a>
+              </div>
             ) : (
               <div className="flex h-64 items-center justify-center bg-sand text-sm text-steel">
                 No profile image attached yet.
@@ -233,42 +286,66 @@ export default async function TrainerHorseWorkspacePage({
           </button>
         </form>
 
-        <form action={addHorseGalleryItemAction} className="grid gap-6 rounded-[2rem] border border-ink/10 bg-white p-6 shadow-panel">
-          <div>
-            <p className="eyebrow">Horse Gallery</p>
-            <h2 className="mt-3 font-display text-2xl text-ink">Add gallery image</h2>
+        <div className="grid gap-6 rounded-[2rem] border border-ink/10 bg-white p-6 shadow-panel">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <p className="eyebrow">Gallery</p>
+              <h2 className="mt-3 font-display text-2xl text-ink">Horse gallery</h2>
+            </div>
+            <Link
+              href={`/data-entry/horses/${horse.id}/history#horse-gallery-history`}
+              className="rounded-full border border-ink/10 bg-sand px-4 py-2 text-sm font-semibold text-ink"
+            >
+              View all photos
+            </Link>
           </div>
-
-          <input type="hidden" name="horseId" value={horse.id} />
-
-          <label className="grid gap-2 text-sm font-medium text-ink">
-            Image URL or file path
-            <input name="imageUrl" placeholder="/horse-images/example.jpg" className="rounded-2xl border border-ink/10 bg-sand px-4 py-3 text-base text-ink outline-none" />
-          </label>
-          <label className="grid gap-2 text-sm font-medium text-ink">
-            Caption
-            <input name="caption" className="rounded-2xl border border-ink/10 bg-sand px-4 py-3 text-base text-ink outline-none" />
-          </label>
-          <label className="grid gap-2 text-sm font-medium text-ink">
-            Taken at
-            <input name="takenAt" type="datetime-local" className="rounded-2xl border border-ink/10 bg-sand px-4 py-3 text-base text-ink outline-none" />
-          </label>
-
-          <button type="submit" className="rounded-full bg-ink px-5 py-3 text-sm font-semibold text-white">
-            Add gallery item
-          </button>
-        </form>
+          <HorseGalleryForm horseId={horse.id} horseName={horse.name} action={addHorseGalleryItemAction} />
+          <div className="grid gap-3 md:grid-cols-2">
+            {galleryItems.length === 0 ? (
+              <div className="rounded-2xl border border-ink/10 bg-sand px-4 py-4 text-sm text-steel md:col-span-2">
+                No gallery images saved for this horse yet.
+              </div>
+            ) : (
+              galleryItems.slice(0, 6).map((item) => (
+                <div key={item.id} className="overflow-hidden rounded-[1.5rem] border border-ink/10 bg-sand">
+                  <div className="relative h-40 w-full">
+                    <a
+                      href={item.imageUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="block h-full w-full"
+                      aria-label={`Open ${item.caption ?? horse.name} image`}
+                    >
+                      <Image
+                        src={item.imageUrl}
+                        alt={item.caption ?? horse.name}
+                        fill
+                        unoptimized
+                        className="object-cover"
+                      />
+                    </a>
+                  </div>
+                  <div className="p-4">
+                    <p className="text-sm font-semibold text-ink">{item.caption ?? horse.name}</p>
+                    <p className="mt-1 text-xs text-steel">{item.takenAt ? item.takenAt.slice(0, 16).replace("T", " ") : "No date supplied"}</p>
+                    <a
+                      href={item.imageUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="mt-3 inline-flex rounded-full border border-ink/10 bg-white px-3 py-1 text-xs font-semibold text-ink"
+                    >
+                      Open full size
+                    </a>
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
+        </div>
       </div>
 
       <div id="etrakka-import" className="mt-8 scroll-mt-24">
         <EtrakkaUploader horseId={horse.id} horseName={horse.name} />
-      </div>
-
-      <div id="new-test" className="mt-8 flex flex-col items-center justify-center py-6">
-        <NewTestModal horseId={horse.id} latestReferenceMetrics={latestReferenceMetrics} />
-        <p className="mt-3 text-sm text-steel text-center max-w-sm">
-          Tap to open the dedicated full-screen panel for rapid testing insertion.
-        </p>
       </div>
 
       <div id="review-results" className="mt-8 grid gap-6 xl:grid-cols-[1.05fr_0.95fr]">
@@ -303,12 +380,18 @@ export default async function TrainerHorseWorkspacePage({
                         <span>Session Notes</span>
                         <svg className="w-4 h-4 transition-transform group-open:rotate-180 text-ink/40" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
                       </summary>
-                      <p className="mt-2 text-steel leading-relaxed">
-                        {entry.trainingSession ? `${entry.trainingSession}. ` : ""}
-                        {entry.attitude ? `Attitude: ${entry.attitude}. ` : ""}
-                        {entry.jockeyComments ? `Jockey: ${entry.jockeyComments}. ` : ""}
-                        {entry.notes && !entry.trainingSession ? entry.notes : ""}
+                      <p
+                        className="mt-2 truncate text-steel"
+                        title={buildSessionNotePreview(entry)}
+                      >
+                        {buildSessionNotePreview(entry)}
                       </p>
+                      <div className="mt-3 border-t border-ink/5 pt-3 text-steel leading-relaxed">
+                        {entry.trainingSession ? <p>{entry.trainingSession}</p> : null}
+                        {entry.attitude ? <p className="mt-2">Attitude: {entry.attitude}</p> : null}
+                        {entry.jockeyComments ? <p className="mt-2">Jockey: {entry.jockeyComments}</p> : null}
+                        {entry.notes ? <p className="mt-2">Additional notes: {entry.notes}</p> : null}
+                      </div>
                     </details>
                   ) : null}
                 </div>
@@ -318,8 +401,25 @@ export default async function TrainerHorseWorkspacePage({
         </div>
 
         <div className="rounded-[2rem] border border-ink/10 bg-white p-6 shadow-panel">
-          <p className="eyebrow">Latest profile-linked inputs</p>
-          <h2 className="mt-3 font-display text-2xl text-ink">History panel</h2>
+          <p className="eyebrow">Trainer Notes</p>
+          <h2 className="mt-3 font-display text-2xl text-ink">Trainer notes and actions</h2>
+          <div className="mt-6 flex flex-wrap gap-3">
+            <Link href="/data-entry" className="rounded-full border border-ink/10 bg-sand px-4 py-2 text-sm font-semibold text-ink">
+              Daily Records
+            </Link>
+            <Link href="/data-entry/feeding" className="rounded-full border border-ink/10 bg-sand px-4 py-2 text-sm font-semibold text-ink">
+              Feeding
+            </Link>
+            <Link href="/data-entry/track" className="rounded-full border border-ink/10 bg-sand px-4 py-2 text-sm font-semibold text-ink">
+              Track Sessions
+            </Link>
+            <Link href="/data-entry/submissions" className="rounded-full border border-ink/10 bg-sand px-4 py-2 text-sm font-semibold text-ink">
+              Submissions
+            </Link>
+            <Link href={`/data-entry/horses/${horse.id}/etrakka`} className="rounded-full border border-ink/10 bg-sand px-4 py-2 text-sm font-semibold text-ink">
+              E-Trakka Data
+            </Link>
+          </div>
           <div className="mt-6 grid gap-3">
             {operationalHistory.length === 0 ? (
               <div className="rounded-2xl border border-ink/10 bg-sand px-4 py-4 text-sm text-steel">

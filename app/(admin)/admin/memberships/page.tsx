@@ -1,4 +1,7 @@
-import { assignMembershipLevelByEmailAction } from "@/app/(admin)/admin/memberships/actions";
+import {
+  approveApplicationAccessAction,
+  assignMembershipLevelByEmailAction,
+} from "@/app/(admin)/admin/memberships/actions";
 import { SectionCard } from "@/components/layout/section-card";
 import { getMembershipAdminSnapshot } from "@/lib/auth/bootstrap";
 
@@ -15,11 +18,13 @@ export default async function AdminMembershipsPage({
 }: AdminMembershipsPageProps) {
   const params = searchParams ? await searchParams : {};
   const assigned = pickValue(params.assigned);
+  const approved = pickValue(params.approved);
   const level = pickValue(params.level);
+  const invite = pickValue(params.invite);
   const error = pickValue(params.error);
   const snapshot = await getMembershipAdminSnapshot();
   const activeUsers = snapshot.users.filter((user) => user.status === "active").length;
-  const inactiveUsers = snapshot.users.length - activeUsers;
+  const pendingApplications = snapshot.applications.filter((application) => application.status !== "approved");
   const membershipMode = !snapshot.envReady
     ? "Setup required"
     : snapshot.hasAdmin
@@ -45,11 +50,23 @@ export default async function AdminMembershipsPage({
         </div>
       ) : null}
 
+      {approved && level ? (
+        <div className="mt-6 rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800">
+          Approved `{approved}` as `{level}`. {invite === "sent" ? "An invite email was sent so the member can set a password." : "The member already existed, so access was activated immediately."}
+        </div>
+      ) : null}
+
       {error ? (
         <div className="mt-6 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
-          {error === "user-not-found"
+          {error === "service-role-missing"
+            ? "Set `SUPABASE_SERVICE_ROLE_KEY` before approving applications or assigning memberships."
+            : error === "application-missing"
+              ? "An application id is required to approve a member request."
+            : error === "user-not-found"
             ? "That user email does not yet exist in the application user table."
-            : "Email and membership level are both required."}
+            : error === "Application must be verified before approval."
+              ? "This application still needs email verification and disclaimer confirmation before approval."
+              : error}
         </div>
       ) : null}
 
@@ -82,6 +99,11 @@ export default async function AdminMembershipsPage({
               ? "The membership workspace will become fully active once admin-side Supabase access is available."
               : "Use this area to manage access levels and keep member permissions aligned with real project roles."}
           </p>
+        </div>
+        <div className="rounded-[1.75rem] border border-ink/10 bg-sand p-5">
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-ember">Pending applications</p>
+          <p className="mt-4 font-display text-4xl text-ink">{pendingApplications.length}</p>
+          <p className="mt-3 text-sm leading-7 text-steel">Applications awaiting verification or Phillip approval.</p>
         </div>
       </div>
 
@@ -150,23 +172,61 @@ export default async function AdminMembershipsPage({
           </div>
 
           <div className="rounded-[2rem] border border-ink/10 bg-white p-6 shadow-panel">
-            <p className="eyebrow">Access guidance</p>
-            <h2 className="mt-3 font-display text-2xl text-ink">What to watch</h2>
+            <p className="eyebrow">Applications</p>
+            <h2 className="mt-3 font-display text-2xl text-ink">Approve new member requests</h2>
             <div className="mt-5 grid gap-3">
-              <div className="rounded-2xl border border-ink/10 bg-sand px-4 py-4 text-sm text-ink">
-                <p className="font-semibold">Active users</p>
-                <p className="mt-1 text-steel">{activeUsers} users are currently active and eligible for access review.</p>
-              </div>
-              <div className="rounded-2xl border border-ink/10 bg-sand px-4 py-4 text-sm text-ink">
-                <p className="font-semibold">Inactive users</p>
-                <p className="mt-1 text-steel">{inactiveUsers} users are currently inactive and may need role or access confirmation.</p>
-              </div>
-              <div className="rounded-2xl border border-ink/10 bg-sand px-4 py-4 text-sm text-ink">
-                <p className="font-semibold">Operational note</p>
-                <p className="mt-1 text-steel">
-                  Assign levels only after a user has authenticated once, so membership links attach to a real app account instead of an assumed identity.
-                </p>
-              </div>
+              {pendingApplications.length === 0 ? (
+                <div className="rounded-2xl border border-ink/10 bg-sand px-4 py-4 text-sm text-steel">
+                  No new onboarding applications are waiting right now.
+                </div>
+              ) : (
+                pendingApplications.map((application) => {
+                  const readyForApproval = Boolean(application.emailVerifiedAt && application.disclaimerAgreedAt);
+
+                  return (
+                    <div key={application.id} className="rounded-2xl border border-ink/10 bg-sand px-4 py-4 text-sm text-ink">
+                      <div className="flex flex-col gap-3">
+                        <div>
+                          <p className="font-semibold">{application.clientName}</p>
+                          <p className="mt-1 text-steel">{application.directEmail}</p>
+                          <p className="mt-1 text-steel">{application.businessName || application.stableAddress}</p>
+                        </div>
+                        <div className="flex flex-wrap gap-2 text-xs font-semibold uppercase tracking-[0.14em]">
+                          <span className={`rounded-full px-3 py-1 ${readyForApproval ? "border border-emerald-200 bg-emerald-50 text-emerald-700" : "border border-amber-200 bg-amber-50 text-amber-700"}`}>
+                            {readyForApproval ? "Verified" : "Awaiting Verification"}
+                          </span>
+                          <span className="rounded-full border border-ink/10 bg-white px-3 py-1 text-ink">
+                            {application.status}
+                          </span>
+                        </div>
+                        <form action={approveApplicationAccessAction} className="flex flex-col gap-3 sm:flex-row sm:items-center">
+                          <input type="hidden" name="applicationId" value={application.id} />
+                          <select
+                            name="levelCode"
+                            defaultValue="trainer"
+                            className="rounded-2xl border border-ink/10 bg-white px-4 py-3 text-sm text-ink outline-none"
+                          >
+                            {snapshot.membershipLevels
+                              .filter((membershipLevel) => !["admin", "public"].includes(membershipLevel.code))
+                              .map((membershipLevel) => (
+                                <option key={membershipLevel.code} value={membershipLevel.code}>
+                                  {membershipLevel.name}
+                                </option>
+                              ))}
+                          </select>
+                          <button
+                            type="submit"
+                            disabled={!readyForApproval}
+                            className="rounded-full bg-ink px-5 py-3 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:bg-steel"
+                          >
+                            Approve And Provision Access
+                          </button>
+                        </form>
+                      </div>
+                    </div>
+                  );
+                })
+              )}
             </div>
           </div>
         </div>

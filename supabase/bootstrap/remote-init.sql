@@ -1482,3 +1482,258 @@ alter table public.horse_biochemistry_results
 
 -- <<< END 0011_biochemistry_session_context.sql
 
+-- >>> BEGIN 0012_etrakka_session_expansion.sql
+-- Adds E-Trakka session storage to the tracked schema and expands it with
+-- recovery and workload metrics from the newer session-summary exports.
+
+create table if not exists public.etrakka_sessions (
+  id uuid primary key default gen_random_uuid(),
+  horse_id uuid not null references public.horses(id) on delete cascade,
+  session_date timestamptz not null,
+  rider text,
+  track_name text,
+  blanket text,
+  session_type text,
+  bt200 numeric(10,3),
+  bt400 numeric(10,3),
+  bt600 numeric(10,3),
+  bt800 numeric(10,3),
+  bt1000 numeric(10,3),
+  s200 numeric(10,3),
+  s400 numeric(10,3),
+  s600 numeric(10,3),
+  s800 numeric(10,3),
+  s1000 numeric(10,3),
+  hr_max numeric(10,2),
+  hr_45 numeric(10,2),
+  trot_mean_hr numeric(10,2),
+  canter_mean_hr numeric(10,2),
+  gallop_mean_hr numeric(10,2),
+  vmax numeric(10,2),
+  v200 numeric(10,2),
+  mj numeric(10,2),
+  sl_50 numeric(10,2),
+  gallop_over_60kph numeric(10,2),
+  secs_over_60kph numeric(10,2),
+  secs_to_hr_drop numeric(10,2),
+  gap_48k_secs numeric(10,2),
+  avg_hr_2_5min numeric(10,2),
+  gallop_metres numeric(10,2),
+  note text,
+  created_by_user_id uuid references public.users(id) on delete set null,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+alter table public.etrakka_sessions
+  add column if not exists rider text,
+  add column if not exists track_name text,
+  add column if not exists blanket text,
+  add column if not exists session_type text,
+  add column if not exists bt200 numeric(10,3),
+  add column if not exists bt400 numeric(10,3),
+  add column if not exists bt600 numeric(10,3),
+  add column if not exists bt800 numeric(10,3),
+  add column if not exists bt1000 numeric(10,3),
+  add column if not exists s200 numeric(10,3),
+  add column if not exists s400 numeric(10,3),
+  add column if not exists s600 numeric(10,3),
+  add column if not exists s800 numeric(10,3),
+  add column if not exists s1000 numeric(10,3),
+  add column if not exists hr_max numeric(10,2),
+  add column if not exists hr_45 numeric(10,2),
+  add column if not exists trot_mean_hr numeric(10,2),
+  add column if not exists canter_mean_hr numeric(10,2),
+  add column if not exists gallop_mean_hr numeric(10,2),
+  add column if not exists vmax numeric(10,2),
+  add column if not exists v200 numeric(10,2),
+  add column if not exists mj numeric(10,2),
+  add column if not exists sl_50 numeric(10,2),
+  add column if not exists gallop_over_60kph numeric(10,2),
+  add column if not exists secs_over_60kph numeric(10,2),
+  add column if not exists secs_to_hr_drop numeric(10,2),
+  add column if not exists gap_48k_secs numeric(10,2),
+  add column if not exists avg_hr_2_5min numeric(10,2),
+  add column if not exists gallop_metres numeric(10,2),
+  add column if not exists note text,
+  add column if not exists created_by_user_id uuid references public.users(id) on delete set null,
+  add column if not exists created_at timestamptz not null default now(),
+  add column if not exists updated_at timestamptz not null default now();
+
+create index if not exists idx_etrakka_sessions_horse_id
+  on public.etrakka_sessions (horse_id);
+
+create index if not exists idx_etrakka_sessions_horse_id_session_date
+  on public.etrakka_sessions (horse_id, session_date desc);
+
+do $$
+begin
+  if not exists (
+    select 1
+    from pg_constraint
+    where conname = 'etrakka_sessions_horse_session_track_unique'
+  ) then
+    alter table public.etrakka_sessions
+      add constraint etrakka_sessions_horse_session_track_unique
+      unique (horse_id, session_date, track_name, session_type);
+  end if;
+end
+$$;
+
+alter table public.etrakka_sessions enable row level security;
+
+drop policy if exists "etrakka_sessions_select_accessible" on public.etrakka_sessions;
+create policy "etrakka_sessions_select_accessible"
+on public.etrakka_sessions
+for select
+using (public.can_access_horse(horse_id));
+
+drop policy if exists "etrakka_sessions_insert_manageable" on public.etrakka_sessions;
+create policy "etrakka_sessions_insert_manageable"
+on public.etrakka_sessions
+for insert
+with check (public.can_manage_horse_records(horse_id));
+
+drop policy if exists "etrakka_sessions_update_manageable" on public.etrakka_sessions;
+create policy "etrakka_sessions_update_manageable"
+on public.etrakka_sessions
+for update
+using (public.can_manage_horse_records(horse_id))
+with check (public.can_manage_horse_records(horse_id));
+
+drop policy if exists "etrakka_sessions_delete_manageable" on public.etrakka_sessions;
+create policy "etrakka_sessions_delete_manageable"
+on public.etrakka_sessions
+for delete
+using (public.can_manage_horse_records(horse_id) or public.is_admin());
+
+-- <<< END 0012_etrakka_session_expansion.sql
+
+-- >>> BEGIN 0013_etrakka_session_model_refinement.sql
+-- Refines the E-Trakka session model for multi-row imports, explicit session
+-- row categorisation, and future GPS / ECG enrichment.
+
+alter table public.etrakka_sessions
+  add column if not exists session_category text not null default 'unknown',
+  add column if not exists source_row_type text,
+  add column if not exists source_file_name text,
+  add column if not exists source_file_format text,
+  add column if not exists source_url text,
+  add column if not exists source_horse_code text,
+  add column if not exists interval_count integer,
+  add column if not exists session_count integer,
+  add column if not exists gps_summary jsonb,
+  add column if not exists gps_track jsonb,
+  add column if not exists ecg_summary jsonb,
+  add column if not exists ecg_trace jsonb,
+  add column if not exists raw_payload jsonb;
+
+update public.etrakka_sessions
+set session_category = case
+  when lower(coalesce(source_row_type, '')) like '%trial%'
+    or lower(coalesce(session_type, '')) like '%trial%' then 'trial'
+  when lower(coalesce(source_row_type, '')) like '%race%'
+    or lower(coalesce(session_type, '')) like '%race%' then 'race'
+  when lower(coalesce(source_row_type, '')) like '%view%' then 'view'
+  when coalesce(session_type, '') <> '' then 'session'
+  else 'unknown'
+end
+where session_category is null
+   or session_category = ''
+   or session_category = 'unknown';
+
+do $$
+begin
+  if not exists (
+    select 1
+    from pg_constraint
+    where conname = 'etrakka_sessions_session_category_check'
+  ) then
+    alter table public.etrakka_sessions
+      add constraint etrakka_sessions_session_category_check
+      check (session_category in ('view', 'race', 'trial', 'session', 'unknown'));
+  end if;
+end
+$$;
+
+create index if not exists idx_etrakka_sessions_session_category
+  on public.etrakka_sessions (session_category);
+
+create index if not exists idx_etrakka_sessions_source_horse_code
+  on public.etrakka_sessions (source_horse_code);
+
+-- <<< END 0013_etrakka_session_model_refinement.sql
+
+-- >>> BEGIN 0014_horse_gallery_storage.sql
+insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
+values (
+  'horse-gallery',
+  'horse-gallery',
+  true,
+  8388608,
+  array[
+    'image/jpeg',
+    'image/png',
+    'image/webp',
+    'image/gif',
+    'image/avif',
+    'image/svg+xml'
+  ]
+)
+on conflict (id) do update
+set
+  public = excluded.public,
+  file_size_limit = excluded.file_size_limit,
+  allowed_mime_types = excluded.allowed_mime_types;
+
+drop policy if exists "horse_gallery_storage_select_accessible" on storage.objects;
+create policy "horse_gallery_storage_select_accessible"
+on storage.objects
+for select
+to authenticated
+using (
+  bucket_id = 'horse-gallery'
+  and (storage.foldername(name))[1] ~* '^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$'
+  and public.can_access_horse(((storage.foldername(name))[1])::uuid)
+);
+
+drop policy if exists "horse_gallery_storage_insert_manageable" on storage.objects;
+create policy "horse_gallery_storage_insert_manageable"
+on storage.objects
+for insert
+to authenticated
+with check (
+  bucket_id = 'horse-gallery'
+  and (storage.foldername(name))[1] ~* '^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$'
+  and public.can_manage_horse_records(((storage.foldername(name))[1])::uuid)
+);
+
+drop policy if exists "horse_gallery_storage_update_manageable" on storage.objects;
+create policy "horse_gallery_storage_update_manageable"
+on storage.objects
+for update
+to authenticated
+using (
+  bucket_id = 'horse-gallery'
+  and (storage.foldername(name))[1] ~* '^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$'
+  and public.can_manage_horse_records(((storage.foldername(name))[1])::uuid)
+)
+with check (
+  bucket_id = 'horse-gallery'
+  and (storage.foldername(name))[1] ~* '^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$'
+  and public.can_manage_horse_records(((storage.foldername(name))[1])::uuid)
+);
+
+drop policy if exists "horse_gallery_storage_delete_manageable" on storage.objects;
+create policy "horse_gallery_storage_delete_manageable"
+on storage.objects
+for delete
+to authenticated
+using (
+  bucket_id = 'horse-gallery'
+  and (storage.foldername(name))[1] ~* '^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$'
+  and public.can_manage_horse_records(((storage.foldername(name))[1])::uuid)
+);
+
+-- <<< END 0014_horse_gallery_storage.sql
+

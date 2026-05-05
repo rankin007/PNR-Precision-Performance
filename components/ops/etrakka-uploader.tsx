@@ -1,61 +1,113 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { importEtrakkaSession, type EtrakkaImportPayload } from "@/lib/actions/etrakka";
 
 export function EtrakkaUploader({ horseId, horseName }: { horseId: string; horseName: string }) {
+  const [isOpen, setIsOpen] = useState(false);
+  const [isDragActive, setIsDragActive] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [selectedFileName, setSelectedFileName] = useState("");
   const [message, setMessage] = useState<{ text: string; type: "error" | "success" } | null>(null);
+
+  useEffect(() => {
+    const syncWithHash = () => {
+      if (window.location.hash === "#etrakka-import") {
+        setIsOpen(true);
+      }
+    };
+
+    syncWithHash();
+    window.addEventListener("hashchange", syncWithHash);
+    return () => window.removeEventListener("hashchange", syncWithHash);
+  }, []);
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setIsOpen(false);
+      }
+    };
+
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.body.style.overflow = originalOverflow;
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [isOpen]);
 
   const parseDateTime = (dateStr: string, timeStr: string) => {
     try {
-      const cleanDate = dateStr.replace(/^[a-zA-Z]+,\s*/, "").trim(); 
+      const cleanDate = dateStr.replace(/^[a-zA-Z]+,\s*/, "").trim();
       const d = new Date(`${cleanDate} ${timeStr}`);
       return isNaN(d.getTime()) ? new Date().toISOString() : d.toISOString();
     } catch {
-      return new Date().toISOString(); 
+      return new Date().toISOString();
     }
   };
 
-  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
+  const parseAndImportFile = async (file: File) => {
+    setSelectedFileName(file.name);
     setLoading(true);
     setMessage(null);
 
     try {
       const text = await file.text();
-      // Remove quotes and carriage returns, then split by lines
       const cleanText = text.replace(/'/g, "").replace(/"/g, "").replace(/\r/g, "");
-      const lines = cleanText.split("\n").map(l => l.trim()).filter(Boolean);
+      const lines = cleanText.split("\n").map((line) => line.trim()).filter(Boolean);
 
       const data: Partial<EtrakkaImportPayload> = {
-        horseId, // Direct context insertion
-        bt200: null, bt400: null, bt600: null, bt800: null, bt1000: null,
-        s200: null, s400: null, s600: null, s800: null, s1000: null,
-        hrMaxBpm: null, hr45: null, trotMeanHrBpm: null, canterMeanHrBpm: null, gallopMeanHrBpm: null,
-        vmaxKph: null, v200: null, sl50: null, gallopOver60kph: null, secsOver60kph: null,
-        recoveryAvgHr2_5minBpm: null, gallopMetres: null,
-        note: null, trackName: "", etrakkaDevice: "", sessionType: "", riderName: ""
+        horseId,
+        bt200: null,
+        bt400: null,
+        bt600: null,
+        bt800: null,
+        bt1000: null,
+        s200: null,
+        s400: null,
+        s600: null,
+        s800: null,
+        s1000: null,
+        hrMaxBpm: null,
+        hr45: null,
+        trotMeanHrBpm: null,
+        canterMeanHrBpm: null,
+        gallopMeanHrBpm: null,
+        vmaxKph: null,
+        v200: null,
+        sl50: null,
+        gallopOver60kph: null,
+        secsOver60kph: null,
+        recoveryAvgHr2_5minBpm: null,
+        gallopMetres: null,
+        note: null,
+        trackName: "",
+        etrakkaDevice: "",
+        sessionType: "",
+        riderName: "",
       };
 
       let sessionDateRaw = "";
       let sessionTimeRaw = "";
 
-      // Smart Parser: Handles either vertical keys ("Track Name, Goulburn") OR horizontal table arrays
-      // Look for the "Date" header to determine if it's horizontal
-      const headerLineIndex = lines.findIndex(l => l.toLowerCase().includes("track name") || l.toLowerCase().includes("session type"));
-      
+      const headerLineIndex = lines.findIndex(
+        (line) => line.toLowerCase().includes("track name") || line.toLowerCase().includes("session type"),
+      );
+
       if (headerLineIndex !== -1 && lines[headerLineIndex + 1]) {
-        // Appears to be horizontal CSV. Parse exactly via columns.
-        const headers = lines[headerLineIndex].split(",").map(h => h.trim().toLowerCase());
-        const rowData = lines[headerLineIndex + 1].split(",").map(c => c.trim());
-        
+        const headers = lines[headerLineIndex].split(",").map((header) => header.trim().toLowerCase());
+        const rowData = lines[headerLineIndex + 1].split(",").map((cell) => cell.trim());
+
         const getValue = (keyAliases: string[]) => {
-          const idx = headers.findIndex(h => keyAliases.some(alias => h === alias || h.includes(alias)));
+          const idx = headers.findIndex((header) => keyAliases.some((alias) => header === alias || header.includes(alias)));
           return idx !== -1 && rowData[idx] ? rowData[idx] : null;
         };
+
         const getNum = (aliases: string[]) => {
           const val = getValue(aliases);
           if (!val || val === "N/A" || val === "") return null;
@@ -69,16 +121,15 @@ export function EtrakkaUploader({ horseId, horseName }: { horseId: string; horse
         data.riderName = getValue(["rider"]) || "";
         data.etrakkaDevice = getValue(["blanket"]) || "";
         data.sessionType = getValue(["session type"]) || "";
-        
+
         data.bt200 = getNum(["bt200"]);
         data.bt400 = getNum(["bt400"]);
         data.bt600 = getNum(["bt600"]);
         data.bt800 = getNum(["bt800"]);
         data.bt1000 = getNum(["bt1000"]);
-        
-        // Exact matches needed so we don't accidentally pull bt200 for 200
+
         const getExactNum = (exactHeader: string) => {
-          const idx = headers.findIndex(h => h === exactHeader);
+          const idx = headers.findIndex((header) => header === exactHeader);
           if (idx === -1 || !rowData[idx] || rowData[idx] === "N/A") return null;
           return parseFloat(rowData[idx]) || null;
         };
@@ -102,11 +153,9 @@ export function EtrakkaUploader({ horseId, horseName }: { horseId: string; horse
         data.recoveryAvgHr2_5minBpm = getNum(["avghr2_5min"]);
         data.gallopMetres = getNum(["gallop metres"]);
         data.note = getValue(["note"]) || null;
-
       } else {
-        // Fallback Vertical Parser
-        lines.forEach(line => {
-          const parts = line.split(",").map(p => p.trim());
+        lines.forEach((line) => {
+          const parts = line.split(",").map((part) => part.trim());
           if (parts.length < 2) return;
           const key = parts[0].toLowerCase();
           const val = parts[1];
@@ -118,13 +167,13 @@ export function EtrakkaUploader({ horseId, horseName }: { horseId: string; horse
           if (key.includes("rider")) data.riderName = val;
           if (key.includes("blanket")) data.etrakkaDevice = val;
           if (key.includes("session type")) data.sessionType = val;
-          
+
           if (key === "bt200" && !isNaN(num)) data.bt200 = num;
           if (key === "bt400" && !isNaN(num)) data.bt400 = num;
           if (key === "bt600" && !isNaN(num)) data.bt600 = num;
           if (key === "bt800" && !isNaN(num)) data.bt800 = num;
           if (key === "bt1000" && !isNaN(num)) data.bt1000 = num;
-          
+
           if (key === "200" && !isNaN(num)) data.s200 = num;
           if (key === "400" && !isNaN(num)) data.s400 = num;
           if (key === "600" && !isNaN(num)) data.s600 = num;
@@ -150,62 +199,183 @@ export function EtrakkaUploader({ horseId, horseName }: { horseId: string; horse
       data.sessionDateIso = parseDateTime(sessionDateRaw || new Date().toDateString(), sessionTimeRaw || "12:00");
 
       const result = await importEtrakkaSession(data as EtrakkaImportPayload);
-      
-      if (result.success) {
-        setMessage({ text: `Successfully imported E-Trakka session for ${horseName}!`, type: "success" });
-      } else {
-        setMessage({ text: result.error || "Failed to upload", type: "error" });
-      }
 
-    } catch (err: unknown) {
-      console.error(err);
-      setMessage({ text: "Error parsing the CSV file. Please ensure it's a valid eTrakka text/CSV document.", type: "error" });
+      if (result.success) {
+        setMessage({ text: `Successfully imported E-Trakka session for ${horseName}.`, type: "success" });
+      } else {
+        setMessage({ text: result.error || "Failed to upload.", type: "error" });
+      }
+    } catch (error: unknown) {
+      console.error(error);
+      setMessage({
+        text: "Error parsing the CSV file. Please ensure it's a valid E-Trakka text or CSV export.",
+        type: "error",
+      });
     } finally {
       setLoading(false);
-      e.target.value = '';
     }
   };
 
+  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    await parseAndImportFile(file);
+    event.target.value = "";
+  };
+
   return (
-    <div className="bg-white p-6 rounded-lg border border-slate-200 mt-6 max-w-xl">
-      <h3 className="text-lg font-medium text-slate-900 mb-2">Import E-Trakka CSV</h3>
-      <p className="text-sm text-slate-500 mb-6">
-        Upload the E-Trakka CSV file here. The data will be automatically assigned and locked to <strong>{horseName}</strong>.
-      </p>
-
-      <div className="flex flex-col gap-4">
-        <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-slate-300 border-dashed rounded-lg cursor-pointer bg-slate-50 hover:bg-slate-100 transition-colors">
-          <div className="flex flex-col items-center justify-center pt-5 pb-6">
-            <svg className="w-8 h-8 mb-4 text-slate-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
-                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"/>
-            </svg>
-            <p className="mb-2 text-sm text-slate-500">
-              <span className="font-semibold text-teal-600">Click to upload</span> or drag and drop
-            </p>
-            <p className="text-xs text-slate-400">CSV export file</p>
-          </div>
-          <input 
-            type="file" 
-            className="hidden" 
-            accept=".csv,.txt"
-            onChange={handleFileUpload}
-            disabled={loading}
-          />
-        </label>
-
-        {loading && (
-          <div className="text-sm text-slate-600 flex items-center gap-2">
-            <svg className="animate-spin h-4 w-4 text-teal-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
-            Parsing & Uploading...
-          </div>
-        )}
-
-        {message && (
-          <div className={`p-3 rounded text-sm font-medium ${message.type === 'error' ? 'bg-red-50 text-red-700' : 'bg-teal-50 text-teal-700'}`}>
-            {message.text}
-          </div>
-        )}
+    <>
+      <div className="flex flex-col items-center justify-center rounded-[2rem] border border-dashed border-teal-300 bg-gradient-to-br from-teal-50 via-white to-[#f7efe3] px-6 py-8 text-center shadow-panel">
+        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-teal-700">Performance Import</p>
+        <h3 className="mt-3 font-display text-3xl text-ink">Import E-Trakka</h3>
+        <p className="mt-3 max-w-2xl text-sm leading-6 text-steel">
+          Open the dedicated import panel for a cleaner upload flow, better mobile handling, and faster CSV processing locked to {horseName}.
+        </p>
+        <button
+          type="button"
+          onClick={() => setIsOpen(true)}
+          className="mt-6 rounded-full bg-teal-600 px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-teal-700"
+        >
+          Open Import Panel
+        </button>
+        <p className="mt-3 text-xs text-steel">Supports `.csv` and `.txt` exports from E-Trakka.</p>
       </div>
-    </div>
+
+      {isOpen ? (
+        <div className="fixed inset-0 z-50 flex flex-col bg-sand/95 backdrop-blur-sm sm:p-6">
+          <div className="flex min-h-full w-full flex-1 flex-col bg-white sm:mx-auto sm:min-h-0 sm:max-w-5xl sm:rounded-[2rem] sm:shadow-2xl">
+            <div className="sticky top-0 z-10 flex items-center justify-between border-b border-ink/10 bg-white/95 px-6 py-4 backdrop-blur sm:rounded-t-[2rem]">
+              <div>
+                <p className="eyebrow text-teal-600">Performance Import</p>
+                <h2 className="mt-1 font-display text-2xl text-ink">E-Trakka Upload</h2>
+              </div>
+              <button
+                type="button"
+                onClick={() => setIsOpen(false)}
+                className="rounded-full bg-slate-100 p-2 text-slate-600 transition hover:bg-slate-200"
+                aria-label="Close E-Trakka upload modal"
+              >
+                <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+
+            <div className="grid flex-1 gap-6 overflow-y-auto p-6 xl:grid-cols-[0.95fr_1.05fr]">
+              <div className="grid gap-6">
+                <div className="rounded-[1.75rem] border border-ink/10 bg-sand p-5">
+                  <p className="text-xs font-semibold uppercase tracking-[0.18em] text-ember">Import Target</p>
+                  <div className="mt-4 rounded-2xl border border-ink/10 bg-white px-4 py-4">
+                    <p className="text-xs font-semibold uppercase tracking-[0.14em] text-steel">Horse</p>
+                    <p className="mt-2 text-2xl font-display text-ink">{horseName}</p>
+                    <p className="mt-2 text-sm text-steel">All parsed performance data will be attached directly to this horse record.</p>
+                  </div>
+                </div>
+
+                <div className="rounded-[1.75rem] border border-ink/10 bg-sand p-5">
+                  <p className="text-xs font-semibold uppercase tracking-[0.18em] text-ember">What&apos;s Improved</p>
+                  <div className="mt-4 grid gap-3">
+                    <div className="rounded-2xl border border-ink/10 bg-white px-4 py-3 text-sm text-ink">Full-screen import panel for easier mobile use</div>
+                    <div className="rounded-2xl border border-ink/10 bg-white px-4 py-3 text-sm text-ink">Drag-and-drop support with clearer upload state</div>
+                    <div className="rounded-2xl border border-ink/10 bg-white px-4 py-3 text-sm text-ink">Automatic opening from the existing workspace import link</div>
+                    <div className="rounded-2xl border border-ink/10 bg-white px-4 py-3 text-sm text-ink">Escape-to-close and stronger success or failure feedback</div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="grid gap-6">
+                <div className="rounded-[1.75rem] border-2 border-teal-500/20 bg-teal-50/10 p-6 shadow-sm">
+                  <p className="text-xs font-semibold uppercase tracking-[0.18em] text-teal-700">Upload File</p>
+                  <label
+                    onDragOver={(event) => {
+                      event.preventDefault();
+                      setIsDragActive(true);
+                    }}
+                    onDragLeave={() => setIsDragActive(false)}
+                    onDrop={(event) => {
+                      event.preventDefault();
+                      setIsDragActive(false);
+                      const file = event.dataTransfer.files?.[0];
+                      if (file && !loading) {
+                        void parseAndImportFile(file);
+                      }
+                    }}
+                    className={`mt-5 flex min-h-[18rem] cursor-pointer flex-col items-center justify-center rounded-[1.75rem] border-2 border-dashed px-6 py-8 text-center transition ${
+                      isDragActive
+                        ? "border-teal-500 bg-teal-50"
+                        : "border-slate-300 bg-white hover:border-teal-400 hover:bg-slate-50"
+                    } ${loading ? "pointer-events-none opacity-70" : ""}`}
+                  >
+                    <div className="rounded-full bg-teal-100 p-4 text-teal-700">
+                      <svg className="h-8 w-8" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
+                        <path
+                          stroke="currentColor"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                          d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
+                        />
+                      </svg>
+                    </div>
+                    <p className="mt-5 text-base font-semibold text-ink">
+                      {loading ? "Parsing and importing file..." : "Click to upload or drag and drop"}
+                    </p>
+                    <p className="mt-2 text-sm text-steel">Use an E-Trakka CSV or TXT export with track, session, split, and heart-rate fields.</p>
+                    <p className="mt-4 rounded-full bg-sand px-4 py-2 text-xs font-semibold uppercase tracking-[0.14em] text-steel">
+                      {selectedFileName || "No file selected yet"}
+                    </p>
+                    <input type="file" className="hidden" accept=".csv,.txt" onChange={handleFileUpload} disabled={loading} />
+                  </label>
+                </div>
+
+                {loading ? (
+                  <div className="flex items-center gap-3 rounded-2xl border border-teal-200 bg-teal-50 px-4 py-4 text-sm font-medium text-teal-800">
+                    <svg className="h-5 w-5 animate-spin text-teal-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    Importing performance session into the horse workspace.
+                  </div>
+                ) : null}
+
+                {message ? (
+                  <div
+                    className={`rounded-2xl border px-4 py-4 text-sm font-medium ${
+                      message.type === "error"
+                        ? "border-red-200 bg-red-50 text-red-700"
+                        : "border-teal-200 bg-teal-50 text-teal-700"
+                    }`}
+                  >
+                    {message.text}
+                  </div>
+                ) : null}
+
+                <div className="rounded-[1.75rem] border border-ink/10 bg-sand p-5">
+                  <p className="text-xs font-semibold uppercase tracking-[0.18em] text-ember">Import Notes</p>
+                  <div className="mt-4 grid gap-3 text-sm text-steel">
+                    <p className="rounded-2xl border border-ink/10 bg-white px-4 py-3">Horizontal and vertical E-Trakka export formats are both supported.</p>
+                    <p className="rounded-2xl border border-ink/10 bg-white px-4 py-3">Unknown or missing numeric fields are safely stored as blank values.</p>
+                    <p className="rounded-2xl border border-ink/10 bg-white px-4 py-3">Session date and time are merged automatically before the upload is saved.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="sticky bottom-0 border-t border-ink/10 bg-white/95 px-6 py-4 backdrop-blur sm:rounded-b-[2rem]">
+              <div className="flex flex-col gap-3 sm:flex-row sm:justify-end">
+                <button
+                  type="button"
+                  onClick={() => setIsOpen(false)}
+                  className="rounded-full border border-ink/10 bg-sand px-5 py-3 text-sm font-semibold text-ink"
+                >
+                  Close Panel
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      ) : null}
+    </>
   );
 }

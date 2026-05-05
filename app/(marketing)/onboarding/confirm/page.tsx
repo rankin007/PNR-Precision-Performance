@@ -60,8 +60,7 @@ export default function ConfirmPage({ searchParams }: ConfirmPageProps) {
               Thank you. Your email is confirmed and your agreement to the disclaimer has been recorded.
             </p>
             <p className="mt-4 text-steel">
-              Our team will review your application and be in touch regarding the finalization of your membership and
-              environment provisioning.
+              Phillip can now review your application for approval. Once approved, you will receive your account access email so you can set a password and sign in.
             </p>
             <div className="mt-8">
               <Link href="/" className="font-semibold underline text-ink">

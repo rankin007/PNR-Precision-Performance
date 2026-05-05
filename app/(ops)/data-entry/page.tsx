@@ -83,7 +83,7 @@ export default async function DataEntryPage({ searchParams }: DataEntryPageProps
         </div>
       </div>
 
-      <div className="mt-8 grid gap-6 xl:grid-cols-[1.1fr_0.9fr]">
+      <div className="mt-6 grid gap-5 xl:grid-cols-[1.18fr_0.82fr]">
         <form action={submitDailyRecordAction} className="grid gap-6 rounded-[2rem] border border-ink/10 bg-white p-6 shadow-panel">
           <div className="flex items-center justify-between gap-4">
             <div>
@@ -187,38 +187,7 @@ export default async function DataEntryPage({ searchParams }: DataEntryPageProps
           </div>
         </form>
 
-        <div className="grid gap-6">
-          <div className="rounded-[2rem] border border-ink/10 bg-white p-6 shadow-panel">
-            <p className="eyebrow">Ops Shortcuts</p>
-            <h2 className="mt-3 font-display text-2xl text-ink">Move between workflows</h2>
-            <div className="mt-6 flex flex-wrap gap-3">
-              <Link
-                href="/data-entry/horses"
-                className="rounded-full border border-ink/10 bg-sand px-5 py-3 text-sm font-semibold text-ink"
-              >
-                Horse workspace
-              </Link>
-              <Link
-                href="/data-entry/feeding"
-                className="rounded-full border border-ink/10 bg-sand px-5 py-3 text-sm font-semibold text-ink"
-              >
-                Feeding entry
-              </Link>
-              <Link
-                href="/data-entry/track"
-                className="rounded-full border border-ink/10 bg-sand px-5 py-3 text-sm font-semibold text-ink"
-              >
-                Track entry
-              </Link>
-              <Link
-                href="/portal/reports"
-                className="rounded-full border border-ink/10 bg-sand px-5 py-3 text-sm font-semibold text-ink"
-              >
-                Member reports
-              </Link>
-            </div>
-          </div>
-
+        <div className="grid gap-5">
           <div className="rounded-[2rem] border border-ink/10 bg-white p-6 shadow-panel">
             <p className="eyebrow">Entry guidance</p>
             <h2 className="mt-3 font-display text-2xl text-ink">What a good daily record should include</h2>

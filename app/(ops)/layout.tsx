@@ -16,6 +16,7 @@ export default async function OpsLayout({
       area="Operations"
       description="Phone-first operational workflows for horse records, feeding, and training capture."
       navigation={opsNavigation}
+      navigationPlacement="header"
       userEmail={context.sessionUser?.email ?? null}
       memberDisplayName={context.memberDisplayName}
       membershipLevelCodes={context.membershipLevelCodes}

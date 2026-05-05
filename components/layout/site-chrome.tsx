@@ -12,7 +12,7 @@ const publicNavigation = [
   { href: "/", label: "Home" },
   { href: "/#workflow", label: "Testimonials" },
   { href: "/shop", label: "Shop" },
-  { href: "/contact", label: "Contact" },
+  { href: "/#footer-enquiry", label: "Contact" },
   { href: "/sign-in?next=%2Fdata-entry%2Fhorses", label: "EQUINE APP" },
   { href: "/member-experience", label: "Members Experience" },
 ];
@@ -96,7 +96,7 @@ export function SiteChrome({ children }: SiteChromeProps) {
 
       {children}
 
-      <footer className="mt-16 border-t border-ink/10 bg-[#18212b] text-white">
+      <footer id="footer-enquiry" className="mt-16 border-t border-ink/10 bg-[#18212b] text-white">
         <div className="section-wrap grid gap-8 px-4 py-12 md:px-8 lg:grid-cols-[1.05fr_0.95fr]">
           <div>
             <h2 className="font-display text-[24pt]">Precision Performance</h2>

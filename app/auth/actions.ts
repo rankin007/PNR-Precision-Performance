@@ -41,6 +41,36 @@ export async function signInWithOtpAction(formData: FormData) {
   redirect(`/sign-in?sent=true&next=${encodeURIComponent(next)}`);
 }
 
+export async function signInWithPasswordAction(formData: FormData) {
+  const email = readString(formData, "email");
+  const password = readString(formData, "password");
+  const next = normalizeNextPath(readString(formData, "next"));
+
+  if (!hasSupabaseEnv()) {
+    redirect(`/sign-in?setup=supabase&next=${encodeURIComponent(next)}`);
+  }
+
+  if (!email) {
+    redirect(`/sign-in?error=email&next=${encodeURIComponent(next)}`);
+  }
+
+  if (!password) {
+    redirect(`/sign-in?error=password&next=${encodeURIComponent(next)}`);
+  }
+
+  const supabase = await createSupabaseServerClient();
+  const { error } = await supabase.auth.signInWithPassword({
+    email,
+    password,
+  });
+
+  if (error) {
+    redirect(`/sign-in?error=credentials&next=${encodeURIComponent(next)}`);
+  }
+
+  redirect(next);
+}
+
 export async function signOutAction() {
   const cookieStore = await cookies();
   cookieStore.delete(ADMIN_BYPASS_COOKIE);

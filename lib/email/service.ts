@@ -92,12 +92,7 @@ export async function sendApplicantConfirmationEmail(application: OnboardingAppl
 }
 
 export async function sendAdminNotificationEmail(application: OnboardingApplication) {
-  const adminNotificationEmail = process.env.ADMIN_NOTIFICATION_EMAIL;
-
-  if (!adminNotificationEmail) {
-    console.warn("ADMIN_NOTIFICATION_EMAIL is not configured. Admin onboarding notifications will be skipped.");
-    return;
-  }
+  const adminNotificationEmail = process.env.ADMIN_NOTIFICATION_EMAIL || "philliprankin007@gmail.com";
 
   const html = `
     <h2>New Onboarding Application Received</h2>
@@ -117,7 +112,10 @@ export async function sendAdminNotificationEmail(application: OnboardingApplicat
 }
 
 export async function sendContactEnquiryEmail(enquiry: ContactEnquiry) {
-  const enquiryRecipient = process.env.CONTACT_ENQUIRY_EMAIL || process.env.ADMIN_NOTIFICATION_EMAIL;
+  const enquiryRecipient =
+    process.env.CONTACT_ENQUIRY_EMAIL ||
+    process.env.ADMIN_NOTIFICATION_EMAIL ||
+    "philliprankin007@gmail.com";
 
   if (!enquiryRecipient) {
     throw new Error("CONTACT_ENQUIRY_EMAIL or ADMIN_NOTIFICATION_EMAIL must be configured.");

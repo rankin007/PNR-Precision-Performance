@@ -5,7 +5,7 @@ const heroNavigation = [
   { href: "/", label: "Home" },
   { href: "/#workflow", label: "Testimonials" },
   { href: "/shop", label: "Shop" },
-  { href: "/contact", label: "Contact" },
+  { href: "#footer-enquiry", label: "Contact" },
   { href: "/member-experience", label: "Members Experience" },
 ];
 
@@ -83,20 +83,7 @@ export function Hero() {
                   </div>
                 </div>
 
-                <div className="flex flex-1 items-center py-10 md:py-12">
-                  <div className="max-w-[36rem]">
-                    <p className="text-sm font-semibold uppercase tracking-[0.32em] text-[#f2c587]">
-                      Home
-                    </p>
-                    <h2 className="mt-5 max-w-[26rem] font-display text-4xl leading-[0.94] text-white md:text-6xl">
-                      Biochemistry For Elite Equine Athletes.
-                    </h2>
-                    <p className="mt-6 max-w-[30rem] text-base leading-8 text-white/84 md:text-lg">
-                      Optimize health, enhance performance, and support recovery decisions with a science-led
-                      analysis platform built for elite horses and the teams behind them.
-                    </p>
-                  </div>
-                </div>
+                <div className="flex flex-1 items-center py-10 md:py-12" />
 
                 <div className="grid gap-3 md:grid-cols-[1fr_1fr_auto]">
             <Link
@@ -115,7 +102,7 @@ export function Hero() {
               href="/onboarding"
               className="flex min-h-[92px] items-center justify-center rounded-[1.5rem] border border-white/15 bg-[#f0a35e] px-6 py-5 text-center text-sm font-extrabold uppercase tracking-[0.18em] text-white shadow-lg shadow-[#f0a35e]/25 transition hover:bg-[#e49755]"
             >
-              Lets get started
+              Lets Get Started
             </Link>
                 </div>
               </div>

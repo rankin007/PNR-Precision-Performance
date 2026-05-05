@@ -1,6 +1,7 @@
-import { hasSupabaseEnv } from "@/lib/supabase/env";
+import { hasSupabaseEnv, supabaseEnv } from "@/lib/supabase/env";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
-import { exampleHorseId } from "@/lib/domain/horses";
+
+const HORSE_GALLERY_BUCKET = "horse-gallery";
 
 export type HorseGalleryItem = {
   id: string;
@@ -69,6 +70,44 @@ export type HorseOperationalHistoryItem = {
   summary: string;
 };
 
+export type HorseEtrakkaSession = {
+  id: string;
+  sessionDate: string;
+  sessionCategory: string | null;
+  sessionType: string | null;
+  sourceRowType: string | null;
+  trackName: string | null;
+  riderName: string | null;
+  etrakkaDevice: string | null;
+  sourceFileName: string | null;
+  bt200: number | null;
+  bt400: number | null;
+  bt600: number | null;
+  bt800: number | null;
+  bt1000: number | null;
+  s200: number | null;
+  s400: number | null;
+  s600: number | null;
+  s800: number | null;
+  s1000: number | null;
+  hrMaxBpm: number | null;
+  hr45: number | null;
+  trotMeanHrBpm: number | null;
+  canterMeanHrBpm: number | null;
+  gallopMeanHrBpm: number | null;
+  vmaxKph: number | null;
+  v200: number | null;
+  mj: number | null;
+  sl50: number | null;
+  gallopOver60kph: number | null;
+  secsOver60kph: number | null;
+  secsToHrDrop: number | null;
+  gap48kSecs: number | null;
+  recoveryAvgHr2_5minBpm: number | null;
+  gallopMetres: number | null;
+  note: string | null;
+};
+
 export type HorseTrainerWorkspace = {
   horse: {
     id: string;
@@ -112,6 +151,44 @@ type LatestWaterRow = {
   volume_value: string | number | null;
   volume_unit: string | null;
   recorded_at: string | null;
+};
+
+type EtrakkaSessionRow = {
+  id: string;
+  session_date: string;
+  session_category?: string | null;
+  session_type?: string | null;
+  source_row_type?: string | null;
+  track_name?: string | null;
+  rider?: string | null;
+  blanket?: string | null;
+  source_file_name?: string | null;
+  bt200?: string | number | null;
+  bt400?: string | number | null;
+  bt600?: string | number | null;
+  bt800?: string | number | null;
+  bt1000?: string | number | null;
+  s200?: string | number | null;
+  s400?: string | number | null;
+  s600?: string | number | null;
+  s800?: string | number | null;
+  s1000?: string | number | null;
+  hr_max?: string | number | null;
+  hr_45?: string | number | null;
+  trot_mean_hr?: string | number | null;
+  canter_mean_hr?: string | number | null;
+  gallop_mean_hr?: string | number | null;
+  vmax?: string | number | null;
+  v200?: string | number | null;
+  mj?: string | number | null;
+  sl_50?: string | number | null;
+  gallop_over_60kph?: string | number | null;
+  secs_over_60kph?: string | number | null;
+  secs_to_hr_drop?: string | number | null;
+  gap_48k_secs?: string | number | null;
+  avg_hr_2_5min?: string | number | null;
+  gallop_metres?: string | number | null;
+  note?: string | null;
 };
 
 function extractStableName(stables: unknown) {
@@ -181,135 +258,103 @@ function buildChartSeries(entries: HorseBiochemistryEntry[]) {
   ].filter((series) => series.points.length > 0);
 }
 
-function getExampleHorseWorkspace(): HorseTrainerWorkspace {
-  const exampleEntries: HorseBiochemistryEntry[] = [
-    {
-      id: "southern-trial-2026-04-18",
-      sampledAt: "2026-04-18T06:40:00",
-      sampleType: "urine_saliva",
-      weightKg: 482.4,
-      trainingSession: "Light canter over 1200m with controlled finish work",
-      attitude: "Bright in the tie-up and focused walking to the track",
-      jockeyComments: "Felt balanced early and wanted to lengthen late without pressure",
-      healthScore: 8.4,
-      hydrationLitres: 28.1,
-      hydrationScore: 8.2,
-      electrolyteScore: 7.8,
-      recoveryScore: 8.1,
-      carbsPercentage: 3.6,
-      saltsMs: 11.2,
-      saltsC: 16.02,
-      urinePh: 7.18,
-      salivaPh: 7.1,
-      ureaLevel: 20.1,
-      blueSquareScore: 7.9,
-      notes: "Light canter over 1200m with controlled finish work. Horse bright and focused. Jockey said the horse travelled smoothly and lifted late.",
-    },
-    {
-      id: "southern-trial-2026-04-19",
-      sampledAt: "2026-04-19T06:35:00",
-      sampleType: "urine_saliva",
-      weightKg: 480.9,
-      trainingSession: "Strong pace gallop over 1600m with final 400m extension",
-      attitude: "Eager in the bridle and sharper through the middle section",
-      jockeyComments: "Felt stronger underneath and came off the bit cleanly when asked",
-      healthScore: 8.7,
-      hydrationLitres: 27.4,
-      hydrationScore: 8.3,
-      electrolyteScore: 8.1,
-      recoveryScore: 8.4,
-      carbsPercentage: 3.9,
-      saltsMs: 12.6,
-      saltsC: 18.02,
-      urinePh: 7.24,
-      salivaPh: 7.22,
-      ureaLevel: 20.0,
-      blueSquareScore: 8.2,
-      notes: "Strong gallop over 1600m. Horse sharper through the work and recovered quickly. Jockey liked the response off the turn.",
-    },
-    {
-      id: "southern-trial-2026-04-20",
-      sampledAt: "2026-04-20T06:45:00",
-      sampleType: "urine_saliva",
-      weightKg: 479.5,
-      trainingSession: "Recovery trot and pace change set with short uphill effort",
-      attitude: "Relaxed in the yard and settled quickly after the hill work",
-      jockeyComments: "Very tractable today and came back under me straight away",
-      healthScore: 8.6,
-      hydrationLitres: 28.6,
-      hydrationScore: 8.5,
-      electrolyteScore: 8.0,
-      recoveryScore: 8.7,
-      carbsPercentage: 3.4,
-      saltsMs: 10.9,
-      saltsC: 15.59,
-      urinePh: 7.12,
-      salivaPh: 7.16,
-      ureaLevel: 19.8,
-      blueSquareScore: 8.0,
-      notes: "Recovery-oriented session with a short uphill effort. Horse relaxed and settled quickly afterward. Jockey noted very clean recovery.",
-    },
-    {
-      id: "southern-trial-2026-04-21",
-      sampledAt: "2026-04-21T06:30:00",
-      sampleType: "urine_saliva",
-      weightKg: 481.1,
-      trainingSession: "Race-pace hit-out over 1000m with even splits",
-      attitude: "Confident, forward, and very engaged before the jump-off",
-      jockeyComments: "Best feel of the week, held rhythm and finished through the line",
-      healthScore: 9.0,
-      hydrationLitres: 28.0,
-      hydrationScore: 8.8,
-      electrolyteScore: 8.4,
-      recoveryScore: 8.9,
-      carbsPercentage: 4.0,
-      saltsMs: 13.1,
-      saltsC: 18.73,
-      urinePh: 7.29,
-      salivaPh: 7.31,
-      ureaLevel: 20.2,
-      blueSquareScore: 8.6,
-      notes: "Race-pace hit-out over 1000m. Horse was confident and forward. Jockey said it was the best feel of the week and the horse finished strongly.",
-    },
-  ];
-
-  const exampleOperationalHistory: HorseOperationalHistoryItem[] = exampleEntries.map((entry) => ({
-    id: `daily-${entry.id}`,
-    source: "daily",
-    dateLabel: formatDateLabel(entry.sampledAt),
-    summary: `Weight ${entry.weightKg} kg. ${entry.trainingSession}. Attitude: ${entry.attitude}. Jockey: ${entry.jockeyComments}.`,
+function mapEtrakkaSessions(rows: EtrakkaSessionRow[] | null | undefined): HorseEtrakkaSession[] {
+  return (rows ?? []).map((entry) => ({
+    id: entry.id,
+    sessionDate: entry.session_date,
+    sessionCategory: entry.session_category ?? null,
+    sessionType: entry.session_type ?? null,
+    sourceRowType: entry.source_row_type ?? null,
+    trackName: entry.track_name ?? null,
+    riderName: entry.rider ?? null,
+    etrakkaDevice: entry.blanket ?? null,
+    sourceFileName: entry.source_file_name ?? null,
+    bt200: toNumber(entry.bt200),
+    bt400: toNumber(entry.bt400),
+    bt600: toNumber(entry.bt600),
+    bt800: toNumber(entry.bt800),
+    bt1000: toNumber(entry.bt1000),
+    s200: toNumber(entry.s200),
+    s400: toNumber(entry.s400),
+    s600: toNumber(entry.s600),
+    s800: toNumber(entry.s800),
+    s1000: toNumber(entry.s1000),
+    hrMaxBpm: toNumber(entry.hr_max),
+    hr45: toNumber(entry.hr_45),
+    trotMeanHrBpm: toNumber(entry.trot_mean_hr),
+    canterMeanHrBpm: toNumber(entry.canter_mean_hr),
+    gallopMeanHrBpm: toNumber(entry.gallop_mean_hr),
+    vmaxKph: toNumber(entry.vmax),
+    v200: toNumber(entry.v200),
+    mj: toNumber(entry.mj),
+    sl50: toNumber(entry.sl_50),
+    gallopOver60kph: toNumber(entry.gallop_over_60kph),
+    secsOver60kph: toNumber(entry.secs_over_60kph),
+    secsToHrDrop: toNumber(entry.secs_to_hr_drop),
+    gap48kSecs: toNumber(entry.gap_48k_secs),
+    recoveryAvgHr2_5minBpm: toNumber(entry.avg_hr_2_5min),
+    gallopMetres: toNumber(entry.gallop_metres),
+    note: entry.note ?? null,
   }));
+}
 
-  return {
-    horse: {
-      id: exampleHorseId,
-      name: "Southern Trial",
-      status: "active",
-      stableName: "Precision Performance Demo Stable",
-      sex: "Gelding",
-      breed: "Thoroughbred",
-      colour: "Bay",
-      dateOfBirth: "2021-09-12",
-      microchipNumber: "PP-DEMO-4821",
-      registrationNumber: "ST-2026-DEMO",
-    },
-    latestReferenceMetrics: [
-      { label: "Latest weight", value: "481.1 kg" },
-      { label: "Latest temperature", value: "37.7 C" },
-      { label: "Latest water intake", value: "28.0 L" },
-    ],
-    galleryItems: [
-      {
-        id: "southern-trial-gallery-1",
-        imageUrl: "/Thoroughbred-scaled.jpg",
-        caption: "Southern Trial profile",
-        takenAt: "2026-04-21T06:10:00",
-      },
-    ],
-    biochemistryEntries: [...exampleEntries].reverse(),
-    operationalHistory: exampleOperationalHistory.reverse(),
-    chartSeries: buildChartSeries(exampleEntries.reverse()),
-  };
+function extractHorseGalleryStoragePath(imageUrl: string) {
+  if (!imageUrl || !hasSupabaseEnv()) {
+    return null;
+  }
+
+  try {
+    const parsed = new URL(imageUrl);
+    const publicPrefix = `/storage/v1/object/public/${HORSE_GALLERY_BUCKET}/`;
+    const signedPrefix = `/storage/v1/object/sign/${HORSE_GALLERY_BUCKET}/`;
+
+    if (parsed.origin !== supabaseEnv.url) {
+      return null;
+    }
+
+    if (parsed.pathname.startsWith(publicPrefix)) {
+      return decodeURIComponent(parsed.pathname.slice(publicPrefix.length));
+    }
+
+    if (parsed.pathname.startsWith(signedPrefix)) {
+      return decodeURIComponent(parsed.pathname.slice(signedPrefix.length));
+    }
+  } catch {
+    return null;
+  }
+
+  return null;
+}
+
+async function resolveGalleryItemUrls(
+  supabase: Awaited<ReturnType<typeof createSupabaseServerClient>>,
+  items: HorseGalleryItemRow[],
+) {
+  return Promise.all(
+    items.map(async (item) => {
+      const storagePath = extractHorseGalleryStoragePath(item.image_url);
+
+      if (!storagePath) {
+        return {
+          id: item.id,
+          imageUrl: item.image_url,
+          caption: item.caption ?? null,
+          takenAt: item.taken_at ?? null,
+        };
+      }
+
+      const { data, error } = await supabase.storage
+        .from(HORSE_GALLERY_BUCKET)
+        .createSignedUrl(storagePath, 60 * 60);
+
+      return {
+        id: item.id,
+        imageUrl: error ? item.image_url : data.signedUrl,
+        caption: item.caption ?? null,
+        takenAt: item.taken_at ?? null,
+      };
+    }),
+  );
 }
 
 export async function getTrainerHorseWorkspace(horseId: string): Promise<{
@@ -452,6 +497,11 @@ export async function getTrainerHorseWorkspace(horseId: string): Promise<{
     })) ?? []),
   ].sort((a, b) => b.dateLabel.localeCompare(a.dateLabel));
 
+  const resolvedGalleryItems = await resolveGalleryItemUrls(
+    supabase,
+    (galleryItems as unknown as HorseGalleryItemRow[] | null) ?? [],
+  );
+
   return {
     envReady: true,
     workspace: {
@@ -487,16 +537,55 @@ export async function getTrainerHorseWorkspace(horseId: string): Promise<{
             }
           : null,
       ].filter((item): item is { label: string; value: string } => Boolean(item)),
-      galleryItems:
-        ((galleryItems as unknown as HorseGalleryItemRow[] | null) ?? []).map((item) => ({
-          id: item.id,
-          imageUrl: item.image_url,
-          caption: item.caption ?? null,
-          takenAt: item.taken_at ?? null,
-        })) ?? [],
+      galleryItems: resolvedGalleryItems,
       biochemistryEntries: mappedBiochemistry,
       operationalHistory,
       chartSeries: buildChartSeries(mappedBiochemistry),
     },
+  };
+}
+
+export async function getTrainerHorseEtrakkaSessions(horseId: string): Promise<{
+  envReady: boolean;
+  horse: { id: string; name: string } | null;
+  sessions: HorseEtrakkaSession[];
+  error?: string;
+}> {
+  if (!hasSupabaseEnv()) {
+    return {
+      envReady: false,
+      horse: null,
+      sessions: [],
+    };
+  }
+
+  const supabase = await createSupabaseServerClient();
+  const [{ data: horse, error: horseError }, { data: sessions, error: sessionError }] = await Promise.all([
+    supabase.from("horses").select("id, name").eq("id", horseId).maybeSingle(),
+    supabase
+      .from("etrakka_sessions")
+      .select("*")
+      .eq("horse_id", horseId)
+      .order("session_date", { ascending: false })
+      .limit(100),
+  ]);
+
+  if (horseError || !horse) {
+    return {
+      envReady: true,
+      horse: null,
+      sessions: [],
+      error: horseError?.message ?? "Horse not found.",
+    };
+  }
+
+  return {
+    envReady: true,
+    horse: {
+      id: horse.id,
+      name: horse.name,
+    },
+    sessions: sessionError ? [] : mapEtrakkaSessions((sessions as EtrakkaSessionRow[] | null) ?? []),
+    error: sessionError?.message,
   };
 }

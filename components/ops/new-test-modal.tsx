@@ -10,7 +10,7 @@ export function NewTestModal({
   horseId: string;
   latestReferenceMetrics: Array<{ label: string; value: string }>;
 }) {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(true);
   const [defaultDateTime, setDefaultDateTime] = useState("");
 
   // Set the precise live local time as soon as they open the modal
