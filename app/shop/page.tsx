@@ -109,7 +109,7 @@ export default function ShopPage() {
             <div className="rounded-[2rem] border border-ink/10 bg-white p-6 shadow-panel">
               <p className="font-display text-3xl text-[#1f5f49]">Professional Kit</p>
               <p className="mt-10 text-sm text-steel">One-off purchase</p>
-              <p className="mt-6 font-display text-5xl text-[#1f5f49]">$2,500</p>
+              <p className="mt-6 font-display text-5xl text-[#1f5f49]">$3,500</p>
               <p className="mt-3 text-sm text-steel">Buyback option: $500 on or before 4 weeks from purchase date</p>
               <FeatureList items={professionalKitItems} />
               <div className="mt-8">
@@ -165,7 +165,7 @@ export default function ShopPage() {
                 <tr className="rounded-2xl bg-sand">
                   <td className="rounded-l-2xl px-4 py-4 font-semibold">Professional Kit</td>
                   <td className="px-4 py-4">Certified instruments, equipment, onboarding, training, and 200 specimen containers</td>
-                  <td className="rounded-r-2xl px-4 py-4 font-semibold">$2,500 one-off</td>
+                  <td className="rounded-r-2xl px-4 py-4 font-semibold">$3,500 one-off</td>
                 </tr>
                 <tr className="rounded-2xl bg-sand">
                   <td className="rounded-l-2xl px-4 py-4 font-semibold">Kit Buyback</td>

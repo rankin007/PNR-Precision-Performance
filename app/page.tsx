@@ -43,8 +43,6 @@ export default function HomePage() {
         eyebrow="Shop"
         title="Shop"
         description="Review the professional equipment and service pricing panels, then move directly into checkout and subscription pathways."
-        imageSrc="/price list for web.jpg"
-        imageAlt="Professional equipment pricing preview"
         href="/shop"
         ctaLabel="Open Shop"
         reverse

@@ -34,7 +34,7 @@ const fallbackProducts: ProductSummary[] = [
     name: "Professional Kit",
     slug: "professional-kit",
     description: "Professional Urine and Saliva Analysis BE Kit with instruments, onboarding, protocols, and in-house training.",
-    priceLabel: "$2,500 AUD",
+    priceLabel: "$3,500 AUD",
     checkoutReady: false,
   },
   {
