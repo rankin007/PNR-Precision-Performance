@@ -66,6 +66,40 @@ function isAllowedGalleryUrl(value: string) {
   }
 }
 
+function extractHorseGalleryStoragePath(imageUrl: string) {
+  if (!imageUrl || !hasSupabaseEnv()) {
+    return null;
+  }
+
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+
+  if (!supabaseUrl) {
+    return null;
+  }
+
+  try {
+    const parsed = new URL(imageUrl);
+    const publicPrefix = `/storage/v1/object/public/${HORSE_GALLERY_BUCKET}/`;
+    const signedPrefix = `/storage/v1/object/sign/${HORSE_GALLERY_BUCKET}/`;
+
+    if (parsed.origin !== new URL(supabaseUrl).origin) {
+      return null;
+    }
+
+    if (parsed.pathname.startsWith(publicPrefix)) {
+      return decodeURIComponent(parsed.pathname.slice(publicPrefix.length));
+    }
+
+    if (parsed.pathname.startsWith(signedPrefix)) {
+      return decodeURIComponent(parsed.pathname.slice(signedPrefix.length));
+    }
+  } catch {
+    return null;
+  }
+
+  return null;
+}
+
 async function uploadGalleryImageIfNeeded(args: {
   formData: FormData;
   horseId: string;
@@ -418,6 +452,45 @@ export async function addHorseGalleryItemAction(formData: FormData) {
 
   revalidateHorsePaths(horseId);
   redirect(`/data-entry/horses/${horseId}?saved=gallery#horse-gallery`);
+}
+
+export async function deleteHorseGalleryItemAction(formData: FormData) {
+  const context = await requireSignedInAppContext("/data-entry/horses");
+
+  if (!hasSupabaseEnv()) {
+    redirect("/data-entry/horses?error=supabase-not-configured");
+  }
+
+  const horseId = readString(formData, "horseId");
+  const galleryItemId = readString(formData, "galleryItemId");
+  const imageUrl = readString(formData, "imageUrl");
+  const returnTo = readString(formData, "returnTo");
+  const returnHash = readString(formData, "returnHash");
+
+  if (!horseId || !galleryItemId || (!context.appUserId && !context.bypassActive)) {
+    redirect(`/data-entry/horses/${horseId || ""}?error=missing-gallery-delete-fields`);
+  }
+
+  const supabase = await createSupabaseServerClient();
+  const { error } = await supabase
+    .from("horse_gallery_items")
+    .delete()
+    .eq("id", galleryItemId)
+    .eq("horse_id", horseId);
+
+  if (error) {
+    redirect(`/data-entry/horses/${horseId}?error=gallery-delete-failed`);
+  }
+
+  const storagePath = extractHorseGalleryStoragePath(imageUrl);
+  if (storagePath) {
+    await supabase.storage.from(HORSE_GALLERY_BUCKET).remove([storagePath]);
+  }
+
+  revalidateHorsePaths(horseId);
+  const targetPath = returnTo || `/data-entry/horses/${horseId}`;
+  const targetHash = returnHash ? `#${returnHash.replace(/^#/, "")}` : "";
+  redirect(`${targetPath}?saved=gallery-deleted${targetHash}`);
 }
 
 export async function addHorseBiochemistryResultAction(formData: FormData) {

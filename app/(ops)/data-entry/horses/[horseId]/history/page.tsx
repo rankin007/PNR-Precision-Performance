@@ -1,7 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
+import { deleteHorseGalleryItemAction } from "@/app/(ops)/data-entry/horses/actions";
 import { SectionCard } from "@/components/layout/section-card";
 import { SimpleMetricChart } from "@/components/charts/simple-metric-chart";
+import { GalleryDeleteButton } from "@/components/ops/gallery-delete-button";
 import { getTrainerHorseWorkspace } from "@/lib/domain/trainer-horses";
 
 type TrainerHorseHistoryPageProps = {
@@ -196,6 +198,16 @@ export default async function TrainerHorseHistoryPage({ params }: TrainerHorseHi
               galleryItems.map((item) => (
                 <div key={item.id} className="overflow-hidden rounded-2xl border border-ink/10 bg-sand">
                   <div className="relative h-44 w-full">
+                    <div className="absolute right-3 top-3 z-10">
+                      <GalleryDeleteButton
+                        action={deleteHorseGalleryItemAction}
+                        horseId={horse.id}
+                        galleryItemId={item.id}
+                        imageUrl={item.imageUrl}
+                        returnTo={`/data-entry/horses/${horse.id}/history`}
+                        returnHash="horse-gallery-history"
+                      />
+                    </div>
                     <a
                       href={item.imageUrl}
                       target="_blank"

@@ -3,12 +3,14 @@ import Link from "next/link";
 import { SectionCard } from "@/components/layout/section-card";
 import { SimpleMetricChart } from "@/components/charts/simple-metric-chart";
 import { EtrakkaUploader } from "@/components/ops/etrakka-uploader";
+import { GalleryDeleteButton } from "@/components/ops/gallery-delete-button";
 import { HorseGalleryForm } from "@/components/ops/horse-gallery-form";
 import { NewTestModal } from "@/components/ops/new-test-modal";
 import { getAccessibleHorseSummaries } from "@/lib/domain/horses";
 import { getTrainerHorseWorkspace } from "@/lib/domain/trainer-horses";
 import {
   addHorseGalleryItemAction,
+  deleteHorseGalleryItemAction,
   updateHorseProfileAction,
 } from "@/app/(ops)/data-entry/horses/actions";
 
@@ -120,7 +122,9 @@ export default async function TrainerHorseWorkspacePage({
             ? "Horse profile saved."
             : saved === "gallery"
               ? "Gallery item added."
-              : "Biochemistry result saved and returned to results."}
+              : saved === "gallery-deleted"
+                ? "Gallery item deleted."
+                : "Biochemistry result saved and returned to results."}
         </div>
       ) : null}
       {error ? (
@@ -134,6 +138,15 @@ export default async function TrainerHorseWorkspacePage({
           <div className="overflow-hidden rounded-[2rem] border border-ink/10 bg-white shadow-panel">
             {galleryItems[0] ? (
               <div className="relative h-64 w-full">
+                <div className="absolute right-3 top-3 z-10">
+                  <GalleryDeleteButton
+                    action={deleteHorseGalleryItemAction}
+                    horseId={horse.id}
+                    galleryItemId={galleryItems[0].id}
+                    imageUrl={galleryItems[0].imageUrl}
+                    returnTo={`/data-entry/horses/${horse.id}`}
+                  />
+                </div>
                 <a
                   href={galleryItems[0].imageUrl}
                   target="_blank"
@@ -309,6 +322,16 @@ export default async function TrainerHorseWorkspacePage({
               galleryItems.slice(0, 6).map((item) => (
                 <div key={item.id} className="overflow-hidden rounded-[1.5rem] border border-ink/10 bg-sand">
                   <div className="relative h-40 w-full">
+                    <div className="absolute right-3 top-3 z-10">
+                      <GalleryDeleteButton
+                        action={deleteHorseGalleryItemAction}
+                        horseId={horse.id}
+                        galleryItemId={item.id}
+                        imageUrl={item.imageUrl}
+                        returnTo={`/data-entry/horses/${horse.id}`}
+                        returnHash="horse-gallery"
+                      />
+                    </div>
                     <a
                       href={item.imageUrl}
                       target="_blank"
