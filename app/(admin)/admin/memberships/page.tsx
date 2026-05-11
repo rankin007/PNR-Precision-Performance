@@ -13,6 +13,21 @@ function pickValue(value: string | string[] | undefined) {
   return Array.isArray(value) ? value[0] : value;
 }
 
+function formatDateTime(value: string | null) {
+  if (!value) {
+    return "Not yet recorded";
+  }
+
+  try {
+    return new Intl.DateTimeFormat("en-AU", {
+      dateStyle: "medium",
+      timeStyle: "short",
+    }).format(new Date(value));
+  } catch {
+    return value;
+  }
+}
+
 export default async function AdminMembershipsPage({
   searchParams,
 }: AdminMembershipsPageProps) {
@@ -190,6 +205,40 @@ export default async function AdminMembershipsPage({
                           <p className="font-semibold">{application.clientName}</p>
                           <p className="mt-1 text-steel">{application.directEmail}</p>
                           <p className="mt-1 text-steel">{application.businessName || application.stableAddress}</p>
+                        </div>
+                        <div className="grid gap-3 rounded-2xl border border-ink/10 bg-white px-4 py-4 sm:grid-cols-2">
+                          <div>
+                            <p className="text-xs font-semibold uppercase tracking-[0.14em] text-steel">Business Name</p>
+                            <p className="mt-1 text-ink">{application.businessName || "Not supplied"}</p>
+                          </div>
+                          <div>
+                            <p className="text-xs font-semibold uppercase tracking-[0.14em] text-steel">Mobile Number</p>
+                            <p className="mt-1 text-ink">{application.mobileNumber}</p>
+                          </div>
+                          <div className="sm:col-span-2">
+                            <p className="text-xs font-semibold uppercase tracking-[0.14em] text-steel">Stable Address</p>
+                            <p className="mt-1 whitespace-pre-line text-ink">{application.stableAddress}</p>
+                          </div>
+                          <div>
+                            <p className="text-xs font-semibold uppercase tracking-[0.14em] text-steel">Direct Email</p>
+                            <p className="mt-1 text-ink">{application.directEmail}</p>
+                          </div>
+                          <div>
+                            <p className="text-xs font-semibold uppercase tracking-[0.14em] text-steel">Admin / Billing Email</p>
+                            <p className="mt-1 text-ink">{application.adminEmail || "Not supplied"}</p>
+                          </div>
+                          <div>
+                            <p className="text-xs font-semibold uppercase tracking-[0.14em] text-steel">Submitted</p>
+                            <p className="mt-1 text-ink">{formatDateTime(application.createdAt)}</p>
+                          </div>
+                          <div>
+                            <p className="text-xs font-semibold uppercase tracking-[0.14em] text-steel">Email Verified</p>
+                            <p className="mt-1 text-ink">{formatDateTime(application.emailVerifiedAt)}</p>
+                          </div>
+                          <div className="sm:col-span-2">
+                            <p className="text-xs font-semibold uppercase tracking-[0.14em] text-steel">Disclaimer Agreed</p>
+                            <p className="mt-1 text-ink">{formatDateTime(application.disclaimerAgreedAt)}</p>
+                          </div>
                         </div>
                         <div className="flex flex-wrap gap-2 text-xs font-semibold uppercase tracking-[0.14em]">
                           <span className={`rounded-full px-3 py-1 ${readyForApproval ? "border border-emerald-200 bg-emerald-50 text-emerald-700" : "border border-amber-200 bg-amber-50 text-amber-700"}`}>
