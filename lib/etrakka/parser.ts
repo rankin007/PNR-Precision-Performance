@@ -165,6 +165,45 @@ function detectFileFormat(fileName: string) {
   return "csv";
 }
 
+function extractViewLinkParts(value: string | null, fallbackSourceUrl?: string) {
+  if (!value) {
+    return {
+      sourceViewHtml: null,
+      sourceUrl: fallbackSourceUrl ?? null,
+      sourceSessionKey: null,
+    };
+  }
+
+  const hrefMatch = value.match(/href=['"]([^'"]+)['"]/i);
+  const rawHref = hrefMatch?.[1]?.trim() ?? "";
+
+  let resolvedUrl = fallbackSourceUrl ?? null;
+  let sourceSessionKey: string | null = null;
+
+  if (rawHref) {
+    try {
+      const base = fallbackSourceUrl ? new URL(fallbackSourceUrl) : new URL("https://e-trakka.com/");
+      const absolute = new URL(rawHref, base);
+      resolvedUrl = absolute.toString();
+      sourceSessionKey = absolute.searchParams.get("sessionkey");
+    } catch {
+      resolvedUrl = fallbackSourceUrl ?? rawHref;
+    }
+  } else if (fallbackSourceUrl) {
+    try {
+      sourceSessionKey = new URL(fallbackSourceUrl).searchParams.get("sessionkey");
+    } catch {
+      sourceSessionKey = null;
+    }
+  }
+
+  return {
+    sourceViewHtml: value,
+    sourceUrl: resolvedUrl,
+    sourceSessionKey,
+  };
+}
+
 function classifySessionCategory(rowType: string | null, sessionType: string | null): EtrakkaSessionCategory {
   const normalized = `${rowType || ""} ${sessionType || ""}`.toLowerCase();
   if (normalized.includes("trial")) return "trial";
@@ -226,6 +265,7 @@ function buildPayloadFromRow(
   const sessionTimeRaw = getFirstValue(row, ["start time", "start"]);
   const rowType = getFirstValue(row, ["view", "type"]);
   const sessionType = getFirstValue(row, ["session type", "type"]) || "";
+  const viewLink = extractViewLinkParts(getFirstValue(row, ["view"]), fallbackSourceUrl);
 
   if (!sessionDateRaw && !sessionTimeRaw && !getFirstValue(row, ["track name", "track", "note"])) {
     return null;
@@ -234,15 +274,20 @@ function buildPayloadFromRow(
   return {
     horseId,
     sessionDateIso: parseDateTime(sessionDateRaw || new Date().toDateString(), sessionTimeRaw || "12:00"),
+    sessionDayLabel: getFirstValue(row, ["day"]),
+    sessionStartTimeText: sessionTimeRaw || null,
+    trainerName: getFirstValue(row, ["trainer"]),
     riderName: getFirstValue(row, ["rider"]) || "",
     trackName: getFirstValue(row, ["track name", "track"]) || "",
     etrakkaDevice: getFirstValue(row, ["blanket", "unit"]) || "",
     sessionType,
     sessionCategory: classifySessionCategory(rowType, sessionType),
     sourceRowType: rowType,
+    sourceViewHtml: viewLink.sourceViewHtml,
     sourceFileName: fileName,
     sourceFileFormat: detectFileFormat(fileName),
-    sourceUrl: getFirstValue(row, ["url"]) || fallbackSourceUrl || null,
+    sourceUrl: getFirstValue(row, ["url"]) || viewLink.sourceUrl,
+    sourceSessionKey: viewLink.sourceSessionKey,
     sourceHorseCode: getFirstValue(row, ["horseid", "horse id"]),
     intervalCount: parseInteger(getFirstValue(row, ["intervals"])),
     sessionCount: parseInteger(getFirstValue(row, ["sessions"])),

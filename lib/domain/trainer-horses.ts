@@ -73,13 +73,18 @@ export type HorseOperationalHistoryItem = {
 export type HorseEtrakkaSession = {
   id: string;
   sessionDate: string;
+  sessionDayLabel: string | null;
+  sessionStartTimeText: string | null;
+  trainerName: string | null;
   sessionCategory: string | null;
   sessionType: string | null;
   sourceRowType: string | null;
+  sourceViewHtml: string | null;
   trackName: string | null;
   riderName: string | null;
   etrakkaDevice: string | null;
   sourceFileName: string | null;
+  sourceSessionKey: string | null;
   bt200: number | null;
   bt400: number | null;
   bt600: number | null;
@@ -156,13 +161,18 @@ type LatestWaterRow = {
 type EtrakkaSessionRow = {
   id: string;
   session_date: string;
+  session_day_label?: string | null;
+  session_start_time_text?: string | null;
+  trainer_name?: string | null;
   session_category?: string | null;
   session_type?: string | null;
   source_row_type?: string | null;
+  source_view_html?: string | null;
   track_name?: string | null;
   rider?: string | null;
   blanket?: string | null;
   source_file_name?: string | null;
+  source_session_key?: string | null;
   bt200?: string | number | null;
   bt400?: string | number | null;
   bt600?: string | number | null;
@@ -262,13 +272,18 @@ function mapEtrakkaSessions(rows: EtrakkaSessionRow[] | null | undefined): Horse
   return (rows ?? []).map((entry) => ({
     id: entry.id,
     sessionDate: entry.session_date,
+    sessionDayLabel: entry.session_day_label ?? null,
+    sessionStartTimeText: entry.session_start_time_text ?? null,
+    trainerName: entry.trainer_name ?? null,
     sessionCategory: entry.session_category ?? null,
     sessionType: entry.session_type ?? null,
     sourceRowType: entry.source_row_type ?? null,
+    sourceViewHtml: entry.source_view_html ?? null,
     trackName: entry.track_name ?? null,
     riderName: entry.rider ?? null,
     etrakkaDevice: entry.blanket ?? null,
     sourceFileName: entry.source_file_name ?? null,
+    sourceSessionKey: entry.source_session_key ?? null,
     bt200: toNumber(entry.bt200),
     bt400: toNumber(entry.bt400),
     bt600: toNumber(entry.bt600),

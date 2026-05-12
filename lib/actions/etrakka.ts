@@ -8,15 +8,20 @@ export type EtrakkaSessionCategory = "view" | "race" | "trial" | "session" | "un
 export type EtrakkaImportPayload = {
   horseId: string;
   sessionDateIso: string;
+  sessionDayLabel: string | null;
+  sessionStartTimeText: string | null;
+  trainerName: string | null;
   riderName: string;
   trackName: string;
   etrakkaDevice: string;
   sessionType: string;
   sessionCategory: EtrakkaSessionCategory;
   sourceRowType: string | null;
+  sourceViewHtml: string | null;
   sourceFileName: string | null;
   sourceFileFormat: string | null;
   sourceUrl: string | null;
+  sourceSessionKey: string | null;
   sourceHorseCode: string | null;
   intervalCount: number | null;
   sessionCount: number | null;
@@ -82,15 +87,20 @@ function buildInsertRecord(payload: EtrakkaImportPayload) {
   return {
     horse_id: payload.horseId,
     session_date: payload.sessionDateIso,
+    session_day_label: payload.sessionDayLabel,
+    session_start_time_text: payload.sessionStartTimeText,
+    trainer_name: payload.trainerName,
     rider: payload.riderName || null,
     track_name: payload.trackName || null,
     blanket: payload.etrakkaDevice || null,
     session_type: payload.sessionType || null,
     session_category: payload.sessionCategory,
     source_row_type: payload.sourceRowType || null,
+    source_view_html: payload.sourceViewHtml || null,
     source_file_name: payload.sourceFileName || null,
     source_file_format: payload.sourceFileFormat || null,
     source_url: payload.sourceUrl || null,
+    source_session_key: payload.sourceSessionKey || null,
     source_horse_code: payload.sourceHorseCode || null,
     interval_count: payload.intervalCount,
     session_count: payload.sessionCount,

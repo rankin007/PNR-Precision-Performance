@@ -169,6 +169,15 @@ function detectFileFormat(fileName: string) {
   return "csv";
 }
 
+function extractViewSessionKey(value: string | null) {
+  if (!value) {
+    return null;
+  }
+
+  const match = value.match(/sessionkey=([^'">]+)/i);
+  return match?.[1] ?? null;
+}
+
 function classifySessionCategory(rowType: string | null, sessionType: string | null): EtrakkaSessionCategory {
   const normalized = `${rowType || ""} ${sessionType || ""}`.toLowerCase();
   if (normalized.includes("trial")) return "trial";
@@ -225,6 +234,7 @@ function buildPayloadFromRow(row: ImportRow, horseId: string, fileName: string):
   const sessionTimeRaw = getFirstValue(row, ["start time", "start"]);
   const rowType = getFirstValue(row, ["view", "type"]);
   const sessionType = getFirstValue(row, ["session type", "type"]) || "";
+  const viewValue = getFirstValue(row, ["view"]);
 
   if (!sessionDateRaw && !sessionTimeRaw && !getFirstValue(row, ["track name", "track", "note"])) {
     return null;
@@ -233,15 +243,20 @@ function buildPayloadFromRow(row: ImportRow, horseId: string, fileName: string):
   return {
     horseId,
     sessionDateIso: parseDateTime(sessionDateRaw || new Date().toDateString(), sessionTimeRaw || "12:00"),
+    sessionDayLabel: getFirstValue(row, ["day"]),
+    sessionStartTimeText: sessionTimeRaw || null,
+    trainerName: getFirstValue(row, ["trainer"]),
     riderName: getFirstValue(row, ["rider"]) || "",
     trackName: getFirstValue(row, ["track name", "track"]) || "",
     etrakkaDevice: getFirstValue(row, ["blanket", "unit"]) || "",
     sessionType,
     sessionCategory: classifySessionCategory(rowType, sessionType),
     sourceRowType: rowType,
+    sourceViewHtml: viewValue,
     sourceFileName: fileName,
     sourceFileFormat: detectFileFormat(fileName),
     sourceUrl: getFirstValue(row, ["url"]),
+    sourceSessionKey: extractViewSessionKey(viewValue),
     sourceHorseCode: getFirstValue(row, ["horseid", "horse id"]),
     intervalCount: parseInteger(getFirstValue(row, ["intervals"])),
     sessionCount: parseInteger(getFirstValue(row, ["sessions"])),
