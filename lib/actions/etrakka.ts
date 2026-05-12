@@ -138,16 +138,52 @@ function buildInsertRecord(payload: EtrakkaImportPayload) {
   };
 }
 
+const CSV_ALIGNMENT_COLUMNS = [
+  "session_day_label",
+  "session_start_time_text",
+  "trainer_name",
+  "source_view_html",
+  "source_session_key",
+] as const;
+
+function removeCsvAlignmentColumns(record: ReturnType<typeof buildInsertRecord>) {
+  const fallbackRecord = { ...record };
+
+  for (const column of CSV_ALIGNMENT_COLUMNS) {
+    delete fallbackRecord[column];
+  }
+
+  return fallbackRecord;
+}
+
+function isMissingCsvAlignmentColumnError(errorMessage: string) {
+  return CSV_ALIGNMENT_COLUMNS.some((column) => errorMessage.includes(column));
+}
+
 async function insertSingleEtrakkaSession(payload: EtrakkaImportPayload): Promise<EtrakkaImportResult> {
   try {
     const supabase = await createSupabaseServerClient();
+    const insertRecord = buildInsertRecord(payload);
 
     const { error: insertError } = await supabase
       .from("etrakka_sessions")
-      .insert(buildInsertRecord(payload));
+      .insert(insertRecord);
 
     if (insertError) {
       console.error("Insert error:", insertError.message);
+
+      if (isMissingCsvAlignmentColumnError(insertError.message)) {
+        const { error: fallbackInsertError } = await supabase
+          .from("etrakka_sessions")
+          .insert(removeCsvAlignmentColumns(insertRecord));
+
+        if (!fallbackInsertError) {
+          return { success: true };
+        }
+
+        console.error("Fallback insert error:", fallbackInsertError.message);
+        return { success: false, error: fallbackInsertError.message };
+      }
 
       if (insertError.code === "23505") {
         return { success: false, error: "duplicate" };
