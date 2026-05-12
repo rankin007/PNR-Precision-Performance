@@ -461,6 +461,9 @@ export function EtrakkaUploader({ horseId, horseName }: { horseId: string; horse
         <p className="mt-3 max-w-2xl text-sm leading-6 text-steel">
           Open the dedicated import panel for a cleaner upload flow, better mobile handling, and faster CSV processing locked to {horseName}.
         </p>
+        <div className="mt-5 rounded-2xl border border-teal-200 bg-white/80 px-4 py-3 text-sm text-ink shadow-sm">
+          You can now upload an export file or paste a readable E-Trakka session URL from the import panel.
+        </div>
         <button
           type="button"
           onClick={() => setIsOpen(true)}
