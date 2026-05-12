@@ -55,12 +55,16 @@ export type EtrakkaImportPayload = {
   ecgSummary: Record<string, unknown> | null;
   ecgTrace: Record<string, unknown> | null;
   rawPayload: Record<string, unknown>;
+  sourceHeaderLabels: string[] | null;
+  sourceRowValues: string[] | null;
+  sourceRowNumber: number | null;
   note: string | null;
 };
 
 type EtrakkaImportResult = {
   success: boolean;
   error?: string;
+  sessionId?: string | null;
 };
 
 export type EtrakkaBatchImportResult = {
@@ -160,25 +164,105 @@ function isMissingCsvAlignmentColumnError(errorMessage: string) {
   return CSV_ALIGNMENT_COLUMNS.some((column) => errorMessage.includes(column));
 }
 
-async function insertSingleEtrakkaSession(payload: EtrakkaImportPayload): Promise<EtrakkaImportResult> {
+function isMissingArchiveTableError(errorMessage: string) {
+  return (
+    errorMessage.includes("etrakka_import_batches") ||
+    errorMessage.includes("etrakka_import_rows")
+  );
+}
+
+async function createImportBatch(
+  supabase: Awaited<ReturnType<typeof createSupabaseServerClient>>,
+  payloads: EtrakkaImportPayload[],
+) {
+  const firstPayload = payloads[0];
+  const headerLabels = payloads.find((payload) => payload.sourceHeaderLabels?.length)?.sourceHeaderLabels ?? [];
+
+  const { data, error } = await supabase
+    .from("etrakka_import_batches")
+    .insert({
+      horse_id: firstPayload.horseId,
+      source_file_name: firstPayload.sourceFileName || null,
+      source_file_format: firstPayload.sourceFileFormat || null,
+      source_url: firstPayload.sourceUrl || null,
+      header_labels: headerLabels,
+      total_rows: payloads.length,
+    })
+    .select("id")
+    .single();
+
+  if (error) {
+    if (isMissingArchiveTableError(error.message)) {
+      return null;
+    }
+
+    throw error;
+  }
+
+  return data.id as string;
+}
+
+async function persistImportRow(args: {
+  supabase: Awaited<ReturnType<typeof createSupabaseServerClient>>;
+  batchId: string | null;
+  payload: EtrakkaImportPayload;
+  result: EtrakkaImportResult;
+}) {
+  const { supabase, batchId, payload, result } = args;
+
+  if (!batchId) {
+    return;
+  }
+
+  const importStatus = result.success
+    ? "imported"
+    : result.error === "duplicate"
+      ? "duplicate"
+      : "failed";
+
+  const { error } = await supabase.from("etrakka_import_rows").insert({
+    batch_id: batchId,
+    horse_id: payload.horseId,
+    session_id: result.sessionId ?? null,
+    row_index: payload.sourceRowNumber ?? 0,
+    source_session_key: payload.sourceSessionKey ?? null,
+    session_date: payload.sessionDateIso,
+    row_values: payload.sourceRowValues ?? [],
+    raw_payload: payload.rawPayload,
+    import_status: importStatus,
+    import_error: result.success ? null : result.error ?? null,
+  });
+
+  if (error && !isMissingArchiveTableError(error.message)) {
+    throw error;
+  }
+}
+
+async function insertSingleEtrakkaSession(
+  payload: EtrakkaImportPayload,
+  supabase: Awaited<ReturnType<typeof createSupabaseServerClient>>,
+): Promise<EtrakkaImportResult> {
   try {
-    const supabase = await createSupabaseServerClient();
     const insertRecord = buildInsertRecord(payload);
 
-    const { error: insertError } = await supabase
+    const { data: insertedSession, error: insertError } = await supabase
       .from("etrakka_sessions")
-      .insert(insertRecord);
+      .insert(insertRecord)
+      .select("id")
+      .single();
 
     if (insertError) {
       console.error("Insert error:", insertError.message);
 
       if (isMissingCsvAlignmentColumnError(insertError.message)) {
-        const { error: fallbackInsertError } = await supabase
+        const { data: fallbackInsertedSession, error: fallbackInsertError } = await supabase
           .from("etrakka_sessions")
-          .insert(removeCsvAlignmentColumns(insertRecord));
+          .insert(removeCsvAlignmentColumns(insertRecord))
+          .select("id")
+          .single();
 
         if (!fallbackInsertError) {
-          return { success: true };
+          return { success: true, sessionId: (fallbackInsertedSession as { id: string } | null)?.id ?? null };
         }
 
         console.error("Fallback insert error:", fallbackInsertError.message);
@@ -197,7 +281,7 @@ async function insertSingleEtrakkaSession(payload: EtrakkaImportPayload): Promis
       return { success: false, error: insertError.message };
     }
 
-    return { success: true };
+    return { success: true, sessionId: (insertedSession as { id: string } | null)?.id ?? null };
   } catch (err: unknown) {
     const errorMsg = err instanceof Error ? err.message : "An unexpected error occurred.";
     return { success: false, error: errorMsg };
@@ -205,7 +289,8 @@ async function insertSingleEtrakkaSession(payload: EtrakkaImportPayload): Promis
 }
 
 export async function importEtrakkaSession(payload: EtrakkaImportPayload) {
-  const result = await insertSingleEtrakkaSession(payload);
+  const supabase = await createSupabaseServerClient();
+  const result = await insertSingleEtrakkaSession(payload, supabase);
 
   if (result.success) {
     return { success: true };
@@ -219,6 +304,7 @@ export async function importEtrakkaSession(payload: EtrakkaImportPayload) {
 }
 
 export async function importEtrakkaSessions(payloads: EtrakkaImportPayload[]): Promise<EtrakkaBatchImportResult> {
+  const supabase = await createSupabaseServerClient();
   const summary: EtrakkaBatchImportResult = {
     success: true,
     importedCount: 0,
@@ -226,9 +312,11 @@ export async function importEtrakkaSessions(payloads: EtrakkaImportPayload[]): P
     failedCount: 0,
     errors: [],
   };
+  const batchId = payloads.length > 0 ? await createImportBatch(supabase, payloads) : null;
 
   for (const payload of payloads) {
-    const result = await insertSingleEtrakkaSession(payload);
+    const result = await insertSingleEtrakkaSession(payload, supabase);
+    await persistImportRow({ supabase, batchId, payload, result });
 
     if (result.success) {
       summary.importedCount += 1;

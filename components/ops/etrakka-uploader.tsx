@@ -290,6 +290,9 @@ function buildPayloadFromRow(row: ImportRow, horseId: string, fileName: string):
     ecgSummary: extractEcgSummary(row),
     ecgTrace: null,
     rawPayload: row,
+    sourceHeaderLabels: null,
+    sourceRowValues: null,
+    sourceRowNumber: null,
     note: getFirstValue(row, ["note"]),
   };
 }
@@ -298,13 +301,26 @@ function parseMultiRowTablePayloads(rows: string[][], horseId: string, fileName:
   const headerIndex = getTableHeaderIndex(rows);
   if (headerIndex === -1) return [];
 
-  const headers = rows[headerIndex].map((cell) => normalizeHeader(cell));
+  const headerLabels = rows[headerIndex].map((cell) => cell.trim());
+  const headers = headerLabels.map((cell) => normalizeHeader(cell));
 
   return rows
     .slice(headerIndex + 1)
     .filter((row) => row.some((cell) => cell.trim().length > 0))
-    .map((row) => buildRowMap(headers, row))
-    .map((row) => buildPayloadFromRow(row, horseId, fileName))
+    .map((row, index): EtrakkaImportPayload | null => {
+      const payload = buildPayloadFromRow(buildRowMap(headers, row), horseId, fileName);
+
+      if (!payload) {
+        return null;
+      }
+
+      return {
+        ...payload,
+        sourceHeaderLabels: headerLabels,
+        sourceRowValues: row,
+        sourceRowNumber: index + 1,
+      } satisfies EtrakkaImportPayload;
+    })
     .filter((payload): payload is EtrakkaImportPayload => Boolean(payload));
 }
 
@@ -325,7 +341,14 @@ function parseSingleSessionPayload(text: string, horseId: string, fileName: stri
   });
 
   const payload = buildPayloadFromRow(data, horseId, fileName);
-  return payload ? [payload] : [];
+  return payload
+    ? [
+        {
+          ...payload,
+          sourceRowNumber: 1,
+        },
+      ]
+    : [];
 }
 
 function parseEtrakkaFile(text: string, horseId: string, fileName: string) {

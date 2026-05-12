@@ -260,6 +260,9 @@ function buildPayloadFromRow(
   horseId: string,
   fileName: string,
   fallbackSourceUrl?: string,
+  sourceHeaderLabels?: string[] | null,
+  sourceRowValues?: string[] | null,
+  sourceRowNumber?: number | null,
 ): EtrakkaImportPayload | null {
   const sessionDateRaw = getFirstValue(row, ["date", "session date"]);
   const sessionTimeRaw = getFirstValue(row, ["start time", "start"]);
@@ -321,6 +324,9 @@ function buildPayloadFromRow(
     ecgSummary: extractEcgSummary(row),
     ecgTrace: null,
     rawPayload: row,
+    sourceHeaderLabels: sourceHeaderLabels ?? null,
+    sourceRowValues: sourceRowValues ?? null,
+    sourceRowNumber: sourceRowNumber ?? null,
     note: getFirstValue(row, ["note"]),
   } satisfies EtrakkaImportPayload;
 }
@@ -334,13 +340,28 @@ function parseMultiRowTablePayloads(
   const headerIndex = getTableHeaderIndex(rows);
   if (headerIndex === -1) return [];
 
-  const headers = rows[headerIndex].map((cell) => normalizeHeader(cell));
+  const headerLabels = rows[headerIndex].map((cell) => cell.trim());
+  const headers = headerLabels.map((cell) => normalizeHeader(cell));
 
   return rows
     .slice(headerIndex + 1)
     .filter((row) => row.some((cell) => cell.trim().length > 0))
-    .map((row) => buildRowMap(headers, row))
-    .map((row) => buildPayloadFromRow(row, horseId, fileName, fallbackSourceUrl))
+    .map((row, index) => ({
+      rowMap: buildRowMap(headers, row),
+      rowValues: row,
+      rowNumber: index + 1,
+    }))
+    .map(({ rowMap, rowValues, rowNumber }) =>
+      buildPayloadFromRow(
+        rowMap,
+        horseId,
+        fileName,
+        fallbackSourceUrl,
+        headerLabels,
+        rowValues,
+        rowNumber,
+      ),
+    )
     .filter((payload): payload is EtrakkaImportPayload => Boolean(payload));
 }
 
@@ -365,7 +386,7 @@ function parseSingleSessionPayload(
     data[field] = data[field].trim();
   });
 
-  const payload = buildPayloadFromRow(data, horseId, fileName, fallbackSourceUrl);
+  const payload = buildPayloadFromRow(data, horseId, fileName, fallbackSourceUrl, null, null, 1);
   return payload ? [payload] : [];
 }
 
