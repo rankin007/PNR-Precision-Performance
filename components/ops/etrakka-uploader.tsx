@@ -1,14 +1,356 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { importEtrakkaSession, type EtrakkaImportPayload } from "@/lib/actions/etrakka";
+import {
+  importEtrakkaSessions,
+  importEtrakkaSessionsFromUrl,
+  type EtrakkaBatchImportResult,
+  type EtrakkaImportPayload,
+  type EtrakkaSessionCategory,
+} from "@/lib/actions/etrakka";
+
+type ImportMessage = {
+  text: string;
+  type: "error" | "success";
+};
+
+type ImportRow = Record<string, string>;
+
+const NUMERIC_FIELDS = [
+  "bt200",
+  "bt400",
+  "bt600",
+  "bt800",
+  "bt1000",
+  "200",
+  "400",
+  "600",
+  "800",
+  "1000",
+  "hr max",
+  "hr 45",
+  "trot mean hr",
+  "canter mean hr",
+  "gallop mean hr",
+  "vmax",
+  "v200",
+  "mj",
+  "sl 50",
+  "gallop>60kph",
+  "secs>60kph",
+  "secstohrdrop",
+  "secs to hr drop",
+  "48kgap secs",
+  "48k gap secs",
+  "avghr2_5min",
+  "avghr2_5m",
+  "gallop metres",
+  "intervals",
+  "sessions",
+];
+
+function normalizeHeader(value: string) {
+  return value
+    .replace(/<[^>]+>/g, " ")
+    .replace(/&nbsp;/gi, " ")
+    .replace(/&amp;/gi, "&")
+    .replace(/\s+/g, " ")
+    .trim()
+    .toLowerCase();
+}
+
+function decodeHtmlEntities(value: string) {
+  return value
+    .replace(/&nbsp;/gi, " ")
+    .replace(/&amp;/gi, "&")
+    .replace(/&quot;/gi, '"')
+    .replace(/&#39;/gi, "'")
+    .replace(/&lt;/gi, "<")
+    .replace(/&gt;/gi, ">");
+}
+
+function parseCsvLine(line: string) {
+  const result: string[] = [];
+  let current = "";
+  let inQuotes = false;
+
+  for (let index = 0; index < line.length; index += 1) {
+    const char = line[index];
+    const nextChar = line[index + 1];
+
+    if (char === '"') {
+      if (inQuotes && nextChar === '"') {
+        current += '"';
+        index += 1;
+      } else {
+        inQuotes = !inQuotes;
+      }
+      continue;
+    }
+
+    if (char === "," && !inQuotes) {
+      result.push(current.trim());
+      current = "";
+      continue;
+    }
+
+    current += char;
+  }
+
+  result.push(current.trim());
+  return result;
+}
+
+function parseDelimitedRows(text: string) {
+  return text
+    .replace(/\r/g, "")
+    .split("\n")
+    .map((line) => line.trim())
+    .filter(Boolean)
+    .map((line) => parseCsvLine(line));
+}
+
+function parseHtmlTableRows(text: string) {
+  const rows = Array.from(text.matchAll(/<tr[\s\S]*?>([\s\S]*?)<\/tr>/gi));
+
+  return rows
+    .map((rowMatch) => {
+      const cells = Array.from(rowMatch[1].matchAll(/<(td|th)[^>]*>([\s\S]*?)<\/\1>/gi));
+      return cells.map((cellMatch) =>
+        decodeHtmlEntities(cellMatch[2].replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim()),
+      );
+    })
+    .filter((row) => row.length > 0);
+}
+
+function parseTabularRows(text: string) {
+  if (/<table[\s>]/i.test(text) || /<tr[\s>]/i.test(text)) {
+    return parseHtmlTableRows(text);
+  }
+
+  return parseDelimitedRows(text);
+}
+
+function getTableHeaderIndex(rows: string[][]) {
+  return rows.findIndex((row) => {
+    const headers = row.map((cell) => normalizeHeader(cell));
+    return headers.includes("track name") && (headers.includes("session type") || headers.includes("start time"));
+  });
+}
+
+function parseNumeric(value: string | null) {
+  if (!value) return null;
+  const sanitized = value.replace(/[^0-9.\-]/g, "");
+  if (!sanitized) return null;
+  const parsed = Number.parseFloat(sanitized);
+  return Number.isFinite(parsed) ? parsed : null;
+}
+
+function parseInteger(value: string | null) {
+  const parsed = parseNumeric(value);
+  return parsed === null ? null : Math.round(parsed);
+}
+
+function parseDateTime(dateStr: string, timeStr: string) {
+  try {
+    const cleanDate = dateStr.replace(/^[a-zA-Z]+,\s*/, "").trim();
+    const raw = `${cleanDate} ${timeStr}`.trim();
+    const parsed = new Date(raw);
+    return Number.isNaN(parsed.getTime()) ? new Date().toISOString() : parsed.toISOString();
+  } catch {
+    return new Date().toISOString();
+  }
+}
+
+function detectFileFormat(fileName: string) {
+  const lower = fileName.toLowerCase();
+  if (lower.endsWith(".xls") || lower.endsWith(".xlsx")) return "xls";
+  if (lower.endsWith(".txt")) return "txt";
+  return "csv";
+}
+
+function classifySessionCategory(rowType: string | null, sessionType: string | null): EtrakkaSessionCategory {
+  const normalized = `${rowType || ""} ${sessionType || ""}`.toLowerCase();
+  if (normalized.includes("trial")) return "trial";
+  if (normalized.includes("race")) return "race";
+  if (normalized.includes("view")) return "view";
+  if (normalized.trim().length > 0) return "session";
+  return "unknown";
+}
+
+function buildRowMap(headers: string[], row: string[]) {
+  const mapped: ImportRow = {};
+
+  headers.forEach((header, index) => {
+    mapped[header] = row[index]?.trim() ?? "";
+  });
+
+  return mapped;
+}
+
+function getFirstValue(row: ImportRow, aliases: string[]) {
+  for (const alias of aliases) {
+    const exact = row[alias];
+    if (exact) return exact;
+
+    const partialKey = Object.keys(row).find((key) => key === alias || key.includes(alias));
+    if (partialKey && row[partialKey]) return row[partialKey];
+  }
+
+  return null;
+}
+
+function extractGpsSummary(row: ImportRow) {
+  const gpsSummary = {
+    distance: getFirstValue(row, ["distance", "gallop metres"]),
+    vmax: getFirstValue(row, ["vmax"]),
+    strideLength: getFirstValue(row, ["sl 50"]),
+  };
+
+  return Object.values(gpsSummary).some(Boolean) ? gpsSummary : null;
+}
+
+function extractEcgSummary(row: ImportRow) {
+  const ecgSummary = {
+    hrMax: getFirstValue(row, ["hr max"]),
+    hr45: getFirstValue(row, ["hr 45"]),
+    avgHr2_5min: getFirstValue(row, ["avghr2_5min", "avghr2_5m"]),
+  };
+
+  return Object.values(ecgSummary).some(Boolean) ? ecgSummary : null;
+}
+
+function buildPayloadFromRow(row: ImportRow, horseId: string, fileName: string): EtrakkaImportPayload | null {
+  const sessionDateRaw = getFirstValue(row, ["date", "session date"]);
+  const sessionTimeRaw = getFirstValue(row, ["start time", "start"]);
+  const rowType = getFirstValue(row, ["view", "type"]);
+  const sessionType = getFirstValue(row, ["session type", "type"]) || "";
+
+  if (!sessionDateRaw && !sessionTimeRaw && !getFirstValue(row, ["track name", "track", "note"])) {
+    return null;
+  }
+
+  return {
+    horseId,
+    sessionDateIso: parseDateTime(sessionDateRaw || new Date().toDateString(), sessionTimeRaw || "12:00"),
+    riderName: getFirstValue(row, ["rider"]) || "",
+    trackName: getFirstValue(row, ["track name", "track"]) || "",
+    etrakkaDevice: getFirstValue(row, ["blanket", "unit"]) || "",
+    sessionType,
+    sessionCategory: classifySessionCategory(rowType, sessionType),
+    sourceRowType: rowType,
+    sourceFileName: fileName,
+    sourceFileFormat: detectFileFormat(fileName),
+    sourceUrl: getFirstValue(row, ["url"]),
+    sourceHorseCode: getFirstValue(row, ["horseid", "horse id"]),
+    intervalCount: parseInteger(getFirstValue(row, ["intervals"])),
+    sessionCount: parseInteger(getFirstValue(row, ["sessions"])),
+    bt200: parseNumeric(getFirstValue(row, ["bt200"])),
+    bt400: parseNumeric(getFirstValue(row, ["bt400"])),
+    bt600: parseNumeric(getFirstValue(row, ["bt600"])),
+    bt800: parseNumeric(getFirstValue(row, ["bt800"])),
+    bt1000: parseNumeric(getFirstValue(row, ["bt1000"])),
+    s200: parseNumeric(getFirstValue(row, ["200"])),
+    s400: parseNumeric(getFirstValue(row, ["400"])),
+    s600: parseNumeric(getFirstValue(row, ["600"])),
+    s800: parseNumeric(getFirstValue(row, ["800"])),
+    s1000: parseNumeric(getFirstValue(row, ["1000"])),
+    hrMaxBpm: parseNumeric(getFirstValue(row, ["hr max"])),
+    hr45: parseNumeric(getFirstValue(row, ["hr 45"])),
+    trotMeanHrBpm: parseNumeric(getFirstValue(row, ["trot mean hr"])),
+    canterMeanHrBpm: parseNumeric(getFirstValue(row, ["canter mean hr"])),
+    gallopMeanHrBpm: parseNumeric(getFirstValue(row, ["gallop mean hr"])),
+    vmaxKph: parseNumeric(getFirstValue(row, ["vmax"])),
+    v200: parseNumeric(getFirstValue(row, ["v200"])),
+    mj: parseNumeric(getFirstValue(row, ["mj"])),
+    sl50: parseNumeric(getFirstValue(row, ["sl 50"])),
+    gallopOver60kph: parseNumeric(getFirstValue(row, ["gallop>60kph"])),
+    secsOver60kph: parseNumeric(getFirstValue(row, ["secs>60kph"])),
+    secsToHrDrop: parseNumeric(getFirstValue(row, ["secstohrdrop", "secs to hr drop"])),
+    gap48kSecs: parseNumeric(getFirstValue(row, ["48kgap secs", "48k gap secs"])),
+    recoveryAvgHr2_5minBpm: parseNumeric(getFirstValue(row, ["avghr2_5min", "avghr2_5m"])),
+    gallopMetres: parseNumeric(getFirstValue(row, ["gallop metres", "distance"])),
+    gpsSummary: extractGpsSummary(row),
+    gpsTrack: null,
+    ecgSummary: extractEcgSummary(row),
+    ecgTrace: null,
+    rawPayload: row,
+    note: getFirstValue(row, ["note"]),
+  };
+}
+
+function parseMultiRowTablePayloads(rows: string[][], horseId: string, fileName: string) {
+  const headerIndex = getTableHeaderIndex(rows);
+  if (headerIndex === -1) return [];
+
+  const headers = rows[headerIndex].map((cell) => normalizeHeader(cell));
+
+  return rows
+    .slice(headerIndex + 1)
+    .filter((row) => row.some((cell) => cell.trim().length > 0))
+    .map((row) => buildRowMap(headers, row))
+    .map((row) => buildPayloadFromRow(row, horseId, fileName))
+    .filter((payload): payload is EtrakkaImportPayload => Boolean(payload));
+}
+
+function parseSingleSessionPayload(text: string, horseId: string, fileName: string) {
+  const rows = parseDelimitedRows(text);
+  const data: ImportRow = {};
+
+  rows.forEach((row) => {
+    if (row.length < 2) return;
+    const key = normalizeHeader(row[0]);
+    const value = row[1]?.trim() ?? "";
+    data[key] = value;
+  });
+
+  NUMERIC_FIELDS.forEach((field) => {
+    if (!(field in data)) return;
+    data[field] = data[field].trim();
+  });
+
+  const payload = buildPayloadFromRow(data, horseId, fileName);
+  return payload ? [payload] : [];
+}
+
+function parseEtrakkaFile(text: string, horseId: string, fileName: string) {
+  const rows = parseTabularRows(text);
+  const multiRowPayloads = parseMultiRowTablePayloads(rows, horseId, fileName);
+  if (multiRowPayloads.length > 0) return multiRowPayloads;
+  return parseSingleSessionPayload(text, horseId, fileName);
+}
+
+function buildResultMessage(result: EtrakkaBatchImportResult, horseName: string, totalRows: number): ImportMessage {
+  const summary = [
+    `Imported ${result.importedCount} session${result.importedCount === 1 ? "" : "s"}`,
+    result.duplicateCount > 0 ? `skipped ${result.duplicateCount} duplicate${result.duplicateCount === 1 ? "" : "s"}` : null,
+    result.failedCount > 0 ? `${result.failedCount} failed` : null,
+    totalRows > 0 ? `from ${totalRows} parsed row${totalRows === 1 ? "" : "s"}` : null,
+  ]
+    .filter(Boolean)
+    .join(", ");
+
+  if (result.importedCount === 0 && result.failedCount > 0) {
+    return {
+      type: "error",
+      text: `${summary} for ${horseName}. ${result.errors[0] || "Please review the file format."}`,
+    };
+  }
+
+  const detail = result.errors[0] ? ` First issue: ${result.errors[0]}` : "";
+  return {
+    type: result.failedCount > 0 ? "error" : "success",
+    text: `${summary} for ${horseName}.${detail}`,
+  };
+}
 
 export function EtrakkaUploader({ horseId, horseName }: { horseId: string; horseName: string }) {
   const [isOpen, setIsOpen] = useState(false);
   const [isDragActive, setIsDragActive] = useState(false);
   const [loading, setLoading] = useState(false);
   const [selectedFileName, setSelectedFileName] = useState("");
-  const [message, setMessage] = useState<{ text: string; type: "error" | "success" } | null>(null);
+  const [sessionUrl, setSessionUrl] = useState("");
+  const [message, setMessage] = useState<ImportMessage | null>(null);
 
   useEffect(() => {
     const syncWithHash = () => {
@@ -41,16 +383,6 @@ export function EtrakkaUploader({ horseId, horseName }: { horseId: string; horse
     };
   }, [isOpen]);
 
-  const parseDateTime = (dateStr: string, timeStr: string) => {
-    try {
-      const cleanDate = dateStr.replace(/^[a-zA-Z]+,\s*/, "").trim();
-      const d = new Date(`${cleanDate} ${timeStr}`);
-      return isNaN(d.getTime()) ? new Date().toISOString() : d.toISOString();
-    } catch {
-      return new Date().toISOString();
-    }
-  };
-
   const parseAndImportFile = async (file: File) => {
     setSelectedFileName(file.name);
     setLoading(true);
@@ -58,157 +390,54 @@ export function EtrakkaUploader({ horseId, horseName }: { horseId: string; horse
 
     try {
       const text = await file.text();
-      const cleanText = text.replace(/'/g, "").replace(/"/g, "").replace(/\r/g, "");
-      const lines = cleanText.split("\n").map((line) => line.trim()).filter(Boolean);
+      const payloads = parseEtrakkaFile(text, horseId, file.name);
 
-      const data: Partial<EtrakkaImportPayload> = {
-        horseId,
-        bt200: null,
-        bt400: null,
-        bt600: null,
-        bt800: null,
-        bt1000: null,
-        s200: null,
-        s400: null,
-        s600: null,
-        s800: null,
-        s1000: null,
-        hrMaxBpm: null,
-        hr45: null,
-        trotMeanHrBpm: null,
-        canterMeanHrBpm: null,
-        gallopMeanHrBpm: null,
-        vmaxKph: null,
-        v200: null,
-        sl50: null,
-        gallopOver60kph: null,
-        secsOver60kph: null,
-        recoveryAvgHr2_5minBpm: null,
-        gallopMetres: null,
-        note: null,
-        trackName: "",
-        etrakkaDevice: "",
-        sessionType: "",
-        riderName: "",
-      };
-
-      let sessionDateRaw = "";
-      let sessionTimeRaw = "";
-
-      const headerLineIndex = lines.findIndex(
-        (line) => line.toLowerCase().includes("track name") || line.toLowerCase().includes("session type"),
-      );
-
-      if (headerLineIndex !== -1 && lines[headerLineIndex + 1]) {
-        const headers = lines[headerLineIndex].split(",").map((header) => header.trim().toLowerCase());
-        const rowData = lines[headerLineIndex + 1].split(",").map((cell) => cell.trim());
-
-        const getValue = (keyAliases: string[]) => {
-          const idx = headers.findIndex((header) => keyAliases.some((alias) => header === alias || header.includes(alias)));
-          return idx !== -1 && rowData[idx] ? rowData[idx] : null;
-        };
-
-        const getNum = (aliases: string[]) => {
-          const val = getValue(aliases);
-          if (!val || val === "N/A" || val === "") return null;
-          const parsed = parseFloat(val);
-          return isNaN(parsed) ? null : parsed;
-        };
-
-        sessionDateRaw = getValue(["date"]) || "";
-        sessionTimeRaw = getValue(["start time"]) || "";
-        data.trackName = getValue(["track name", "track"]) || "";
-        data.riderName = getValue(["rider"]) || "";
-        data.etrakkaDevice = getValue(["blanket"]) || "";
-        data.sessionType = getValue(["session type"]) || "";
-
-        data.bt200 = getNum(["bt200"]);
-        data.bt400 = getNum(["bt400"]);
-        data.bt600 = getNum(["bt600"]);
-        data.bt800 = getNum(["bt800"]);
-        data.bt1000 = getNum(["bt1000"]);
-
-        const getExactNum = (exactHeader: string) => {
-          const idx = headers.findIndex((header) => header === exactHeader);
-          if (idx === -1 || !rowData[idx] || rowData[idx] === "N/A") return null;
-          return parseFloat(rowData[idx]) || null;
-        };
-
-        data.s200 = getExactNum("200");
-        data.s400 = getExactNum("400");
-        data.s600 = getExactNum("600");
-        data.s800 = getExactNum("800");
-        data.s1000 = getExactNum("1000");
-
-        data.hrMaxBpm = getNum(["hr max"]);
-        data.hr45 = getNum(["hr 45"]);
-        data.trotMeanHrBpm = getNum(["trot mean hr"]);
-        data.canterMeanHrBpm = getNum(["canter mean hr"]);
-        data.gallopMeanHrBpm = getNum(["gallop mean hr"]);
-        data.vmaxKph = getNum(["vmax"]);
-        data.v200 = getNum(["v200"]);
-        data.sl50 = getNum(["sl 50"]);
-        data.gallopOver60kph = getNum(["gallop>60kph"]);
-        data.secsOver60kph = getNum(["secs>60kph"]);
-        data.recoveryAvgHr2_5minBpm = getNum(["avghr2_5min"]);
-        data.gallopMetres = getNum(["gallop metres"]);
-        data.note = getValue(["note"]) || null;
-      } else {
-        lines.forEach((line) => {
-          const parts = line.split(",").map((part) => part.trim());
-          if (parts.length < 2) return;
-          const key = parts[0].toLowerCase();
-          const val = parts[1];
-          const num = parseFloat(val);
-
-          if (key.includes("date")) sessionDateRaw = val;
-          if (key.includes("start time")) sessionTimeRaw = val;
-          if (key.includes("track name")) data.trackName = val;
-          if (key.includes("rider")) data.riderName = val;
-          if (key.includes("blanket")) data.etrakkaDevice = val;
-          if (key.includes("session type")) data.sessionType = val;
-
-          if (key === "bt200" && !isNaN(num)) data.bt200 = num;
-          if (key === "bt400" && !isNaN(num)) data.bt400 = num;
-          if (key === "bt600" && !isNaN(num)) data.bt600 = num;
-          if (key === "bt800" && !isNaN(num)) data.bt800 = num;
-          if (key === "bt1000" && !isNaN(num)) data.bt1000 = num;
-
-          if (key === "200" && !isNaN(num)) data.s200 = num;
-          if (key === "400" && !isNaN(num)) data.s400 = num;
-          if (key === "600" && !isNaN(num)) data.s600 = num;
-          if (key === "800" && !isNaN(num)) data.s800 = num;
-          if (key === "1000" && !isNaN(num)) data.s1000 = num;
-
-          if (key.includes("hr max") && !isNaN(num)) data.hrMaxBpm = num;
-          if (key.includes("hr 45") && !isNaN(num)) data.hr45 = num;
-          if (key.includes("trot mean hr") && !isNaN(num)) data.trotMeanHrBpm = num;
-          if (key.includes("canter mean hr") && !isNaN(num)) data.canterMeanHrBpm = num;
-          if (key.includes("gallop mean hr") && !isNaN(num)) data.gallopMeanHrBpm = num;
-          if (key === "vmax" && !isNaN(num)) data.vmaxKph = num;
-          if (key === "v200" && !isNaN(num)) data.v200 = num;
-          if (key === "sl 50" && !isNaN(num)) data.sl50 = num;
-          if (key.includes("gallop>60kph") && !isNaN(num)) data.gallopOver60kph = num;
-          if (key.includes("secs>60kph") && !isNaN(num)) data.secsOver60kph = num;
-          if (key.includes("avghr2_5min") && !isNaN(num)) data.recoveryAvgHr2_5minBpm = num;
-          if (key.includes("gallop metres") && !isNaN(num)) data.gallopMetres = num;
-          if (key === "note") data.note = val;
+      if (payloads.length === 0) {
+        setMessage({
+          text: "No E-Trakka session rows were found in this file. Please use a supported export.",
+          type: "error",
         });
+        return;
       }
 
-      data.sessionDateIso = parseDateTime(sessionDateRaw || new Date().toDateString(), sessionTimeRaw || "12:00");
-
-      const result = await importEtrakkaSession(data as EtrakkaImportPayload);
-
-      if (result.success) {
-        setMessage({ text: `Successfully imported E-Trakka session for ${horseName}.`, type: "success" });
-      } else {
-        setMessage({ text: result.error || "Failed to upload.", type: "error" });
-      }
+      const result = await importEtrakkaSessions(payloads);
+      setMessage(buildResultMessage(result, horseName, payloads.length));
     } catch (error: unknown) {
       console.error(error);
       setMessage({
-        text: "Error parsing the CSV file. Please ensure it's a valid E-Trakka text or CSV export.",
+        text: "Error parsing the file. Please ensure it is a valid E-Trakka CSV, TXT, or session-summary export.",
+        type: "error",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const importFromUrl = async () => {
+    const trimmedUrl = sessionUrl.trim();
+    if (!trimmedUrl) {
+      setMessage({
+        text: "Paste an E-Trakka session URL before starting the import.",
+        type: "error",
+      });
+      return;
+    }
+
+    setLoading(true);
+    setSelectedFileName("");
+    setMessage(null);
+
+    try {
+      const result = await importEtrakkaSessionsFromUrl({
+        horseId,
+        sourceUrl: trimmedUrl,
+      });
+
+      setMessage(buildResultMessage(result, horseName, result.importedCount + result.duplicateCount + result.failedCount));
+    } catch (error: unknown) {
+      console.error(error);
+      setMessage({
+        text: "That E-Trakka page could not be imported. Try a CSV export or a read-only session link.",
         type: "error",
       });
     } finally {
@@ -239,7 +468,7 @@ export function EtrakkaUploader({ horseId, horseName }: { horseId: string; horse
         >
           Open Import Panel
         </button>
-        <p className="mt-3 text-xs text-steel">Supports `.csv` and `.txt` exports from E-Trakka.</p>
+        <p className="mt-3 text-xs text-steel">Supports `.csv`, `.txt`, and session-summary `.xls` exports from E-Trakka.</p>
       </div>
 
       {isOpen ? (
@@ -276,10 +505,10 @@ export function EtrakkaUploader({ horseId, horseName }: { horseId: string; horse
                 <div className="rounded-[1.75rem] border border-ink/10 bg-sand p-5">
                   <p className="text-xs font-semibold uppercase tracking-[0.18em] text-ember">What&apos;s Improved</p>
                   <div className="mt-4 grid gap-3">
-                    <div className="rounded-2xl border border-ink/10 bg-white px-4 py-3 text-sm text-ink">Full-screen import panel for easier mobile use</div>
-                    <div className="rounded-2xl border border-ink/10 bg-white px-4 py-3 text-sm text-ink">Drag-and-drop support with clearer upload state</div>
-                    <div className="rounded-2xl border border-ink/10 bg-white px-4 py-3 text-sm text-ink">Automatic opening from the existing workspace import link</div>
-                    <div className="rounded-2xl border border-ink/10 bg-white px-4 py-3 text-sm text-ink">Escape-to-close and stronger success or failure feedback</div>
+                    <div className="rounded-2xl border border-ink/10 bg-white px-4 py-3 text-sm text-ink">Multi-row CSV files now import every session row in one pass</div>
+                    <div className="rounded-2xl border border-ink/10 bg-white px-4 py-3 text-sm text-ink">View, Race, and Trial rows are classified separately in the saved session model</div>
+                    <div className="rounded-2xl border border-ink/10 bg-white px-4 py-3 text-sm text-ink">Future GPS and ECG placeholders are prepared in the session record</div>
+                    <div className="rounded-2xl border border-ink/10 bg-white px-4 py-3 text-sm text-ink">Import summary now shows imported, duplicate, and failed row counts</div>
                   </div>
                 </div>
               </div>
@@ -321,12 +550,37 @@ export function EtrakkaUploader({ horseId, horseName }: { horseId: string; horse
                     <p className="mt-5 text-base font-semibold text-ink">
                       {loading ? "Parsing and importing file..." : "Click to upload or drag and drop"}
                     </p>
-                    <p className="mt-2 text-sm text-steel">Use an E-Trakka CSV or TXT export with track, session, split, and heart-rate fields.</p>
+                    <p className="mt-2 text-sm text-steel">Use an E-Trakka CSV, TXT, or session-summary export with track, split, heart-rate, and recovery fields.</p>
                     <p className="mt-4 rounded-full bg-sand px-4 py-2 text-xs font-semibold uppercase tracking-[0.14em] text-steel">
                       {selectedFileName || "No file selected yet"}
                     </p>
-                    <input type="file" className="hidden" accept=".csv,.txt" onChange={handleFileUpload} disabled={loading} />
+                    <input type="file" className="hidden" accept=".csv,.txt,.xls,.xlsx" onChange={handleFileUpload} disabled={loading} />
                   </label>
+                </div>
+
+                <div className="rounded-[1.75rem] border border-ink/10 bg-sand p-5">
+                  <p className="text-xs font-semibold uppercase tracking-[0.18em] text-ember">Paste Session URL</p>
+                  <p className="mt-3 text-sm leading-6 text-steel">
+                    Paste a readable E-Trakka session page link here. Login-gated Trainer Centre URLs will be rejected unless they expose a public read-only session page.
+                  </p>
+                  <div className="mt-4 grid gap-3">
+                    <input
+                      type="url"
+                      value={sessionUrl}
+                      onChange={(event) => setSessionUrl(event.target.value)}
+                      placeholder="https://e-trakka.com/SessionDetails.aspx?sessionkey=..."
+                      className="rounded-2xl border border-ink/10 bg-white px-4 py-3 text-sm text-ink outline-none transition focus:border-teal-500"
+                      disabled={loading}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => void importFromUrl()}
+                      disabled={loading}
+                      className="rounded-full bg-ink px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#0f1720] disabled:cursor-not-allowed disabled:bg-steel"
+                    >
+                      {loading ? "Importing..." : "Import From URL"}
+                    </button>
+                  </div>
                 </div>
 
                 {loading ? (
@@ -335,7 +589,7 @@ export function EtrakkaUploader({ horseId, horseName }: { horseId: string; horse
                       <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                       <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                     </svg>
-                    Importing performance session into the horse workspace.
+                    Importing performance sessions into the horse workspace.
                   </div>
                 ) : null}
 
@@ -354,9 +608,10 @@ export function EtrakkaUploader({ horseId, horseName }: { horseId: string; horse
                 <div className="rounded-[1.75rem] border border-ink/10 bg-sand p-5">
                   <p className="text-xs font-semibold uppercase tracking-[0.18em] text-ember">Import Notes</p>
                   <div className="mt-4 grid gap-3 text-sm text-steel">
-                    <p className="rounded-2xl border border-ink/10 bg-white px-4 py-3">Horizontal and vertical E-Trakka export formats are both supported.</p>
-                    <p className="rounded-2xl border border-ink/10 bg-white px-4 py-3">Unknown or missing numeric fields are safely stored as blank values.</p>
-                    <p className="rounded-2xl border border-ink/10 bg-white px-4 py-3">Session date and time are merged automatically before the upload is saved.</p>
+                    <p className="rounded-2xl border border-ink/10 bg-white px-4 py-3">Multi-row CSV exports now import each session row instead of only the first one.</p>
+                    <p className="rounded-2xl border border-ink/10 bg-white px-4 py-3">View, Race, and Trial row types are separated into their own session category field.</p>
+                    <p className="rounded-2xl border border-ink/10 bg-white px-4 py-3">Recovery and workload fields like MJ, seconds-to-drop, and 48K gap seconds are saved with the session.</p>
+                    <p className="rounded-2xl border border-ink/10 bg-white px-4 py-3">GPS and ECG placeholders are ready for richer future E-Trakka export formats.</p>
                   </div>
                 </div>
               </div>
