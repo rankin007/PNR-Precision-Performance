@@ -182,6 +182,11 @@ async function insertSingleEtrakkaSession(payload: EtrakkaImportPayload): Promis
         }
 
         console.error("Fallback insert error:", fallbackInsertError.message);
+
+        if (fallbackInsertError.code === "23505") {
+          return { success: false, error: "duplicate" };
+        }
+
         return { success: false, error: fallbackInsertError.message };
       }
 
