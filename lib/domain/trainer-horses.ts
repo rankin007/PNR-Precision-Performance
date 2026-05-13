@@ -113,6 +113,17 @@ export type HorseEtrakkaSession = {
   note: string | null;
 };
 
+export type HorseEtrakkaSheet = {
+  sourceLabel: string;
+  usesRawImportRows: boolean;
+  headerLabels: string[];
+  rows: Array<{
+    id: string;
+    rowNumber: number;
+    values: string[];
+  }>;
+};
+
 export type HorseTrainerWorkspace = {
   horse: {
     id: string;
@@ -199,6 +210,20 @@ type EtrakkaSessionRow = {
   avg_hr_2_5min?: string | number | null;
   gallop_metres?: string | number | null;
   note?: string | null;
+};
+
+type EtrakkaImportBatchRow = {
+  id: string;
+  source_file_name: string | null;
+  source_file_format: string | null;
+  created_at?: string | null;
+  header_labels?: unknown;
+};
+
+type EtrakkaImportRowRecord = {
+  id: string;
+  row_index: number | null;
+  row_values?: unknown;
 };
 
 function extractStableName(stables: unknown) {
@@ -311,6 +336,154 @@ function mapEtrakkaSessions(rows: EtrakkaSessionRow[] | null | undefined): Horse
     gallopMetres: toNumber(entry.gallop_metres),
     note: entry.note ?? null,
   }));
+}
+
+function getStringArray(value: unknown) {
+  if (!Array.isArray(value)) {
+    return [];
+  }
+
+  return value.map((entry) => (typeof entry === "string" ? entry : String(entry ?? "")));
+}
+
+function buildFallbackEtrakkaSheet(sessions: HorseEtrakkaSession[]): HorseEtrakkaSheet {
+  const headerLabels = [
+    "View",
+    "Date",
+    "Day",
+    "Start Time",
+    "Track Name",
+    "Trainer",
+    "Rider",
+    "Blanket",
+    "Session Type",
+    "BT200",
+    "BT400",
+    "BT600",
+    "BT800",
+    "BT1000",
+    "200",
+    "400",
+    "600",
+    "800",
+    "1000",
+    "HR Max",
+    "HR 45",
+    "Trot Mean HR",
+    "Canter Mean HR",
+    "Gallop Mean HR",
+    "Vmax",
+    "V200",
+    "MJ",
+    "SL 50",
+    "Gallop>60kph",
+    "Secs>60kph",
+    "SecsToHRDrop",
+    "48KGap Secs",
+    "AvgHR2_5min",
+    "Gallop Metres",
+    "Note",
+  ];
+
+  return {
+    sourceLabel: "Normalized E-Trakka session archive",
+    usesRawImportRows: false,
+    headerLabels,
+    rows: sessions.map((session, index) => ({
+      id: session.id,
+      rowNumber: index + 1,
+      values: [
+        session.sourceSessionKey ?? session.sourceRowType ?? "",
+        session.sessionDate.slice(0, 10),
+        session.sessionDayLabel ?? "",
+        session.sessionStartTimeText ?? session.sessionDate.slice(11, 16),
+        session.trackName ?? "",
+        session.trainerName ?? "",
+        session.riderName ?? "",
+        session.etrakkaDevice ?? "",
+        session.sessionType ?? "",
+        session.bt200?.toString() ?? "",
+        session.bt400?.toString() ?? "",
+        session.bt600?.toString() ?? "",
+        session.bt800?.toString() ?? "",
+        session.bt1000?.toString() ?? "",
+        session.s200?.toString() ?? "",
+        session.s400?.toString() ?? "",
+        session.s600?.toString() ?? "",
+        session.s800?.toString() ?? "",
+        session.s1000?.toString() ?? "",
+        session.hrMaxBpm?.toString() ?? "",
+        session.hr45?.toString() ?? "",
+        session.trotMeanHrBpm?.toString() ?? "",
+        session.canterMeanHrBpm?.toString() ?? "",
+        session.gallopMeanHrBpm?.toString() ?? "",
+        session.vmaxKph?.toString() ?? "",
+        session.v200?.toString() ?? "",
+        session.mj?.toString() ?? "",
+        session.sl50?.toString() ?? "",
+        session.gallopOver60kph?.toString() ?? "",
+        session.secsOver60kph?.toString() ?? "",
+        session.secsToHrDrop?.toString() ?? "",
+        session.gap48kSecs?.toString() ?? "",
+        session.recoveryAvgHr2_5minBpm?.toString() ?? "",
+        session.gallopMetres?.toString() ?? "",
+        session.note ?? "",
+      ],
+    })),
+  };
+}
+
+async function getHorseEtrakkaSheet(
+  supabase: Awaited<ReturnType<typeof createSupabaseServerClient>>,
+  horseId: string,
+  sessions: HorseEtrakkaSession[],
+): Promise<HorseEtrakkaSheet> {
+  try {
+    const { data: batch, error: batchError } = await supabase
+      .from("etrakka_import_batches")
+      .select("id, source_file_name, source_file_format, created_at, header_labels")
+      .eq("horse_id", horseId)
+      .order("created_at", { ascending: false })
+      .limit(1)
+      .maybeSingle();
+
+    if (batchError || !batch) {
+      return buildFallbackEtrakkaSheet(sessions);
+    }
+
+    const { data: importRows, error: rowsError } = await supabase
+      .from("etrakka_import_rows")
+      .select("id, row_index, row_values")
+      .eq("batch_id", batch.id)
+      .order("row_index", { ascending: true });
+
+    if (rowsError) {
+      return buildFallbackEtrakkaSheet(sessions);
+    }
+
+    const typedBatch = batch as EtrakkaImportBatchRow;
+    const typedRows = (importRows as EtrakkaImportRowRecord[] | null) ?? [];
+    const headerLabels = getStringArray(typedBatch.header_labels);
+
+    if (headerLabels.length === 0 || typedRows.length === 0) {
+      return buildFallbackEtrakkaSheet(sessions);
+    }
+
+    return {
+      sourceLabel: typedBatch.source_file_name
+        ? `Latest preserved import: ${typedBatch.source_file_name}`
+        : "Latest preserved E-Trakka import",
+      usesRawImportRows: true,
+      headerLabels,
+      rows: typedRows.map((row, index) => ({
+        id: row.id,
+        rowNumber: row.row_index ?? index + 1,
+        values: getStringArray(row.row_values),
+      })),
+    };
+  } catch {
+    return buildFallbackEtrakkaSheet(sessions);
+  }
 }
 
 function extractHorseGalleryStoragePath(imageUrl: string) {
@@ -564,6 +737,7 @@ export async function getTrainerHorseEtrakkaSessions(horseId: string): Promise<{
   envReady: boolean;
   horse: { id: string; name: string } | null;
   sessions: HorseEtrakkaSession[];
+  sheet: HorseEtrakkaSheet | null;
   error?: string;
 }> {
   if (!hasSupabaseEnv()) {
@@ -571,6 +745,7 @@ export async function getTrainerHorseEtrakkaSessions(horseId: string): Promise<{
       envReady: false,
       horse: null,
       sessions: [],
+      sheet: null,
     };
   }
 
@@ -590,9 +765,13 @@ export async function getTrainerHorseEtrakkaSessions(horseId: string): Promise<{
       envReady: true,
       horse: null,
       sessions: [],
+      sheet: null,
       error: horseError?.message ?? "Horse not found.",
     };
   }
+
+  const mappedSessions = sessionError ? [] : mapEtrakkaSessions((sessions as EtrakkaSessionRow[] | null) ?? []);
+  const sheet = await getHorseEtrakkaSheet(supabase, horseId, mappedSessions);
 
   return {
     envReady: true,
@@ -600,7 +779,8 @@ export async function getTrainerHorseEtrakkaSessions(horseId: string): Promise<{
       id: horse.id,
       name: horse.name,
     },
-    sessions: sessionError ? [] : mapEtrakkaSessions((sessions as EtrakkaSessionRow[] | null) ?? []),
+    sessions: mappedSessions,
+    sheet,
     error: sessionError?.message,
   };
 }
