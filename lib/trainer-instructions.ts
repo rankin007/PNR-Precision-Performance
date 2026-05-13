@@ -25,7 +25,7 @@ export const trainerInstructionResources: Array<{
         title: "Zoom Recording Walkthrough 40mins",
         description: "Recorded Zoom walkthrough for trainer onboarding, platform use, and process overview.",
         type: "instructional-video",
-        url: "/IMG_3563.MOV",
+        url: "https://us06web.zoom.us/rec/share/afvURa1-bLawKOEevFRr9vOYSZyQWn7xbdlVIM45ZHT24dHf6rxHHvhoNVvnwD5N.bygGx4dGB8FMiWJ0?startTime=1778193880000",
         duration: null,
       },
     ],
