@@ -22,10 +22,10 @@ export const trainerInstructionResources: Array<{
     summary: "Use these links for hosted walkthroughs, setup clips, or trainer-specific demos.",
     items: [
       {
-        title: "Zoom Recording Walkthrough",
+        title: "Zoom Recording Walkthrough 40mins",
         description: "Recorded Zoom walkthrough for trainer onboarding, platform use, and process overview.",
         type: "instructional-video",
-        url: "https://us06web.zoom.us/rec/share/afvURa1-bLawKOEevFRr9vOYSZyQWn7xbdlVIM45ZHT24dHf6rxHHvhoNVvnwD5N.bygGx4dGB8FMiWJ0?startTime=1778193880000",
+        url: "/IMG_3563.MOV",
         duration: null,
       },
     ],
@@ -35,7 +35,7 @@ export const trainerInstructionResources: Array<{
     summary: "Add public or unlisted YouTube resources that trainers can open quickly from the ops area.",
     items: [
       {
-        title: "Precision Performance YouTube Walkthrough",
+        title: "Professional BE Kit video Instructions",
         description: "YouTube training video covering the platform workflow and trainer usage.",
         type: "youtube-video",
         url: "https://www.youtube.com/watch?v=VCRlc9M5bIY",
