@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 
 const testimonials = [
@@ -38,21 +39,34 @@ export function WorkflowStrip() {
                 recovery, and raceday decisions.
               </p>
               <div className="mt-6">
-                <div className="flex flex-wrap gap-3">
-                  <Link
-                    href="/contact"
-                    className="inline-flex items-center justify-center rounded-full bg-ink px-6 py-3 text-sm font-semibold text-white transition hover:bg-[#0f1720]"
-                  >
-                    Contact Precision Performance
-                  </Link>
-                  <a
-                    href="/Phillips%20bio%202026.pdf"
-                    target="_blank"
-                    rel="noreferrer"
-                    className="inline-flex items-center justify-center rounded-full border border-ink/10 bg-white px-6 py-3 text-sm font-semibold text-ink transition hover:border-ink/20"
-                  >
-                    Phillip Rankin, Founder, Precision Performance
-                  </a>
+                <div className="flex flex-col gap-4">
+                  <div className="flex flex-wrap gap-3">
+                    <Link
+                      href="/contact"
+                      className="inline-flex items-center justify-center rounded-full bg-ink px-6 py-3 text-sm font-semibold text-white transition hover:bg-[#0f1720]"
+                    >
+                      Contact Precision Performance
+                    </Link>
+                    <a
+                      href="/Phillips%20bio%202026.pdf"
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-flex items-center justify-center rounded-full border border-ink/10 bg-white px-6 py-3 text-sm font-semibold text-ink transition hover:border-ink/20"
+                    >
+                      Phillip Rankin, Founder, Precision Performance
+                    </a>
+                  </div>
+                  <div className="max-w-[20rem] overflow-hidden rounded-[1.5rem] border border-ink/10 bg-white shadow-panel">
+                    <div className="relative aspect-[4/5] w-full">
+                      <Image
+                        src="/IMG_9309.JPEG"
+                        alt="Phillip Rankin, Founder of Precision Performance"
+                        fill
+                        unoptimized
+                        className="object-cover"
+                      />
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
