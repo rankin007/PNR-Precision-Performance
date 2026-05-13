@@ -14,6 +14,7 @@ const testimonials = [
   {
     title: "Testimonial 3",
     description: "The biometric reporting gave our stable more confidence in every performance decision we made.",
+    videoSrc: "/IMG_3360.MOV",
   },
   {
     title: "Testimonial 4",
@@ -37,12 +38,22 @@ export function WorkflowStrip() {
                 recovery, and raceday decisions.
               </p>
               <div className="mt-6">
-                <Link
-                  href="/contact"
-                  className="inline-flex items-center justify-center rounded-full bg-ink px-6 py-3 text-sm font-semibold text-white transition hover:bg-[#0f1720]"
-                >
-                  Contact Precision Performance
-                </Link>
+                <div className="flex flex-wrap gap-3">
+                  <Link
+                    href="/contact"
+                    className="inline-flex items-center justify-center rounded-full bg-ink px-6 py-3 text-sm font-semibold text-white transition hover:bg-[#0f1720]"
+                  >
+                    Contact Precision Performance
+                  </Link>
+                  <a
+                    href="/Phillips%20bio%202026.pdf"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center justify-center rounded-full border border-ink/10 bg-white px-6 py-3 text-sm font-semibold text-ink transition hover:border-ink/20"
+                  >
+                    Phillip Rankin, Founder, Precision Performance
+                  </a>
+                </div>
               </div>
             </div>
             <div className="grid gap-3 md:max-w-xl">
@@ -60,32 +71,30 @@ export function WorkflowStrip() {
 
                   {testimonial.videoSrc ? (
                     <div className="mt-4">
-                      <video
-                        controls
-                        playsInline
-                        className="w-full rounded-2xl border border-ink/10 bg-black"
-                        preload="metadata"
-                      >
-                        <source src={testimonial.videoSrc} />
-                        Your browser does not support the video tag.
-                      </video>
-                      <div className="mt-3 flex flex-wrap gap-3">
-                        <a
-                          href={testimonial.videoSrc}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="rounded-full border border-ink/10 bg-sand px-4 py-2 text-xs font-semibold uppercase tracking-[0.14em] text-ink"
-                        >
-                          Open video
-                        </a>
-                        <a
-                          href={testimonial.videoSrc}
-                          download
-                          className="rounded-full border border-ink/10 bg-sand px-4 py-2 text-xs font-semibold uppercase tracking-[0.14em] text-ink"
-                        >
-                          Download video
-                        </a>
-                      </div>
+                      <details className="group">
+                        <summary className="flex cursor-pointer list-none items-center justify-between rounded-2xl border border-ink/10 bg-sand px-4 py-3 text-sm font-semibold text-ink">
+                          <span>Watch testimonial video</span>
+                          <svg
+                            className="h-4 w-4 text-ink/50 transition-transform group-open:rotate-180"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                          >
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                          </svg>
+                        </summary>
+                        <div className="mt-3 max-w-sm">
+                          <video
+                            controls
+                            playsInline
+                            className="w-full rounded-2xl border border-ink/10 bg-black"
+                            preload="metadata"
+                          >
+                            <source src={testimonial.videoSrc} />
+                            Your browser does not support the video tag.
+                          </video>
+                        </div>
+                      </details>
                     </div>
                   ) : null}
 
