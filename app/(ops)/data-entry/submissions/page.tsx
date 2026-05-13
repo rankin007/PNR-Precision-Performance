@@ -19,8 +19,17 @@ export default async function SubmissionReviewPage() {
       title="Recent submission review"
       description="Review the latest operational submissions, jump into correction flows, and keep the stable activity feed moving cleanly."
     >
+      <div className="flex flex-wrap gap-3">
+        <Link
+          href="/data-entry/horses"
+          className="rounded-full border border-ink/10 bg-sand px-4 py-2 text-sm font-semibold text-ink"
+        >
+          Back to Stable
+        </Link>
+      </div>
+
       {!result.envReady ? (
-        <div className="rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
+        <div className="mt-6 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
           The submission review board is currently running in preview mode, so curated sample records are shown while live operational submissions are still being connected.
         </div>
       ) : null}
@@ -114,12 +123,12 @@ export default async function SubmissionReviewPage() {
           <div className="rounded-[1.75rem] border border-ink/10 bg-white p-6 shadow-panel">
             <p className="eyebrow">Next routes</p>
             <h2 className="mt-3 font-display text-2xl text-ink">Continue operations</h2>
-            <div className="mt-5 flex flex-wrap gap-3">
+            <div className="mt-5 flex flex-wrap justify-center gap-3">
               <Link
                 href="/data-entry"
                 className="rounded-full bg-ink px-4 py-2 text-sm font-semibold text-white"
               >
-                Daily entry
+                Daily record submission
               </Link>
               <Link
                 href="/data-entry/feeding"

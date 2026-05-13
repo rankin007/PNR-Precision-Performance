@@ -38,8 +38,17 @@ export default async function SubmissionDetailPage({
           : "This submission could not be resolved from the available operational data."
       }
     >
+      <div className="flex flex-wrap gap-3">
+        <Link
+          href="/data-entry/horses"
+          className="rounded-full border border-ink/10 bg-sand px-4 py-2 text-sm font-semibold text-ink"
+        >
+          Back to Stable
+        </Link>
+      </div>
+
       {!result.envReady ? (
-        <div className="rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
+        <div className="mt-6 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
           This review page is currently running in preview mode, so sample correction data is being shown while live submission records are still being connected.
         </div>
       ) : null}

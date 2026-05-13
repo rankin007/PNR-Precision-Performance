@@ -31,8 +31,17 @@ export default async function DataEntryPage({ searchParams }: DataEntryPageProps
       title="Daily record submission"
       description="Capture the core daily operational record, then move quickly into feeding, track, and submission review workflows without leaving the ops area."
     >
+      <div className="flex flex-wrap gap-3">
+        <Link
+          href="/data-entry/horses"
+          className="rounded-full border border-ink/10 bg-sand px-4 py-2 text-sm font-semibold text-ink"
+        >
+          Back to Stable
+        </Link>
+      </div>
+
       {!result.envReady ? (
-        <div className="rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
+        <div className="mt-6 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
           Daily entry is currently running in preview workflow mode, so the form and recent queue can be reviewed while live horse and submission data are still being connected.
         </div>
       ) : null}
