@@ -60,7 +60,7 @@ export const trainerInstructionResources: Array<{
         url: "/Manual%20Test%20Spreedsheet%20HORSE%20V1.xlsx",
       },
       {
-        title: "Disclaimer and NDA",
+        title: "Disclaimer",
         description: "Before commencing the Program Each Person agrees to Read and Sign Disclaimer and NDA.",
         type: "pdf-document",
         url: "/Precision%20Performance%20Disclaimer.pdf",
