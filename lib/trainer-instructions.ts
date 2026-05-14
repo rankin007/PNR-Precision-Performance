@@ -59,6 +59,12 @@ export const trainerInstructionResources: Array<{
         type: "pdf-document",
         url: "/Manual%20Test%20Spreedsheet%20HORSE%20V1.xlsx",
       },
+      {
+        title: "Disclaimer and NDA",
+        description: "Before commencing the Program Each Person agrees to Read and Sign Disclaimer and NDA.",
+        type: "pdf-document",
+        url: "/Precision%20Performance%20Disclaimer.pdf",
+      },
     ],
   },
   {
@@ -66,8 +72,8 @@ export const trainerInstructionResources: Array<{
     summary: "Keep fast reference links here for first-use setup, supporting media, and practical troubleshooting context.",
     items: [
       {
-        title: "iCloud Photo Reference",
-        description: "Photo reference link that trainers can use for quick visual support or attached workflow context.",
+        title: "UNBOXING, The 4 Min Runthrough of Equipement",
+        description: "Safe external reference link for the equipment unboxing runthrough until a smaller hosted export is ready.",
         type: "quick-start-note",
         url: "https://www.icloud.com/photos/#/i,pz,210DCDAC-9955-40F7-837A-2A5D9E36947A,38931/",
       },

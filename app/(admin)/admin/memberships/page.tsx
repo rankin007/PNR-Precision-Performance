@@ -215,6 +215,20 @@ export default async function AdminMembershipsPage({
                             <p className="text-xs font-semibold uppercase tracking-[0.14em] text-steel">Mobile Number</p>
                             <p className="mt-1 text-ink">{application.mobileNumber}</p>
                           </div>
+                          <div className="sm:col-span-2 rounded-2xl border border-ink/10 bg-sand px-4 py-4">
+                            <p className="text-xs font-semibold uppercase tracking-[0.14em] text-steel">Disclaimer and NDA</p>
+                            <p className="mt-1 text-ink">
+                              Before commencing the Program Each Person agrees to Read and Sign Disclaimer and NDA
+                            </p>
+                            <a
+                              href="/Precision%20Performance%20Disclaimer.pdf"
+                              target="_blank"
+                              rel="noreferrer"
+                              className="mt-4 inline-flex rounded-full bg-ink px-5 py-3 text-sm font-semibold text-white"
+                            >
+                              Open Disclaimer and NDA
+                            </a>
+                          </div>
                           <div className="sm:col-span-2">
                             <p className="text-xs font-semibold uppercase tracking-[0.14em] text-steel">Stable Address</p>
                             <p className="mt-1 whitespace-pre-line text-ink">{application.stableAddress}</p>
