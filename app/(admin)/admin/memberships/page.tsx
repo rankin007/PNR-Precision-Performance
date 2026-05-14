@@ -220,14 +220,24 @@ export default async function AdminMembershipsPage({
                             <p className="mt-1 text-ink">
                               Before commencing the Program Each Person agrees to Read and Sign Disclaimer and NDA
                             </p>
-                            <a
-                              href="/Precision%20Performance%20Disclaimer.pdf"
-                              target="_blank"
-                              rel="noreferrer"
-                              className="mt-4 inline-flex rounded-full bg-ink px-5 py-3 text-sm font-semibold text-white"
-                            >
-                              Open Disclaimer and NDA
-                            </a>
+                            <div className="mt-4 flex flex-wrap gap-3">
+                              <a
+                                href="/Precision%20Performance%20Disclaimer.pdf"
+                                target="_blank"
+                                rel="noreferrer"
+                                className="inline-flex rounded-full bg-ink px-5 py-3 text-sm font-semibold text-white"
+                              >
+                                Open Disclaimer
+                              </a>
+                              <a
+                                href="/NDA%20Precision%20Performance.pdf"
+                                target="_blank"
+                                rel="noreferrer"
+                                className="inline-flex rounded-full border border-ink/10 bg-white px-5 py-3 text-sm font-semibold text-ink"
+                              >
+                                Open NDA
+                              </a>
+                            </div>
                           </div>
                           <div className="sm:col-span-2">
                             <p className="text-xs font-semibold uppercase tracking-[0.14em] text-steel">Stable Address</p>

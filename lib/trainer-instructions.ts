@@ -65,6 +65,12 @@ export const trainerInstructionResources: Array<{
         type: "pdf-document",
         url: "/Precision%20Performance%20Disclaimer.pdf",
       },
+      {
+        title: "NDA Precision Performance",
+        description: "Non-disclosure agreement document for Precision Performance program participation and onboarding.",
+        type: "pdf-document",
+        url: "/NDA%20Precision%20Performance.pdf",
+      },
     ],
   },
   {
