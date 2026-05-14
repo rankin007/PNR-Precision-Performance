@@ -79,9 +79,9 @@ export const trainerInstructionResources: Array<{
     items: [
       {
         title: "UNBOXING, The 4 Min Runthrough of Equipement",
-        description: "Safe external reference link for the equipment unboxing runthrough until a smaller hosted export is ready.",
+        description: "Local hosted unboxing runthrough for quick trainer access during setup and first-use onboarding.",
         type: "quick-start-note",
-        url: "https://www.icloud.com/photos/#/i,pz,210DCDAC-9955-40F7-837A-2A5D9E36947A,38931/",
+        url: "/IMG_3563.MOV",
       },
       {
         title: "Add More Troubleshooting Notes Here",
