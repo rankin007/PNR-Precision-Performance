@@ -41,8 +41,8 @@ const fallbackProducts: ProductSummary[] = [
     id: "product-2",
     name: "Monthly Service",
     slug: "monthly-performance-service",
-    description: "Monthly physiological monitoring service with unlimited testing, weekly reporting, and supplement guidance per horse.",
-    priceLabel: "$600 AUD",
+    description: "$120 Per Horse or P.O.A Unlimited testing.",
+    priceLabel: "$120 AUD",
     checkoutReady: false,
   },
   {

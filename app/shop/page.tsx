@@ -130,9 +130,8 @@ export default function ShopPage() {
                 Recommended
               </span>
               <p className="mt-8 font-display text-3xl text-[#1f5f49]">Monthly Service</p>
-              <p className="mt-10 text-sm text-steel">Per horse per month</p>
-              <p className="mt-6 font-display text-5xl text-[#1f5f49]">$600</p>
-              <p className="mt-3 text-sm text-steel">In-house collection and continuous physiological monitoring</p>
+              <p className="mt-10 font-display text-4xl leading-tight text-[#1f5f49]">$120 Per Horse or P.O.A</p>
+              <p className="mt-3 text-sm text-steel">Unlimited testing.</p>
               <FeatureList items={monthlyServiceItems} />
               <div className="mt-8">
                 <form action="/api/checkout" method="POST">
@@ -174,8 +173,8 @@ export default function ShopPage() {
                 </tr>
                 <tr className="rounded-2xl bg-sand">
                   <td className="rounded-l-2xl px-4 py-4 font-semibold">Monthly Service</td>
-                  <td className="px-4 py-4">Unlimited testing, weekly reporting, and supplement guidance per horse</td>
-                  <td className="rounded-r-2xl px-4 py-4 font-semibold">$600 per horse / month</td>
+                  <td className="px-4 py-4">Unlimited testing.</td>
+                  <td className="rounded-r-2xl px-4 py-4 font-semibold">$120 per horse or P.O.A</td>
                 </tr>
               </tbody>
             </table>
