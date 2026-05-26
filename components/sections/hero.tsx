@@ -6,7 +6,6 @@ const heroNavigation = [
   { href: "/#workflow", label: "Testimonials" },
   { href: "/shop", label: "Shop" },
   { href: "#footer-enquiry", label: "Contact" },
-  { href: "/member-experience", label: "Members Experience" },
 ];
 
 export function Hero() {
@@ -16,12 +15,6 @@ export function Hero() {
         <div className="relative overflow-hidden rounded-[2rem] border border-[#d4cbb7]/40 bg-[#193328] p-3 shadow-[0_28px_70px_rgba(0,0,0,0.28)] md:p-5">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.09),transparent_26%)]" />
           <div className="relative rounded-[1.7rem] border border-[#b9ab8f]/65 bg-[#0f2a1e] p-4 md:p-6">
-            <div className="absolute left-1/2 top-0 z-20 -translate-x-1/2 -translate-y-1/2 rounded-2xl border border-[#7c745f] bg-[#5d6650]/95 px-5 py-3 text-center shadow-lg shadow-black/25">
-              <p className="text-xs font-extrabold uppercase tracking-[0.22em] text-[#f1d08f]">
-                Home
-              </p>
-            </div>
-
             <div className="relative overflow-hidden rounded-[1.45rem] border border-white/10 bg-[#102117]">
               <div className="absolute inset-0 bg-gradient-to-r from-[#123020]/94 via-[#163826]/78 to-transparent" />
               <div className="absolute inset-y-0 right-0 w-full md:w-[58%]">
@@ -44,13 +37,36 @@ export function Hero() {
                     <p className="mt-3 text-sm font-semibold uppercase tracking-[0.14em] text-[#f1d6b6] md:text-base">
                       Biochemistry Analysis for Elite Equine
                     </p>
-                    <p className="mt-2 max-w-2xl text-sm leading-6 text-white/74 md:text-base">
-                      An advanced Urine and Saliva Analysis to optimize Equine Performance and Recovery.
+                    <p className="mt-2 max-w-2xl text-sm leading-5 text-white/74 md:text-base md:leading-6">
+                      Advanced urine and saliva analysis to optimize equine performance and recovery.
                     </p>
+                    <div className="mt-4 space-y-2.5 text-sm leading-5 text-white/82 md:text-base md:leading-6">
+                      <p>
+                        <span className="font-bold text-white">Real-Time Insights:</span> Immediate biochemical data.
+                      </p>
+                      <p>
+                        <span className="font-bold text-white">No Guessing:</span> Exact measurements for nutrition,
+                        supplementation, and hydration.
+                      </p>
+                      <p>
+                        <span className="font-bold text-white">Minimized Recovery Times:</span> Identify and reduce
+                        recovery times to maintain training momentum.
+                      </p>
+                      <div className="pt-1">
+                        <p className="font-bold text-white">The program aims to support:</p>
+                        <ul className="mt-1.5 list-disc space-y-1.5 pl-5">
+                          <li>Improved recovery between training and event days</li>
+                          <li>Better hydration and electrolyte management</li>
+                          <li>Individualised feeding and supplementation strategies</li>
+                          <li>Greater consistency throughout racing campaigns</li>
+                          <li>Reduced metabolic stress and recovery downtime</li>
+                        </ul>
+                      </div>
+                    </div>
                   </Link>
 
                   <div className="flex flex-col items-start gap-3 lg:items-end">
-                    <nav className="flex flex-wrap gap-2">
+                    <nav className="flex flex-wrap justify-start gap-2 lg:justify-end">
                       {heroNavigation.map((item) => (
                         <Link
                           key={item.href}
@@ -85,24 +101,24 @@ export function Hero() {
 
                 <div className="flex flex-1 items-center py-10 md:py-12" />
 
-                <div className="grid gap-3 md:grid-cols-[1fr_1fr_auto]">
+                <div className="grid gap-3 md:grid-cols-3">
             <Link
               href="/platform-stack"
-              className="flex min-h-[92px] items-center justify-center rounded-[1.5rem] border border-white/15 bg-[#f0a35e] px-6 py-5 text-center text-sm font-extrabold uppercase tracking-[0.18em] text-white shadow-lg shadow-[#f0a35e]/25 transition hover:bg-[#e49755]"
+              className="flex min-h-[72px] items-center justify-center rounded-[1.35rem] border border-white/15 bg-[#f0a35e] px-4 py-3 text-center text-[13px] font-extrabold uppercase tracking-[0.14em] text-white shadow-lg shadow-[#f0a35e]/25 transition hover:bg-[#e49755] md:min-h-[76px] md:px-5"
             >
               Phone App Preview
             </Link>
             <Link
               href="/member-experience"
-              className="flex min-h-[92px] items-center justify-center rounded-[1.5rem] border border-white/15 bg-[#f0a35e] px-6 py-5 text-center text-sm font-extrabold uppercase tracking-[0.18em] text-white shadow-lg shadow-[#f0a35e]/25 transition hover:bg-[#e49755]"
+              className="flex min-h-[72px] items-center justify-center rounded-[1.35rem] border border-white/15 bg-[#f0a35e] px-4 py-3 text-center text-[13px] font-extrabold uppercase tracking-[0.14em] text-white shadow-lg shadow-[#f0a35e]/25 transition hover:bg-[#e49755] md:min-h-[76px] md:px-5"
             >
               Members Experience
             </Link>
             <Link
               href="/onboarding"
-              className="flex min-h-[92px] items-center justify-center rounded-[1.5rem] border border-white/15 bg-[#f0a35e] px-6 py-5 text-center text-sm font-extrabold uppercase tracking-[0.18em] text-white shadow-lg shadow-[#f0a35e]/25 transition hover:bg-[#e49755]"
+              className="flex min-h-[72px] items-center justify-center rounded-[1.35rem] border border-white/15 bg-[#f0a35e] px-4 py-3 text-center text-[13px] font-extrabold uppercase tracking-[0.14em] text-white shadow-lg shadow-[#f0a35e]/25 transition hover:bg-[#e49755] md:min-h-[76px] md:px-5"
             >
-              Lets Get Started
+              Let&apos;s Get Started
             </Link>
                 </div>
               </div>
