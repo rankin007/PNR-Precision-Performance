@@ -5,13 +5,21 @@ import { addHorseBiochemistryResultAction } from "@/app/(ops)/data-entry/horses/
 
 export function NewTestModal({ 
   horseId, 
-  latestReferenceMetrics 
+  horseName,
+  latestReferenceMetrics,
+  startOpen = false,
 }: { 
   horseId: string;
+  horseName?: string;
   latestReferenceMetrics: Array<{ label: string; value: string }>;
+  startOpen?: boolean;
 }) {
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(startOpen);
   const [defaultDateTime, setDefaultDateTime] = useState("");
+
+  useEffect(() => {
+    setIsOpen(startOpen);
+  }, [startOpen]);
 
   // Set the precise live local time as soon as they open the modal
   useEffect(() => {
@@ -47,6 +55,7 @@ export function NewTestModal({
               <div>
                 <p className="eyebrow text-teal-600">Modify Tests</p>
                 <h2 className="mt-1 font-display text-2xl text-ink">NEW TEST</h2>
+                {horseName ? <p className="mt-1 text-sm text-steel">{horseName}</p> : null}
               </div>
               <button 
                 onClick={() => setIsOpen(false)}
