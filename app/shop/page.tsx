@@ -129,16 +129,14 @@ export default function ShopPage() {
             <BulletList items={overviewItems} />
           </div>
 
-          <div className="grid gap-6 lg:grid-cols-2 xl:grid-cols-2">
-            <div className="rounded-[2rem] border border-ink/10 bg-white p-6 shadow-panel">
+          <div className="grid items-stretch gap-6 lg:grid-cols-2 xl:grid-cols-2">
+            <div className="flex h-full flex-col rounded-[2rem] border border-ink/10 bg-white p-6 shadow-panel">
               <p className="font-display text-3xl text-[#1f5f49]">Professional Kit</p>
               <p className="mt-10 text-sm text-steel">One-off purchase</p>
               <p className="mt-6 font-display text-5xl text-[#1f5f49]">$4,500</p>
-              <p className="mt-3 text-sm text-steel">
-                Buyback option: $500 on or before 4 weeks from purchase date
-              </p>
+              <p className="mt-3 text-sm text-steel">plus Postage</p>
               <BulletList items={professionalKitItems} />
-              <div className="mt-8">
+              <div className="mt-auto pt-8">
                 <form action="/api/checkout" method="POST">
                   <input type="hidden" name="slug" value="professional-kit" />
                   <button
@@ -151,7 +149,7 @@ export default function ShopPage() {
               </div>
             </div>
 
-            <div className="rounded-[2rem] border border-[#d2b161] bg-white p-6 shadow-panel">
+            <div className="flex h-full flex-col rounded-[2rem] border border-[#d2b161] bg-white p-6 shadow-panel">
               <span className="inline-flex rounded-full bg-[#f7efd8] px-4 py-2 text-xs font-bold uppercase tracking-[0.18em] text-[#c49a3a]">
                 Recommended
               </span>
@@ -161,7 +159,7 @@ export default function ShopPage() {
               </p>
               <p className="mt-3 text-sm text-steel">Unlimited testing.</p>
               <BulletList items={monthlyServiceItems} />
-              <div className="mt-8">
+              <div className="mt-auto pt-8">
                 <form action="/api/checkout" method="POST">
                   <input type="hidden" name="slug" value="monthly-performance-service" />
                   <button
@@ -195,14 +193,9 @@ export default function ShopPage() {
                     Certified instruments, equipment, onboarding, training, and 200
                     specimen containers
                   </td>
-                  <td className="rounded-r-2xl px-4 py-4 font-semibold">$4,500 one-off</td>
-                </tr>
-                <tr className="rounded-2xl bg-sand">
-                  <td className="rounded-l-2xl px-4 py-4 font-semibold">Kit Buyback</td>
-                  <td className="px-4 py-4">
-                    Available on or before 4 weeks if returned in good order
+                  <td className="rounded-r-2xl px-4 py-4 font-semibold">
+                    $4,500 one-off plus Postage
                   </td>
-                  <td className="rounded-r-2xl px-4 py-4 font-semibold">$500</td>
                 </tr>
                 <tr className="rounded-2xl bg-sand">
                   <td className="rounded-l-2xl px-4 py-4 font-semibold">Monthly Service</td>
