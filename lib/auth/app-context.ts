@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import type { User } from "@supabase/supabase-js";
-import { bootstrapAuthenticatedUser } from "@/lib/auth/bootstrap";
+import { bootstrapAuthenticatedUser, hasAnyAdminAssignment } from "@/lib/auth/bootstrap";
+import { normalizeAppRedirectPath } from "@/lib/auth/access";
 import { hasSupabaseEnv } from "@/lib/supabase/env";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
@@ -8,27 +9,70 @@ export type AppAuthContext = {
   envReady: boolean;
   sessionUser: User | null;
   appUserId: string | null;
+  appUserStatus: string | null;
   memberProfileId: string | null;
   memberDisplayName: string | null;
+  memberProfileActive: boolean;
   membershipLevelCodes: string[];
   permissionCodes: string[];
+};
+
+type MembershipLevelRow = {
+  starts_at?: string | null;
+  ends_at?: string | null;
+  membership_levels?: { code?: string | null } | Array<{ code?: string | null }> | null;
+};
+
+type PermissionMembershipLevel = {
+  membership_level_permissions?:
+    | Array<{
+        permissions?: { code?: string | null } | Array<{ code?: string | null }> | null;
+      }>
+    | null;
+};
+
+type PermissionRow = {
+  starts_at?: string | null;
+  ends_at?: string | null;
+  membership_levels?: PermissionMembershipLevel | Array<PermissionMembershipLevel> | null;
 };
 
 function uniqueStrings(values: Array<string | null | undefined>) {
   return [...new Set(values.filter((value): value is string => Boolean(value)))];
 }
 
+function pickFirst<T>(value: T | T[] | null | undefined): T | undefined {
+  if (Array.isArray(value)) {
+    return value[0];
+  }
+
+  return value ?? undefined;
+}
+
+function isMembershipActive(row: { starts_at?: string | null; ends_at?: string | null }, now: Date) {
+  const startsAt = row.starts_at ? new Date(row.starts_at) : null;
+  const endsAt = row.ends_at ? new Date(row.ends_at) : null;
+
+  return (!startsAt || startsAt <= now) && (!endsAt || endsAt >= now);
+}
+
+function emptyAppAuthContext(envReady: boolean): AppAuthContext {
+  return {
+    envReady,
+    sessionUser: null,
+    appUserId: null,
+    appUserStatus: null,
+    memberProfileId: null,
+    memberDisplayName: null,
+    memberProfileActive: false,
+    membershipLevelCodes: [],
+    permissionCodes: [],
+  };
+}
+
 export async function getAppAuthContext(): Promise<AppAuthContext> {
   if (!hasSupabaseEnv()) {
-    return {
-      envReady: false,
-      sessionUser: null,
-      appUserId: null,
-      memberProfileId: null,
-      memberDisplayName: null,
-      membershipLevelCodes: [],
-      permissionCodes: [],
-    };
+    return emptyAppAuthContext(false);
   }
 
   const supabase = await createSupabaseServerClient();
@@ -37,15 +81,7 @@ export async function getAppAuthContext(): Promise<AppAuthContext> {
   } = await supabase.auth.getUser();
 
   if (!user) {
-    return {
-      envReady: true,
-      sessionUser: null,
-      appUserId: null,
-      memberProfileId: null,
-      memberDisplayName: null,
-      membershipLevelCodes: [],
-      permissionCodes: [],
-    };
+    return emptyAppAuthContext(true);
   }
 
   await bootstrapAuthenticatedUser({
@@ -65,16 +101,17 @@ export async function getAppAuthContext(): Promise<AppAuthContext> {
 
   const { data: appUser } = await supabase
     .from("users")
-    .select("id")
+    .select("id, status")
     .eq("auth_user_id", user.id)
     .maybeSingle();
 
   const appUserId = appUser?.id ?? null;
+  const now = new Date();
 
   const { data: memberProfile } = appUserId
     ? await supabase
         .from("member_profiles")
-        .select("id, display_name")
+        .select("id, display_name, is_active")
         .eq("user_id", appUserId)
         .maybeSingle()
     : { data: null };
@@ -82,35 +119,44 @@ export async function getAppAuthContext(): Promise<AppAuthContext> {
   const { data: membershipRows } = appUserId
     ? await supabase
         .from("user_membership_levels")
-        .select("membership_levels(code)")
+        .select("starts_at, ends_at, membership_levels(code)")
         .eq("user_id", appUserId)
-    : { data: [] as any[] };
+    : { data: [] as MembershipLevelRow[] };
 
   const { data: permissionRows } = appUserId
     ? await supabase
         .from("user_membership_levels")
-        .select("membership_levels!inner(membership_level_permissions!inner(permissions!inner(code)))")
+        .select("starts_at, ends_at, membership_levels!inner(membership_level_permissions!inner(permissions!inner(code)))")
         .eq("user_id", appUserId)
-    : { data: [] as any[] };
+    : { data: [] as PermissionRow[] };
+
+  const typedMembershipRows = (membershipRows ?? []) as MembershipLevelRow[];
+  const typedPermissionRows = (permissionRows ?? []) as PermissionRow[];
 
   const membershipLevelCodes = uniqueStrings(
-    (membershipRows ?? []).map((row: any) => row.membership_levels?.code),
+    typedMembershipRows
+      .filter((row) => isMembershipActive(row, now))
+      .map((row) => pickFirst(row.membership_levels)?.code),
   );
 
   const permissionCodes = uniqueStrings(
-    (permissionRows ?? []).flatMap((row: any) =>
-      ((row.membership_levels?.membership_level_permissions as any[]) ?? []).map(
-        (permissionRow: any) => permissionRow.permissions?.code,
-      ),
-    ),
+    typedPermissionRows.filter((row) => isMembershipActive(row, now)).flatMap((row) => {
+      const membershipLevel = pickFirst(row.membership_levels);
+
+      return (membershipLevel?.membership_level_permissions ?? []).map(
+        (permissionRow) => pickFirst(permissionRow.permissions)?.code,
+      );
+    }),
   );
 
   return {
     envReady: true,
     sessionUser: user,
     appUserId,
+    appUserStatus: appUser?.status ?? null,
     memberProfileId: memberProfile?.id ?? null,
     memberDisplayName: memberProfile?.display_name ?? user.email ?? null,
+    memberProfileActive: Boolean(memberProfile?.is_active),
     membershipLevelCodes,
     permissionCodes,
   };
@@ -120,20 +166,55 @@ export function hasAppPermission(context: AppAuthContext, permissionCode: string
   return context.permissionCodes.includes(permissionCode);
 }
 
+export function hasActivePortalMembership(context: AppAuthContext) {
+  return (
+    context.appUserStatus === "active" &&
+    context.memberProfileActive &&
+    context.membershipLevelCodes.length > 0
+  );
+}
+
 export async function requireSignedInAppContext(nextPath = "/portal") {
+  const safeNextPath = normalizeAppRedirectPath(nextPath);
   const context = await getAppAuthContext();
 
   if (!context.envReady) {
-    redirect(`/sign-in?setup=supabase&next=${encodeURIComponent(nextPath)}`);
+    redirect(`/sign-in?setup=supabase&next=${encodeURIComponent(safeNextPath)}`);
   }
 
   if (!context.sessionUser) {
-    redirect(`/sign-in?next=${encodeURIComponent(nextPath)}`);
+    redirect(`/sign-in?next=${encodeURIComponent(safeNextPath)}`);
   }
 
   return context;
 }
 
+export async function requirePortalAppContext(nextPath = "/portal") {
+  const safeNextPath = normalizeAppRedirectPath(nextPath);
+  const context = await requireSignedInAppContext(safeNextPath);
+
+  if (hasAppPermission(context, "platform.admin") || hasActivePortalMembership(context)) {
+    return context;
+  }
+
+  const canClaimInitialAdmin = Boolean(context.appUserId) && !(await hasAnyAdminAssignment());
+
+  if (canClaimInitialAdmin) {
+    return context;
+  }
+
+  redirect(`/sign-in?error=portal-access&next=${encodeURIComponent(safeNextPath)}`);
+}
+
+export async function requireOperationalWriteAppContext(nextPath = "/data-entry") {
+  const context = await requireSignedInAppContext(nextPath);
+
+  if (hasAppPermission(context, "platform.admin") || hasAppPermission(context, "horse.records.write")) {
+    return context;
+  }
+
+  redirect("/portal?denied=data-entry");
+}
 export async function requireAdminAppContext(nextPath = "/admin") {
   const context = await requireSignedInAppContext(nextPath);
 

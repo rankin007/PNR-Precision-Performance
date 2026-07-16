@@ -1,0 +1,101 @@
+{
+  "source": {
+    "document": "Reading Tables v1.csv",
+    "version": "v1",
+    "notes": "Source-backed Sprint 014 fixture subset selected from Reading Tables v1.csv rows around 2.5, 6.5, 14.3, and 2.5. Loss percentages are stored as decimal fractions to match Sprint 013 migration representation."
+  },
+  "lookupRows": [
+    {
+      "lookupType": "carbs",
+      "exactReading": 2.5,
+      "exactReadingText": "2.5",
+      "lossFraction": 0.7767,
+      "lossPercentText": "77.67%"
+    },
+    {
+      "lookupType": "ph_average",
+      "exactReading": 6.5,
+      "exactReadingText": "6.5",
+      "lossFraction": 0.3167,
+      "lossPercentText": "31.67%"
+    },
+    {
+      "lookupType": "salts",
+      "exactReading": 14.3,
+      "exactReadingText": "14.3",
+      "lossFraction": 0.1089,
+      "lossPercentText": "10.89%"
+    },
+    {
+      "lookupType": "urea",
+      "exactReading": 2.5,
+      "exactReadingText": "2.5",
+      "lossFraction": 0.56,
+      "lossPercentText": "56.00%"
+    }
+  ],
+  "scoredCase": {
+    "name": "all exact lookups present",
+    "rawReadings": {
+      "carbsReading": 2.5,
+      "phSaliva": 6.4,
+      "phUrine": 6.6,
+      "conductivityRawMeterValue": 10,
+      "ureaReading": 2.5
+    },
+    "expected": {
+      "phAverage": 6.5,
+      "conductivityConvertedCValue": 14.3,
+      "hydrationScoreEnergyLoss": 0.4428,
+      "hydrationScore": 0.5572,
+      "healthScoreEnergyLoss": 0.440575,
+      "healthScore": 0.559425
+    }
+  },
+  "blockedCases": [
+    {
+      "name": "missing carbs exact lookup",
+      "rawReadings": {
+        "carbsReading": 99.9,
+        "phSaliva": 6.4,
+        "phUrine": 6.6,
+        "conductivityRawMeterValue": 10,
+        "ureaReading": 2.5
+      },
+      "expectedMissingLookupType": "carbs"
+    },
+    {
+      "name": "missing pH Average exact lookup",
+      "rawReadings": {
+        "carbsReading": 2.5,
+        "phSaliva": 6.41,
+        "phUrine": 6.61,
+        "conductivityRawMeterValue": 10,
+        "ureaReading": 2.5
+      },
+      "expectedMissingLookupType": "ph_average"
+    },
+    {
+      "name": "missing salts exact lookup after C conversion",
+      "rawReadings": {
+        "carbsReading": 2.5,
+        "phSaliva": 6.4,
+        "phUrine": 6.6,
+        "conductivityRawMeterValue": 10.01,
+        "ureaReading": 2.5
+      },
+      "expectedMissingLookupType": "salts"
+    },
+    {
+      "name": "missing urea exact lookup",
+      "rawReadings": {
+        "carbsReading": 2.5,
+        "phSaliva": 6.4,
+        "phUrine": 6.6,
+        "conductivityRawMeterValue": 10,
+        "ureaReading": 99.9
+      },
+      "expectedMissingLookupType": "urea"
+    }
+  ]
+}

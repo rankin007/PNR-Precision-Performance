@@ -38,6 +38,11 @@ export const adminNavigation: NavigationItem[] = [
     label: "Users",
     description: "Profiles, access, and organisation management.",
   },
+  {
+    href: "/admin/commerce",
+    label: "Commerce",
+    description: "Products, orders, payments, and checkout state.",
+  },
 ];
 
 export const opsNavigation: NavigationItem[] = [

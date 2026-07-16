@@ -18,6 +18,44 @@ type CheckoutUserContext = {
   email: string | null;
 };
 
+export type AdminCommerceSnapshot = {
+  envReady: boolean;
+  products: Array<{
+    id: string;
+    name: string;
+    slug: string;
+    status: string;
+    priceAmount: number;
+    currencyCode: string;
+    updatedAt: string | null;
+  }>;
+  orders: Array<{
+    id: string;
+    userId: string | null;
+    status: string;
+    totalAmount: number;
+    currencyCode: string;
+    provider: string | null;
+    checkoutSessionId: string | null;
+    paymentIntentId: string | null;
+    orderedAt: string | null;
+    updatedAt: string | null;
+  }>;
+  payments: Array<{
+    id: string;
+    orderId: string | null;
+    status: string;
+    amount: number;
+    currencyCode: string;
+    provider: string | null;
+    providerPaymentId: string | null;
+    checkoutSessionId: string | null;
+    paidAt: string | null;
+    createdAt: string | null;
+  }>;
+  errors: string[];
+};
+
 function optionalUuid(value: string | null | undefined) {
   if (typeof value !== "string") {
     return null;
@@ -25,6 +63,11 @@ function optionalUuid(value: string | null | undefined) {
 
   const trimmed = value.trim();
   return trimmed.length > 0 ? trimmed : null;
+}
+
+function normaliseAmount(value: number | string | null | undefined) {
+  const amount = typeof value === "number" ? value : Number(value ?? 0);
+  return Number.isFinite(amount) ? amount : 0;
 }
 
 function normaliseAmountFromMinorUnits(amount: number | null | undefined) {
@@ -112,6 +155,88 @@ export async function resolveCheckoutUserContext(
   };
 }
 
+export async function getAdminCommerceSnapshot(): Promise<AdminCommerceSnapshot> {
+  if (!hasSupabaseAdminEnv()) {
+    return {
+      envReady: false,
+      products: [],
+      orders: [],
+      payments: [],
+      errors: [],
+    };
+  }
+
+  const admin = createSupabaseAdminClient();
+  const [productsResult, ordersResult, paymentsResult] = await Promise.all([
+    admin
+      .from("products")
+      .select("id, name, slug, status, price_amount, currency_code, updated_at")
+      .order("updated_at", { ascending: false })
+      .limit(50),
+    admin
+      .from("orders")
+      .select(
+        "id, user_id, status, total_amount, currency_code, provider, provider_checkout_session_id, provider_payment_intent_id, ordered_at, updated_at",
+      )
+      .order("updated_at", { ascending: false })
+      .limit(25),
+    admin
+      .from("payments")
+      .select(
+        "id, order_id, status, amount, currency_code, provider, provider_payment_id, provider_checkout_session_id, paid_at, created_at",
+      )
+      .order("created_at", { ascending: false })
+      .limit(25),
+  ]);
+
+  const errors = [
+    productsResult.error ? "products-read-failed" : null,
+    ordersResult.error ? "orders-read-failed" : null,
+    paymentsResult.error ? "payments-read-failed" : null,
+  ].filter(Boolean) as string[];
+
+  return {
+    envReady: true,
+    products:
+      productsResult.data?.map((product) => ({
+        id: product.id,
+        name: product.name,
+        slug: product.slug,
+        status: product.status ?? "draft",
+        priceAmount: normaliseAmount(product.price_amount),
+        currencyCode: product.currency_code ?? "AUD",
+        updatedAt: product.updated_at ?? null,
+      })) ?? [],
+    orders:
+      ordersResult.data?.map((order) => ({
+        id: order.id,
+        userId: order.user_id ?? null,
+        status: order.status ?? "pending",
+        totalAmount: normaliseAmount(order.total_amount),
+        currencyCode: order.currency_code ?? "AUD",
+        provider: order.provider ?? null,
+        checkoutSessionId: order.provider_checkout_session_id ?? null,
+        paymentIntentId: order.provider_payment_intent_id ?? null,
+        orderedAt: order.ordered_at ?? null,
+        updatedAt: order.updated_at ?? null,
+      })) ?? [],
+    payments:
+      paymentsResult.data?.map((payment) => ({
+        id: payment.id,
+        orderId: payment.order_id ?? null,
+        status: payment.status ?? "pending",
+        amount: normaliseAmount(payment.amount),
+        currencyCode: payment.currency_code ?? "AUD",
+        provider: payment.provider ?? null,
+        providerPaymentId: payment.provider_payment_id ?? null,
+        checkoutSessionId: payment.provider_checkout_session_id ?? null,
+        paidAt: payment.paid_at ?? null,
+        createdAt: payment.created_at ?? null,
+      })) ?? [],
+    errors,
+  };
+}
+
 export async function createPendingOrderForCheckout(input: {
   product: ProductSnapshot;
   appUserId: string | null;
@@ -142,17 +267,11 @@ export async function createPendingOrderForCheckout(input: {
     throw orderError;
   }
 
-  const { error: itemError } = await admin.from("order_items").insert({
-    order_id: order.id,
-    product_id: input.product.id,
-    quantity: 1,
-    unit_price_amount: input.product.priceAmount,
-    line_total_amount: input.product.priceAmount,
+  await ensureOrderItemForProduct({
+    orderId: order.id,
+    productId: input.product.id,
+    amount: input.product.priceAmount,
   });
-
-  if (itemError) {
-    throw itemError;
-  }
 
   return {
     id: order.id,
@@ -200,6 +319,40 @@ export async function markOrderCheckoutFailed(orderId: string) {
     .eq("id", orderId);
 }
 
+async function ensureOrderItemForProduct(input: {
+  orderId: string;
+  productId: string;
+  amount: number;
+}) {
+  const admin = createSupabaseAdminClient();
+  const { data: existingItem, error: lookupError } = await admin
+    .from("order_items")
+    .select("id")
+    .eq("order_id", input.orderId)
+    .eq("product_id", input.productId)
+    .maybeSingle();
+
+  if (lookupError) {
+    throw lookupError;
+  }
+
+  if (existingItem) {
+    return;
+  }
+
+  const { error: itemInsertError } = await admin.from("order_items").insert({
+    order_id: input.orderId,
+    product_id: input.productId,
+    quantity: 1,
+    unit_price_amount: input.amount,
+    line_total_amount: input.amount,
+  });
+
+  if (itemInsertError) {
+    throw itemInsertError;
+  }
+}
+
 export async function syncCheckoutSessionToCommerce(session: Stripe.Checkout.Session) {
   if (!hasSupabaseAdminEnv()) {
     throw new Error("Missing Supabase service role configuration for Stripe webhooks.");
@@ -231,19 +384,24 @@ export async function syncCheckoutSessionToCommerce(session: Stripe.Checkout.Ses
   if (!resolvedOrderId) {
     const { data: insertedOrder, error: orderInsertError } = await admin
       .from("orders")
-      .insert({
-        user_id: appUserId,
-        provider: "stripe",
-        provider_checkout_session_id: session.id,
-        provider_payment_intent_id: paymentIntentId,
-        status: orderStatus,
-        subtotal_amount: amount,
-        tax_amount: 0,
-        total_amount: amount,
-        currency_code: currencyCode,
-        ordered_at: paidAt,
-        updated_at: new Date().toISOString(),
-      })
+      .upsert(
+        {
+          user_id: appUserId,
+          provider: "stripe",
+          provider_checkout_session_id: session.id,
+          provider_payment_intent_id: paymentIntentId,
+          status: orderStatus,
+          subtotal_amount: amount,
+          tax_amount: 0,
+          total_amount: amount,
+          currency_code: currencyCode,
+          ordered_at: paidAt,
+          updated_at: new Date().toISOString(),
+        },
+        {
+          onConflict: "provider,provider_checkout_session_id",
+        },
+      )
       .select("id")
       .single();
 
@@ -252,20 +410,6 @@ export async function syncCheckoutSessionToCommerce(session: Stripe.Checkout.Ses
     }
 
     resolvedOrderId = insertedOrder.id;
-
-    if (productId) {
-      const { error: itemInsertError } = await admin.from("order_items").insert({
-        order_id: resolvedOrderId,
-        product_id: productId,
-        quantity: 1,
-        unit_price_amount: amount,
-        line_total_amount: amount,
-      });
-
-      if (itemInsertError) {
-        throw itemInsertError;
-      }
-    }
   } else {
     const { error: orderUpdateError } = await admin
       .from("orders")
@@ -286,6 +430,18 @@ export async function syncCheckoutSessionToCommerce(session: Stripe.Checkout.Ses
     if (orderUpdateError) {
       throw orderUpdateError;
     }
+  }
+
+  if (!resolvedOrderId) {
+    throw new Error("Stripe checkout session could not be matched to an order.");
+  }
+
+  if (productId) {
+    await ensureOrderItemForProduct({
+      orderId: resolvedOrderId,
+      productId,
+      amount,
+    });
   }
 
   if (paymentIntentId) {

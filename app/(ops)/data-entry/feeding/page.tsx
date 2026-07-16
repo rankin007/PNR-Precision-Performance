@@ -38,7 +38,11 @@ export default async function FeedingEntryPage({ searchParams }: FeedingEntryPag
         <div className="mt-6 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
           {error === "missing-fields"
             ? "A horse is required."
-            : "The feeding log could not be submitted yet."}
+            : error === "horse-not-accessible"
+              ? "That horse is not available for feeding entry from this account."
+              : error === "supabase-not-configured"
+                ? "Supabase is not configured, so live feeding logs cannot be submitted yet."
+                : "The feeding log could not be submitted yet."}
         </div>
       ) : null}
       <form action={submitFeedingLogAction} className="mt-8 grid gap-6">

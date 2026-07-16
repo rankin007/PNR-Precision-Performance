@@ -1,13 +1,14 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { createServerClient } from "@supabase/ssr";
+import { normalizeAppRedirectPath } from "@/lib/auth/access";
 import { bootstrapAuthenticatedUser } from "@/lib/auth/bootstrap";
 import { hasSupabaseEnv, supabaseEnv } from "@/lib/supabase/env";
 
 export async function GET(request: NextRequest) {
   const requestUrl = new URL(request.url);
   const code = requestUrl.searchParams.get("code");
-  const next = requestUrl.searchParams.get("next") || "/portal";
+  const next = normalizeAppRedirectPath(requestUrl.searchParams.get("next"));
 
   if (!hasSupabaseEnv()) {
     return NextResponse.redirect(
@@ -32,7 +33,13 @@ export async function GET(request: NextRequest) {
       },
     });
 
-    await supabase.auth.exchangeCodeForSession(code);
+    const { error: exchangeError } = await supabase.auth.exchangeCodeForSession(code);
+
+    if (exchangeError) {
+      return NextResponse.redirect(
+        new URL(`/sign-in?error=callback&next=${encodeURIComponent(next)}`, request.url),
+      );
+    }
 
     const {
       data: { user },

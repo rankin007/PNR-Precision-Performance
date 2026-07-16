@@ -34,7 +34,7 @@ const fallbackSubmissions: SubmissionSummary[] = [
     detail: "Temperature, weight, and water intake submitted for 2026-04-14.",
   },
   {
-    id: "feed-1",
+    id: "feeding-1",
     type: "Feeding Log",
     horseName: "Velvet Charge",
     detail: "Recovery Feed Mix logged with notes.",
@@ -94,6 +94,18 @@ function formatSubmissionDate(value: string | null | undefined) {
   return value ?? "Unspecified";
 }
 
+function parseSubmissionId(submissionId: string) {
+  const separatorIndex = submissionId.indexOf("-");
+
+  if (separatorIndex <= 0 || separatorIndex === submissionId.length - 1) {
+    return { submissionType: "", entityId: "" };
+  }
+
+  return {
+    submissionType: submissionId.slice(0, separatorIndex),
+    entityId: submissionId.slice(separatorIndex + 1),
+  };
+}
 function toNumberOrNull(value: unknown) {
   if (typeof value === "number") {
     return value;
@@ -107,16 +119,47 @@ function toNumberOrNull(value: unknown) {
   return null;
 }
 
-function horseNameFromRelation(row: any) {
-  return row?.horses?.name ?? "Unknown horse";
-}
+type HorseRelation = {
+  horses?: { name?: string | null } | Array<{ name?: string | null }> | null;
+};
 
-function foodMenuNameFromRelation(row: any) {
-  if (Array.isArray(row?.food_menus)) {
-    return row.food_menus[0]?.name ?? null;
+type FoodMenuRelation = {
+  food_menus?: { name?: string | null } | Array<{ name?: string | null }> | null;
+};
+
+type DailySubmissionRow = HorseRelation & {
+  id: string;
+  record_date: string;
+  notes: string | null;
+};
+
+type FeedingSubmissionRow = HorseRelation & {
+  id: string;
+  notes: string | null;
+};
+
+type TrackSubmissionRow = HorseRelation & {
+  id: string;
+  session_date: string;
+  session_type: string | null;
+  distance_value: number | null;
+  distance_unit: string | null;
+};
+
+function relationName(relation: { name?: string | null } | Array<{ name?: string | null }> | null | undefined) {
+  if (Array.isArray(relation)) {
+    return relation[0]?.name ?? null;
   }
 
-  return row?.food_menus?.name ?? null;
+  return relation?.name ?? null;
+}
+
+function horseNameFromRelation(row: HorseRelation | null | undefined) {
+  return relationName(row?.horses) ?? "Unknown horse";
+}
+
+function foodMenuNameFromRelation(row: FoodMenuRelation | null | undefined) {
+  return relationName(row?.food_menus);
 }
 
 export async function getRecentOperationSubmissions() {
@@ -148,22 +191,22 @@ export async function getRecentOperationSubmissions() {
   ]);
 
   const submissions: SubmissionSummary[] = [
-    ...((dailyRecords ?? []).map((record: any) => ({
+    ...(((dailyRecords ?? []) as DailySubmissionRow[]).map((record) => ({
       id: `daily-${record.id}`,
       type: "Daily Record",
-      horseName: record.horses?.name ?? "Unknown horse",
+      horseName: horseNameFromRelation(record),
       detail: record.notes || `Daily record logged for ${record.record_date}.`,
     })) as SubmissionSummary[]),
-    ...((feedingLogs ?? []).map((record: any) => ({
+    ...(((feedingLogs ?? []) as FeedingSubmissionRow[]).map((record) => ({
       id: `feeding-${record.id}`,
       type: "Feeding Log",
-      horseName: record.horses?.name ?? "Unknown horse",
+      horseName: horseNameFromRelation(record),
       detail: record.notes || "Feeding event logged.",
     })) as SubmissionSummary[]),
-    ...((trackSessions ?? []).map((record: any) => ({
+    ...(((trackSessions ?? []) as TrackSubmissionRow[]).map((record) => ({
       id: `track-${record.id}`,
       type: "Track Session",
-      horseName: record.horses?.name ?? "Unknown horse",
+      horseName: horseNameFromRelation(record),
       detail:
         record.session_type || record.distance_value
           ? `${record.session_type ?? "Session"} ${record.distance_value ?? ""} ${record.distance_unit ?? ""}`.trim()
@@ -185,7 +228,7 @@ export async function getSubmissionDetail(submissionId: string) {
     };
   }
 
-  const [submissionType, entityId] = submissionId.split("-", 2);
+  const { submissionType, entityId } = parseSubmissionId(submissionId);
 
   if (!submissionType || !entityId) {
     return {

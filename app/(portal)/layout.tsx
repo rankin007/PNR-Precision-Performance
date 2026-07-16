@@ -1,5 +1,5 @@
 import { AppShell } from "@/components/layout/app-shell";
-import { requireSignedInAppContext } from "@/lib/auth/session";
+import { requirePortalAppContext } from "@/lib/auth/session";
 import { portalNavigation } from "@/lib/navigation";
 
 export default async function PortalLayout({
@@ -7,7 +7,7 @@ export default async function PortalLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const context = await requireSignedInAppContext("/portal");
+  const context = await requirePortalAppContext("/portal");
 
   return (
     <AppShell

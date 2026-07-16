@@ -36,7 +36,11 @@ export default async function TrackEntryPage({ searchParams }: TrackEntryPagePro
         <div className="mt-6 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
           {error === "missing-fields"
             ? "Horse and session date are required."
-            : "The track session could not be submitted yet."}
+            : error === "horse-not-accessible"
+              ? "That horse is not available for track session entry from this account."
+              : error === "supabase-not-configured"
+                ? "Supabase is not configured, so live track sessions cannot be submitted yet."
+                : "The track session could not be submitted yet."}
         </div>
       ) : null}
       <form action={submitTrackSessionAction} className="mt-8 grid gap-6">

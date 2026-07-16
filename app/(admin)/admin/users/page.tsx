@@ -42,7 +42,9 @@ export default async function AdminUsersPage({ searchParams }: AdminUsersPagePro
             ? "Set `SUPABASE_SERVICE_ROLE_KEY` before using admin user management."
             : error === "missing-fields"
               ? "Both a user id and next status are required."
-              : "User status update failed."}
+              : error === "invalid-status"
+                ? "User status can only be changed to an approved launch status."
+                : "User status update failed."}
         </div>
       ) : null}
 
@@ -64,7 +66,7 @@ export default async function AdminUsersPage({ searchParams }: AdminUsersPagePro
                   <div className="space-y-2">
                     <p className="text-xs font-semibold uppercase tracking-[0.18em] text-ember">
                       {user.membershipLevelCodes.length > 0
-                        ? user.membershipLevelCodes.join(" · ")
+                        ? user.membershipLevelCodes.join(" / ")
                         : "No levels assigned"}
                     </p>
                     <h2 className="font-display text-3xl text-ink">

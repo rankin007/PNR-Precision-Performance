@@ -53,7 +53,11 @@ export default async function SubmissionDetailPage({
         <div className="mt-6 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
           {error === "update-failed"
             ? "The submission update did not complete."
-            : "A required field was missing for this correction flow."}
+            : error === "horse-not-accessible"
+              ? "That submission is not available for correction from this account."
+              : error === "supabase-not-configured"
+                ? "Supabase is not configured, so live submission corrections cannot be saved yet."
+                : "A required field was missing for this correction flow."}
         </div>
       ) : null}
 

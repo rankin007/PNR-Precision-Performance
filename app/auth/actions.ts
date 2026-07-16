@@ -1,6 +1,7 @@
 "use server";
 
 import { redirect } from "next/navigation";
+import { normalizeAppRedirectPath } from "@/lib/auth/access";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { hasSupabaseEnv } from "@/lib/supabase/env";
 
@@ -11,7 +12,7 @@ function readString(formData: FormData, key: string) {
 
 export async function signInWithOtpAction(formData: FormData) {
   const email = readString(formData, "email");
-  const next = readString(formData, "next") || "/portal";
+  const next = normalizeAppRedirectPath(readString(formData, "next"));
 
   if (!hasSupabaseEnv()) {
     redirect(`/sign-in?setup=supabase&next=${encodeURIComponent(next)}`);

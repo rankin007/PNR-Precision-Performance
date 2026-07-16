@@ -41,6 +41,11 @@ export default async function PortalPage({ searchParams }: PortalPageProps) {
           Administrative access was requested, but your account does not currently have the `platform.admin` permission.
         </div>
       ) : null}
+      {denied === "data-entry" ? (
+        <div className="mb-6 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
+          Operational data-entry workflow access requires the `horse.records.write` permission.
+        </div>
+      ) : null}
       {bootstrapState === "already-configured" ? (
         <div className="mb-6 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
           Initial admin onboarding has already been completed for this project.

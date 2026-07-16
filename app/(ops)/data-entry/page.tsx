@@ -40,9 +40,15 @@ export default async function DataEntryPage({ searchParams }: DataEntryPageProps
         <div className="mt-6 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
           {error === "missing-fields"
             ? "Horse and record date are required."
-            : error === "record-create-failed"
-              ? "The daily record could not be created."
-              : "The form could not be submitted yet."}
+            : error === "horse-not-accessible"
+              ? "That horse is not available for operational record entry from this account."
+              : error === "supabase-not-configured"
+                ? "Supabase is not configured, so live daily records cannot be submitted yet."
+                : error === "metric-create-failed"
+                  ? "The daily record was created, but one of the metric logs could not be saved."
+                  : error === "record-create-failed"
+                    ? "The daily record could not be created."
+                    : "The form could not be submitted yet."}
         </div>
       ) : null}
       <form action={submitDailyRecordAction} className="mt-8 grid gap-6">

@@ -10,6 +10,8 @@ type SignInFormProps = {
 const errorMessages: Record<string, string> = {
   email: "Enter an email address before continuing.",
   otp: "We could not start sign-in. Check the new Supabase project settings and try again.",
+  callback: "The sign-in link could not be verified. Request a new link and try again.",
+  "portal-access": "Your account is signed in, but portal access is not active yet.",
 };
 
 export function SignInForm({
@@ -61,4 +63,3 @@ export function SignInForm({
     </div>
   );
 }
-

@@ -1,5 +1,5 @@
 import { AppShell } from "@/components/layout/app-shell";
-import { requireSignedInAppContext } from "@/lib/auth/session";
+import { requireOperationalWriteAppContext } from "@/lib/auth/session";
 import { opsNavigation } from "@/lib/navigation";
 
 export default async function OpsLayout({
@@ -7,7 +7,7 @@ export default async function OpsLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const context = await requireSignedInAppContext("/data-entry");
+  const context = await requireOperationalWriteAppContext("/data-entry");
 
   return (
     <AppShell

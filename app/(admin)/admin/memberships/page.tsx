@@ -42,7 +42,15 @@ export default async function AdminMembershipsPage({
         <div className="mt-6 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
           {error === "user-not-found"
             ? "That user email does not yet exist in the application user table."
-            : "Email and membership level are both required."}
+            : error === "service-role-missing"
+              ? "Set `SUPABASE_SERVICE_ROLE_KEY` before using admin membership tools."
+              : error === "invalid-email"
+                ? "Enter a valid user email address."
+                : error === "invalid-level"
+                  ? "Select one of the configured membership levels."
+                  : error === "assignment-failed"
+                    ? "Membership assignment failed. Check the configured levels and try again."
+                    : "Email and membership level are both required."}
         </div>
       ) : null}
 

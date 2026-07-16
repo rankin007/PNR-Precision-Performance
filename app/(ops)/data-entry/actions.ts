@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { hasSupabaseEnv } from "@/lib/supabase/env";
-import { requireSignedInAppContext } from "@/lib/auth/session";
+import { requireOperationalWriteAppContext } from "@/lib/auth/session";
 
 function readString(formData: FormData, key: string) {
   const value = formData.get(key);
@@ -27,8 +27,61 @@ function revalidateSubmissionPaths(submissionId: string) {
   revalidatePath(`/data-entry/submissions/${submissionId}`);
 }
 
+async function findWritableHorse(supabase: Awaited<ReturnType<typeof createSupabaseServerClient>>, horseId: string) {
+  if (!horseId) {
+    return null;
+  }
+
+  const { data, error } = await supabase
+    .from("horses")
+    .select("id")
+    .eq("id", horseId)
+    .maybeSingle();
+
+  if (error || !data?.id) {
+    return null;
+  }
+
+  return data;
+}
+
+async function findDailyRecordHorseId(
+  supabase: Awaited<ReturnType<typeof createSupabaseServerClient>>,
+  recordId: string,
+) {
+  const { data, error } = await supabase
+    .from("daily_records")
+    .select("horse_id")
+    .eq("id", recordId)
+    .maybeSingle();
+
+  if (error || !data?.horse_id) {
+    return null;
+  }
+
+  return data.horse_id as string;
+}
+
+async function findSubmissionHorseId(
+  supabase: Awaited<ReturnType<typeof createSupabaseServerClient>>,
+  table: "feeding_logs" | "track_sessions",
+  recordId: string,
+) {
+  const { data, error } = await supabase
+    .from(table)
+    .select("horse_id")
+    .eq("id", recordId)
+    .maybeSingle();
+
+  if (error || !data?.horse_id) {
+    return null;
+  }
+
+  return data.horse_id as string;
+}
+
 export async function submitDailyRecordAction(formData: FormData) {
-  const context = await requireSignedInAppContext("/data-entry");
+  const context = await requireOperationalWriteAppContext("/data-entry");
 
   if (!hasSupabaseEnv()) {
     redirect("/data-entry?error=supabase-not-configured");
@@ -46,6 +99,10 @@ export async function submitDailyRecordAction(formData: FormData) {
   }
 
   const supabase = await createSupabaseServerClient();
+
+  if (!(await findWritableHorse(supabase, horseId))) {
+    redirect("/data-entry?error=horse-not-accessible");
+  }
 
   const { data: dailyRecord, error: dailyRecordError } = await supabase
     .from("daily_records")
@@ -68,33 +125,45 @@ export async function submitDailyRecordAction(formData: FormData) {
   }
 
   if (temperatureValue !== null) {
-    await supabase.from("temperature_logs").insert({
+    const { error } = await supabase.from("temperature_logs").insert({
       daily_record_id: dailyRecord.id,
       horse_id: horseId,
       temperature_value: temperatureValue,
       temperature_unit: "C",
       created_by_user_id: context.appUserId,
     });
+
+    if (error) {
+      redirect("/data-entry?error=metric-create-failed");
+    }
   }
 
   if (weightValue !== null) {
-    await supabase.from("weight_logs").insert({
+    const { error } = await supabase.from("weight_logs").insert({
       daily_record_id: dailyRecord.id,
       horse_id: horseId,
       weight_value: weightValue,
       weight_unit: "kg",
       created_by_user_id: context.appUserId,
     });
+
+    if (error) {
+      redirect("/data-entry?error=metric-create-failed");
+    }
   }
 
   if (waterValue !== null) {
-    await supabase.from("water_intake_logs").insert({
+    const { error } = await supabase.from("water_intake_logs").insert({
       daily_record_id: dailyRecord.id,
       horse_id: horseId,
       volume_value: waterValue,
       volume_unit: "L",
       created_by_user_id: context.appUserId,
     });
+
+    if (error) {
+      redirect("/data-entry?error=metric-create-failed");
+    }
   }
 
   revalidatePath("/data-entry");
@@ -102,7 +171,7 @@ export async function submitDailyRecordAction(formData: FormData) {
 }
 
 export async function submitFeedingLogAction(formData: FormData) {
-  const context = await requireSignedInAppContext("/data-entry/feeding");
+  const context = await requireOperationalWriteAppContext("/data-entry/feeding");
 
   if (!hasSupabaseEnv()) {
     redirect("/data-entry/feeding?error=supabase-not-configured");
@@ -117,6 +186,11 @@ export async function submitFeedingLogAction(formData: FormData) {
   }
 
   const supabase = await createSupabaseServerClient();
+
+  if (!(await findWritableHorse(supabase, horseId))) {
+    redirect("/data-entry/feeding?error=horse-not-accessible");
+  }
+
   const { error } = await supabase.from("feeding_logs").insert({
     horse_id: horseId,
     food_menu_id: foodMenuId || null,
@@ -133,7 +207,7 @@ export async function submitFeedingLogAction(formData: FormData) {
 }
 
 export async function submitTrackSessionAction(formData: FormData) {
-  const context = await requireSignedInAppContext("/data-entry/track");
+  const context = await requireOperationalWriteAppContext("/data-entry/track");
 
   if (!hasSupabaseEnv()) {
     redirect("/data-entry/track?error=supabase-not-configured");
@@ -152,6 +226,11 @@ export async function submitTrackSessionAction(formData: FormData) {
   }
 
   const supabase = await createSupabaseServerClient();
+
+  if (!(await findWritableHorse(supabase, horseId))) {
+    redirect("/data-entry/track?error=horse-not-accessible");
+  }
+
   const { error } = await supabase.from("track_sessions").insert({
     horse_id: horseId,
     session_date: sessionDate,
@@ -173,7 +252,7 @@ export async function submitTrackSessionAction(formData: FormData) {
 }
 
 export async function updateDailyRecordSubmissionAction(formData: FormData) {
-  const context = await requireSignedInAppContext("/data-entry/submissions");
+  const context = await requireOperationalWriteAppContext("/data-entry/submissions");
 
   if (!hasSupabaseEnv()) {
     redirect("/data-entry/submissions?error=supabase-not-configured");
@@ -192,6 +271,11 @@ export async function updateDailyRecordSubmissionAction(formData: FormData) {
   }
 
   const supabase = await createSupabaseServerClient();
+  const recordHorseId = await findDailyRecordHorseId(supabase, entityId);
+
+  if (!recordHorseId || recordHorseId !== horseId) {
+    redirect(`/data-entry/submissions/${submissionId}?error=horse-not-accessible`);
+  }
 
   const { error: recordError } = await supabase
     .from("daily_records")
@@ -215,20 +299,22 @@ export async function updateDailyRecordSubmissionAction(formData: FormData) {
       .limit(1)
       .maybeSingle();
 
-    if (latestTemperature?.id) {
-      await supabase
-        .from("temperature_logs")
-        .update({ temperature_value: temperatureValue, notes: notes || null })
-        .eq("id", latestTemperature.id);
-    } else {
-      await supabase.from("temperature_logs").insert({
-        daily_record_id: entityId,
-        horse_id: horseId,
-        temperature_value: temperatureValue,
-        temperature_unit: "C",
-        notes: notes || null,
-        created_by_user_id: context.appUserId,
-      });
+    const { error } = latestTemperature?.id
+      ? await supabase
+          .from("temperature_logs")
+          .update({ temperature_value: temperatureValue, notes: notes || null })
+          .eq("id", latestTemperature.id)
+      : await supabase.from("temperature_logs").insert({
+          daily_record_id: entityId,
+          horse_id: horseId,
+          temperature_value: temperatureValue,
+          temperature_unit: "C",
+          notes: notes || null,
+          created_by_user_id: context.appUserId,
+        });
+
+    if (error) {
+      redirect(`/data-entry/submissions/${submissionId}?error=update-failed`);
     }
   }
 
@@ -241,20 +327,22 @@ export async function updateDailyRecordSubmissionAction(formData: FormData) {
       .limit(1)
       .maybeSingle();
 
-    if (latestWeight?.id) {
-      await supabase
-        .from("weight_logs")
-        .update({ weight_value: weightValue, notes: notes || null })
-        .eq("id", latestWeight.id);
-    } else {
-      await supabase.from("weight_logs").insert({
-        daily_record_id: entityId,
-        horse_id: horseId,
-        weight_value: weightValue,
-        weight_unit: "kg",
-        notes: notes || null,
-        created_by_user_id: context.appUserId,
-      });
+    const { error } = latestWeight?.id
+      ? await supabase
+          .from("weight_logs")
+          .update({ weight_value: weightValue, notes: notes || null })
+          .eq("id", latestWeight.id)
+      : await supabase.from("weight_logs").insert({
+          daily_record_id: entityId,
+          horse_id: horseId,
+          weight_value: weightValue,
+          weight_unit: "kg",
+          notes: notes || null,
+          created_by_user_id: context.appUserId,
+        });
+
+    if (error) {
+      redirect(`/data-entry/submissions/${submissionId}?error=update-failed`);
     }
   }
 
@@ -267,20 +355,22 @@ export async function updateDailyRecordSubmissionAction(formData: FormData) {
       .limit(1)
       .maybeSingle();
 
-    if (latestWater?.id) {
-      await supabase
-        .from("water_intake_logs")
-        .update({ volume_value: waterValue, notes: notes || null })
-        .eq("id", latestWater.id);
-    } else {
-      await supabase.from("water_intake_logs").insert({
-        daily_record_id: entityId,
-        horse_id: horseId,
-        volume_value: waterValue,
-        volume_unit: "L",
-        notes: notes || null,
-        created_by_user_id: context.appUserId,
-      });
+    const { error } = latestWater?.id
+      ? await supabase
+          .from("water_intake_logs")
+          .update({ volume_value: waterValue, notes: notes || null })
+          .eq("id", latestWater.id)
+      : await supabase.from("water_intake_logs").insert({
+          daily_record_id: entityId,
+          horse_id: horseId,
+          volume_value: waterValue,
+          volume_unit: "L",
+          notes: notes || null,
+          created_by_user_id: context.appUserId,
+        });
+
+    if (error) {
+      redirect(`/data-entry/submissions/${submissionId}?error=update-failed`);
     }
   }
 
@@ -289,7 +379,7 @@ export async function updateDailyRecordSubmissionAction(formData: FormData) {
 }
 
 export async function updateFeedingLogSubmissionAction(formData: FormData) {
-  await requireSignedInAppContext("/data-entry/submissions");
+  const context = await requireOperationalWriteAppContext("/data-entry/submissions");
 
   if (!hasSupabaseEnv()) {
     redirect("/data-entry/submissions?error=supabase-not-configured");
@@ -304,6 +394,12 @@ export async function updateFeedingLogSubmissionAction(formData: FormData) {
   }
 
   const supabase = await createSupabaseServerClient();
+  const horseId = await findSubmissionHorseId(supabase, "feeding_logs", entityId);
+
+  if (!horseId || !context.appUserId) {
+    redirect(`/data-entry/submissions/${submissionId}?error=horse-not-accessible`);
+  }
+
   const { error } = await supabase.from("feeding_logs").update({ notes: notes || null }).eq("id", entityId);
 
   if (error) {
@@ -315,7 +411,7 @@ export async function updateFeedingLogSubmissionAction(formData: FormData) {
 }
 
 export async function updateTrackSessionSubmissionAction(formData: FormData) {
-  await requireSignedInAppContext("/data-entry/submissions");
+  const context = await requireOperationalWriteAppContext("/data-entry/submissions");
 
   if (!hasSupabaseEnv()) {
     redirect("/data-entry/submissions?error=supabase-not-configured");
@@ -334,6 +430,12 @@ export async function updateTrackSessionSubmissionAction(formData: FormData) {
   }
 
   const supabase = await createSupabaseServerClient();
+  const horseId = await findSubmissionHorseId(supabase, "track_sessions", entityId);
+
+  if (!horseId || !context.appUserId) {
+    redirect(`/data-entry/submissions/${submissionId}?error=horse-not-accessible`);
+  }
+
   const { error } = await supabase
     .from("track_sessions")
     .update({

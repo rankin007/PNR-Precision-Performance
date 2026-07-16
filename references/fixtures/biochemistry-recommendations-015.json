@@ -1,0 +1,60 @@
+{
+  "source": {
+    "document": "Sprint 015 fixture-only threshold and recommendation scaffold",
+    "version": "fixture-only-v1",
+    "notes": "Thresholds and rule content in this file are fixture-only values for validating scaffold behavior. They are not approved production Green/Amber/Red thresholds and are not trainer-facing Table of Knowledge advice."
+  },
+  "thresholdSets": [
+    {
+      "scoreKind": "hydration",
+      "sourceDocument": "Sprint 015 fixture-only threshold and recommendation scaffold",
+      "sourceVersion": "fixture-only-v1",
+      "thresholds": [
+        { "zone": "red", "minScore": 0, "maxScore": 0.499999, "label": "Fixture red" },
+        { "zone": "amber", "minScore": 0.5, "maxScore": 0.699999, "label": "Fixture amber" },
+        { "zone": "green", "minScore": 0.7, "maxScore": 1, "label": "Fixture green" }
+      ]
+    },
+    {
+      "scoreKind": "health",
+      "sourceDocument": "Sprint 015 fixture-only threshold and recommendation scaffold",
+      "sourceVersion": "fixture-only-v1",
+      "thresholds": [
+        { "zone": "red", "minScore": 0, "maxScore": 0.499999, "label": "Fixture red" },
+        { "zone": "amber", "minScore": 0.5, "maxScore": 0.699999, "label": "Fixture amber" },
+        { "zone": "green", "minScore": 0.7, "maxScore": 1, "label": "Fixture green" }
+      ]
+    }
+  ],
+  "activeRules": [
+    {
+      "ruleId": "fixture-hydration-amber-hydration-001",
+      "category": "hydration",
+      "scoreKind": "hydration",
+      "zone": "amber",
+      "level": 3,
+      "status": "active",
+      "content": "Fixture-only active rule content for validation. Not production advice.",
+      "sourceDocument": "Sprint 015 fixture-only threshold and recommendation scaffold",
+      "sourceVersion": "fixture-only-v1"
+    }
+  ],
+  "draftRules": [
+    {
+      "ruleId": "fixture-health-amber-feed-draft-001",
+      "category": "feed",
+      "scoreKind": "health",
+      "zone": "amber",
+      "level": 3,
+      "status": "draft",
+      "content": "Fixture-only draft content that must not be emitted.",
+      "sourceDocument": "Sprint 015 fixture-only threshold and recommendation scaffold",
+      "sourceVersion": "fixture-only-v1"
+    }
+  ],
+  "expected": {
+    "hydrationZone": "amber",
+    "healthZone": "amber",
+    "generatedRecommendationRuleId": "fixture-hydration-amber-hydration-001"
+  }
+}
