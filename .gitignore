@@ -21,4 +21,9 @@ pnpm-lock.yaml
 .vercel
 .validation-logs/
 .logs/
+supabase/.temp/
+supabase/.temp-old-link/
 desktop.ini
+/.release-main/
+/.claude/
+/planning/reviews/021M-supabase-support-escalation.md

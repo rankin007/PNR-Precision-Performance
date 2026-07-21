@@ -2,6 +2,11 @@
 
 | Risk | Likelihood | Impact | Mitigation | Status |
 |---|---:|---:|---|---|
+| Temporary NOLOGIN role pp_audit_020e_20260720 remains after the 020E privilege-model stop. | High | High | Protected supabase_admin context must revoke only the automatic creator membership; Builder then runs validated exact ACL revoke/drop and absence checks. | Active - critical manual intervention |
+| Ambient PUBLIC/default privileges invalidate a nominal zero-row-privilege audit role. | High | High | Inventory the two effective privilege sources through a revised read-only design before any audit-role retry; do not remediate within 020E. | Active |
+| Linked production schema exists without corresponding local `0001`-`0009` records in remote CLI migration history. | High | High | Treat Sprint 020B structural verification as schema truth; prohibit replay/repair/reconciliation until separately planned, reviewed, and authorized. | Active |
+| A future CLI command mutates the linked production project unintentionally. | Medium | High | Keep `supabase/.temp/**` ignored, classify installed command behavior before execution, and require explicit sprint scope for every remote write. | Active |
+| Migration 0009 is replayed against an unknown, partial, or divergent remote state. | Medium | High | Run the Sprint 020 read-only inventory first, verify the hash and recovery posture, and require explicit mutation authorization; prefer forward-fix over destructive rollback. | Active |
 | Future global Node upgrades reintroduce the Next.js build hang. | Medium | Medium | Keep `npm run build` pinned to project-local Node `22.14.0`; test runtime upgrades in a dedicated maintenance sprint. | Active |
 | Codex restricted sandbox hangs while normal unsandboxed local build succeeds. | Medium | Low | Use the bounded wrapper and, when needed, run final Next build validation outside the restricted sandbox; record this distinction in validation docs. | Active |
 | OneDrive offline placeholders return under `node_modules` or generated output. | Medium | Medium | Rebuild dependencies with `npm ci` if direct reads or Next build stall on placeholder files; avoid relying on dehydrated dependency trees. | Active |
@@ -61,3 +66,50 @@
 | Tracked production-adjacent env file may contain sensitive or environment-specific values. | Medium | High | Sprint 017 removed `.env.vercel.production` from Git tracking while preserving the local ignored file and without printing values. | Mitigated locally |
 | Deleted `middleware.ts` could hide route-safety regressions if accepted without review. | Medium | High | Sprint 017 accepted the deletion only after source inspection, production build, and route-safety smoke passed. | Mitigated locally |
 | Dirty tree remains too broad for safe feature work without baseline decision. | High | Medium | Sprint 017 validated and created the approved local baseline commit, excluding env values and manual/user-preference folders. | Mitigated locally |
+| Sprint 018 capture UI cannot complete live persistence until the biochemistry migration exists remotely. | High | High | Keep missing schema as a clear blocked state; plan a remote Supabase biochemistry migration/live smoke sprint only after explicit operator authorization. | Active |
+| Trainer-facing result screens could be mistaken for final recommendations while thresholds/content are unavailable. | Medium | High | Sprint 018 displays unavailable/blocked states for zones and recommendations until approved thresholds and Table of Knowledge rules are supplied. | Active |
+| Unsupported performance, medical, causal, or outcome claims reduce trust and create compliance exposure. | High | High | Apply `docs/DESIGN_AND_MESSAGING_AUTHORITY.md`; classify claims by evidence level and reject guarantees, diagnosis, prediction, proof, and unvalidated score/recommendation claims. | Active |
+| Visual redesign silently expands into storage, voice, auth/RLS, schema, CMS, aggregation, or deployment work. | High | High | Every relevant sprint must identify architecture gates explicitly and keep unapproved functional changes outside visual/content scope. | Active |
+| Status colours are interpreted without labels or context. | Medium | High | Always pair Green/Amber/Red with text, appropriate icons, numerical values where applicable, and explanatory context. | Active |
+| Confidential operational records or identifiable horse/stable data appear in public marketing assets. | High | High | Use recreated anonymised charts, exclude raw records/formulas, and require explicit releases for identifiable people, horses, and stables. | Active |
+| Conflicting brand names, pricing, or product claims reach public surfaces. | High | High | Apply the accepted brand hierarchy; keep pricing unpublished until one commercial schedule is approved; preserve the public gate until separately reopened. | Active |
+| A repository-led Supabase replacement destroys hosted Auth, Storage, business data, configuration, or required legacy records. | Medium | Critical | Treat every 020F preserve-data, recreate-manually, and unknown-stop item as a hard gate; require protected backups and a disposable recovery rehearsal before 020G. | Active |
+| Leaked-password protection is disabled on the Free candidate. | Low while passwordless-only; High if password auth is added | High | Keep Email OTP/magic-link as the only Auth flow. Any password-auth feature must reopen and resolve this control before implementation. Joint owners: Randell Rankin and Philip Rankin. | Accepted exception |
+| Candidate keys or sessions leak through shell history, command arguments, environment dumps, logs, screenshots, or files during local testing. | Medium | Critical | The 020G browser-inspection incident is contained: affected task deleted, replacement keys present, legacy keys disabled, no durable value fragments. Sprint 021 must design a protected consumption path that never exposes DOM credential values to retained inspection output. | Contained incident; design risk remains active |
+| Temporary localhost callback or synthetic candidate data remains after testing. | Low | High | The temporary callback was removed and the allowlist restored to the sole production URL. No Auth identity or fixture was created. Sprint 021 must retain exact callback and zero-count cleanup controls for any future test. | 020G contained; future-test risk remains active |
+| Synthetic rows without a neutral direct run-ID column could be missed or broadly deleted. | Medium | Critical | Anchor the run in stable code, horse slugs, profile aliases, and available notes fields; trace remaining rows only through exact joins and protected A/B mapping; require bounded aggregate plan and stop on ambiguity. | Active |
+| Structural readiness could be mistaken for authenticated proof or production cutover readiness. | High | High | Sprint 021E closed blocked-clean and authenticated proof did not start. Sprint 021F reconciles zero owned state and requires a separate 021G-or-later Pack for any retry. | Active |
+| A personal or conversation-disclosed mailbox is reused for synthetic authentication. | Medium | Critical | The 021F runbook requires a new dedicated non-personal mailbox, unique password, MFA, plus-alias proof, and address non-retention. | Active |
+| Browser mailbox inspection emits private message metadata while locating the test account. | Medium | Critical | Sprint 021G stopped before mutation, cleared protected state, and closed blocked-clean. A later Pack must use an account-scoped mailbox interface that returns readiness/address internally without traversing message DOM. | Active |
+# Sprint 021H risk — protected acquisition output
+
+Dashboard DOM/snapshot inspection can expose visible API-key values. Reopen authenticated proof only with an acquisition surface that keeps both publishable and secret values inside protected process memory and outside tool output.
+# Sprint 021I risk — target-bound credential injection
+
+Existing local protected configuration is bound to the protected old project, while candidate dashboard retrieval requires exposure-prone transfer. Any future mechanism must bind target metadata before protected use and keep the value inside one protected process.
+# Sprint 021J risk — authenticated Administrator read error
+
+Genuine candidate sessions and fixtures can be established, but the first Administrator horse read errored before authorization results could be credited. Structural readiness must not be mistaken for authenticated readiness until the operation error is diagnosed and the full matrix reruns cleanly.
+# Sprint 021K risk — Auth-issued token rejection
+
+Candidate Auth can return a session object whose access token is immediately rejected by Auth and Data API. No authenticated-readiness claim is valid until hosted token issuance/verification compatibility is resolved and the complete matrix passes.
+
+# Sprint 021L risk — provider JWT verification inconsistency
+
+Candidate Auth may continue rejecting newly issued, JWKS-advertised user tokens until Supabase investigates or repairs provider state. Reopen only after provider confirmation; first rerun two fresh minimal Auth chains from authoritative zero state. Do not infer authenticated/RLS/runtime readiness or attempt speculative signing/Auth changes.
+
+# Sprint 021M risk — persistent provider JWT rejection
+
+Two timed independent attempts prove the provider inconsistency persists beyond an immediate propagation window. Do not repeat reproductions or infer authenticated readiness. Supabase must inspect project-level Auth/Data API JWT trust; after resolution, require two successive fresh minimal passes from zero before any matrix.
+
+# Sprint 017B risk — broad post-baseline working tree
+
+The post-017 baseline now contains 255 classified status entries, including high-risk runtime/auth/database groups, one protected support record, and a 22,166-file nested release snapshot. Do not broadly stage, clean, archive, or ignore these paths. Resolve exact 017C treatments first, then segment reviewed 017D staging groups.
+
+# Sprint 017C risk — local-only boundary leakage into staging
+
+Root `.release-main/` and `.claude/` are now correctly ignored but remain on disk. 017D must verify they remain excluded and must not use broad forced-add behavior. The samples scaffold and relocated DOCX require explicit staging review rather than automatic inclusion.
+
+# Sprint 017D risk — validation ledger drift
+
+Repository baseline commits remain blocked because the Sprint 020G clean-rebuild validator encodes an exact `0001`–`0010` migration ledger while accepted immutable history now extends through `0012`. Do not bypass the validator or omit migrations `0011`/`0012`; reconcile the expected ledger under a narrow follow-up Pack, then rerun the complete baseline gate from the beginning.

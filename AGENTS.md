@@ -32,6 +32,20 @@ Production code lives in the existing project around this planning layer. The Bu
 - Architect Pack commands: `planning/architect-packs/README.md`
 - Sprint work: `planning/sprints/`
 - Sprint-close briefing: `planning/ARCHITECT_BRIEFING.md`
+- Design and messaging authority: `docs/DESIGN_AND_MESSAGING_AUTHORITY.md`
+
+---
+
+## Sprint Numbering Rule
+
+This is a hard project rule.
+
+- A planned core sprint uses its numeric identifier, for example `019` or `020`.
+- Any later corrective, completion, verification, or follow-up sprint belonging to that core sprint keeps the same number and adds a letter suffix.
+- New follow-up suffixes start at `B`, then continue `C`, `D`, and so on. Example: `019B`, `019C`.
+- Do not reopen the closed core sprint, consume the next numeric roadmap sprint, or renumber later core sprints for follow-up work.
+- Use the suffix consistently in the sprint title, folder, Architect Pack filename, state, status, schedule, briefing, documentation, and handoff references. Example folder: `planning/sprints/019B-mobile-heading-correction/`.
+- Historical sprint identifiers, including earlier `A` suffixed sprints, remain unchanged. Do not create new `A` follow-ups.
 
 ---
 
@@ -45,26 +59,16 @@ Use `docs/WORKFLOW_PROFILE.md` to choose the right rigor level.
 
 ---
 
-## Builder Authorization Rule
+## Architect Pack Handoff Rule
 
-This is the only implementation approval gate.
+This is a hard project rule.
 
-Once an Architect Pack is created at the user's request, the Architect must apply the pack and authorize implementation for that sprint in `planning/STATE.md` before handing off. Do not leave an approved pack stopped at `apply-pack` or waiting for a second implementation approval unless the user explicitly says the pack is draft/planning-only.
-
-If `planning/STATE.md` says `Implementation authorized: yes`, Builder may edit files inside the approved sprint scope without another approval.
-
-Builder must stop and ask before implementation if any of these are true:
-
-- the work changes scope
-- the work touches secrets or credentials outside the sprint's explicit safe-handling instructions
-- the work deletes files or data outside the sprint's explicit approved deletion/untracking rules
-- the work changes authentication, authorization, billing, or the data model outside the approved sprint scope
-- the work modifies more than the approved file set
-- the sprint does not clearly say `Implementation authorized: yes`
-
-Authorization to implement a sprint does not authorize push, PR, deployment, remote migration, production data mutation, secret exposure, billing changes, or public reopening unless the sprint explicitly says so.
-
-If approval is ambiguous, ask. If an Architect Pack was created at the user's request and is not marked draft/planning-only, default to applying the pack and setting `Implementation authorized: yes` for that sprint.
+- Architect creates the Architect Pack only. Architect defines scope, acceptance criteria, risks, boundaries, and the Builder handoff, then stops.
+- Builder applies the Architect Pack, verifies the generated sprint files, and builds from those sprint files.
+- Do not add an implementation-authorization heading, field, flag, status, checklist item, approval gate, or equivalent wording to packs, sprint files, state, status, briefings, schedules, prompts, or reports.
+- Delivery of the created Architect Pack is the Architect-to-Builder handoff. Builder controls pack application and execution. Architect must not apply the pack.
+- Builder remains bound by the sprint scope and approved file set, and must stop for scope expansion, secrets exposure, destructive actions, or external/production actions not expressly included in the sprint.
+- Draft or planning-only packs must be labelled clearly and must not be applied until the user asks for application.
 
 ---
 
@@ -78,10 +82,11 @@ If approval is ambiguous, ask. If an Architect Pack was created at the user's re
 6. `planning/RISKS.md`
 7. `planning/QUESTIONS.md`
 8. `docs/WORKFLOW_PROFILE.md`
-9. `planning/ARCHITECT_BRIEFING.md`, if present
-10. Active sprint file(s) under `planning/sprints/`
-11. Relevant docs under `docs/`
-12. Relevant source notes under `references/`
+9. `docs/DESIGN_AND_MESSAGING_AUTHORITY.md`, if present
+10. `planning/ARCHITECT_BRIEFING.md`, if present
+11. Active sprint file(s) under `planning/sprints/`
+12. Relevant docs under `docs/`
+13. Relevant source notes under `references/`
 
 ---
 

@@ -4,6 +4,7 @@ import { bootstrapAuthenticatedUser, hasAnyAdminAssignment } from "@/lib/auth/bo
 import { normalizeAppRedirectPath } from "@/lib/auth/access";
 import { hasSupabaseEnv } from "@/lib/supabase/env";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { isOperationalRole, type OperationalRole } from "@/lib/auth/role-matrix";
 
 export type AppAuthContext = {
   envReady: boolean;
@@ -15,6 +16,7 @@ export type AppAuthContext = {
   memberProfileActive: boolean;
   membershipLevelCodes: string[];
   permissionCodes: string[];
+  primaryRole: OperationalRole | null;
 };
 
 type MembershipLevelRow = {
@@ -67,6 +69,7 @@ function emptyAppAuthContext(envReady: boolean): AppAuthContext {
     memberProfileActive: false,
     membershipLevelCodes: [],
     permissionCodes: [],
+    primaryRole: null,
   };
 }
 
@@ -101,7 +104,7 @@ export async function getAppAuthContext(): Promise<AppAuthContext> {
 
   const { data: appUser } = await supabase
     .from("users")
-    .select("id, status")
+    .select("id, status, primary_role_code")
     .eq("auth_user_id", user.id)
     .maybeSingle();
 
@@ -159,6 +162,7 @@ export async function getAppAuthContext(): Promise<AppAuthContext> {
     memberProfileActive: Boolean(memberProfile?.is_active),
     membershipLevelCodes,
     permissionCodes,
+    primaryRole: isOperationalRole(appUser?.primary_role_code) ? appUser.primary_role_code : null,
   };
 }
 

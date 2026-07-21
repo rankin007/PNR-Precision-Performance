@@ -148,6 +148,29 @@ export async function assignMembershipLevelToUser(params: {
     throw error;
   }
 
+  const primaryRoleByMembership: Record<string, string | null> = {
+    admin: "administrator",
+    administrator: "administrator",
+    trainer: "trainer",
+    "stable-manager": "stable_manager",
+    veterinarian: "veterinarian",
+    consultant: "consultant",
+    "stable-hand": "stable_hand",
+    "stable-staff": "stable_hand",
+    staff: "stable_hand",
+    owner: null,
+  };
+  if (Object.prototype.hasOwnProperty.call(primaryRoleByMembership, membershipLevel.code)) {
+    const { error: roleError } = await admin
+      .from("users")
+      .update({
+        primary_role_code: primaryRoleByMembership[membershipLevel.code],
+        updated_at: new Date().toISOString(),
+      })
+      .eq("id", params.userId);
+    if (roleError) throw roleError;
+  }
+
   return membershipLevel.code;
 }
 

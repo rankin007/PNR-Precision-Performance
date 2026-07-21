@@ -1,0 +1,50 @@
+# Sprint 021K - Administrator Read Correction And Authenticated Closeout Acceptance
+
+- [x] Applied four-file sprint matches this Pack. — **pass**.
+- [x] Dirty-worktree inventory/source hashes are recorded and unrelated changes remain untouched. — **pass**.
+- [x] New 021K harness defaults nonmutating and passes target, run, error-allowlist, session, branch, ceiling, compensation, cleanup, hosted-config, and clearing tests. — **pass**: 12/12.
+- [x] Existing static/focused tests, TypeScript, lint, production build, and credential ignore/untracked checks pass before diagnosis. — **pass**.
+- [x] Exact candidate, old-project refusal, opening ledger 0001-0012, structure/advisors, health, production-only callback, and zero Auth/application/Storage baselines pass. — **pass**: inherited/opening 021J closeout plus 021K guards.
+- [x] Minimal diagnostic topology stays within one identity/profile/membership/stable/horse and zero Storage objects. — **pass**.
+- [x] Administrator failure is reproduced or conclusively isolated using a genuine actor session. — **pass**.
+- [x] Sanitized provider/database error code and fixed message category are captured without protected or private data. — **pass**: unauthorized/generic-operation classes.
+- [x] Session/request construction and actor binding are proved or disproved. — **pass**: multiple independent request constructions fail.
+- [x] Active application identity/profile, Administrator role/membership, and permission mapping are proved or disproved. — **pass**: bounded topology created successfully; token rejection precedes database evaluation.
+- [x] Authenticated privileges and relevant helper results/execute boundaries are proved or disproved. — **pass**: helper calls cannot authenticate and do not reach privilege evaluation.
+- [x] Horse SELECT policy evaluation, including recursion and permission classes, is proved or disproved. — **pass**: REST unauthorized proves policy evaluation is not reached.
+- [x] Harness-vs-hosted control requests isolate the failing layer. — **pass**: Auth identity, supported client, and direct REST controls.
+- [x] One exact root cause and one conditional correction branch are recorded before modification. — **pass**: `auth-issued-session-rejected`; correction is outside A/B/C.
+- [x] Diagnostic state is cleaned to zero before correction validation. — **pass**.
+- [ ] Branch A changes only the new harness, Branch B uses only forward migration 0013/bootstrap/validators, or Branch C changes only the named auth integration files/tests. — **not-run**: no approved branch applies.
+- [ ] Any migration correction preserves 0001-0012 immutably, applies 0013 once, and produces exact ledger 0001-0013. — **not-run**: no migration correction.
+- [x] Any advisor change is rerun, counted accurately, and individually dispositioned without merging the hosted Auth exception. — **pass**: no advisor-affecting change; baseline unchanged.
+- [x] Regression, denial, static/focused, TypeScript, lint, build, hash, and approved-diff checks pass after correction. — **pass** as applicable: no correction; diagnostic/local checks pass.
+- [ ] A fresh minimal correction check proves Administrator one-row horse read plus anonymous and lower-role denial controls. — **not-run**: out-of-scope root cause.
+- [x] Correction-check state is cleaned to zero before full reproof. — **pass**: no correction-check state created; diagnostic state zero.
+- [ ] A fresh 021K run begins with authoritative zero anchors and declared full ceilings. — **not-run**.
+- [ ] Exactly ten deterministic `.invalid` identities and ten genuine isolated candidate sessions are established without delivery or fabricated JWTs. — **not-run**.
+- [ ] Exact two-stable/four-horse topology and role/ownership/access relationships remain within ceilings. — **not-run**.
+- [ ] Administrator global positive and bounded reversible administration cases pass. — **not-run**.
+- [ ] Trainer A/B scoped positives, cross-scope denials, escalation denials, and lower-role grant/revoke pass. — **not-run**.
+- [ ] Manager A positives and cross-stable/security/ownership/role-management denials pass. — **not-run**.
+- [ ] Vet X, Consultant X, and Hand A assigned positives and unassigned/edit denials pass. — **not-run**.
+- [ ] Owner A/B own-horse reads and edit/comment/assignment/transfer/other-horse denials pass. — **not-run**.
+- [ ] SUSPENDED and anonymous receive zero protected application-data access. — **not-run**.
+- [ ] Comment creation, authorship mutation, Administrator removal, Owner denial, and content boundaries pass. — **not-run**.
+- [ ] Revocation causes immediate fresh-session denial while historical attribution remains. — **not-run**.
+- [ ] Direct RLS assertions use genuine actor sessions and never the service key. — **not-run**: diagnosis stopped before full reproof.
+- [ ] Representative application routes/actions agree with direct RLS for every role class without resource disclosure. — **not-run**.
+- [ ] Every mandatory assertion is recorded exactly once using sanitized aliases/result classes. — **not-run**.
+- [x] First failed assertion stops the matrix and initiates compensation/cleanup. — **pass**: diagnosis stopped before full matrix and cleaned each topology.
+- [x] Exact cleanup removes dependency-safe application state before Auth identities. — **pass**.
+- [x] Final diagnostic/full-run Auth/application/Storage counts are zero and starting baselines are restored. — **pass**.
+- [x] Runtime, sessions, cookies, artifacts, protected memory, and browser/process state are cleared. — **pass**.
+- [x] Closing hosted configuration, ledger, structure/advisors, project health, old-project non-contact, and ignored credential-file status pass. — **pass**.
+- [x] Outcome is exactly authenticated-role-rls-proof-passed-clean, authenticated-role-rls-proof-failed-clean, diagnosis-complete-blocked-clean, blocked-clean, or credential-incident-contained-clean and matches evidence. — **pass**: `diagnosis-complete-blocked-clean`.
+- [x] Email delivery/passwordless callback proof remains explicitly outside scope and not tested. — **pass**.
+- [x] Sprint 021 closeout accurately distinguishes structural, authenticated, runtime, deployment, and callback readiness. — **pass**.
+- [x] Status, progress, schedule, decisions/risks/questions, results, and Architect briefing agree. — **pass**.
+- [x] Final tests, hashes, JSON, redacted scans, ignore/untracked checks, approved diff, and `git diff --check` pass. — **pass**.
+- [x] No out-of-scope application/configuration/dependency/hosted-setting/deployment/cutover/old-project mutation, package install, stage, commit, push, or PR occurs. — **pass**.
+
+Builder must annotate every item exactly once as `pass`, `fail`, or `not-run` with named evidence or reason. Failed and not-run items remain unchecked. Passed-clean requires complete diagnosis, cause-matched correction, full proof, cleanup, and restoration.

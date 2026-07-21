@@ -58,11 +58,9 @@ For larger or strict work, use:
 - `acceptance.md`
 - `handoff-prompt.md`
 
-## Builder Authorization
+## Architect / Builder Handoff
 
-Use the single authorization rule in `AGENTS.md`.
-
-If `planning/STATE.md` says `Implementation authorized: yes`, Builder may edit files inside the approved sprint scope without another approval.
+Architect creates the pack only and then stops. Builder applies the pack, verifies the generated sprint files, and executes within sprint scope. Builder stops for scope expansion, secrets, destructive actions, and external or production actions not expressly included.
 
 Builder stops only for scope changes, secrets, deletes, auth/data-model/billing changes, or files outside the approved set.
 

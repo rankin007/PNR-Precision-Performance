@@ -16,7 +16,7 @@ The Architect:
 - Uses one `SPRINT.md` for small sprints and the four-file sprint set for larger or strict work.
 - Packages the plan as an Architect Pack saved in `planning/architect-packs/`.
 - Does not write production code.
-- When the pack is ready, writes `planning/STATUS.json` with `phase: "apply-pack"`.
+- Creates the pack only, then hands it to Builder without applying it.
 
 Start an Architect session by reading this file, `AGENTS.md`, `planning/ARCHITECT_BRIEFING.md` if present, the filled starter prompt, and the planning files.
 
@@ -38,7 +38,7 @@ The Builder turns an approved sprint into working software.
 The Builder:
 - Reads `AGENTS.md`, `planning/STATE.md`, the active sprint file(s), and relevant references.
 - Implements only from approved sprint artifacts, never directly from the Architect Pack after it is applied.
-- Uses the authorization rule in `AGENTS.md` as the single code gate.
+- Applies the Architect Pack, verifies the generated sprint files, and builds from them.
 - Leaves status markers in `planning/STATUS.json`.
 - Refreshes `planning/ARCHITECT_BRIEFING.md` at sprint close.
 

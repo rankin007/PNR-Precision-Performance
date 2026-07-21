@@ -1,6 +1,7 @@
 import { submitTrackSessionAction } from "@/app/(ops)/data-entry/actions";
 import { SectionCard } from "@/components/layout/section-card";
 import { getAccessibleHorseSummaries } from "@/lib/domain/horses";
+import { requireOperationalWriteAppContext } from "@/lib/auth/session";
 
 type TrackEntryPageProps = {
   searchParams?: Promise<Record<string, string | string[] | undefined>>;
@@ -11,6 +12,7 @@ function pickValue(value: string | string[] | undefined) {
 }
 
 export default async function TrackEntryPage({ searchParams }: TrackEntryPageProps) {
+  await requireOperationalWriteAppContext("/data-entry/track");
   const params = searchParams ? await searchParams : {};
   const submitted = pickValue(params.submitted) === "true";
   const error = pickValue(params.error);

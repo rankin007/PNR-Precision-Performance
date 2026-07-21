@@ -1,0 +1,2 @@
+#!/usr/bin/env node
+const MODES=new Set(["preflight","full-proof"]);const mode=process.argv[2]||"preflight";if(!MODES.has(mode)){process.stdout.write('{"harness":"021L-proof","state":"stopped","messageCode":"MODE_REFUSED"}\n');process.exitCode=1;}else{process.stdout.write(JSON.stringify({harness:"021L-proof",mode,state:"nonmutating",messageCode:mode==="full-proof"?"AUTH_CHAIN_GATE_REQUIRED":"PREFLIGHT_READY"})+"\n");}

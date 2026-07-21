@@ -2,6 +2,7 @@ import { submitFeedingLogAction } from "@/app/(ops)/data-entry/actions";
 import { SectionCard } from "@/components/layout/section-card";
 import { getFoodMenuSummaries } from "@/lib/domain/food-menus";
 import { getAccessibleHorseSummaries } from "@/lib/domain/horses";
+import { requireOperationalWriteAppContext } from "@/lib/auth/session";
 
 type FeedingEntryPageProps = {
   searchParams?: Promise<Record<string, string | string[] | undefined>>;
@@ -12,6 +13,7 @@ function pickValue(value: string | string[] | undefined) {
 }
 
 export default async function FeedingEntryPage({ searchParams }: FeedingEntryPageProps) {
+  await requireOperationalWriteAppContext("/data-entry/feeding");
   const params = searchParams ? await searchParams : {};
   const submitted = pickValue(params.submitted) === "true";
   const error = pickValue(params.error);

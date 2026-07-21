@@ -1,8 +1,8 @@
 {
-  "schemaVersion": 1,
-  "phase": "closeout",
-  "sprint": "017-baseline-commit-approval",
-  "status": "complete-local-baseline-ready",
-  "updated": "2026-07-17T08:45:00+10:00",
-  "summary": "Sprint 017 resolved the baseline commit gates locally: .env.vercel.production is untracked while preserved locally, root ORCHESTRATOR deletions have archive evidence, middleware deletion passed route-safety smoke, validation passed, and Builder is creating the authorized local baseline commit. No push, PR, deployment, remote migration, production mutation, Stripe change, public reopening, or feature work was authorized or performed."
+    "schemaVersion":  1,
+    "phase":  "closeout",
+    "sprint":  "017E-validator-reconciliation-and-local-baseline-completion",
+    "status":  "baseline-blocked-clean",
+    "updated":  "2026-07-22T00:00:00+10:00",
+    "summary":  "Sprint 017E is closed baseline-blocked-clean. The exact 0001-0012 validator correction and 271-path literal staging passed, but the mandatory staged diff check found pre-existing whitespace errors outside the approved edit set. No commit was created; develop, HEAD 171d3aa, all working files, and the empty index are preserved."
 }

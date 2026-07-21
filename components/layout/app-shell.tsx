@@ -22,11 +22,11 @@ export function AppShell({
   children,
 }: AppShellProps) {
   return (
-    <div className="min-h-screen bg-[linear-gradient(180deg,#f8f3eb_0%,#f1ede5_100%)]">
+    <div className="min-h-screen bg-canvas">
       <div className="section-wrap grid min-h-screen gap-6 px-4 py-6 md:grid-cols-[260px_minmax(0,1fr)] md:px-8">
-        <aside className="rounded-[2rem] border border-ink/10 bg-[#18212b] p-6 text-white shadow-panel">
+        <aside className="rounded-[2rem] border border-white/10 bg-technical p-6 text-white shadow-panel">
           <div className="space-y-4">
-            <p className="eyebrow text-[#d88b70] before:bg-current">{area}</p>
+            <p className="eyebrow text-accent before:bg-current">Precision Performance Portal</p>
             <div>
               <h1 className="font-display text-3xl leading-tight">{area}</h1>
               <p className="mt-3 text-sm leading-7 text-white/70">{description}</p>
@@ -51,7 +51,7 @@ export function AppShell({
           <header className="rounded-[2rem] border border-ink/10 bg-white/85 px-6 py-5 shadow-panel">
             <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
               <div>
-                <p className="text-sm uppercase tracking-[0.2em] text-ember">Platform Area</p>
+                <p className="text-sm uppercase tracking-[0.2em] text-data">Portal area</p>
                 <h2 className="mt-2 font-display text-3xl text-ink">{area}</h2>
                 <p className="mt-2 text-sm leading-7 text-steel">
                   {memberDisplayName

@@ -1,0 +1,1 @@
+import assert from "node:assert/strict";import {spawnSync} from "node:child_process";const a=spawnSync(process.execPath,["scripts/supabase-authenticated-proof-021L.mjs"],{encoding:"utf8"});assert.equal(a.status,0);assert.equal(JSON.parse(a.stdout).state,"nonmutating");process.stdout.write("021L proof harness self-test passed.\n");

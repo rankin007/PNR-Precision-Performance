@@ -1,0 +1,43 @@
+# Sprint 021J - Operator-Provisioned Authenticated Proof And Closeout Acceptance
+
+- [x] Applied four-file sprint matches this Pack. — **pass**: Pack check/application and unchanged generated requirements/blueprint/handoff.
+- [x] Dirty-worktree inventory/source hashes are recorded and unrelated changes remain untouched. — **pass**: pre-existing worktree inventory and SHA-256 source lock.
+- [x] New harness defaults nonmutating and passes target-first, target-refusal, file-schema, secret-output, run, no-email, session, ceiling, compensation, cleanup, hosted-config, and clearing tests. — **pass**: 19/19.
+- [x] Existing Sprint 021 static/focused tests, TypeScript, lint, and production build gate pass before provisioning. — **pass**.
+- [x] `.env.local` and `.env.test.local` are ignored and untracked; neither file is displayed, copied, staged, or inspected through tool output. — **pass**.
+- [x] Required manual intervention is recorded and the operator receives the exact private two-file instructions. — **pass**.
+- [x] Operator returns only the approved readiness phrase and no credential value or fragment. — **pass**.
+- [x] `.env.local` contains public Supabase names only and `.env.test.local` contains only the service-role name, verified without outputting contents. — **pass**: sanitized Stage A/B schema checks.
+- [x] Stage A validates exact candidate public target before Stage B loads any protected material. — **pass**.
+- [x] Old project, unexpected targets, duplicate variables, cross-file schema violations, and all retired/reused runs are refused. — **pass**: harness tests and target-first checks.
+- [x] No credential, token, cookie, generated artifact, Auth UUID, private identifier, routable address, or value fragment is emitted or retained. — **pass**: sanitized outputs and clearing evidence.
+- [x] Candidate ledger remains 0001-0012; migrations 0011/0012, structure/advisors, health, callback/Site URL, and starting Auth/application/Storage baselines are confirmed. — **pass**: CLI, dashboard, hashes, and remote zero baseline.
+- [x] A fresh 021J run begins with authoritative zero anchors and declared ceilings. — **pass**: `021J-RLS-20260721-01`.
+- [x] Exactly ten deterministic `.invalid` run-owned Auth identities are created with no delivery. — **pass**.
+- [x] Exactly ten genuine isolated candidate user sessions are established through supported Auth exchange without fabricated JWTs. — **pass**.
+- [x] Exact two-stable/four-horse topology and required role/ownership/access relationships remain within ceilings. — **pass**: fixture bootstrap completed before first assertion.
+- [ ] Administrator positive and bounded reversible administration cases pass. — **fail**: first Administrator horse read returned `HORSE_READ_FAILED_ADMIN`; later case not run.
+- [ ] Trainer A/B scoped positives, cross-scope denials, escalation denials, and lower-role grant/revoke pass. — **not-run**: matrix stopped at first Administrator error.
+- [ ] Manager A positive and cross-stable/security/ownership/role-management denials pass. — **not-run**.
+- [ ] Vet X, Consultant X, and Hand A assigned positives and unassigned/edit denials pass. — **not-run**.
+- [ ] Owner A/B own-horse reads and edit/comment/assignment/transfer/other-horse denials pass. — **not-run**.
+- [ ] SUSPENDED and anonymous receive zero protected application-data access. — **not-run**.
+- [ ] Comment creation, authorship mutation, Administrator removal, Owner denial, and content boundaries pass. — **not-run**.
+- [ ] Revocation causes immediate fresh-session denial while historical attribution remains. — **not-run**.
+- [ ] Direct RLS assertions execute as genuine actor sessions, never the service key. — **fail**: genuine Administrator session was used, but the operation errored before a result class could be credited.
+- [ ] Representative application routes/actions agree with direct RLS for every role class without resource disclosure. — **not-run**.
+- [ ] Every mandatory assertion is recorded exactly once using sanitized aliases/result classes. — **not-run**: matrix stopped before assertion ledger population.
+- [x] First failed assertion stops the matrix and initiates compensation/cleanup. — **pass**.
+- [x] Exact cleanup removes dependency-safe application state before Auth identities. — **pass**.
+- [x] Final run-owned Auth/application/Storage counts are zero and starting baselines are restored. — **pass**: final remote baseline.
+- [x] Runtime, sessions, cookies, generated artifacts, protected memory, and browser/process state are cleared. — **pass**.
+- [x] Production-only callback/Site URL, ledger, structure/advisors, project health, and old-project integrity/non-contact are confirmed after cleanup. — **pass**: dashboard/CLI/final baseline.
+- [x] Operator-managed credential files remain ignored, untracked, untouched by Builder, and undisplayed. — **pass**.
+- [x] Outcome is exactly authenticated-role-rls-proof-passed-clean, authenticated-role-rls-proof-failed-clean, blocked-clean, or credential-incident-contained-clean and matches evidence. — **pass**: `authenticated-role-rls-proof-failed-clean`.
+- [x] Email delivery/passwordless callback proof is explicitly recorded as outside 021J and not tested. — **pass**.
+- [x] Sprint 021 closeout accurately distinguishes structural, authenticated, runtime, deployment, and callback readiness. — **pass**.
+- [x] Status, progress, schedule, decisions/risks/questions, results, and Architect briefing agree. — **pass**.
+- [x] Closing tests, hashes, JSON, redacted scans, ignore/untracked checks, approved diff, and `git diff --check` pass. — **pass**: final validation evidence.
+- [x] No implementation/schema/migration/config/dependency/hosted-setting/deployment/cutover/old-project mutation, package install, stage, commit, push, or PR occurs. — **pass**.
+
+Builder must annotate every item exactly once as `pass`, `fail`, or `not-run` with named evidence or reason. Failed and not-run items remain unchecked. Passed-clean requires all mandatory provisioning, authenticated proof, cleanup, and restoration criteria to pass.

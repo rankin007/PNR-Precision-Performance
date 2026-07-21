@@ -2,9 +2,15 @@
 
 Save Architect Pack files in this folder.
 
-Recommended file name pattern:
+Recommended core-sprint file name pattern:
 
 `architect-pack-###-{sprint-name}.md`
+
+Required follow-up pattern:
+
+`architect-pack-###B-{follow-up-name}.md`, then `###C`, `###D`, and so on.
+
+Follow-up sprints keep the core number and start at suffix `B`. Apply the same identifier to the sprint folder and all state/status references. Historical `A` identifiers remain unchanged; do not create new `A` follow-ups.
 
 ## Commands
 
@@ -47,6 +53,9 @@ FILE: planning/sprints/001-example/SPRINT.md
 ```
 
 ## Rules
+
+- Architect creates the pack only and then stops. Builder applies the pack, verifies the generated sprint files, and executes them. Delivery of the created pack is the role handoff.
+- Do not add a separate Builder execution flag, approval field, state toggle, checklist gate, or reset step.
 
 - Do not store secrets, API keys, passwords, tokens, or private credentials in Architect Packs.
 - After a pack is applied, Builder implements from generated sprint files under `planning/sprints/`, not from the Architect Pack itself.

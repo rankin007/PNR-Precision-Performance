@@ -1,0 +1,49 @@
+# Sprint 021M - Provider-Directed Timed JWT Reproduction Acceptance
+
+- [x] **pass** — Applied four-file sprint matches the validated Pack.
+- [x] **pass** — Dirty-worktree inventory and final 021M source hashes are recorded; unrelated changes were untouched.
+- [x] **pass** — Harnesses default nonmutating and pass 12/12 timed safety checks plus the proof-gate self-test.
+- [x] **pass** — Static/focused tests, TypeScript, lint, unchanged confirmation build, and ignored/untracked credential checks passed.
+- [x] **pass** — Exact target/refusal, ledger 0001-0012, prior structural/advisor/configuration baselines, both-project health, and repeated zero state passed.
+- [x] **pass** — Signing/JWKS/API-key classes match 021L opening/final evidence and no hosted mutation occurred.
+- [x] **pass** — T0 used one fresh `.invalid` identity and no application/Storage fixture.
+- [x] **pass** — T0 recorded its bounded window, endpoint paths, statuses, fixed classes, and allowlisted correlations in the restricted support file.
+- [x] **pass** — T0 identity and protected state were cleared; authoritative remote preflight returned zero.
+- [x] **pass** — T+20 began 1,330 seconds after T0 end with no retained protected or remote state.
+- [x] **pass** — Exact target, zero state, ignored files, unchanged hosted classes, and final project health passed around T+20.
+- [x] **pass** — T+20 used a different fresh identity/session/client and no application/Storage fixture.
+- [x] **pass** — T+20 recorded the same bounded allowlisted evidence in the restricted support file.
+- [x] **pass** — T+20 identity and protected state were cleared; authoritative remote preflight returned zero.
+- [x] **pass** — Timed outcome is `provider-internal-inconsistency-persistent` under Pack rules.
+- [x] **pass** — Correlation values occur only in the support-escalation file; no body or unrestricted error/header content was retained.
+- [x] **pass** — Persistent failure produced the complete sanitized support bundle and exact submission/resumption steps.
+- [ ] **not-run** — Recovery did not occur, so an additional confirmation was prohibited.
+- [ ] **not-run** — Stable Auth gate failed consistently before identity/Data API verification.
+- [x] **pass** — Diagnostic state is zero; no confirmation/full proof began.
+- [ ] **not-run** — Full 021M RLS run was forbidden by the failed stable Auth gate.
+- [ ] **not-run** — Ten actors were not created after the failed gate.
+- [ ] **not-run** — Application topology was not created after the failed gate.
+- [ ] **not-run** — Administrator matrix was not reached.
+- [ ] **not-run** — Trainer matrix was not reached.
+- [ ] **not-run** — Manager matrix was not reached.
+- [ ] **not-run** — Vet/Consultant/Hand matrix was not reached.
+- [ ] **not-run** — Owner matrix was not reached.
+- [ ] **not-run** — Suspended/anonymous matrix was not reached.
+- [ ] **not-run** — Comment matrix was not reached.
+- [ ] **not-run** — Revocation matrix was not reached.
+- [ ] **not-run** — Direct RLS assertions were blocked before database/RLS evaluation.
+- [ ] **not-run** — Representative application-route comparison was not reached.
+- [ ] **not-run** — No full-matrix assertions existed to record.
+- [ ] **not-run** — The full matrix did not start; persistent timed failure routed directly to escalation and cleanup.
+- [ ] **not-run** — No application fixture existed; each isolated Auth identity was deleted after its attempt.
+- [x] **pass** — Final timed Auth/application/Storage counts are zero and baselines restored.
+- [x] **pass** — Sessions, artifacts, tokens, protected memory, and browser/process state are cleared.
+- [x] **pass** — Final hosted classes, callback/Site URL, ledger, advisors, health, old-project boundary, and ignored-file state passed.
+- [x] **pass** — Outcome is exactly `provider-escalation-required-clean` and matches evidence.
+- [x] **pass** — Email delivery and real passwordless callback proof remain out of scope and untested.
+- [x] **pass** — Closeout distinguishes structural readiness from blocked authenticated/runtime proof and unauthorized deployment/callback work.
+- [x] **pass** — Status, progress, schedule, decisions/risks/questions, results, and briefing agree.
+- [x] **pass** — Final tests, hashes, JSON, redacted scans, correlation containment, credential checks, approved diff, and whitespace checks passed.
+- [x] **pass** — No out-of-scope mutation, package install, deployment, old-project contact, stage, commit, push, or PR occurred.
+
+Builder must annotate every item exactly once as `pass`, `fail`, or `not-run` with named evidence or reason. Failed and not-run criteria remain unchecked. Passed-clean requires stable Auth, full authenticated proof, cleanup, and restoration.

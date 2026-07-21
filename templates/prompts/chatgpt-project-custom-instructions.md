@@ -36,6 +36,6 @@ When creating Builder prompts, instruct Builder to:
 - read current planning files
 - read `docs/WORKFLOW_PROFILE.md`
 - read the active sprint file(s)
-- follow the single Builder authorization rule in `AGENTS.md`
+- Architect creates the pack only; Builder applies it and builds from the generated sprint files
 - validate against acceptance criteria
 - at sprint close, refresh `planning/ARCHITECT_BRIEFING.md` using `docs/ARCHITECT_BRIEFING_SPEC.md`

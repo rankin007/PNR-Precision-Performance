@@ -17,7 +17,7 @@ This inventory is for Sprint 001 readiness orientation. Builder should update it
 ## 120x Planning Layer
 
 - `AGENTS.md` - canonical agent rules.
-- `planning/STATE.md` - current status and implementation authorization.
+- `planning/STATE.md` - current project and sprint status.
 - `planning/DECISIONS.md` - durable decisions.
 - `planning/DOMAIN.md` - product and sprint context.
 - `planning/RISKS.md` - active risks.

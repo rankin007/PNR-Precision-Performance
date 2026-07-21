@@ -2,6 +2,7 @@ import { submitDailyRecordAction } from "@/app/(ops)/data-entry/actions";
 import { SectionCard } from "@/components/layout/section-card";
 import { getAccessibleHorseSummaries } from "@/lib/domain/horses";
 import { getRecentOperationSubmissions } from "@/lib/domain/operations";
+import { requireOperationalWriteAppContext } from "@/lib/auth/session";
 
 type DataEntryPageProps = {
   searchParams?: Promise<Record<string, string | string[] | undefined>>;
@@ -12,6 +13,7 @@ function pickValue(value: string | string[] | undefined) {
 }
 
 export default async function DataEntryPage({ searchParams }: DataEntryPageProps) {
+  await requireOperationalWriteAppContext("/data-entry");
   const params = searchParams ? await searchParams : {};
   const submitted = pickValue(params.submitted) === "true";
   const error = pickValue(params.error);

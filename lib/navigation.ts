@@ -62,6 +62,11 @@ export const opsNavigation: NavigationItem[] = [
     description: "Training and track activity capture.",
   },
   {
+    href: "/data-entry/biochemistry",
+    label: "Biochemistry",
+    description: "Manual readings, exact scoring, and result states.",
+  },
+  {
     href: "/data-entry/submissions",
     label: "Submissions",
     description: "Recent submissions and review paths.",

@@ -22,12 +22,12 @@ export default async function SignInPage({ searchParams }: SignInPageProps) {
 
   const description =
     setup === "supabase"
-      ? "Supabase environment variables are not configured yet. Connect the new Supabase account for this project, then return here to enable real authentication."
-      : "This route is the platform sign-in entry point and will be connected to the new project-specific Supabase Auth instance.";
+      ? "Secure sign-in is not configured in this environment. An operator must complete the approved service setup before access can continue."
+      : "Sign in to the Precision Performance Portal for approved equine biochemistry and operations access.";
 
   return (
     <main className="section-wrap px-4 py-16 md:px-8">
-      <SectionCard eyebrow="Sign In" title="Authentication entry point" description={description}>
+      <SectionCard eyebrow="Secure portal" title="Sign in to Precision Performance" description={description}>
         <div className="grid gap-4 md:grid-cols-2">
           <div className="rounded-2xl border border-ink/10 bg-sand p-5 text-sm leading-7 text-ink">
             <p className="font-semibold">Next destination</p>
@@ -37,8 +37,8 @@ export default async function SignInPage({ searchParams }: SignInPageProps) {
             <p className="font-semibold text-ink">Current status</p>
             <p className="mt-2">
               {envReady
-                ? "Supabase environment variables are present. The passwordless sign-in flow is ready to connect to the new project."
-                : "UI and middleware are scaffolded. The live auth flow will activate once the new Supabase project is connected and environment variables are set."}
+                ? "Passwordless email sign-in is available in this environment."
+                : "Secure sign-in is unavailable until the approved service configuration is complete."}
             </p>
           </div>
         </div>

@@ -1,5 +1,5 @@
 import { AppShell } from "@/components/layout/app-shell";
-import { requireOperationalWriteAppContext } from "@/lib/auth/session";
+import { requirePortalAppContext } from "@/lib/auth/session";
 import { opsNavigation } from "@/lib/navigation";
 
 export default async function OpsLayout({
@@ -7,7 +7,7 @@ export default async function OpsLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const context = await requireOperationalWriteAppContext("/data-entry");
+  const context = await requirePortalAppContext("/data-entry");
 
   return (
     <AppShell

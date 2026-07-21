@@ -3515,3 +3515,511 @@ set
   source_row_number = excluded.source_row_number;
 
 -- <<< END 0009_biochemistry_test_data_model.sql
+
+-- >>> BEGIN 0010_secure_helper_execution.sql
+-- Restrict application-owned SECURITY DEFINER helpers to authenticated callers.
+alter function public.current_app_user_id() set search_path = pg_catalog, public;
+alter function public.has_permission(text) set search_path = pg_catalog, public;
+alter function public.is_admin() set search_path = pg_catalog, public;
+alter function public.current_member_profile_id() set search_path = pg_catalog, public;
+alter function public.can_access_horse(uuid) set search_path = pg_catalog, public;
+alter function public.can_manage_horse_records(uuid) set search_path = pg_catalog, public;
+alter function public.has_stable_scope(uuid) set search_path = pg_catalog, public;
+alter function public.can_write_stable_scope(uuid) set search_path = pg_catalog, public;
+alter function public.can_read_biochemistry_horse(uuid) set search_path = pg_catalog, public;
+alter function public.can_write_biochemistry_horse(uuid) set search_path = pg_catalog, public;
+alter function public.can_soft_delete_biochemistry_horse(uuid) set search_path = pg_catalog, public;
+revoke execute on function public.current_app_user_id() from public, anon;
+revoke execute on function public.has_permission(text) from public, anon;
+revoke execute on function public.is_admin() from public, anon;
+revoke execute on function public.current_member_profile_id() from public, anon;
+revoke execute on function public.can_access_horse(uuid) from public, anon;
+revoke execute on function public.can_manage_horse_records(uuid) from public, anon;
+revoke execute on function public.has_stable_scope(uuid) from public, anon;
+revoke execute on function public.can_write_stable_scope(uuid) from public, anon;
+revoke execute on function public.can_read_biochemistry_horse(uuid) from public, anon;
+revoke execute on function public.can_write_biochemistry_horse(uuid) from public, anon;
+revoke execute on function public.can_soft_delete_biochemistry_horse(uuid) from public, anon;
+grant execute on function public.current_app_user_id() to authenticated;
+grant execute on function public.has_permission(text) to authenticated;
+grant execute on function public.is_admin() to authenticated;
+grant execute on function public.current_member_profile_id() to authenticated;
+grant execute on function public.can_access_horse(uuid) to authenticated;
+grant execute on function public.can_manage_horse_records(uuid) to authenticated;
+grant execute on function public.has_stable_scope(uuid) to authenticated;
+grant execute on function public.can_write_stable_scope(uuid) to authenticated;
+grant execute on function public.can_read_biochemistry_horse(uuid) to authenticated;
+grant execute on function public.can_write_biochemistry_horse(uuid) to authenticated;
+grant execute on function public.can_soft_delete_biochemistry_horse(uuid) to authenticated;
+
+-- <<< END 0010_secure_helper_execution.sql
+
+-- >>> BEGIN 0011_definitive_role_matrix_and_comments.sql
+-- Sprint 021 - definitive operational roles, scoped horse access, and comments.
+
+alter table public.users
+  add column if not exists primary_role_code text;
+
+alter table public.users drop constraint if exists users_primary_role_code_check;
+alter table public.users add constraint users_primary_role_code_check
+  check (primary_role_code is null or primary_role_code in
+    ('administrator','trainer','stable_manager','veterinarian','consultant','stable_hand'));
+
+create table if not exists public.stable_role_assignments (
+  id uuid primary key default gen_random_uuid(),
+  stable_id uuid not null references public.stables(id) on delete restrict,
+  member_profile_id uuid not null references public.member_profiles(id) on delete cascade,
+  role_code text not null check (role_code in ('trainer','stable_manager','stable_hand')),
+  assigned_by_user_id uuid references public.users(id) on delete set null,
+  starts_at timestamptz,
+  ends_at timestamptz,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  unique (stable_id, member_profile_id, role_code)
+);
+
+create unique index if not exists idx_stable_role_one_manager_stable
+  on public.stable_role_assignments (member_profile_id)
+  where role_code in ('stable_manager','stable_hand') and ends_at is null;
+create index if not exists idx_stable_role_active_scope
+  on public.stable_role_assignments (stable_id, member_profile_id, role_code, ends_at);
+
+alter table public.biochemistry_horse_access_assignments drop constraint if exists biochemistry_horse_access_assignments_role_code_check;
+alter table public.biochemistry_horse_access_assignments add constraint biochemistry_horse_access_assignments_role_code_check
+  check (role_code in ('trainer','stable_hand','veterinarian','consultant','owner'));
+
+alter table public.biochemistry_test_notes
+  add column if not exists updated_at timestamptz not null default now(),
+  add column if not exists updated_by_user_id uuid references public.users(id) on delete set null;
+alter table public.biochemistry_test_notes drop constraint if exists biochemistry_test_notes_length_check;
+alter table public.biochemistry_test_notes add constraint biochemistry_test_notes_length_check
+  check (char_length(note_text) between 1 and 2000);
+create index if not exists idx_biochemistry_test_notes_active_test
+  on public.biochemistry_test_notes (test_id, created_at) where deleted_at is null;
+
+create or replace function public.is_active_app_user()
+returns boolean language sql stable security definer
+set search_path = pg_catalog, public as $$
+  select exists (
+    select 1 from public.users u
+    join public.member_profiles mp on mp.user_id = u.id
+    where u.auth_user_id = auth.uid() and u.status = 'active' and mp.is_active
+  )
+$$;
+
+create or replace function public.current_primary_role()
+returns text language sql stable security definer
+set search_path = pg_catalog, public as $$
+  select u.primary_role_code from public.users u
+  join public.member_profiles mp on mp.user_id = u.id
+  where u.auth_user_id = auth.uid() and u.status = 'active' and mp.is_active
+  limit 1
+$$;
+
+create or replace function public.is_admin()
+returns boolean language sql stable security definer
+set search_path = pg_catalog, public as $$
+  select public.is_active_app_user() and public.current_primary_role() = 'administrator'
+$$;
+
+create or replace function public.has_permission(permission_code text)
+returns boolean language sql stable security definer
+set search_path = pg_catalog, public as $$
+  select public.is_active_app_user() and exists (
+    select 1 from public.users u
+    join public.user_membership_levels uml on uml.user_id = u.id
+    join public.membership_level_permissions mlp on mlp.membership_level_id = uml.membership_level_id
+    join public.permissions p on p.id = mlp.permission_id
+    where u.auth_user_id = auth.uid() and p.code = permission_code
+      and (uml.starts_at is null or uml.starts_at <= now())
+      and (uml.ends_at is null or uml.ends_at >= now())
+  )
+$$;
+
+create or replace function public.has_active_stable_role(target_stable_id uuid, required_role text)
+returns boolean language sql stable security definer
+set search_path = pg_catalog, public as $$
+  select public.is_active_app_user() and public.current_primary_role() = required_role and exists (
+    select 1 from public.stable_role_assignments sra
+    where sra.stable_id = target_stable_id
+      and sra.member_profile_id = public.current_member_profile_id()
+      and sra.role_code = required_role
+      and (sra.starts_at is null or sra.starts_at <= now())
+      and (sra.ends_at is null or sra.ends_at >= now())
+  )
+$$;
+
+create or replace function public.has_explicit_horse_role(target_horse_id uuid, required_roles text[])
+returns boolean language sql stable security definer
+set search_path = pg_catalog, public as $$
+  select public.is_active_app_user() and exists (
+    select 1 from public.biochemistry_horse_access_assignments bha
+    where bha.horse_id = target_horse_id
+      and bha.member_profile_id = public.current_member_profile_id()
+      and bha.role_code = any(required_roles)
+      and (bha.starts_at is null or bha.starts_at <= now())
+      and (bha.ends_at is null or bha.ends_at >= now())
+  )
+$$;
+
+create or replace function public.can_access_horse(target_horse_id uuid)
+returns boolean language sql stable security definer
+set search_path = pg_catalog, public as $$
+  select public.is_active_app_user() and (
+    public.is_admin()
+    or public.has_explicit_horse_role(target_horse_id, array['trainer','stable_hand','veterinarian','consultant','owner'])
+    or exists (
+      select 1 from public.horses h where h.id = target_horse_id
+        and public.has_active_stable_role(h.stable_id, 'stable_manager')
+    )
+    or exists (
+      select 1 from public.horse_assignments ha
+      join public.owners o on o.id = ha.owner_id
+      where ha.horse_id = target_horse_id
+        and o.member_profile_id = public.current_member_profile_id()
+        and (ha.starts_at is null or ha.starts_at <= now())
+        and (ha.ends_at is null or ha.ends_at >= now())
+    )
+  )
+$$;
+
+create or replace function public.can_manage_horse_records(target_horse_id uuid)
+returns boolean language sql stable security definer
+set search_path = pg_catalog, public as $$
+  select public.is_active_app_user() and (
+    public.is_admin()
+    or (public.current_primary_role() = 'trainer' and public.has_explicit_horse_role(target_horse_id, array['trainer']))
+    or exists (select 1 from public.horses h where h.id = target_horse_id
+      and public.has_active_stable_role(h.stable_id, 'stable_manager'))
+  )
+$$;
+
+create or replace function public.can_read_biochemistry_horse(target_horse_id uuid)
+returns boolean language sql stable security definer
+set search_path = pg_catalog, public as $$ select public.can_access_horse(target_horse_id) $$;
+
+create or replace function public.can_write_biochemistry_horse(target_horse_id uuid)
+returns boolean language sql stable security definer
+set search_path = pg_catalog, public as $$ select public.can_manage_horse_records(target_horse_id) $$;
+
+create or replace function public.can_comment_biochemistry_horse(target_horse_id uuid)
+returns boolean language sql stable security definer
+set search_path = pg_catalog, public as $$
+  select public.is_active_app_user() and public.current_primary_role() <> 'owner' and (
+    public.can_manage_horse_records(target_horse_id)
+    or public.has_explicit_horse_role(target_horse_id, array['stable_hand','veterinarian','consultant'])
+  )
+$$;
+
+create or replace function public.can_manage_biochemistry_comment(target_note_id uuid)
+returns boolean language sql stable security definer
+set search_path = pg_catalog, public as $$
+  select public.is_active_app_user() and exists (
+    select 1 from public.biochemistry_test_notes n
+    where n.id = target_note_id and n.deleted_at is null
+      and (public.is_admin() or (n.created_by_user_id = public.current_app_user_id()
+        and public.can_comment_biochemistry_horse(n.horse_id)))
+  )
+$$;
+
+alter table public.stable_role_assignments enable row level security;
+drop policy if exists "stable_role_assignments_scoped_select" on public.stable_role_assignments;
+create policy "stable_role_assignments_scoped_select" on public.stable_role_assignments for select
+  using (public.is_admin() or member_profile_id = public.current_member_profile_id());
+drop policy if exists "stable_role_assignments_admin_manage" on public.stable_role_assignments;
+create policy "stable_role_assignments_admin_manage" on public.stable_role_assignments for all
+  using (public.is_admin()) with check (public.is_admin());
+
+drop policy if exists "horses_manage_admin_only" on public.horses;
+create policy "horses_manage_authorised_scope" on public.horses for all
+  using (public.can_manage_horse_records(id))
+  with check (public.is_admin() or public.has_active_stable_role(stable_id, 'trainer') or public.has_active_stable_role(stable_id, 'stable_manager'));
+
+drop policy if exists "biochemistry_notes_insert_writable" on public.biochemistry_test_notes;
+create policy "biochemistry_notes_insert_commenter" on public.biochemistry_test_notes for insert
+  with check (created_by_user_id = public.current_app_user_id()
+    and public.can_comment_biochemistry_horse(horse_id));
+drop policy if exists "biochemistry_notes_update_writable_or_delete_allowed" on public.biochemistry_test_notes;
+create policy "biochemistry_notes_update_author_or_admin" on public.biochemistry_test_notes for update
+  using (public.can_manage_biochemistry_comment(id))
+  with check ((created_by_user_id = public.current_app_user_id() or public.is_admin())
+    and char_length(note_text) between 1 and 2000);
+
+insert into public.membership_levels (code,name,description,is_paid,is_custom,sort_order) values
+ ('administrator','Administrator','Global operational administrator.',false,false,100),
+ ('stable-manager','Stable Manager','Single-stable operational manager.',false,false,80),
+ ('veterinarian','Veterinarian','Explicit assigned-horse professional.',false,false,60),
+ ('consultant','Consultant','Explicit assigned-horse professional.',false,false,50),
+ ('stable-hand','Stable Hand','Single-stable explicitly assigned horse support.',false,false,40)
+on conflict (code) do update set name=excluded.name,description=excluded.description,sort_order=excluded.sort_order;
+
+revoke execute on function public.is_active_app_user() from public, anon;
+revoke execute on function public.current_primary_role() from public, anon;
+revoke execute on function public.has_active_stable_role(uuid,text) from public, anon;
+revoke execute on function public.has_explicit_horse_role(uuid,text[]) from public, anon;
+revoke execute on function public.can_comment_biochemistry_horse(uuid) from public, anon;
+revoke execute on function public.can_manage_biochemistry_comment(uuid) from public, anon;
+grant execute on function public.is_active_app_user() to authenticated;
+grant execute on function public.current_primary_role() to authenticated;
+grant execute on function public.has_active_stable_role(uuid,text) to authenticated;
+grant execute on function public.has_explicit_horse_role(uuid,text[]) to authenticated;
+grant execute on function public.can_comment_biochemistry_horse(uuid) to authenticated;
+grant execute on function public.can_manage_biochemistry_comment(uuid) to authenticated;
+
+-- <<< END 0011_definitive_role_matrix_and_comments.sql
+
+-- >>> BEGIN 0012_role_lifecycle_policy_hardening.sql
+-- Sprint 021 - forward-only lifecycle and assignment hardening after 0011.
+
+alter table public.users drop constraint if exists users_status_check;
+alter table public.users add constraint users_status_check
+  check (status in ('active','inactive','suspended'));
+
+alter table public.horses
+  add column if not exists deleted_at timestamptz,
+  add column if not exists deleted_by_user_id uuid references public.users(id) on delete set null,
+  add column if not exists delete_reason text;
+alter table public.horses drop constraint if exists horses_soft_delete_attribution_check;
+alter table public.horses add constraint horses_soft_delete_attribution_check
+  check (deleted_at is null or deleted_by_user_id is not null);
+
+create table if not exists public.horse_ownership_history (
+  id uuid primary key default gen_random_uuid(),
+  horse_id uuid not null references public.horses(id) on delete restrict,
+  owner_id uuid references public.owners(id) on delete set null,
+  assignment_id uuid,
+  action text not null check (action in ('assigned','changed','revoked')),
+  changed_by_user_id uuid references public.users(id) on delete set null,
+  changed_at timestamptz not null default now()
+);
+create index if not exists idx_horse_ownership_history_horse_changed
+  on public.horse_ownership_history (horse_id, changed_at desc);
+
+create or replace function public.record_horse_ownership_history()
+returns trigger language plpgsql security definer
+set search_path = pg_catalog, public as $$
+begin
+  if tg_op = 'INSERT' and new.owner_id is not null then
+    insert into public.horse_ownership_history(horse_id,owner_id,assignment_id,action,changed_by_user_id)
+    values(new.horse_id,new.owner_id,new.id,'assigned',public.current_app_user_id());
+  elsif tg_op = 'UPDATE' and old.owner_id is distinct from new.owner_id then
+    insert into public.horse_ownership_history(horse_id,owner_id,assignment_id,action,changed_by_user_id)
+    values(new.horse_id,new.owner_id,new.id,case when new.owner_id is null then 'revoked' else 'changed' end,public.current_app_user_id());
+  elsif tg_op = 'DELETE' and old.owner_id is not null then
+    insert into public.horse_ownership_history(horse_id,owner_id,assignment_id,action,changed_by_user_id)
+    values(old.horse_id,old.owner_id,old.id,'revoked',public.current_app_user_id());
+  end if;
+  if tg_op = 'DELETE' then return old; end if;
+  return new;
+end $$;
+drop trigger if exists horse_assignments_ownership_history on public.horse_assignments;
+create trigger horse_assignments_ownership_history
+after insert or update or delete on public.horse_assignments
+for each row execute function public.record_horse_ownership_history();
+
+create or replace function public.is_trainer_for_horse(target_horse_id uuid)
+returns boolean language sql stable security definer
+set search_path = pg_catalog, public as $$
+  select public.is_active_app_user()
+    and public.current_primary_role() = 'trainer'
+    and public.has_explicit_horse_role(target_horse_id, array['trainer'])
+$$;
+
+create or replace function public.is_trainer_for_stable(target_stable_id uuid)
+returns boolean language sql stable security definer
+set search_path = pg_catalog, public as $$
+  select public.is_active_app_user()
+    and public.current_primary_role() = 'trainer'
+    and public.has_active_stable_role(target_stable_id, 'trainer')
+$$;
+
+create or replace function public.can_manage_scoped_user(target_user_id uuid)
+returns boolean language sql stable security definer
+set search_path = pg_catalog, public as $$
+  select public.is_admin() or (
+    public.current_primary_role() = 'trainer'
+    and target_user_id <> public.current_app_user_id()
+    and exists (
+      select 1 from public.users target
+      join public.member_profiles target_profile on target_profile.user_id = target.id
+      where target.id = target_user_id
+        and target.primary_role_code in ('stable_manager','veterinarian','consultant','stable_hand')
+        and (
+          exists (
+            select 1 from public.stable_role_assignments sra
+            where sra.member_profile_id = target_profile.id
+              and sra.role_code in ('stable_manager','stable_hand')
+              and public.is_trainer_for_stable(sra.stable_id)
+              and (sra.starts_at is null or sra.starts_at <= now())
+              and (sra.ends_at is null or sra.ends_at >= now())
+          )
+          or exists (
+            select 1 from public.biochemistry_horse_access_assignments bha
+            where bha.member_profile_id = target_profile.id
+              and bha.role_code in ('veterinarian','consultant','stable_hand')
+              and public.is_trainer_for_horse(bha.horse_id)
+              and (bha.starts_at is null or bha.starts_at <= now())
+              and (bha.ends_at is null or bha.ends_at >= now())
+          )
+        )
+    )
+  )
+$$;
+
+create or replace function public.can_manage_horse_access_assignment(
+  target_horse_id uuid,
+  target_member_profile_id uuid,
+  target_role_code text
+)
+returns boolean language sql stable security definer
+set search_path = pg_catalog, public as $$
+  select public.is_admin() or (
+    public.is_trainer_for_horse(target_horse_id)
+    and target_member_profile_id <> public.current_member_profile_id()
+    and target_role_code in ('stable_hand','veterinarian','consultant')
+    and exists (
+      select 1 from public.users target
+      join public.member_profiles mp on mp.user_id = target.id
+      where mp.id = target_member_profile_id
+        and target.status = 'active' and mp.is_active
+        and target.primary_role_code = target_role_code
+    )
+  )
+$$;
+
+create or replace function public.can_manage_stable_role_assignment(
+  target_stable_id uuid,
+  target_member_profile_id uuid,
+  target_role_code text
+)
+returns boolean language sql stable security definer
+set search_path = pg_catalog, public as $$
+  select public.is_admin() or (
+    public.is_trainer_for_stable(target_stable_id)
+    and target_member_profile_id <> public.current_member_profile_id()
+    and target_role_code in ('stable_manager','stable_hand')
+    and exists (
+      select 1 from public.users target
+      join public.member_profiles mp on mp.user_id = target.id
+      where mp.id = target_member_profile_id
+        and target.status = 'active' and mp.is_active
+        and target.primary_role_code = target_role_code
+    )
+  )
+$$;
+
+drop policy if exists "users_update_self_or_admin" on public.users;
+drop policy if exists "users_update_scoped_manager" on public.users;
+create policy "users_update_scoped_manager" on public.users for update
+  using (public.is_admin() or public.can_manage_scoped_user(id))
+  with check (
+    public.is_admin()
+    or (public.can_manage_scoped_user(id)
+      and primary_role_code in ('stable_manager','veterinarian','consultant','stable_hand'))
+  );
+
+drop policy if exists "users_select_self_or_admin" on public.users;
+create policy "users_select_scoped" on public.users for select
+  using (id = public.current_app_user_id() or public.is_admin() or public.can_manage_scoped_user(id));
+drop policy if exists "member_profiles_select_self_or_admin" on public.member_profiles;
+create policy "member_profiles_select_scoped" on public.member_profiles for select
+  using (user_id = public.current_app_user_id() or public.is_admin() or public.can_manage_scoped_user(user_id));
+
+drop policy if exists "horses_manage_authorised_scope" on public.horses;
+drop policy if exists "horses_insert_authorised_scope" on public.horses;
+drop policy if exists "horses_update_authorised_scope" on public.horses;
+create policy "horses_insert_authorised_scope" on public.horses for insert
+  with check (
+    public.is_admin()
+    or public.is_trainer_for_stable(stable_id)
+    or public.has_active_stable_role(stable_id, 'stable_manager')
+  );
+create policy "horses_update_authorised_scope" on public.horses for update
+  using (public.can_manage_horse_records(id))
+  with check (public.can_manage_horse_records(id));
+-- No DELETE policy: normal horse deletion is recoverable status/soft-delete only.
+
+drop policy if exists "stables_admin_manage" on public.stables;
+create policy "stables_admin_insert" on public.stables for insert
+  with check (public.is_admin());
+create policy "stables_admin_update" on public.stables for update
+  using (public.is_admin()) with check (public.is_admin());
+-- No DELETE policy: stable retirement is represented by recoverable status changes.
+
+alter table public.horse_ownership_history enable row level security;
+create policy "horse_ownership_history_select_accessible" on public.horse_ownership_history for select
+  using (public.can_access_horse(horse_id));
+-- Trigger-owned audit rows have no direct client mutation policies.
+
+drop policy if exists "stable_role_assignments_admin_manage" on public.stable_role_assignments;
+drop policy if exists "stable_role_assignments_scoped_insert" on public.stable_role_assignments;
+drop policy if exists "stable_role_assignments_scoped_update" on public.stable_role_assignments;
+drop policy if exists "stable_role_assignments_scoped_delete" on public.stable_role_assignments;
+create policy "stable_role_assignments_scoped_insert" on public.stable_role_assignments for insert
+  with check (public.can_manage_stable_role_assignment(stable_id, member_profile_id, role_code));
+create policy "stable_role_assignments_scoped_update" on public.stable_role_assignments for update
+  using (public.can_manage_stable_role_assignment(stable_id, member_profile_id, role_code))
+  with check (public.can_manage_stable_role_assignment(stable_id, member_profile_id, role_code));
+create policy "stable_role_assignments_scoped_delete" on public.stable_role_assignments for delete
+  using (public.can_manage_stable_role_assignment(stable_id, member_profile_id, role_code));
+
+drop policy if exists "biochemistry_horse_access_manage_trainer_or_admin" on public.biochemistry_horse_access_assignments;
+drop policy if exists "biochemistry_horse_access_scoped_insert" on public.biochemistry_horse_access_assignments;
+drop policy if exists "biochemistry_horse_access_scoped_update" on public.biochemistry_horse_access_assignments;
+drop policy if exists "biochemistry_horse_access_scoped_delete" on public.biochemistry_horse_access_assignments;
+create policy "biochemistry_horse_access_scoped_insert" on public.biochemistry_horse_access_assignments for insert
+  with check (public.can_manage_horse_access_assignment(horse_id, member_profile_id, role_code));
+create policy "biochemistry_horse_access_scoped_update" on public.biochemistry_horse_access_assignments for update
+  using (public.can_manage_horse_access_assignment(horse_id, member_profile_id, role_code))
+  with check (public.can_manage_horse_access_assignment(horse_id, member_profile_id, role_code));
+create policy "biochemistry_horse_access_scoped_delete" on public.biochemistry_horse_access_assignments for delete
+  using (public.can_manage_horse_access_assignment(horse_id, member_profile_id, role_code));
+
+drop policy if exists "horse_assignments_insert_trainer_or_admin" on public.horse_assignments;
+drop policy if exists "horse_assignments_update_trainer_or_admin" on public.horse_assignments;
+drop policy if exists "horse_assignments_delete_admin_only" on public.horse_assignments;
+create policy "horse_assignments_insert_owner_or_admin" on public.horse_assignments for insert
+  with check (
+    public.is_admin()
+    or (public.is_trainer_for_horse(horse_id) and owner_id is not null and trainer_id is null)
+  );
+create policy "horse_assignments_update_owner_or_admin" on public.horse_assignments for update
+  using (public.is_admin() or (public.is_trainer_for_horse(horse_id) and owner_id is not null and trainer_id is null))
+  with check (public.is_admin() or (public.is_trainer_for_horse(horse_id) and owner_id is not null and trainer_id is null));
+create policy "horse_assignments_delete_owner_or_admin" on public.horse_assignments for delete
+  using (public.is_admin() or (public.is_trainer_for_horse(horse_id) and owner_id is not null and trainer_id is null));
+
+insert into public.permissions(code,name,description,scope) values
+  ('horse.comments.write','Horse Comments Write','Add and manage own horse-scoped comments.','horse')
+on conflict(code) do update set name=excluded.name,description=excluded.description,scope=excluded.scope;
+
+with mapping(level_code,permission_code) as (values
+  ('administrator','platform.admin'),
+  ('administrator','horse.records.write'),
+  ('administrator','horse.comments.write'),
+  ('trainer','horse.comments.write'),
+  ('stable-manager','horse.records.write'),
+  ('stable-manager','horse.comments.write'),
+  ('veterinarian','horse.comments.write'),
+  ('consultant','horse.comments.write'),
+  ('stable-hand','horse.comments.write')
+)
+insert into public.membership_level_permissions(membership_level_id,permission_id)
+select ml.id,p.id from mapping m
+join public.membership_levels ml on ml.code=m.level_code
+join public.permissions p on p.code=m.permission_code
+on conflict(membership_level_id,permission_id) do nothing;
+
+revoke execute on function public.is_trainer_for_horse(uuid) from public, anon;
+revoke execute on function public.is_trainer_for_stable(uuid) from public, anon;
+revoke execute on function public.can_manage_scoped_user(uuid) from public, anon;
+revoke execute on function public.can_manage_horse_access_assignment(uuid,uuid,text) from public, anon;
+revoke execute on function public.can_manage_stable_role_assignment(uuid,uuid,text) from public, anon;
+revoke execute on function public.record_horse_ownership_history() from public, anon, authenticated;
+grant execute on function public.is_trainer_for_horse(uuid) to authenticated;
+grant execute on function public.is_trainer_for_stable(uuid) to authenticated;
+grant execute on function public.can_manage_scoped_user(uuid) to authenticated;
+grant execute on function public.can_manage_horse_access_assignment(uuid,uuid,text) to authenticated;
+grant execute on function public.can_manage_stable_role_assignment(uuid,uuid,text) to authenticated;
+
+-- <<< END 0012_role_lifecycle_policy_hardening.sql

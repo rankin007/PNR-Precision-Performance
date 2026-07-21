@@ -1,0 +1,51 @@
+# Sprint 021L - Hosted Auth/JWT Reconciliation And Closeout Acceptance
+
+- [x] **pass** — Applied four-file sprint matches this Pack.
+- [x] **pass** — Dirty-worktree inventory and 021L source hashes were recorded; unrelated changes were untouched.
+- [x] **pass** — New reconciliation/proof harnesses default nonmutating and focused self-tests passed 8/8 plus proof-gate self-test.
+- [x] **pass** — Static/focused tests, TypeScript, lint, production build, and ignored/untracked credential checks passed.
+- [x] **pass** — Exact candidate/refusal guards, ledger 0001-0012, advisor 0/22/0, both-project health, callback baseline, and zero-state evidence passed.
+- [x] **pass** — Opening JWT-signing/Auth/API-key manifest is sanitized and recorded.
+- [x] **pass** — Minimal diagnosis used exactly one `.invalid` Auth identity and no application/Storage fixtures.
+- [x] **pass** — Exchange/session and fixed-class SDK/direct Auth/Data API outcomes are recorded.
+- [x] **pass** — Required token metadata classes are recorded without token, claims, timestamps, or identifiers.
+- [x] **pass** — JWKS and hosted signing lifecycle are recorded only as counts/classes; no material or IDs were persisted.
+- [x] **pass** — Candidate publishable/secret and legacy key presence classes are recorded without values.
+- [x] **pass** — `provider-internal-inconsistency` is supported by named independent controls.
+- [x] **pass** — Diagnostic identity/session was cleaned; Auth/application/Storage counts are zero.
+- [x] **pass** — Branch E alone was selected with no-change desired state, stop condition, and no rollback requirement.
+- [ ] **not-run** — Branch A local reprovisioning was ruled out by exact-candidate binding and request-construction evidence.
+- [ ] **not-run** — Branch B signing-key mutation was not cause-matched and speculative mutation is forbidden.
+- [ ] **not-run** — Branch C Auth-setting correction was not supported by evidence.
+- [x] **pass** — The Branch E support bundle is sanitized and provides exact submission/resumption steps.
+- [x] **pass** — No hosted mutation occurred; signing/Auth/API-key state remains at its opening state with no unresolved mutation.
+- [ ] **not-run** — No corrected Auth chain exists pending provider investigation.
+- [ ] **not-run** — No signing-state change or second verification session was justified; service key was never an actor.
+- [x] **pass** — Diagnostic state returned to authoritative zero before the full-proof gate.
+- [ ] **not-run** — A full 021L RLS run was forbidden because the minimal Auth gate failed.
+- [ ] **not-run** — Ten actor sessions were not created after the failed minimal gate.
+- [ ] **not-run** — Application topology was not created after the failed minimal gate.
+- [ ] **not-run** — Administrator matrix was not reached.
+- [ ] **not-run** — Trainer matrix was not reached.
+- [ ] **not-run** — Manager matrix was not reached.
+- [ ] **not-run** — Vet/Consultant/Hand matrix was not reached.
+- [ ] **not-run** — Owner matrix was not reached.
+- [ ] **not-run** — Suspended/anonymous application-data matrix was not reached.
+- [ ] **not-run** — Comment matrix was not reached.
+- [ ] **not-run** — Revocation matrix was not reached.
+- [ ] **not-run** — Direct RLS assertions were blocked before database/RLS evaluation.
+- [ ] **not-run** — Representative application-route comparison was not reached.
+- [ ] **not-run** — No full-matrix assertions existed to record.
+- [ ] **not-run** — The matrix did not start; minimal Auth failure selected Branch E and cleanup immediately.
+- [ ] **not-run** — No application fixture existed; the sole Auth identity was deleted directly.
+- [x] **pass** — Final Auth/application/Storage counts are zero and opening baselines are restored.
+- [x] **pass** — Sessions, artifacts, protected memory, and browser/process state were cleared.
+- [x] **pass** — Final hosted classes, callback/Site URL, ledger, advisors, health, non-contact boundary, and ignored-file state passed.
+- [x] **pass** — Outcome is exactly `provider-escalation-required-clean` and matches evidence.
+- [x] **pass** — Email delivery and real passwordless callback proof remain explicitly outside scope and untested.
+- [x] **pass** — Closeout distinguishes structural readiness from blocked authenticated/runtime proof and unauthorized deployment/callback work.
+- [x] **pass** — Status, progress, schedule, decisions/risks/questions, results, and briefing agree.
+- [x] **pass** — Final tests, JSON, sanitized scans, ignored/untracked checks, diff inspection, and whitespace checks passed.
+- [x] **pass** — No out-of-scope mutation, package install, deployment, old-project contact, stage, commit, push, or PR occurred.
+
+Builder must annotate every item exactly once as `pass`, `fail`, or `not-run` with named evidence or reason. Failed and not-run items remain unchecked. Passed-clean requires root-cause proof, stable reconciliation, full authenticated proof, cleanup, and restoration.

@@ -1,4 +1,5 @@
 import { signInWithOtpAction } from "@/app/auth/actions";
+import { Notice } from "@/components/ui/notice";
 
 type SignInFormProps = {
   nextPath: string;
@@ -24,20 +25,19 @@ export function SignInForm({
     <div className="rounded-[2rem] border border-ink/10 bg-white p-6 shadow-panel">
       <h2 className="font-display text-2xl text-ink">Email sign-in</h2>
       <p className="mt-3 max-w-2xl text-sm leading-7 text-steel">
-        Use passwordless email sign-in for the new project-specific Supabase account. This will
-        become the live entry point for owners, trainers, staff, and administrators.
+        Enter your approved account email. We will send a secure, single-use sign-in link.
       </p>
 
       {sent ? (
-        <div className="mt-5 rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800">
+        <Notice className="mt-5" tone="success" title="Email requested">
           Sign-in email requested. Check your inbox and return through the magic link.
-        </div>
+        </Notice>
       ) : null}
 
       {error ? (
-        <div className="mt-5 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
+        <Notice className="mt-5" tone="warning" title="Sign-in needs attention">
           {errorMessages[error] ?? "Authentication could not continue."}
-        </div>
+        </Notice>
       ) : null}
 
       <form action={signInWithOtpAction} className="mt-6 grid gap-4">
@@ -49,13 +49,13 @@ export function SignInForm({
             type="email"
             placeholder="you@example.com"
             disabled={!envReady}
-            className="rounded-2xl border border-ink/10 bg-sand px-4 py-3 text-base text-ink outline-none transition focus:border-ember"
+            className="rounded-2xl border border-technical/20 bg-canvas px-4 py-3 text-base text-technical transition focus:border-data"
           />
         </label>
         <button
           type="submit"
           disabled={!envReady}
-          className="inline-flex w-fit items-center justify-center rounded-full bg-ink px-5 py-3 text-sm font-semibold text-white transition disabled:cursor-not-allowed disabled:bg-steel"
+          className="inline-flex w-fit items-center justify-center rounded-full bg-brand px-5 py-3 text-sm font-semibold text-white transition hover:bg-technical disabled:cursor-not-allowed disabled:bg-muted"
         >
           Request sign-in link
         </button>

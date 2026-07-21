@@ -1,0 +1,2829 @@
+﻿{
+    "schemaVersion":  "1.0",
+    "capturedAt":  "2026-07-21T23:25:03.5617898Z",
+    "opening":  {
+                    "branch":  "develop",
+                    "head":  "171d3aa4186e04c656a50d91b52b1f086f95f89a",
+                    "upstream":  "origin/develop",
+                    "ahead":  3,
+                    "behind":  0,
+                    "indexEntries":  0,
+                    "visibleStatusEntries":  278
+                },
+    "candidates":  [
+                       {
+                           "path":  "planning/sprints/021B-structural-reconciliation-and-closeout/acceptance.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "021B"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/sprints/021B-structural-reconciliation-and-closeout/blueprint.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "021B"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/sprints/021-definitive-role-matrix-and-authenticated-rls-proof/handoff-prompt.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "021"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/sprints/021-definitive-role-matrix-and-authenticated-rls-proof/requirements.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "021"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/sprints/021C-advisor-accounting-and-acceptance-record-correction/acceptance.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "021C"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/sprints/021C-advisor-accounting-and-acceptance-record-correction/blueprint.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "021C"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/sprints/021B-structural-reconciliation-and-closeout/handoff-prompt.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "021B"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/sprints/021B-structural-reconciliation-and-closeout/requirements.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "021B"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/sprints/021-definitive-role-matrix-and-authenticated-rls-proof/blueprint.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "021"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/sprints/020F-temporary-role-cleanup-and-remote-repository-replacement-audit/requirements.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "020F"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/sprints/020G-clean-supabase-project-rebuild-and-cutover/acceptance.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "020G"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/sprints/020F-temporary-role-cleanup-and-remote-repository-replacement-audit/blueprint.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "020F"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/sprints/020F-temporary-role-cleanup-and-remote-repository-replacement-audit/handoff-prompt.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "020F"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/sprints/020G-clean-supabase-project-rebuild-and-cutover/requirements.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "020G"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/sprints/021-definitive-role-matrix-and-authenticated-rls-proof/acceptance.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "021"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/sprints/020G-clean-supabase-project-rebuild-and-cutover/blueprint.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "020G"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/sprints/020G-clean-supabase-project-rebuild-and-cutover/handoff-prompt.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "020G"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/sprints/021F-recovery-reconciliation-and-safe-restart-method/blueprint.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "021F"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/sprints/021F-recovery-reconciliation-and-safe-restart-method/handoff-prompt.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "021F"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/sprints/021E-authenticated-role-rls-and-application-proof/requirements.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "021E"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/sprints/021F-recovery-reconciliation-and-safe-restart-method/acceptance.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "021F"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/sprints/021G-automated-authenticated-role-rls-and-application-proof/blueprint.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "021G"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/sprints/021G-automated-authenticated-role-rls-and-application-proof/handoff-prompt.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "021G"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/sprints/021F-recovery-reconciliation-and-safe-restart-method/requirements.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "021F"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/sprints/021G-automated-authenticated-role-rls-and-application-proof/acceptance.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "021G"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/sprints/021E-authenticated-role-rls-and-application-proof/handoff-prompt.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "021E"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/sprints/021D-acceptance-audit-trail-closeout/acceptance.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "021D"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/sprints/021D-acceptance-audit-trail-closeout/blueprint.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "021D"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/sprints/021C-advisor-accounting-and-acceptance-record-correction/handoff-prompt.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "021C"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/sprints/021C-advisor-accounting-and-acceptance-record-correction/requirements.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "021C"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/sprints/021E-authenticated-role-rls-and-application-proof/acceptance.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "021E"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/sprints/021E-authenticated-role-rls-and-application-proof/blueprint.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "021E"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/sprints/021D-acceptance-audit-trail-closeout/handoff-prompt.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "021D"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/sprints/021D-acceptance-audit-trail-closeout/requirements.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "021D"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/sprints/020F-temporary-role-cleanup-and-remote-repository-replacement-audit/acceptance.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "020F"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  true
+                       },
+                       {
+                           "path":  "planning/sprints/019B-mobile-heading-correction/VERIFICATION.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "019B"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/sprints/019B-mobile-heading-correction/acceptance.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "019B"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/sprints/019-design-system-and-product-language-baseline/requirements.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "019"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/sprints/019B-mobile-heading-correction/BUILDER_START_INSTRUCTIONS.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "019B"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/sprints/019B-mobile-heading-correction/requirements.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "019B"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/sprints/020-remote-biochemistry-migration-live-readiness/acceptance.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "020"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/sprints/019B-mobile-heading-correction/blueprint.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "019B"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/sprints/019B-mobile-heading-correction/handoff-prompt.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "019B"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/sprints/019-design-system-and-product-language-baseline/handoff-prompt.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "019"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/sprints/018-mobile-biochemistry-capture-results/blueprint.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "018"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/sprints/018-mobile-biochemistry-capture-results/handoff-prompt.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "018"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/sprints/018-mobile-biochemistry-capture-results/BUILDER_START_INSTRUCTIONS.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "018"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/sprints/018-mobile-biochemistry-capture-results/acceptance.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "018"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/sprints/019-design-system-and-product-language-baseline/acceptance.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "019"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/sprints/019-design-system-and-product-language-baseline/blueprint.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "019"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/sprints/018-mobile-biochemistry-capture-results/requirements.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "018"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/sprints/019-design-system-and-product-language-baseline/BUILDER_START_INSTRUCTIONS.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "019"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/sprints/020D-supabase-cli-authentication-linking-read-only-connectivity/handoff-prompt.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "020D"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/sprints/020D-supabase-cli-authentication-linking-read-only-connectivity/requirements.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "020D"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/sprints/020D-supabase-cli-authentication-linking-read-only-connectivity/acceptance.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "020D"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/sprints/020D-supabase-cli-authentication-linking-read-only-connectivity/blueprint.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "020D"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/sprints/020E-cli-mediated-supabase-structural-audit-execution/handoff-prompt.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "020E"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/sprints/020E-cli-mediated-supabase-structural-audit-execution/requirements.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "020E"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/sprints/020E-cli-mediated-supabase-structural-audit-execution/acceptance.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "020E"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/sprints/020E-cli-mediated-supabase-structural-audit-execution/blueprint.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "020E"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/sprints/020C-temporary-database-audit-access-and-review/requirements.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "020C"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/sprints/020-remote-biochemistry-migration-live-readiness/requirements.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "020"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/sprints/020B-remote-biochemistry-verification/VERIFICATION.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "020B"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/sprints/020-remote-biochemistry-migration-live-readiness/blueprint.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "020"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/sprints/020-remote-biochemistry-migration-live-readiness/handoff-prompt.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "020"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/sprints/020C-temporary-database-audit-access-and-review/blueprint.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "020C"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/sprints/020C-temporary-database-audit-access-and-review/handoff-prompt.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "020C"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/sprints/020C-temporary-database-audit-access-and-review/OPERATIONS.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "020C"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/sprints/020C-temporary-database-audit-access-and-review/acceptance.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "020C"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/sprints/021G-automated-authenticated-role-rls-and-application-proof/requirements.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "021G"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "scripts/test-supabase-timed-jwt-reproduction-021M.mjs",
+                           "group":  "validation-scripts-tests",
+                           "originatingSprints":  [
+                                                      "017B-017D-baseline"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "medium",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "scripts/test-validate-json-files.mjs",
+                           "group":  "validation-scripts-tests",
+                           "originatingSprints":  [
+                                                      "017F"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "medium",
+                           "editedBy017F":  true
+                       },
+                       {
+                           "path":  "scripts/test-supabase-authenticated-proof-021L.mjs",
+                           "group":  "validation-scripts-tests",
+                           "originatingSprints":  [
+                                                      "017B-017D-baseline"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "medium",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "scripts/test-supabase-authenticated-proof-021M.mjs",
+                           "group":  "validation-scripts-tests",
+                           "originatingSprints":  [
+                                                      "017B-017D-baseline"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "medium",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "scripts/validate-design-system-019.ps1",
+                           "group":  "validation-scripts-tests",
+                           "originatingSprints":  [
+                                                      "017B-017D-baseline"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "medium",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "scripts/validate-json-files.mjs",
+                           "group":  "validation-scripts-tests",
+                           "originatingSprints":  [
+                                                      "017F"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "medium",
+                           "editedBy017F":  true
+                       },
+                       {
+                           "path":  "scripts/validate-biochemistry-remote-readiness.ps1",
+                           "group":  "validation-scripts-tests",
+                           "originatingSprints":  [
+                                                      "017B-017D-baseline"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "medium",
+                           "editedBy017F":  true
+                       },
+                       {
+                           "path":  "scripts/validate-database-audit-020C.ps1",
+                           "group":  "validation-scripts-tests",
+                           "originatingSprints":  [
+                                                      "017B-017D-baseline"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "medium",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "scripts/test-supabase-authenticated-proof-021K.mjs",
+                           "group":  "validation-scripts-tests",
+                           "originatingSprints":  [
+                                                      "017B-017D-baseline"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "medium",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "scripts/test-role-matrix-021.mjs",
+                           "group":  "validation-scripts-tests",
+                           "originatingSprints":  [
+                                                      "017B-017D-baseline"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "medium",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "scripts/test-supabase-auth-jwt-reconciliation-021L.mjs",
+                           "group":  "validation-scripts-tests",
+                           "originatingSprints":  [
+                                                      "017B-017D-baseline"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "medium",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "scripts/supabase-timed-jwt-reproduction-021M.mjs",
+                           "group":  "validation-scripts-tests",
+                           "originatingSprints":  [
+                                                      "017B-017D-baseline"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "medium",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "scripts/test-protected-acquisition-021I.mjs",
+                           "group":  "validation-scripts-tests",
+                           "originatingSprints":  [
+                                                      "017B-017D-baseline"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "medium",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "scripts/test-supabase-authenticated-proof-021H.mjs",
+                           "group":  "validation-scripts-tests",
+                           "originatingSprints":  [
+                                                      "017B-017D-baseline"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "medium",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "scripts/test-supabase-authenticated-proof-021J.mjs",
+                           "group":  "validation-scripts-tests",
+                           "originatingSprints":  [
+                                                      "017B-017D-baseline"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "medium",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "scripts/test-supabase-authenticated-proof-021E.mjs",
+                           "group":  "validation-scripts-tests",
+                           "originatingSprints":  [
+                                                      "017B-017D-baseline"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "medium",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "scripts/test-supabase-authenticated-proof-021G.mjs",
+                           "group":  "validation-scripts-tests",
+                           "originatingSprints":  [
+                                                      "017B-017D-baseline"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "medium",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "supabase/verification/020E-audit-role-setup.sql",
+                           "group":  "database-migrations-verification",
+                           "originatingSprints":  [
+                                                      "020E"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "high",
+                           "editedBy017F":  true
+                       },
+                       {
+                           "path":  "supabase/verification/020E-structural-audit.sql",
+                           "group":  "database-migrations-verification",
+                           "originatingSprints":  [
+                                                      "020E"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "high",
+                           "editedBy017F":  true
+                       },
+                       {
+                           "path":  "supabase/verification/020C-database-audit.sql",
+                           "group":  "database-migrations-verification",
+                           "originatingSprints":  [
+                                                      "020C"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "high",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "supabase/verification/020E-audit-role-cleanup.sql",
+                           "group":  "database-migrations-verification",
+                           "originatingSprints":  [
+                                                      "020E"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "high",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "supabase/verification/020G-clean-project-verification.sql",
+                           "group":  "database-migrations-verification",
+                           "originatingSprints":  [
+                                                      "020G"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "high",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "supabase/verification/021-role-matrix-structure.sql",
+                           "group":  "database-migrations-verification",
+                           "originatingSprints":  [
+                                                      "021"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "high",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "supabase/verification/020F-remote-structure-inventory.sql",
+                           "group":  "database-migrations-verification",
+                           "originatingSprints":  [
+                                                      "020F"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "high",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "supabase/verification/020F-temporary-role-cleanup.sql",
+                           "group":  "database-migrations-verification",
+                           "originatingSprints":  [
+                                                      "020F"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "high",
+                           "editedBy017F":  true
+                       },
+                       {
+                           "path":  "supabase/verification/020-biochemistry-readiness.sql",
+                           "group":  "database-migrations-verification",
+                           "originatingSprints":  [
+                                                      "020"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "high",
+                           "editedBy017F":  true
+                       },
+                       {
+                           "path":  "scripts/validate-supabase-replacement-audit-020F.ps1",
+                           "group":  "validation-scripts-tests",
+                           "originatingSprints":  [
+                                                      "017B-017D-baseline"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "medium",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "scripts/validate-supabase-structural-audit-020E.ps1",
+                           "group":  "validation-scripts-tests",
+                           "originatingSprints":  [
+                                                      "017B-017D-baseline"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "medium",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "scripts/validate-role-matrix-021.ps1",
+                           "group":  "validation-scripts-tests",
+                           "originatingSprints":  [
+                                                      "017B-017D-baseline"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "medium",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "scripts/validate-supabase-clean-rebuild-020G.ps1",
+                           "group":  "validation-scripts-tests",
+                           "originatingSprints":  [
+                                                      "017B-017D-baseline"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "medium",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "supabase/migrations/0012_role_lifecycle_policy_hardening.sql",
+                           "group":  "database-migrations-verification",
+                           "originatingSprints":  [
+                                                      "017B-017D-baseline"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "high",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "supabase/tests/021_candidate_structure.test.sql",
+                           "group":  "database-migrations-verification",
+                           "originatingSprints":  [
+                                                      "021"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "high",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "supabase/migrations/0010_secure_helper_execution.sql",
+                           "group":  "database-migrations-verification",
+                           "originatingSprints":  [
+                                                      "017B-017D-baseline"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "high",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "supabase/migrations/0011_definitive_role_matrix_and_comments.sql",
+                           "group":  "database-migrations-verification",
+                           "originatingSprints":  [
+                                                      "017B-017D-baseline"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "high",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "scripts/supabase-synthetic-auth-rls-020G.mjs",
+                           "group":  "validation-scripts-tests",
+                           "originatingSprints":  [
+                                                      "017B-017D-baseline"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "medium",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/sprints/021J-operator-provisioned-authenticated-proof-closeout/requirements.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "021J"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/sprints/021K-administrator-read-correction-and-authenticated-closeout/acceptance.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "021K"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/sprints/021J-operator-provisioned-authenticated-proof-closeout/blueprint.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "021J"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/sprints/021J-operator-provisioned-authenticated-proof-closeout/handoff-prompt.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "021J"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/sprints/021K-administrator-read-correction-and-authenticated-closeout/requirements.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "021K"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/sprints/021L-hosted-auth-jwt-reconciliation-and-closeout/acceptance.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "021L"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/sprints/021K-administrator-read-correction-and-authenticated-closeout/blueprint.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "021K"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/sprints/021K-administrator-read-correction-and-authenticated-closeout/handoff-prompt.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "021K"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/sprints/021J-operator-provisioned-authenticated-proof-closeout/acceptance.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "021J"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/sprints/021H-mailbox-independent-authenticated-role-rls-proof/handoff-prompt.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "021H"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/sprints/021H-mailbox-independent-authenticated-role-rls-proof/requirements.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "021H"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/sprints/021H-mailbox-independent-authenticated-role-rls-proof/acceptance.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "021H"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/sprints/021H-mailbox-independent-authenticated-role-rls-proof/blueprint.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "021H"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/sprints/021I-credential-boundary-corrected-authenticated-proof/handoff-prompt.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "021I"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/sprints/021I-credential-boundary-corrected-authenticated-proof/requirements.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "021I"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/sprints/021I-credential-boundary-corrected-authenticated-proof/acceptance.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "021I"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/sprints/021I-credential-boundary-corrected-authenticated-proof/blueprint.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "021I"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "scripts/supabase-authenticated-proof-021G.mjs",
+                           "group":  "validation-scripts-tests",
+                           "originatingSprints":  [
+                                                      "017B-017D-baseline"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "medium",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "scripts/supabase-authenticated-proof-021H.mjs",
+                           "group":  "validation-scripts-tests",
+                           "originatingSprints":  [
+                                                      "017B-017D-baseline"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "medium",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "scripts/supabase-auth-jwt-reconciliation-021L.mjs",
+                           "group":  "validation-scripts-tests",
+                           "originatingSprints":  [
+                                                      "017B-017D-baseline"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "medium",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "scripts/supabase-authenticated-proof-021E.mjs",
+                           "group":  "validation-scripts-tests",
+                           "originatingSprints":  [
+                                                      "017B-017D-baseline"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "medium",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "scripts/supabase-authenticated-proof-021L.mjs",
+                           "group":  "validation-scripts-tests",
+                           "originatingSprints":  [
+                                                      "017B-017D-baseline"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "medium",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "scripts/supabase-authenticated-proof-021M.mjs",
+                           "group":  "validation-scripts-tests",
+                           "originatingSprints":  [
+                                                      "017B-017D-baseline"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "medium",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "scripts/supabase-authenticated-proof-021J.mjs",
+                           "group":  "validation-scripts-tests",
+                           "originatingSprints":  [
+                                                      "017B-017D-baseline"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "medium",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "scripts/supabase-authenticated-proof-021K.mjs",
+                           "group":  "validation-scripts-tests",
+                           "originatingSprints":  [
+                                                      "017B-017D-baseline"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "medium",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "samples/README.md",
+                           "group":  "reference-scaffold",
+                           "originatingSprints":  [
+                                                      "unknown"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/sprints/021L-hosted-auth-jwt-reconciliation-and-closeout/requirements.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "021L"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/sprints/021M-provider-directed-timed-jwt-reproduction/acceptance.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "021M"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/sprints/021L-hosted-auth-jwt-reconciliation-and-closeout/blueprint.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "021L"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/sprints/021L-hosted-auth-jwt-reconciliation-and-closeout/handoff-prompt.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "021L"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/sprints/021M-provider-directed-timed-jwt-reproduction/requirements.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "021M"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "references/client-docs/Sprint list 190726.docx",
+                           "group":  "reference-scaffold",
+                           "originatingSprints":  [
+                                                      "017B-017D-baseline"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "medium",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/sprints/021M-provider-directed-timed-jwt-reproduction/blueprint.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "021M"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/sprints/021M-provider-directed-timed-jwt-reproduction/handoff-prompt.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "021M"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "docs/DESIGN_SYSTEM_BASELINE_019.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "017B-017D-baseline"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "docs/SPRINT_021_PROGRESS.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "017B-017D-baseline"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "docs/DATABASE_AUDIT_REVIEW_020C.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "017B-017D-baseline"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "docs/DESIGN_AND_MESSAGING_AUTHORITY.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "017B-017D-baseline"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "docs/SUPABASE_REMOTE_REPLACEMENT_AUDIT_020F.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "017B-017D-baseline"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  true
+                       },
+                       {
+                           "path":  "docs/SUPABASE_STRUCTURAL_AUDIT_020E.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "017B-017D-baseline"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "docs/SUPABASE_CLEAN_REBUILD_020G.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "017B-017D-baseline"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "docs/SUPABASE_CLI_CONNECTIVITY_020D.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "017B-017D-baseline"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  true
+                       },
+                       {
+                           "path":  "docs/BIOCHEMISTRY_REMOTE_READINESS_020.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "017B-017D-baseline"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  true
+                       },
+                       {
+                           "path":  "app/(ops)/data-entry/biochemistry/actions.ts",
+                           "group":  "application-design",
+                           "originatingSprints":  [
+                                                      "017B-017D-baseline"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "medium",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "app/(ops)/data-entry/biochemistry/page.tsx",
+                           "group":  "application-design",
+                           "originatingSprints":  [
+                                                      "017B-017D-baseline"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "medium",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "app/(ops)/data-entry/access/actions.ts",
+                           "group":  "auth-role",
+                           "originatingSprints":  [
+                                                      "017B-017D-baseline"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "high",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "app/(ops)/data-entry/biochemistry/[testId]/page.tsx",
+                           "group":  "application-design",
+                           "originatingSprints":  [
+                                                      "017B-017D-baseline"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "medium",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "components/ui/status-indicator.tsx",
+                           "group":  "application-design",
+                           "originatingSprints":  [
+                                                      "017B-017D-baseline"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "medium",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "docs/BIOCHEMISTRY_CAPTURE_RESULTS_018.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "017B-017D-baseline"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "components/ops/biochemistry-result-panel.tsx",
+                           "group":  "application-design",
+                           "originatingSprints":  [
+                                                      "017B-017D-baseline"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "medium",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "components/ui/notice.tsx",
+                           "group":  "application-design",
+                           "originatingSprints":  [
+                                                      "017B-017D-baseline"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "medium",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/architect-packs/architect-pack-020-remote-biochemistry-migration-live-readiness.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "020"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  true
+                       },
+                       {
+                           "path":  "planning/architect-packs/architect-pack-020C-temporary-database-audit-access-and-review.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "020C"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/architect-packs/architect-pack-019-design-system-and-product-language-baseline.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "019"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/architect-packs/architect-pack-019B-mobile-heading-correction.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "019B"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/architect-packs/architect-pack-020F-temporary-role-cleanup-and-remote-repository-replacement-audit.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "020F"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/architect-packs/architect-pack-020G-clean-supabase-project-rebuild-and-cutover.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "020G"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/architect-packs/architect-pack-020D-supabase-cli-authentication-linking-read-only-connectivity.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "020D"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/architect-packs/architect-pack-020E-cli-mediated-supabase-structural-audit-execution.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "020E"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/architect-packs/architect-pack-018-mobile-biochemistry-capture-results.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "018"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/PROJECT_SPRINT_LIST_2026-07-21.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "017B-planning-input"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  true
+                       },
+                       {
+                           "path":  "planning/architect-packs/architect-pack-017B-repository-reconciliation-and-review-baseline.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "017B"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  true
+                       },
+                       {
+                           "path":  "docs/TEST_AUTH_MAILBOX_AND_PROTECTED_PROCESS_RUNBOOK.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "017B-017D-baseline"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "lib/auth/role-matrix.ts",
+                           "group":  "auth-role",
+                           "originatingSprints":  [
+                                                      "021"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "high",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/architect-packs/architect-pack-017E-validator-reconciliation-and-local-baseline-completion.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "017E"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  true
+                       },
+                       {
+                           "path":  "planning/architect-packs/architect-pack-017F-repository-baseline-completion.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "017F"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  true
+                       },
+                       {
+                           "path":  "planning/architect-packs/architect-pack-017C-repository-treatment-and-boundary-reconciliation.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "017C"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  true
+                       },
+                       {
+                           "path":  "planning/architect-packs/architect-pack-017D-intentional-staging-and-local-baseline-commit.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "017D"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  true
+                       },
+                       {
+                           "path":  "templates/prompts/chatgpt-project-custom-instructions.md",
+                           "group":  "repository-method-config",
+                           "originatingSprints":  [
+                                                      "017B-017D-baseline"
+                                                  ],
+                           "openingState":  "tracked-modified",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "components/layout/app-shell.tsx",
+                           "group":  "application-design",
+                           "originatingSprints":  [
+                                                      "017B-017D-baseline"
+                                                  ],
+                           "openingState":  "tracked-modified",
+                           "risk":  "medium",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "components/layout/section-card.tsx",
+                           "group":  "application-design",
+                           "originatingSprints":  [
+                                                      "017B-017D-baseline"
+                                                  ],
+                           "openingState":  "tracked-modified",
+                           "risk":  "medium",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "app/sign-in/page.tsx",
+                           "group":  "application-design",
+                           "originatingSprints":  [
+                                                      "017B-017D-baseline"
+                                                  ],
+                           "openingState":  "tracked-modified",
+                           "risk":  "medium",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "components/auth/sign-in-form.tsx",
+                           "group":  "application-design",
+                           "originatingSprints":  [
+                                                      "017B-017D-baseline"
+                                                  ],
+                           "openingState":  "tracked-modified",
+                           "risk":  "medium",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "lib/auth/bootstrap.ts",
+                           "group":  "auth-role",
+                           "originatingSprints":  [
+                                                      "017B-017D-baseline"
+                                                  ],
+                           "openingState":  "tracked-modified",
+                           "risk":  "high",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "lib/navigation.ts",
+                           "group":  "auth-role",
+                           "originatingSprints":  [
+                                                      "017B-017D-baseline"
+                                                  ],
+                           "openingState":  "tracked-modified",
+                           "risk":  "high",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "docs/WORKFLOW_PROFILE.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "017B-017D-baseline"
+                                                  ],
+                           "openingState":  "tracked-modified",
+                           "risk":  "low",
+                           "editedBy017F":  true
+                       },
+                       {
+                           "path":  "lib/auth/app-context.ts",
+                           "group":  "auth-role",
+                           "originatingSprints":  [
+                                                      "017B-017D-baseline"
+                                                  ],
+                           "openingState":  "tracked-modified",
+                           "risk":  "high",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "app/page.tsx",
+                           "group":  "application-design",
+                           "originatingSprints":  [
+                                                      "017B-017D-baseline"
+                                                  ],
+                           "openingState":  "tracked-modified",
+                           "risk":  "medium",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "app/(ops)/data-entry/feeding/page.tsx",
+                           "group":  "application-design",
+                           "originatingSprints":  [
+                                                      "017B-017D-baseline"
+                                                  ],
+                           "openingState":  "tracked-modified",
+                           "risk":  "medium",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "app/(ops)/data-entry/page.tsx",
+                           "group":  "application-design",
+                           "originatingSprints":  [
+                                                      "017B-017D-baseline"
+                                                  ],
+                           "openingState":  "tracked-modified",
+                           "risk":  "medium",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  ".gitignore",
+                           "group":  "repository-method-config",
+                           "originatingSprints":  [
+                                                      "020G",
+                                                      "021I"
+                                                  ],
+                           "openingState":  "tracked-modified",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "AGENTS.md",
+                           "group":  "repository-method-config",
+                           "originatingSprints":  [
+                                                      "017B-017D-baseline"
+                                                  ],
+                           "openingState":  "tracked-modified",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "app/globals.css",
+                           "group":  "application-design",
+                           "originatingSprints":  [
+                                                      "017B-017D-baseline"
+                                                  ],
+                           "openingState":  "tracked-modified",
+                           "risk":  "medium",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "app/layout.tsx",
+                           "group":  "application-design",
+                           "originatingSprints":  [
+                                                      "017B-017D-baseline"
+                                                  ],
+                           "openingState":  "tracked-modified",
+                           "risk":  "medium",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "app/(ops)/data-entry/track/page.tsx",
+                           "group":  "application-design",
+                           "originatingSprints":  [
+                                                      "017B-017D-baseline"
+                                                  ],
+                           "openingState":  "tracked-modified",
+                           "risk":  "medium",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "app/(ops)/layout.tsx",
+                           "group":  "application-design",
+                           "originatingSprints":  [
+                                                      "017B-017D-baseline"
+                                                  ],
+                           "openingState":  "tracked-modified",
+                           "risk":  "medium",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/architect-packs/README.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "017B-017D-baseline"
+                                                  ],
+                           "openingState":  "tracked-modified",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "supabase/bootstrap/remote-init.sql",
+                           "group":  "database-migrations-verification",
+                           "originatingSprints":  [
+                                                      "017B-017D-baseline"
+                                                  ],
+                           "openingState":  "tracked-modified",
+                           "risk":  "high",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/STATE.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "017B-017D-baseline"
+                                                  ],
+                           "openingState":  "tracked-modified",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/STATUS.json",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "017B-017D-baseline"
+                                                  ],
+                           "openingState":  "tracked-modified",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "templates/method/120x-agent-identity.md",
+                           "group":  "repository-method-config",
+                           "originatingSprints":  [
+                                                      "017B-017D-baseline"
+                                                  ],
+                           "openingState":  "tracked-modified",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "templates/method/120x-architect-builder-method-starter.md",
+                           "group":  "repository-method-config",
+                           "originatingSprints":  [
+                                                      "017B-017D-baseline"
+                                                  ],
+                           "openingState":  "tracked-modified",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "supabase/config.toml",
+                           "group":  "database-migrations-verification",
+                           "originatingSprints":  [
+                                                      "017B-017D-baseline"
+                                                  ],
+                           "openingState":  "tracked-modified",
+                           "risk":  "high",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "tailwind.config.ts",
+                           "group":  "application-design",
+                           "originatingSprints":  [
+                                                      "019"
+                                                  ],
+                           "openingState":  "tracked-modified",
+                           "risk":  "medium",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/SPRINT_SCHEDULE.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "017B-017D-baseline"
+                                                  ],
+                           "openingState":  "tracked-modified",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "package.json",
+                           "group":  "repository-method-config",
+                           "originatingSprints":  [
+                                                      "017B-017D-baseline"
+                                                  ],
+                           "openingState":  "tracked-modified",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/ARCHITECT_BRIEFING.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "017B-017D-baseline"
+                                                  ],
+                           "openingState":  "tracked-modified",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "lib/site-config.ts",
+                           "group":  "repository-method-config",
+                           "originatingSprints":  [
+                                                      "017B-017D-baseline"
+                                                  ],
+                           "openingState":  "tracked-modified",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "package-lock.json",
+                           "group":  "repository-method-config",
+                           "originatingSprints":  [
+                                                      "017B-017D-baseline"
+                                                  ],
+                           "openingState":  "tracked-modified",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/QUESTIONS.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "017B-017D-baseline"
+                                                  ],
+                           "openingState":  "tracked-modified",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/RISKS.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "017B-017D-baseline"
+                                                  ],
+                           "openingState":  "tracked-modified",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/DECISIONS.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "017B-017D-baseline"
+                                                  ],
+                           "openingState":  "tracked-modified",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/FILE_INVENTORY.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "017B-017D-baseline"
+                                                  ],
+                           "openingState":  "tracked-modified",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/architect-packs/architect-pack-021-definitive-role-matrix-and-authenticated-rls-proof.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "021"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/reviews/021L-authenticated-proof-results.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "021L"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/reviews/021L-hosted-auth-jwt-diagnosis-and-reconciliation.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "021L"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/reviews/021K-authenticated-proof-results.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "021K"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/reviews/021L-authenticated-proof-manifest.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "021L"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/reviews/021M-timed-jwt-reproduction-results.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "021M"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/reviews/PROJECT_REVIEW_AND_FORWARD_ROADMAP_2026-07-19.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "017B-017D-baseline"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  true
+                       },
+                       {
+                           "path":  "planning/reviews/021L-hosted-auth-jwt-opening-manifest.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "021L"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/reviews/021L-supabase-support-bundle.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "021L"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/reviews/021K-authenticated-proof-manifest.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "021K"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/reviews/021H-authenticated-proof-manifest.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "021H"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/reviews/021H-authenticated-proof-results.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "021H"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/reviews/021G-authenticated-proof-manifest.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "021G"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/reviews/021G-authenticated-proof-results.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "021G"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/reviews/021J-authenticated-proof-results.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "021J"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/reviews/021K-administrator-read-diagnosis.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "021K"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/reviews/021I-build-and-credential-boundary-preflight-results.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "021I"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/reviews/021J-authenticated-proof-manifest.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "021J"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/sprints/017D-intentional-staging-and-local-baseline-commit/requirements.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "017D"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/sprints/017E-validator-reconciliation-and-local-baseline-completion/acceptance.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "017E"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/sprints/017D-intentional-staging-and-local-baseline-commit/blueprint.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "017D"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/sprints/017D-intentional-staging-and-local-baseline-commit/handoff-prompt.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "017D"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/sprints/017E-validator-reconciliation-and-local-baseline-completion/requirements.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "017E"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/sprints/017F-repository-baseline-completion/SPRINT.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "017F"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  true
+                       },
+                       {
+                           "path":  "planning/sprints/017E-validator-reconciliation-and-local-baseline-completion/blueprint.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "017E"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/sprints/017E-validator-reconciliation-and-local-baseline-completion/handoff-prompt.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "017E"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/sprints/017D-intentional-staging-and-local-baseline-commit/acceptance.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "017D"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/sprints/017B-repository-reconciliation-and-review-baseline/handoff-prompt.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "017B"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/sprints/017B-repository-reconciliation-and-review-baseline/requirements.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "017B"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/sprints/017B-repository-reconciliation-and-review-baseline/acceptance.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "017B"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/sprints/017B-repository-reconciliation-and-review-baseline/blueprint.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "017B"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/sprints/017C-repository-treatment-and-boundary-reconciliation/handoff-prompt.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "017C"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/sprints/017C-repository-treatment-and-boundary-reconciliation/requirements.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "017C"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/sprints/017C-repository-treatment-and-boundary-reconciliation/acceptance.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "017C"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/sprints/017C-repository-treatment-and-boundary-reconciliation/blueprint.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "017C"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/reviews/021F-recovery-reconciliation-and-safe-restart-method.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "021F"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/architect-packs/architect-pack-021M-provider-directed-timed-jwt-reproduction.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "021M"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/reviews/017B-file-classification.json",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "017B"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/architect-packs/architect-pack-021K-administrator-read-correction-and-authenticated-closeout.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "021K"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/architect-packs/architect-pack-021L-hosted-auth-jwt-reconciliation-and-closeout.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "021L"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/reviews/017D-local-baseline-commit-review.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "017E"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  true
+                       },
+                       {
+                           "path":  "planning/reviews/017D-precommit-review.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "017D"
+                                                  ],
+                           "openingState":  "planned-new",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/reviews/017B-repository-reconciliation-inventory.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "017B"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/reviews/017C-repository-treatment-and-boundary-reconciliation.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "017C"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/architect-packs/architect-pack-021J-operator-provisioned-authenticated-proof-closeout.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "021J"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/architect-packs/architect-pack-021D-acceptance-audit-trail-closeout.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "021D"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/architect-packs/architect-pack-021E-authenticated-role-rls-and-application-proof.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "021E"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/architect-packs/architect-pack-021B-structural-reconciliation-and-closeout.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "021B"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/architect-packs/architect-pack-021C-advisor-accounting-and-acceptance-record-correction.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "021C"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/architect-packs/architect-pack-021H-mailbox-independent-authenticated-role-rls-proof.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "021H"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/architect-packs/architect-pack-021I-credential-boundary-corrected-authenticated-proof.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "021I"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/architect-packs/architect-pack-021F-recovery-reconciliation-and-safe-restart-method.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "021F"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/architect-packs/architect-pack-021G-automated-authenticated-role-rls-and-application-proof.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "021G"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/reviews/020G-synthetic-auth-rls-test-plan.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "020G"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/reviews/021B-structural-reconciliation-and-advisor-disposition.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "021B"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/reviews/020G-new-project-manifest.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "020G"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/reviews/020G-security-disposition.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "020G"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/reviews/021E-authenticated-proof-manifest.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "021E"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/reviews/021E-authenticated-proof-results.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "021E"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/reviews/021C-advisor-accounting-and-acceptance-record-correction.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "021C"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/reviews/021D-acceptance-audit-trail-closeout.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "021D"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/reviews/020G-cutover-and-rollback.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "020G"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/reviews/017E-precommit-review.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "017E"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/reviews/017E-staging-manifest.json",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "017E"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/reviews/017D-staging-manifest.json",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "017D"
+                                                  ],
+                           "openingState":  "planned-new",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/reviews/017E-local-baseline-completion-review.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "017F"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  false
+                       },
+                       {
+                           "path":  "planning/reviews/020F-supabase-object-classification.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "020F"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  true
+                       },
+                       {
+                           "path":  "planning/reviews/020F-supabase-preservation-decisions.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "020F"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  true
+                       },
+                       {
+                           "path":  "planning/reviews/017F-precommit-review.md",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "017F"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  true
+                       },
+                       {
+                           "path":  "planning/reviews/017F-staging-manifest.json",
+                           "group":  "planning-evidence",
+                           "originatingSprints":  [
+                                                      "017F"
+                                                  ],
+                           "openingState":  "untracked",
+                           "risk":  "low",
+                           "editedBy017F":  true
+                       }
+                   ],
+    "groupTotals":  {
+                        "application-design":  18,
+                        "auth-role":  5,
+                        "database-migrations-verification":  15,
+                        "validation-scripts-tests":  30,
+                        "planning-evidence":  200,
+                        "reference-scaffold":  2,
+                        "repository-method-config":  8
+                    },
+    "exclusions":  [
+                       ".env* except classified .env.example",
+                       ".release-main/**",
+                       ".claude/**",
+                       "planning/reviews/021M-supabase-support-escalation.md",
+                       ".next/**",
+                       "build/**",
+                       "node_modules/**",
+                       ".validation-logs/**",
+                       ".logs/**",
+                       "supabase/.temp/**",
+                       "supabase/.temp-old-link/**",
+                       "desktop.ini",
+                       "local IDE state",
+                       "caches",
+                       "credentials/keys/tokens/cookies/sessions",
+                       "protected browser/process material",
+                       "generated logs"
+                   ],
+    "totals":  {
+                   "candidates":  278,
+                   "editedBy017F":  26,
+                   "exclusions":  17
+               }
+}
