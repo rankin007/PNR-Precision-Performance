@@ -7,6 +7,14 @@
     "build": "node node_modules/next/dist/bin/next build",
     "start": "next start",
     "lint": "next lint",
+    "typecheck": "node node_modules/typescript/bin/tsc --noEmit --incremental false",
+    "validate:json": "node scripts/run-validation-suite.mjs json",
+    "test:domain": "node scripts/run-validation-suite.mjs domain",
+    "test:roles": "node scripts/run-validation-suite.mjs roles",
+    "test:supabase-self": "node scripts/run-validation-suite.mjs supabase-self",
+    "validate:static": "node scripts/run-validation-suite.mjs static",
+    "validate:ci": "node scripts/run-validation-suite.mjs ci",
+    "validate:local": "node scripts/run-validation-suite.mjs local",
     "db:bundle": "powershell -ExecutionPolicy Bypass -File scripts/export-supabase-bootstrap.ps1"
   },
   "dependencies": {

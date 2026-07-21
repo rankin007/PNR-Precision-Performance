@@ -1,5 +1,23 @@
 # Validation
 
+## Canonical Commands
+
+| Command | Purpose |
+|---|---|
+| `npm run validate:json` | Self-test deterministic JSON parsing and parse the maintained JSON set. |
+| `npm run test:domain` | Run scoring and recommendation fixtures. |
+| `npm run test:roles` | Run focused role/comment tests. |
+| `npm run test:supabase-self` | Run exact credential-free Supabase harness self-tests only. |
+| `npm run validate:static` | Run cross-platform static validators for Sprints 019–021. |
+| `npm run lint` | Run ESLint. |
+| `npm run typecheck` | Run project-local TypeScript with no emit/incremental state. |
+| `npm run validate:ci` | Run the complete deterministic, remote-safe CI sequence. |
+| `npm run validate:local` | Run the same suite locally with one bounded unchanged build retry for the known page-generation worker-exit class. |
+
+CI and local validation do not log in, link Supabase, run migrations, contact application services, deploy, or execute `scripts/supabase-*.mjs` harnesses.
+
+## Historical Validation Records
+
 ## Anti-Hang / Loop Stopper
 
 Validation commands that may hang must run through a bounded wrapper:

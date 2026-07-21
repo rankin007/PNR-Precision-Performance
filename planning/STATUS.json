@@ -1,8 +1,8 @@
 {
     "schemaVersion":  1,
-    "phase":  "closeout",
-    "sprint":  "017F-repository-baseline-completion",
-    "status":  "local-baseline-complete",
+    "phase":  "implementation",
+    "sprint":  "002B-delivery-system-and-project-state-consolidation",
+    "status":  "in-progress",
     "updated":  "2026-07-22T00:00:00+10:00",
-    "summary":  "Sprint 017F is closed local-baseline-complete. Mechanical whitespace and JSON-validation blockers were resolved, a fresh 278-path baseline passed the full credential-free suite, and the required two local commits completed with a clean non-ignored working tree. No remote or production action occurred."
+    "summary":  "Sprint 002B is consolidating canonical credential-free validation, CI, current planning state, preserved history, and evidence navigation from the clean Sprint 017F baseline."
 }

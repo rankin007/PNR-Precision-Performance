@@ -2,7 +2,7 @@
 
 **Accepted direction:** 2026-07-21
 **Workflow profile:** standard by default for ordinary repository, UI, documentation, local tooling, tests, and product features. Strict controls remain mandatory for auth/RLS, secrets or protected evidence, remote migrations, production data, billing/Stripe, destructive operations, external publication, and production deployment.
-**Current position:** Sprint 021M is closed `provider-escalation-required-clean`. Supabase investigation is pending. No Builder sprint is active.
+**Current position:** Sprint 002B consolidates local/CI validation and current planning authority after the clean 017F baseline. Sprint 022 is the next product sprint. Sprint 021N remains waiting on substantive Supabase response/remediation.
 
 ## How To Use This List
 
@@ -237,14 +237,13 @@ This workstream waits for a substantive Supabase response or remediation.
 ## Recommended Execution Order
 
 1. Sprint 017B repository reconciliation.
-2. Sprint 002B validation reproducibility.
-3. Sprint 011B planning-state reconciliation.
+2. Sprint 002B validation and planning-state consolidation.
+3. Local Sprint 022 capture work that does not depend on hosted Auth.
 4. Domain/commercial preparation for Sprints 025 and 030.
-5. Local Sprint 022 capture work that does not depend on hosted Auth.
-6. Public/content preparation for Sprint 029 behind the gate.
-7. Sprint 021N immediately after a substantive Supabase response or remediation.
-8. Complete the Sprint 021 authenticated chain before sensitive uploads or broader stakeholder acceptance.
-9. Continue Sprints 023–033 according to their dependencies.
+5. Public/content preparation for Sprint 029 behind the gate.
+6. Sprint 021N immediately after a substantive Supabase response or remediation.
+7. Complete the Sprint 021 authenticated chain before sensitive uploads or broader stakeholder acceptance.
+8. Continue Sprints 023–033 according to their dependencies.
 
 ## Current Manual Interventions
 

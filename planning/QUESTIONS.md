@@ -1,118 +1,34 @@
-# Open Questions
+# Current Questions
 
-| Question | Owner | Needed By | Status | Answer / Notes |
-|---|---|---|---|---|
-| Who can execute the exact supabase_admin-grantor membership revoke for pp_audit_020e_20260720? | Supabase operator / support | Immediate cleanup | Blocked | Use a protected context with current_user = supabase_admin; revoke only the exact role from postgres and return sanitized zero-membership confirmation. |
-| What revised audit-role model should replace 020E's failed zero-membership design? | Architect / Supabase expert | Before audit retry | Open | Account for PostgreSQL 17 creator membership semantics and pre-existing ambient privileges without broadening grants or weakening downshift proof. |
-| Is Sprint 020D complete and what connectivity classification applies? | Builder / Architect | Sprint 020D close | Answered | Yes. All four layers passed and the outcome is operational. The linked CLI is suitable connectivity for approved 020C metadata-only work; no remote mutation or 020C audit-account action occurred. |
-| How should Sprint 020C use the verified Sprint 020D CLI path? | User / Architect | Before resuming Sprint 020C | Open | Decide whether to revise 020C around the linked CLI or retain its current client-side SCRAM temporary-account procedure. Connectivity alone does not authorize account creation or audit execution. |
-| Is Sprint 020 complete and explicitly closed? | Builder / Architect | Sprint 020 close | Answered readiness-only | Yes. Local/readiness acceptance passed, remote state is inaccessible, and no remote migration occurred. |
-| Who will run the Sprint 020 read-only Supabase inventory? | User / Supabase operator | Before any migration 0009 write | Blocked | Follow `docs/BIOCHEMISTRY_REMOTE_READINESS_020.md` and return sanitized results only; remote mutation still requires explicit authorization. |
-| What is the next narrow product-readiness sprint after build readiness? | Architect / User | Next planning session | Answered | Approved next sprint was Sprint 003 - Release Baseline And Environment Truth. Full path to Done is locked in at `planning/SPRINT_SCHEDULE.md`. |
-| Which deployment target is canonical for the next verification pass: Vercel, Railway, or local-only? | User / Architect | Sprint 003 | Answered with launch caveat | Local project evidence points to Vercel: `vercel.json`, `.vercel/project.json`, and README stack notes. Production intent/domain still need user confirmation before Sprint 007 launch work. |
-| Should `.release-main/` and generated artifacts be removed with an elevated/OneDrive-aware cleanup pass later? | User / Architect | Later cleanup sprint | Open | Sprint 001 archive was blocked by Windows/OneDrive permissions. Sprint 003 inspected only and did not force-remove. |
-| Should the dirty worktree be normalized before the first product implementation sprint? | Architect / User | Before broad product work | Open | Sprint 003 recorded the dirty baseline and did not revert unrelated work. Sprint 004 may proceed narrowly, but a dedicated normalization step remains recommended before broad feature or launch work if the team wants cleaner ownership boundaries. |
-| Are auth/RLS/Stripe/admin service-role flows intended to be production-verified before member-facing work? | Architect / User | Product-readiness planning | Answered | Yes, but sequenced: release baseline first in Sprint 003, auth/RLS/portal in Sprint 004, portal/data-entry in Sprint 005, admin/commerce in Sprint 006, launch verification in Sprint 007. |
-| Should global Node 24 support be pursued later? | Architect / Builder | Maintenance planning | Open | Current build is pinned to project-local Node `22.14.0`; global Node `24.14.1` repeatedly hung Next.js `15.3.8`. |
-| What is the exact non-secret environment variable contract for local, staging, and production? | Builder / Architect | Sprint 003 close | Answered locally with production caveat | `docs/ENVIRONMENT.md` documents the local/source-derived variable contract by name/category/requiredness only. Actual production values and remote environment completeness were not validated. |
-| What production domain should `NEXT_PUBLIC_SITE_URL` use? | User / Architect | Before Sprint 007 launch verification | Answered | Sprint 009 used `https://precisionperformance.com.au` as the canonical production URL and Vercel aliased the deployment to it. |
-| What real Supabase test users should represent admin, active member, inactive/non-member, and anonymous Sprint 004 acceptance cases? | User / Builder | Sprint 004 / launch verification | Blocked | No real Supabase test-user sessions were available in this Builder run. `docs/AUTH_RLS_PORTAL_ACCESS.md` documents the role labels needed without requesting or storing credentials. |
-| Is remote Supabase access available for RLS verification, or should Sprint 004 use local Supabase evidence plus blocked remote cases? | User / Builder | Sprint 004 / launch verification | Blocked | Sprint 004 used local source and migration evidence. Remote RLS execution remains blocked until non-destructive Supabase access is provided. |
-| What real Supabase workflow fixtures should represent Sprint 005 portal/data-entry acceptance cases? | User / Builder | Sprint 005 / launch verification | Blocked | No configured Supabase test-user sessions, assigned horse fixtures, or remote RLS execution access were available in this Builder run. `docs/PORTAL_DATA_ENTRY_WORKFLOW.md` documents the exact non-secret setup needed. |
-| Can authenticated phone-width and desktop-width workflow smoke be completed before launch? | User / Builder | Before Sprint 007 launch verification | Blocked | Sprint 005 automated validation passed, but browser/device smoke for signed-in live workflows remains blocked until Supabase env and test users are available. |
-| Can Sprint 007 receive configured Stripe test-mode checkout and webhook replay access? | User / Builder | Sprint 007 | Blocked | Sprint 006 hardened code paths but could not run test checkout or webhook replay because Stripe env/test access was unavailable. |
-| What final product catalogue, pricing, and active statuses should launch use? | User / Architect | Sprint 007 | Open | Sprint 006 verified database-backed active products and checkout-disabled fallback behavior, but final business offer/pricing still needs confirmation. |
-| Can Sprint 007 receive configured Supabase admin/member/non-member users plus product/order/payment fixtures? | User / Builder | Sprint 007 | Blocked | Sprint 004-006 live smoke remains blocked by missing Supabase env, test users, role/horse/product/order/payment fixtures, and remote RLS access. |
-| Is the MVP approved for production launch now? | User / Architect | Before deployment | Answered deployed | Sprint 009 received explicit deployment authorization and deployed to Vercel production. Full live acceptance remains partial until Supabase/RLS workflow smoke and Stripe checkout/webhook replay are completed. |
-| Who will complete the remaining live acceptance checklist? | User / Operator / Builder | Before final live acceptance | Open | Sprint 010 verified deployment/public safety checks. Remaining gates are Supabase migration/checks, authenticated launch users/fixtures/RLS smoke, and Stripe test checkout/webhook replay without exposing secrets. |
-| Which domain should be canonical for `NEXT_PUBLIC_SITE_URL`? | User / Operator | Before deployment | Answered | Sprint 009 used `https://precisionperformance.com.au` as canonical. |
-| When should the Sprint 008 Supabase migration be applied remotely? | User / Operator / Builder | Before final live acceptance | Blocked | Sprint 010 confirmed no local `supabase` CLI, `psql`, or safe remote SQL execution path was available. Operator must apply the migration through Supabase dashboard or approved CLI, then Builder can run non-destructive checks. |
+Historical and superseded questions through Sprint 017F are preserved in `planning/history/QUESTIONS-THROUGH-017F.md`.
 
-| Is Sprint 010 final live acceptance complete? | Builder / Architect | Sprint 010 close | Answered partial | No. Sprint 010 is partial with documented blockers: Supabase remote migration/checks, authenticated workflow/RLS smoke, and Stripe test checkout/webhook replay remain unverified by Builder. |
+## Active Decision Required
 
-| What exact formula should Hydration Score use for carbohydrate and conductivity? | User / Domain expert / Architect | Before Sprint 015 | Open | The Done document names the inputs and example interpretations but does not provide the final scoring formula. |
-| What exact formula and weights should Health Score use for carbohydrate, conductivity, pH urine, pH saliva, and turbidity? | User / Domain expert / Architect | Before Sprint 015 | Open | The Done document identifies inputs and zone examples but says the actual formula is needed. |
-| What pH ideal range and `.1` calibration rules are final for urine and saliva? | User / Domain expert / Architect | Before Sprint 013 | Open | The Done document mentions `.1` calibration and pH outside `6.5-7.5` as stress context; final storage/validation rules need confirmation. |
-| When exactly should the pink Horiba conductivity `1.43` multiplier apply? | User / Domain expert / Architect | Before Sprint 013 | Open | The Done document says pink Horiba input is multiplied by `1.43`; Builder needs source/type rules so other conductivity readings are not transformed incorrectly. |
-| What initial Table of Knowledge comments should ship for each category and Level 1-5 column? | User / Domain expert / Architect | Before Sprint 015 | Open | The Done document defines the scaffold and says comments can be changed/upgraded in MVP2, but initial production-safe content is not supplied. |
-| Are recommendation disclaimers, trainer review, or vet review required before recommendations are shown? | User / Domain expert / Architect | Before Sprint 015 | Open | Recommendations may affect feed, hydration, supplements, workload, and health interpretation. |
-| Is OCR/photo recognition part of MVP1, MVP2, or manual-confirmation-only launch behavior? | User / Architect | Before Sprint 014 | Open | The Done document describes automatic extraction as optional future enhancement/MVP2 while also describing photo input support. |
-| What voice-to-text provider, permission flow, and fallback behavior should be used? | User / Architect / Builder | Before Sprint 014 | Open | The Done target requires voice notes; provider and failure behavior are not defined. |
-| What upload file types, size limits, retention period, and Supabase Storage buckets should be used? | User / Architect / Builder | Before Sprint 013 | Open | The Done target requires photos and PDFs; storage/access policy needs explicit design. |
-| How should trainer-managed vet access changes work? | User / Architect | Before Sprint 013 | Open | The Done target says vets are read-only unless changed by trainer; exact workflow and audit requirements are undefined. |
-| What limited write permissions should stable staff have? | User / Architect | Before Sprint 013 | Open | The Done target says stable staff has limited write, but the permitted record types/actions need definition. |
-| What pricing, catalogue, onboarding, and support plan should be treated as launch-ready? | User / Business owner / Architect | Before final Done acceptance | Open | The Done document includes business readiness, while existing product catalogue/pricing confirmation remains open. |
-| Which Sprint 012 live acceptance tasks must be completed before product build resumes? | User / Architect / Builder | Sprint 012 planning | Open | Carry-forward candidates are Supabase remote migration/checks, authenticated RLS/workflow smoke, Stripe checkout/replay, and malformed checkout POST hardening. |
-| Should Sprint 012 checkout safety fix be deployed before Sprint 013 starts? | User / Architect | Before Sprint 013 | Open | Sprint 012 validated the local source fix and production currently returned `307` for malformed smoke, but no deployment was performed in Sprint 012. |
-| Who will provide the safe Supabase remote SQL/check path for final live acceptance? | User / Operator | Before final live acceptance | Blocked | Sprint 012 again found no local `supabase` CLI, `psql`, or safe dashboard/SQL path available to Builder. |
-| Who will provide safe Stripe test-mode checkout and replay fixtures? | User / Operator | Before final live acceptance | Blocked | Stripe CLI is installed, but no safe test-mode checkout/replay target, endpoint setup, or fixtures were available. |
-| Should the Sprint 012C candidate be deployed as-is in a future sprint or first converted into a committed branch/PR? | User / Architect | Before deployment | Answered | Sprint 012D converted the candidate into reviewed branch `codex/012d-production-baseline` at commit `358e1fc`. Future deployment approval should use the recorded 012D branch/commit, not the temporary 012C folder. |
-| Is deployment of the Sprint 012D baseline authorized? | User / Architect | Before deployment | Open | No. Sprint 012D explicitly stopped before deployment, push, or PR. A future instruction must explicitly authorize any Vercel production deployment. |
-| Which ambiguous cleanup candidates should be archived versus kept once Sprint 012E inventory is complete? | User / Architect | Sprint 012E close | Answered partial | Sprint 012E archived low-risk non-runtime clutter and deferred `.release-main/`, `.claude/`, `samples/`, `.next/`, and `build/` for user/Architect decision or ignore treatment. |
+| Question | Owner | Needed by |
+|---|---|---|
+| What production Hydration and Health/Biochemistry Trend Score formulas and Green/Amber/Red thresholds are approved? | Domain owner / Architect | Before production-facing scoring |
+| What pH ideal range, `.1` calibration, and pink Horiba `1.43` applicability rules are authoritative? | Domain owner | Before final capture/scoring rules |
+| What Table of Knowledge rules, disclaimers, and review controls may be trainer-facing? | Domain owner / Veterinarian / Architect | Before recommendation UI |
+| What display label replaces or qualifies `Health Score`? | Business/domain owner | Before public or trainer-facing terminology is finalized |
+| What catalogue, pricing, GST, kit, support, subscription, cancellation, postage, buyback, and trial terms are final? | Business owner | Before commerce/public reopening |
 
-| Should .release-main/ be archived or removed in a future cleanup sprint? | User / Architect | Future cleanup | Open | Sprint 012E left it in place because it contains runtime source, package files, and nested Git metadata, and the sprint allowed inspection only unless clearly safe. |
-| Should Sprint 012F production deployment be authorized after local validation passes? | User / Architect | Sprint 012F close | Open | Local implementation and validation passed on 2026-07-16. Production deployment was not performed and still requires explicit user authorization. |
-| What destination should the public interest/sign-up CTA use? | User / Architect | Sprint 012F implementation | Answered for local gate | Builder used non-persistent interest text only, plus the existing `/sign-in` operator link. Persistent storage/provider choice remains future scope. |
-| Should Kit Buyback remain part of the product catalogue? | User / Architect | Before public shop reopening | Open | `.release-main/lib/domain/products.ts` lists Kit Buyback at $500 AUD, but `.release-main/app/shop/page.tsx` pricing panel only lists Professional Kit and Monthly Service. |
-| What should happen when a biochemistry reading has no exact lookup row? | User / Architect | Sprint 013 close / Sprint 014 planning | Open | Sprint 013 should not invent fallback behavior; recommended default is block scoring for that test until the table is corrected. |
-| Is Sprint 013 complete and explicitly closed? | Builder / Architect | Sprint 013 close | Answered | Yes. Sprint 013 is complete locally as of 2026-07-16, with no remote Supabase migration, deployment, production mutation, push, PR, Stripe change, or shop reopening performed. |
-| Should the Sprint 013 Supabase migration be applied remotely? | User / Operator / Architect | Before production biochemistry use | Open | Not authorized or performed in Sprint 013. Requires a later explicit safe migration path and post-apply smoke checks. |
-| Is Sprint 014 ready for Builder execution? | User / Architect | Sprint 014 start | Historical / superseded | The former implementation-authorization mechanism was removed on 2026-07-19. Applied sprint files are the Builder handoff. |
-| Does the business confirm Sprint 013 shop-written service pricing as final public commerce truth? | User / Business owner / Architect | Before shop reopening or Stripe changes | Open | Sprint 013 documented Professional Kit `$4,500` one-off plus Postage and Monthly Service `$120 per horse or P.O.A`; older seed/source values conflict. |
-| Is Sprint 014 complete and explicitly closed? | Builder / Architect | Sprint 014 close | Answered | Yes. Sprint 014 is complete locally as of 2026-07-16, with no UI, remote Supabase migration, deployment, production mutation, push, PR, Stripe change, recommendation content, or shop reopening performed. |
-| Should Sprint 015 proceed as recommendation/scoring-output integration or should mobile capture UI be reprioritized? | User / Architect | Sprint 015 planning | Open | Sprint 014 completed the scoring foundation. Next scope should be explicitly authorized before Builder edits source. |
-| Is Sprint 015 complete and explicitly closed? | Builder / Architect | Sprint 015 close | Answered | Yes. Sprint 015 is complete locally as of 2026-07-17, with no UI, remote Supabase migration, deployment, production mutation, push, PR, Stripe change, production thresholds, production recommendation content, or shop reopening performed. |
-| What production thresholds classify Hydration Score as Green, Amber, or Red? | User / Domain expert / Architect | Before trainer-facing result UI | Open | Sprint 015 supports supplied thresholds but did not invent or approve production numeric boundaries. |
-| What production thresholds classify Health Score as Green, Amber, or Red? | User / Domain expert / Architect | Before trainer-facing result UI | Open | Sprint 015 supports supplied thresholds but did not invent or approve production numeric boundaries. |
-| What approved Table of Knowledge rules should generate trainer-facing recommendations? | User / Domain expert / Architect | Before trainer-facing recommendation UI | Open | Sprint 015 supports active supplied rules but did not invent advice content. |
-| Is Sprint 016 complete and explicitly closed? | Builder / Architect | Sprint 016 close | Answered | Yes. Sprint 016 is complete locally as of 2026-07-17. It produced repository inventory and alignment docs only; no delete, revert, archive move, commit, push, PR, deploy, remote migration, production mutation, or feature work was performed. |
-| Should `.env.vercel.production` remain tracked? | User / Operator / Architect | Before baseline commit | Answered | No. Sprint 017 removed it from Git tracking while preserving the ignored local file and without exposing values. |
-| Is deleted `middleware.ts` accepted? | User / Architect / Builder | Before baseline commit | Answered | Yes. Sprint 017 accepted deletion after source inspection, production build, and route-safety smoke confirmed the page/API public gate and allowed routes remain safe. |
-| Should the next sprint be baseline commit approval before feature work? | User / Architect | Before Sprint 017 | Answered | Yes. Sprint 017 completed the baseline commit approval work locally. Sprint 018 can now be planned from the baselined repo. |
-| Is Sprint 018 complete and explicitly closed? | Builder / Architect | Sprint 018 close | Answered | Yes. Sprint 018 is complete locally as of 2026-07-17, with authenticated operations biochemistry capture/results routes, exact-match scoring integration, blocked/unavailable states, docs, and validation. No commit, push, PR, deployment, remote migration, production mutation, Stripe change, public reopening, uploads/OCR/voice provider integration, trends, invented thresholds, or invented recommendation content was performed. |
-| Should Sprint 019 apply the remote biochemistry migration or continue local-only with trends/history? | User / Architect | Sprint 019 planning | Open | Sprint 018 recommends remote Supabase biochemistry migration/live smoke if operator access is ready; otherwise trends/history can continue locally on top of the new result-state foundation. |
-| Which public display label should replace or qualify `Health Score`? | User / Domain expert / Architect | Before public/trainer-facing score terminology is finalized | Open | Recommended interim candidates include Biochemistry Trend Score, Recovery Support Score, Performance Readiness Indicator, or Baseline Alignment Score. A display-only choice avoids premature internal migration. |
-| Is a CMS or dedicated Insights publishing system required? | User / Architect | Before public information architecture expands beyond section-led pages | Open | The accepted default is existing routes and section-led composition; CMS or broad route expansion requires separate scope. |
-| Who will supply approved photography and written releases for identifiable people, horses, and stables? | User / Business owner | Before public website visual implementation or reopening | Open | Authentic equine photography is required and unapproved identifiable/confidential material is prohibited. |
-| What definitive role matrix should govern Trainer, Stable Manager, Stable Staff, Owner, Veterinarian, Consultant, and Administrator access? | User / Domain owner / Architect | Sprint 021 structural implementation | Answered | Sprint 021 encoded the accepted definitive structural matrix through immutable migrations 0011/0012; Sprint 021B reconciled the structural evidence without changing behavior. Authenticated runtime proof remains a separate future planning choice. |
-| Which 020F preservation/removal decisions are accepted for Auth, Storage, application data, hosted configuration, remote-only relations, secrets, advisor findings, downtime, recovery, and migration history? | User / named owners / Architect | Before Sprint 020G | Open | See planning/reviews/020F-supabase-preservation-decisions.md; replacement remains stopped. |
-| May Builder edit supabase/config.toml to move enable_confirmations from auth to auth.email? | User / Architect | Sprint 020G migration preflight | Answered | Yes. The user narrowly expanded the approved file set for this one relocation only, preserving all other settings and intended behavior. |
-| Are the candidate Auth URL/provider/password-protection/API settings configured? | Randell Rankin / Philip Rankin | Sprint 020G hosted configuration | Answered | Yes. Site URL and sole production callback are restored; exposed schemas are exactly `graphql_public` and `public`; the passwordless Free-plan exception remains; replacement publishable/secret keys are present and legacy anon/service_role keys are disabled. No value may be reproduced. |
-| Did Sprint 020G complete synthetic Auth/RLS and candidate-connected application-runtime testing? | Builder / Architect | Sprint 020G close | Answered | No. Execution stopped before harness, runtime, Auth identities, or fixtures. These tests transfer to Sprint 021 discovery and must not be reported as passed. |
-| May Builder add the proposed candidate-only synthetic harness at `scripts/supabase-synthetic-auth-rls-020G.mjs`? | User / Architect / Builder | Before harness creation | Answered | Yes. The exact file was created and locally/mock validated only. Gate A passed independently; the harness did not run remotely and is not authenticated proof. |
-| Should authenticated role/RLS/application proof be attempted again? | User / Domain owner / Architect | Separate Sprint 021G-or-later planning | Open | Sprint 021E closed blocked-clean without authenticated proof. Any retry needs a new Pack, fresh run ID, and a dedicated undisclosed mailbox verified under the 021F runbook. |
-| What protected mailbox interface can supply the dedicated account identity without exposing message DOM metadata? | Architect / Builder / Operator | Before any post-021G retry | Open | Sprint 021G stopped blocked-clean before a fresh run or mutation. A future Pack must solve this interface explicitly rather than probing mailbox message DOM. |
-# Sprint 021H follow-up question
+## Provider / External Blocker
 
-What supported protected acquisition surface can transfer candidate keys directly into process memory without rendering or returning either value through browser/tool output?
-# Sprint 021I follow-up question
+| Question | Owner | Next action |
+|---|---|---|
+| How will Supabase resolve the candidate project’s persistent rejection of newly issued exact-project JWTs? | Supabase / Operator | Supply substantive provider response or confirmed remediation; then plan 021N. |
+| When is a remote migration/deployment/public reopening authorized? | User / Operator | Provide explicit scoped authorization in a future sprint. |
 
-Which supported provider/system capability will inject the exact candidate secret into one protected process with target binding and sanitized status-only output?
-# Sprint 021J follow-up question
+## Future Roadmap Input
 
-What sanitized PostgREST/RLS error class caused the genuine Administrator session horse read to fail after successful session and fixture bootstrap?
-# Sprint 021K follow-up question
+| Question | Owner | Relevant sprint |
+|---|---|---|
+| What upload types, size limits, retention, bucket/access policy, and privacy controls apply? | Architect / Privacy owner | Upload/storage sprint after authenticated proof |
+| What voice-to-text provider, permission flow, review step, retention, and fallback apply? | Architect / Business owner | Voice sprint |
+| What limited write and access-management workflows apply to staff, veterinarians, and consultants? | Product owner / Architect | Role-workflow sprint |
+| Who supplies approved photography and releases for identifiable people, horses, and stables? | Business owner | Public content sprint |
+| Is a CMS required, or do existing section-led routes remain authoritative? | Product owner | Public information architecture |
 
-Which hosted Auth/JWT issuance or verification configuration causes a newly exchanged candidate session token to be rejected immediately by both Auth identity verification and Data API REST?
+## Historical / Superseded
 
-# Sprint 021L provider question
-
-Can Supabase confirm and resolve why project `uvskssaecdhxcgytkasc` rejects an immediately issued, current authenticated JWT whose asymmetric signing key is advertised by its JWKS? The sanitized reproduction and state classes are in `planning/reviews/021L-supabase-support-bundle.md`.
-
-# Sprint 021M provider question
-
-Can Supabase correlate the two contained T0/T+20 request windows and explain why Auth-user and Data API JWT trust consistently reject candidate-issued sessions? The restricted support record contains only the requested allowlisted correlation identifiers.
-
-# Sprint 017B treatment questions
-
-Answered by 017C: preserve `.release-main/` and `.claude/` local-only behind anchored root ignores; retain `samples/README.md` unchanged as a project scaffold; relocate the supplied DOCX byte-identically into `references/client-docs/`. Whether the samples scaffold and DOCX enter a commit remains an explicit 017D staging decision.
-
-# Sprint 017D validation-reconciliation question
-
-Should the next Sprint 017 follow-up narrowly update the Sprint 020G clean-rebuild validator and supporting evidence so its expected immutable ledger is `0001`–`0012`, before a later follow-up repeats the local-baseline commit attempt?
-
-Answered by 017E: yes. The exact validator reconciliation passed independently. The same sprint's baseline attempt then stopped at pre-existing staged whitespace findings outside its edit scope.
-
-# Sprint 017E staged-safety question
-
-Should Sprint 017F authorize narrow mechanical whitespace normalization for the named failing candidate files and replace the PowerShell staged-JSON parser with deterministic Node-based parsing before repeating the baseline commit attempt?
+See `planning/history/QUESTIONS-THROUGH-017F.md`. Archived questions are evidence, not current authority.

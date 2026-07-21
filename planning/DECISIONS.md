@@ -6,6 +6,9 @@ Record durable decisions future sprints must respect.
 
 ## Decision Log
 
+| 2026-07-22 | Use the eight canonical package commands and dependency-free allowlisted orchestrator as the validation interface for local development and CI. | Scattered commands made coverage and remote-safety difficult to maintain consistently. | CI and Builders use `validate:ci` / `validate:local`; component commands remain directly runnable and remote harnesses stay excluded. |
+| 2026-07-22 | Keep current planning records concise and archive superseded state through Sprint 017F under `planning/history/`. | Duplicated historical narrative obscured current authority and next action. | `planning/EVIDENCE_INDEX.md` navigates current, historical, provider-pending, and protected evidence without deleting history. |
+
 | Date | Decision | Reason | Impact |
 |---|---|---|---|
 | 2026-07-20 | Close Sprint 021D acceptance-audit-complete — structurally-ready unchanged. | Sprint 021C had 21 evidence-supported but unchecked acceptance criteria; 021D also required its own evidence-mapped checklist before closure. | Both checklists now have zero unchecked criteria. No technical state changed; authenticated proof, if chosen, requires Sprint 021E. |
