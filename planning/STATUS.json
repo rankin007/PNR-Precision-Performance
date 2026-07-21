@@ -1,8 +1,8 @@
 {
     "schemaVersion":  1,
     "phase":  "closeout",
-    "sprint":  "017E-validator-reconciliation-and-local-baseline-completion",
-    "status":  "baseline-blocked-clean",
+    "sprint":  "017F-repository-baseline-completion",
+    "status":  "local-baseline-complete",
     "updated":  "2026-07-22T00:00:00+10:00",
-    "summary":  "Sprint 017E is closed baseline-blocked-clean. The exact 0001-0012 validator correction and 271-path literal staging passed, but the mandatory staged diff check found pre-existing whitespace errors outside the approved edit set. No commit was created; develop, HEAD 171d3aa, all working files, and the empty index are preserved."
+    "summary":  "Sprint 017F is closed local-baseline-complete. Mechanical whitespace and JSON-validation blockers were resolved, a fresh 278-path baseline passed the full credential-free suite, and the required two local commits completed with a clean non-ignored working tree. No remote or production action occurred."
 }

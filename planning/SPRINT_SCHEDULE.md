@@ -212,3 +212,7 @@ Outcome: `baseline-blocked-clean`. Exact staging and safety checks passed, but t
 # Sprint 017E — closed 2026-07-22
 
 Outcome: `baseline-blocked-clean`. The validator reconciliation passed and 271-path literal staging reached safety review, but the mandatory staged diff check found pre-existing whitespace errors outside the approved edit set. No commit was created; the index is empty and all working files are preserved. Sprint 017F must reconcile whitespace and deterministic JSON parsing before retrying.
+
+# Sprint 017F — closed 2026-07-22
+
+Outcome: `local-baseline-complete`. All recorded mechanical blockers were resolved in-sprint, the fresh 278-path baseline passed complete credential-free validation, and the two required local commits completed the repository baseline. Next work should consolidate validation/CI and planning as a useful outcome rather than extend the Sprint 017 child chain.
