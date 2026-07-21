@@ -2,7 +2,7 @@
 
 ## Where Things Stand
 
-Sprint 002B is complete locally. The repository has a clean post-017F baseline, one canonical credential-free validation system for developers and CI, concise current planning records, preserved history, and a navigational evidence index.
+Sprint 002B is closed `delivery-consolidation-complete`. The repository has a clean post-017F baseline, one canonical credential-free validation system for developers and CI, concise current planning records, preserved history, and a navigational evidence index. Commit 1 is `c961d4be10006d3a95eb90be880be5c0f98caf38`; the Builder handoff records the closeout commit.
 
 Supabase authenticated proof remains provider-blocked after Sprint 021M. Local/static and structural evidence must not be described as authenticated, hosted-runtime, cutover, or production readiness.
 

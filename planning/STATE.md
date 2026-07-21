@@ -2,9 +2,9 @@
 
 ## Current Status
 
-Sprint `002B-delivery-system-and-project-state-consolidation` is the current completed delivery sprint. Sprint 017F established the clean local repository baseline; 002B adds canonical local/CI validation and consolidates current planning authority while preserving prior records under `planning/history/`.
+Sprint `002B-delivery-system-and-project-state-consolidation` is closed **delivery-consolidation-complete**. Sprint 017F established the clean local repository baseline; 002B added canonical local/CI validation and consolidated current planning authority while preserving prior records under `planning/history/`.
 
-Branch: `develop`. The final 002B commit hashes and clean-state evidence are recorded in `planning/reviews/002B-delivery-system-and-project-state-consolidation.md`.
+Branch: `develop`. Commit 1 is `c961d4be10006d3a95eb90be880be5c0f98caf38`; the closeout commit and clean-state evidence are recorded in `planning/reviews/002B-delivery-system-and-project-state-consolidation.md` and the Builder handoff.
 
 ## Delivery And Validation State
 

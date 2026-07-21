@@ -2,7 +2,16 @@
 
 ## Outcome
 
-Pre-closeout evidence for Sprint 002B. Final outcome, commit hashes, closing state, and complete durations are added after the validated content commit.
+Sprint `002B-delivery-system-and-project-state-consolidation` completed **delivery-consolidation-complete** on 2026-07-22.
+
+Commit 1:
+
+- hash: `c961d4be10006d3a95eb90be880be5c0f98caf38`;
+- parent: `1d507193a048b0d5dbb3b90e4dcec3247b71679d`;
+- subject: `chore: consolidate validation and project state`;
+- statistics: 23 files, 2,125 insertions, 712 deletions.
+
+Commit 2 subject: `docs: close sprint 002B delivery consolidation`. Its approved set is this review, the applied sprint annotation, `planning/STATE.md`, `planning/STATUS.json`, `planning/ARCHITECT_BRIEFING.md`, and `planning/SPRINT_SCHEDULE.md`. The final hash is reported in the Builder handoff.
 
 ## Opening Repository State
 
@@ -97,3 +106,7 @@ Commit 1 intended set: 23 files, 2,125 insertions, and 712 deletions. The high d
 Sprint 021M remains provider-blocked; no hosted reproduction ran. No protected content, remote system, migration, deployment, billing, production mutation, push, fetch, pull, PR, merge, tag, release, public reopening, or authenticated proof occurred.
 
 Next recommendation: Sprint 022 — Mobile Biochemistry Workflow Completion.
+
+## Closing Repository State
+
+After Commit 2, Builder verifies `develop`, Commit 2 parentage to Commit 1, empty index, zero non-ignored working entries, preserved ignored/protected names, and local ahead/behind state. No remote action is part of this outcome.
