@@ -18,6 +18,8 @@ Sprint 029F update: validation, reparse-safe production build, HTTP route smoke,
 
 Sprint 029G update: production alias reconciliation passed after a reported discrepancy. `https://precisionperformance.com.au/` returned the Sprint 029 page markers, old-page markers were absent, Vercel inspect mapped the alias to deployment `dpl_9gPytpAofTSHcTJJMM1Qw9TxKpAd`, and public route-safety smoke passed. No alias correction, DNS change, Vercel setting/environment mutation, Supabase mutation, Stripe mutation, or production data mutation was performed.
 
+Sprint 029H update: stronger external-public verification passed. Cache-busted live requests to `https://precisionperformance.com.au/`, `https://www.precisionperformance.com.au/`, and `https://pnr-precision-performance.vercel.app/` returned the Sprint 029 marketing-preview markers and no old-page markers. DNS resolved apex and `www` to Vercel records, Vercel inspect still mapped the production alias to deployment `dpl_9gPytpAofTSHcTJJMM1Qw9TxKpAd`, and final public route smoke passed. No alias correction, redeploy, DNS change, Vercel setting/environment mutation, Supabase mutation, Stripe mutation, or production data mutation was performed.
+
 ## Implemented Page
 
 Route: `/`
@@ -130,6 +132,8 @@ Limitations:
 Sprint 029F deployed smoke passed on `https://precisionperformance.com.au`. This sprint must not claim full public website completion, product Done, commerce readiness, authenticated readiness, SEO/indexing launch, final launch readiness, or production readiness.
 
 Sprint 029G reconfirmed the same production alias as the current public smoke target.
+
+Sprint 029H reconfirmed the same production alias from multiple live public perspectives. Browser automation remained unavailable in this environment, so any remaining old-content observation should be reproduced with a live hard-refresh/private-window HTTP request before treating it as current production behavior.
 
 ## Deployment Blocker
 

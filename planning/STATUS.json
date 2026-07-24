@@ -1,8 +1,8 @@
 {
     "schemaVersion":  1,
     "phase":  "deployed-marketing-preview",
-    "sprint":  "029G-production-alias-reconciliation-and-public-smoke",
+    "sprint":  "029H-external-public-alias-correction-and-final-smoke",
     "status":  "marketing-preview-deployed",
-    "updated":  "2026-07-24T17:16:08+10:00",
-    "summary":  "Sprint 029G reconciled the production alias. https://precisionperformance.com.au returns Sprint 029 marketing-preview markers, Vercel inspect maps the alias to deployment dpl_9gPytpAofTSHcTJJMM1Qw9TxKpAd, and public route-safety smoke passes. No alias correction or production settings/DNS/env mutation was needed. This is not full public website completion, commerce readiness, authenticated readiness, SEO/indexing launch, final launch readiness, or production readiness."
+    "updated":  "2026-07-24T17:36:00+10:00",
+    "summary":  "Sprint 029H completed stronger external-public alias verification. Cache-busted live requests to https://precisionperformance.com.au, https://www.precisionperformance.com.au, and https://pnr-precision-performance.vercel.app return Sprint 029 marketing-preview markers and no old-page markers; DNS resolves apex/www to Vercel; Vercel inspect maps the alias to deployment dpl_9gPytpAofTSHcTJJMM1Qw9TxKpAd; and final public route-safety smoke passes. No alias correction, redeploy, or production settings/DNS/env mutation was needed. This is not full public website completion, commerce readiness, authenticated readiness, SEO/indexing launch, final launch readiness, or production readiness."
 }
