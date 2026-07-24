@@ -2,15 +2,15 @@
 
 ## Where Things Stand
 
-Sprint 029F was applied as the browser-proof release and live-deployment follow-up for Sprint 029. The front-page marketing preview has passed local validation/build/HTTP smoke and operator-assisted visual smoke. Staging, push, deployment, and deployed smoke are in progress.
+Sprint 029F was applied as the browser-proof release and live-deployment follow-up for Sprint 029. The front-page marketing preview has passed local validation/build/HTTP smoke, operator-assisted visual smoke, Vercel deployment, and deployed smoke. It is live at `https://precisionperformance.com.au`.
 
 The authenticated/Supabase branch remains at the prior 021Z clean close state. Do not resume or retry 021Z without a new bounded Pack.
 
 ## Current Status
 
-Sprint 029F status: `pre-deployment`.
+Sprint 029F status: `marketing-preview-deployed`.
 
-The known root front-page width/layout source issue was corrected in 029B. Sprint 029C restored JSON/static/typecheck validation through project-local Node script resolution. Sprint 029D aligned ESLint 9/Next linting and proved a successful production build in a non-OneDrive temp workspace. Sprint 029E reconfirmed validation/build/HTTP route smoke. Sprint 029F reconfirmed validation/build/HTTP route smoke and completed operator-assisted visual smoke after automated browser capture remained unavailable. Commit, push, Vercel deployment, and deployed smoke remain in progress, with unrelated active 021AA dirty work excluded from staging.
+The known root front-page width/layout source issue was corrected in 029B. Sprint 029C restored JSON/static/typecheck validation through project-local Node script resolution. Sprint 029D aligned ESLint 9/Next linting and proved a successful production build in a non-OneDrive temp workspace. Sprint 029E reconfirmed validation/build/HTTP route smoke. Sprint 029F reconfirmed validation/build/HTTP route smoke, completed operator-assisted visual smoke after automated browser capture remained unavailable, deployed through Vercel, and passed deployed safety smoke. Unrelated active 021AA dirty work remained excluded from staging/deployment.
 
 ## Since Last Sprint
 
@@ -21,6 +21,8 @@ The known root front-page width/layout source issue was corrected in 029B. Sprin
 - Reconfirmed safe local HTTP route smoke for `/`, stale public redirects, sign-in, protected anonymous redirects, and checkout GET unavailable behavior.
 - Attempted automated browser/viewport smoke with installed Edge and the connected Node REPL route; neither produced usable screenshot evidence.
 - Completed operator-assisted visual smoke after the user confirmed the mobile/tablet/desktop visual smoke passes.
+- Deployed with Vercel CLI archive mode after ordinary upload attempts failed with `fetch failed`.
+- Verified `https://precisionperformance.com.au` returns the 029F front page, redirects stale public routes, keeps protected routes behind sign-in redirects, and leaves checkout/product slug unavailable.
 - Captured 029F evidence in `planning/reviews/029F-browser-proof-release-and-live-deployment-evidence.md`.
 
 ## Architecture / File Map
@@ -48,7 +50,7 @@ The known root front-page width/layout source issue was corrected in 029B. Sprin
 - Automated browser/viewport screenshot capture remains unavailable in the current environment: installed Edge did not emit screenshot evidence, and the connected Node REPL browser path failed to start.
 - Production build depends on a non-OneDrive workspace or equivalent reparse-safe output/dependency path.
 - The worktree still contains unresolved active Sprint 021AA changes outside 029B scope.
-- Deployed smoke is incomplete until Vercel deployment succeeds.
+- Deployed smoke passed on the production alias.
 - Do not claim public relaunch, SEO launch, full public website completion, product Done, commerce readiness, authenticated readiness, deployment readiness, or production readiness.
 
 ## Open Questions For The Architect
@@ -69,9 +71,9 @@ Passed:
 
 Blocked/limited:
 
-- Deployed smoke did not run because no deployment occurred.
-- No files were staged, committed, pushed, or deployed.
+- Local SSH push was unavailable (`Permission denied (publickey)`), so the remote release branch was created/updated through the GitHub API connector.
+- The raw Vercel deployment URL redirects to Vercel SSO; public smoke used the production alias `https://precisionperformance.com.au`.
 
 ## Recommended Next Architect Action
 
-Complete explicit sprint-only staging for Sprint 029/029B/029C/029D/029E/029F files, commit, push, deploy through the confirmed Vercel project, and perform deployed safety smoke.
+Plan any broader public website, commerce, authenticated, SEO/indexing, final launch, or production-readiness work separately. Preserve the Sprint 029F marketing-preview boundary.

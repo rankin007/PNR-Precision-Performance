@@ -2,9 +2,9 @@
 
 ## Current Status
 
-Sprint `029F-browser-proof-release-and-live-deployment` is applied and in pre-deployment execution. The Sprint 029 root marketing-preview page remains in place, and 029B corrected the suspect front-page width/layout classes in `app/page.tsx`.
+Sprint `029F-browser-proof-release-and-live-deployment` is closed as marketing-preview deployed. The Sprint 029 root marketing-preview page is live at `https://precisionperformance.com.au`, and 029B corrected the suspect front-page width/layout classes in `app/page.tsx`.
 
-Sprint 029F applied the browser-proof release follow-up. JSON/static validation, TypeScript, lint, reparse-safe production build, and safe local HTTP route smoke pass. Headless Edge is present but did not produce screenshot evidence because of GPU process failures, and the connected Node REPL browser route is unavailable. Operator-assisted visual smoke passed for mobile/tablet/desktop, hero image visibility, keyboard traversal, overflow/readability, and status indicators. Sprint-only staging, commit, push, deployment, and deployed smoke are in progress, while unresolved active Sprint 021AA dirty-tree state remains outside the 029F scope.
+Sprint 029F applied the browser-proof release follow-up. JSON/static validation, TypeScript, lint, reparse-safe production build, and safe local HTTP route smoke pass. Headless Edge is present but did not produce screenshot evidence because of GPU process failures, and the connected Node REPL browser route is unavailable. Operator-assisted visual smoke passed for mobile/tablet/desktop, hero image visibility, keyboard traversal, overflow/readability, and status indicators. Vercel deployment and deployed route safety smoke passed. Unresolved active Sprint 021AA dirty-tree state remains outside the 029F scope.
 
 Prior authenticated branch status remains: Sprint `021Z-onedrive-runtime-file-and-complete-browser-proof` is closed **browser-bootstrap-agreement-failed-clean**. OneDrive-aware runtime validation, protected selected-alias equality, one clean production build, client-secret exclusion, runtime readiness, and local safety gates passed. The bounded rendered bootstrap run timed out after one owned actor; exact Auth-last recovery restored Auth/application/Storage zero. The main browser matrix did not begin.
 
@@ -28,7 +28,7 @@ The bounded direct RLS matrix passed in 021P, comment result agreement was corre
 
 Sprint 029/029B/029C/029D/029E/029F provides a marketing-preview front page release path only. It does not establish full public website completion, product Done, commerce readiness, authenticated readiness, final launch readiness, or production readiness.
 
-Sprint 029 local production build passed before 029B. Sprint 029C restored JSON/static/typecheck validation through project-local Node script resolution. Sprint 029D restored lint and proved production build in a reparse-safe temp workspace. Sprint 029E reconfirmed validation/build/HTTP route smoke. Sprint 029F reconfirmed validation/build/HTTP route smoke and completed operator-assisted visual smoke. Deployment and deployed smoke remain to be completed. None of this establishes complete browser application proof, approved score thresholds, production recommendation content, final commerce truth, upload/privacy design, production readiness, or SEO/indexing launch.
+Sprint 029 local production build passed before 029B. Sprint 029C restored JSON/static/typecheck validation through project-local Node script resolution. Sprint 029D restored lint and proved production build in a reparse-safe temp workspace. Sprint 029E reconfirmed validation/build/HTTP route smoke. Sprint 029F reconfirmed validation/build/HTTP route smoke, completed operator-assisted visual smoke, deployed to Vercel, and passed deployed smoke on `https://precisionperformance.com.au`. None of this establishes complete browser application proof, approved score thresholds, production recommendation content, final commerce truth, upload/privacy design, production readiness, or SEO/indexing launch.
 
 ## Workflow And Boundaries
 
@@ -38,7 +38,7 @@ No Builder may inspect protected local-only content, contact external systems, m
 
 ## Immediate Next Work
 
-Immediate Sprint 029F action: complete explicit Sprint 029/029B/029C/029D/029E/029F staging, commit, push, Vercel deployment, and deployed smoke while preserving the unresolved active Sprint 021AA dirty state outside staging.
+Immediate Sprint 029 follow-up: preserve the marketing-preview deployment boundary and plan any broader public website, commerce, authenticated, SEO/indexing, or production-readiness work separately.
 
 Next product sprint: **022 — Mobile Biochemistry Workflow Completion**. It may proceed locally within existing schema and typed-note boundaries without waiting for the provider.
 
@@ -46,7 +46,7 @@ Authenticated-proof branch: a separately planned later Sprint 021 suffix may dia
 
 ## Manual Interventions Required
 
-1. Sprint 029 deployment is in 029F pre-deployment execution after operator-assisted visual smoke passed. Builder must verify sprint-only staging, deployed URL, front-page rendering, shop/checkout unavailable behavior, and protected-route safety before closeout.
+1. Sprint 029F deployed the marketing-preview front page and passed deployed smoke. Do not generalize this into full public website completion, commerce readiness, authenticated readiness, SEO/indexing launch, final launch readiness, or production readiness.
 2. Architect action: plan a bounded fixed-class diagnosis of the 021Z bootstrap timeout while preserving OneDrive-aware runtime acceptance and exact cleanup.
 3. Domain authority for production thresholds, score terminology, pH/device rules, and Table of Knowledge recommendations before production-facing scoring/advice.
 4. Business authority for final catalogue, pricing, GST, kit/support terms, and public reopening.

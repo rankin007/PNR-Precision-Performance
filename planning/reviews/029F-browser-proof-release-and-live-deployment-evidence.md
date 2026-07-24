@@ -2,7 +2,7 @@
 
 ## Status
 
-In progress after operator-assisted visual proof passed.
+Marketing-preview deployed.
 
 ## Timestamp
 
@@ -84,7 +84,16 @@ Operator result:
 
 ## Deployment Status
 
-- No staging, commit, push, Vercel preview, or Vercel production deployment performed.
+- Local sprint commit: `ce88697` (`Deploy Sprint 029F front page marketing preview`).
+- Plain `git push origin develop` was stopped because `develop` was already ahead of `origin/develop` by older unrelated local commits.
+- Isolated release branch: `codex/029F-browser-proof-release-and-live-deployment`.
+- Isolated release worktree commit: `d79ace2`.
+- Local SSH push was unavailable after host-key acceptance because GitHub rejected the available key with `Permission denied (publickey)`.
+- GitHub API created the remote release branch and published the runtime-critical 029F route changes there.
+- Vercel CLI 56.5.0 deployed from the isolated release worktree using `npm.cmd exec -- vercel deploy --prod --yes --archive=tgz`.
+- Deployment ID: `dpl_9gPytpAofTSHcTJJMM1Qw9TxKpAd`.
+- Deployment URL: `https://pnr-precision-performance-leqvohy7q-rankin007s-projects.vercel.app`.
+- Production alias reported by Vercel and used for public smoke: `https://precisionperformance.com.au`.
 
 ## Staging Evidence
 
@@ -111,3 +120,27 @@ Explicit staging was performed for:
 - `planning/sprints/029F-browser-proof-release-and-live-deployment/SPRINT.md`
 
 Unrelated active Sprint 021AA/auth/Supabase dirty files remained unstaged.
+
+## Deployed Smoke
+
+Production alias `https://precisionperformance.com.au` returned:
+
+- `/` -> 200, title `Precision Performance`
+- `/home` -> 307, `Location: /`
+- `/contact` -> 307, `Location: /`
+- `/shop` -> 307, `Location: /`
+- `/shop/example` -> 404 unavailable
+- `/sign-in` -> 200, title `PNR Precision Performance`
+- `/admin` -> 307, `Location: /sign-in?login=required&next=%2Fadmin`
+- `/portal` -> 307, `Location: /sign-in?login=required&next=%2Fportal`
+- `/data-entry` -> 307, `Location: /sign-in?login=required&next=%2Fdata-entry`
+- `/api/checkout` -> 404 unavailable
+
+The raw Vercel deployment URL redirected to Vercel SSO and was not used for public smoke evidence.
+
+## Remaining Limitations
+
+- The deployment is a marketing-preview release only.
+- Do not claim full public website completion, product Done, production readiness, commerce readiness, authenticated readiness, SEO/indexing launch, or final launch readiness.
+- Local `develop` remains ahead of `origin/develop` by older commits outside this sprint.
+- Unrelated Sprint 021AA/auth/Supabase dirty state remains in the main workspace.

@@ -1,8 +1,8 @@
 {
     "schemaVersion":  1,
-    "phase":  "pre-deployment",
+    "phase":  "deployed-marketing-preview",
     "sprint":  "029F-browser-proof-release-and-live-deployment",
-    "status":  "validation-build-http-and-operator-visual-smoke-passed",
-    "updated":  "2026-07-24T16:01:52+10:00",
-    "summary":  "Sprint 029F Pack applied. JSON/static/typecheck/lint pass, production build passes in a non-OneDrive temp workspace, safe HTTP route smoke passes, and operator-assisted visual smoke passes after automated Edge/Node browser proof remained unavailable. Sprint-only staging, commit, push, Vercel deployment, and deployed smoke are in progress; unrelated Sprint 021AA dirty state remains excluded."
+    "status":  "marketing-preview-deployed",
+    "updated":  "2026-07-24T16:55:00+10:00",
+    "summary":  "Sprint 029F deployed the marketing-preview front page to Vercel and public smoke passed on https://precisionperformance.com.au. JSON/static/typecheck/lint, reparse-safe build, local HTTP route smoke, operator-assisted visual smoke, production deploy, and deployed route safety smoke passed. This is not full public website completion, commerce readiness, authenticated readiness, SEO/indexing launch, final launch readiness, or production readiness."
 }

@@ -14,7 +14,7 @@ Sprint 029D update: ESLint 9/Next linting now passes through a flat-config bridg
 
 Sprint 029E update: validation, reparse-safe production build, and safe HTTP route smoke were reconfirmed. Deployment remained blocked because installed Edge did not produce screenshot or DOM evidence in headless mode, the connected Node REPL browser route failed to start, and sprint-only staging/commit/push/deployment did not occur.
 
-Sprint 029F update: validation, reparse-safe production build, HTTP route smoke, and operator-assisted visual smoke passed. Sprint-only staging, commit, push, deployment, and deployed smoke are in progress.
+Sprint 029F update: validation, reparse-safe production build, HTTP route smoke, operator-assisted visual smoke, Vercel deployment, and deployed smoke passed. The marketing-preview front page is live at `https://precisionperformance.com.au`.
 
 ## Implemented Page
 
@@ -125,22 +125,22 @@ Limitations:
 - During Sprint 029E, Edge was found locally but did not produce screenshot or DOM evidence in headless mode, and the connected Node REPL browser path failed to start.
 - During Sprint 029F, Edge headless screenshot capture again produced no screenshot files because of GPU process failures, and Node REPL browser tooling remained unavailable.
 
-Because deployed smoke evidence is incomplete until deployment finishes, this sprint must not claim deployed status, public relaunch, product Done, commerce readiness, authenticated readiness, SEO/indexing launch, final launch readiness, or production readiness.
+Sprint 029F deployed smoke passed on `https://precisionperformance.com.au`. This sprint must not claim full public website completion, product Done, commerce readiness, authenticated readiness, SEO/indexing launch, final launch readiness, or production readiness.
 
 ## Deployment Blocker
 
-Deployment, push, and commit are proceeding only through explicit Sprint 029/029B/029C/029D/029E/029F file staging. The following remain controlled constraints:
+Deployment proceeded through explicit Sprint 029/029B/029C/029D/029E/029F file staging and an isolated release worktree/branch. The following remain controlled constraints:
 
 - The worktree contains a large unresolved active Sprint 021AA dirty state.
 - Sprint 029 requires staging only sprint-related files and stopping before pushing unrelated or unresolved active 021AA changes.
 - `.vercel/project.json` has the expected non-secret `projectId`/`orgId` shape, but the identifiers are not reproduced or committed.
-- Sprint 029F validation/build/HTTP route smoke and operator-assisted visual proof passed; staging/commit/push/deployment/deployed smoke remain to be completed.
+- Sprint 029F validation/build/HTTP route smoke, operator-assisted visual proof, Vercel deployment, and deployed smoke passed.
 
 ## Manual Intervention Required
 
 What is blocked:
 
-Sprint 029 deployed smoke and final marketing-preview deployment status.
+No blocking Sprint 029F deployment action remains.
 
 Evidence checked:
 
@@ -153,13 +153,14 @@ Evidence checked:
 Exact user/manual action needed:
 
 1. Preserve the active Sprint 021AA dirty state outside Sprint 029 staging.
-2. Stage only the explicit Sprint 029/029B/029C/029D/029E/029F approved file list.
-3. Commit, push, deploy, and run deployed smoke only if the staged diff remains sprint-only.
+2. Treat the deployed page as a marketing preview only.
+3. Require a later sprint for full public website, commerce, authenticated, SEO/indexing, or production readiness claims.
 
 Builder will verify afterward:
 
 1. Sprint-related-only git diff and staged file list.
 2. Vercel deployment URL and post-deployment smoke for front page rendering, shop/checkout unavailable behavior, and protected-route safety.
+3. Completed in Sprint 029F evidence at `planning/reviews/029F-browser-proof-release-and-live-deployment-evidence.md`.
 
 ## Remaining Content Gaps
 
