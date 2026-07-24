@@ -1,8 +1,8 @@
 {
     "schemaVersion":  1,
-    "phase":  "closeout",
-    "sprint":  "002B-delivery-system-and-project-state-consolidation",
-    "status":  "delivery-consolidation-complete",
-    "updated":  "2026-07-22T00:00:00+10:00",
-    "summary":  "Sprint 002B is closed delivery-consolidation-complete. Canonical credential-free validation and CI, concise current planning state, exact history archives, and evidence navigation passed complete local validation and were captured in two local commits. No remote or production action occurred."
+    "phase":  "pre-deployment",
+    "sprint":  "029F-browser-proof-release-and-live-deployment",
+    "status":  "validation-build-http-and-operator-visual-smoke-passed",
+    "updated":  "2026-07-24T16:01:52+10:00",
+    "summary":  "Sprint 029F Pack applied. JSON/static/typecheck/lint pass, production build passes in a non-OneDrive temp workspace, safe HTTP route smoke passes, and operator-assisted visual smoke passes after automated Edge/Node browser proof remained unavailable. Sprint-only staging, commit, push, Vercel deployment, and deployed smoke are in progress; unrelated Sprint 021AA dirty state remains excluded."
 }
