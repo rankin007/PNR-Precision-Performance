@@ -1,8 +1,8 @@
 {
     "schemaVersion":  1,
     "phase":  "deployed-marketing-preview",
-    "sprint":  "029I-live-public-content-reconciliation-and-hard-deploy",
-    "status":  "marketing-preview-live-reconciled",
-    "updated":  "2026-07-24T18:08:00+10:00",
-    "summary":  "Sprint 029I reconciled source, clean-worktree build, Vercel alias/deployment, DNS/header, and live public content evidence after a later old-content observation. Apex, www, the Vercel app alias, and the exact reported review029h URL return Sprint 029 marketing-preview markers and no old-page markers; Vercel inspect maps the production aliases to deployment dpl_9gPytpAofTSHcTJJMM1Qw9TxKpAd; final public route-safety smoke passes; and the raw deployment URL is Vercel SSO-gated. No redeploy, alias correction, or production settings/DNS/env mutation was needed. This is not full public website completion, commerce readiness, authenticated readiness, SEO/indexing launch, final launch readiness, or production readiness."
+    "sprint":  "029J-rendered-live-visual-reconciliation-and-deploy-correction",
+    "status":  "rendered-live-marketing-preview-corrected",
+    "updated":  "2026-07-24T21:15:00+10:00",
+    "summary":  "Sprint 029J corrected the rendered-live marketing preview after proving the prior live page had the Sprint 029 text but a missing hero image asset. The root page received a narrow mobile hero wrapping correction, deployment dpl_CMahP7G62gim3t6HmkhPFwSC1JMy was deployed to the intended pnr-precision-performance Vercel project, apex/www/app aliases map to that deployment, hero image endpoints return 200, Edge DevTools screenshots prove local/apex/www parity at desktop/tablet/mobile widths, and final route-safety smoke passes. This remains a noindex/nofollow marketing preview, not full public website completion, commerce readiness, authenticated readiness, SEO/indexing launch, final launch readiness, or production readiness."
 }

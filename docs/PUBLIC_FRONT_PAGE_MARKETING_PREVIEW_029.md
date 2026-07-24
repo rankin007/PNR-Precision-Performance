@@ -22,6 +22,8 @@ Sprint 029H update: stronger external-public verification passed. Cache-busted l
 
 Sprint 029I update: live public content reconciliation passed after a later old-content observation. Source, clean-worktree production build, Vercel inspect, DNS, cache headers, apex, `www`, and Vercel app alias checks agree that the public site serves Sprint 029 marketing-preview content. The specific reported URL `https://precisionperformance.com.au/?review029h=1` returned Sprint markers and no old-page markers. The raw deployment URL is Vercel SSO-gated. No redeploy, alias correction, DNS change, Vercel setting/environment mutation, Supabase mutation, Stripe mutation, or production data mutation was performed.
 
+Sprint 029J update: rendered-live visual reconciliation found that the live page had correct text markers but the hero image asset was missing from the production deployment, causing the public page to render as a pale broken-image layout. Sprint 029J added a narrow mobile hero wrapping correction, redeployed the intended Vercel production project, and proved local/apex/`www` rendered parity with Edge DevTools screenshots at desktop, tablet, and mobile sizes. Deployment `dpl_CMahP7G62gim3t6HmkhPFwSC1JMy` is live on the production aliases. No DNS change, Vercel settings/environment mutation, Supabase mutation, Stripe mutation, or production data mutation was performed.
+
 ## Implemented Page
 
 Route: `/`
@@ -138,6 +140,8 @@ Sprint 029G reconfirmed the same production alias as the current public smoke ta
 Sprint 029H reconfirmed the same production alias from multiple live public perspectives. Browser automation remained unavailable in this environment, so any remaining old-content observation should be reproduced with a live hard-refresh/private-window HTTP request before treating it as current production behavior.
 
 Sprint 029I reconciled the same production alias across source, build, Vercel, DNS/header, and public internet layers. Browser automation still remained unavailable because the browser runtime failed to start, but cache-busted public HTTP checks for apex, `www`, the Vercel app alias, and the exact reported old-content URL all returned the Sprint 029 marketing-preview page.
+
+Sprint 029J corrected rendered-live visual evidence after confirming the production hero image asset returned 404 before redeploy. Final Edge DevTools rendered screenshots show the hero image visible and non-zero image dimensions on local, apex, and `www`, with viewport `scrollWidth` equal to viewport width at desktop, tablet, and mobile sizes.
 
 ## Deployment Blocker
 
