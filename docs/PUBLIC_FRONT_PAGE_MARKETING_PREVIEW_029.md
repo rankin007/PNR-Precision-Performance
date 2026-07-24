@@ -20,6 +20,8 @@ Sprint 029G update: production alias reconciliation passed after a reported disc
 
 Sprint 029H update: stronger external-public verification passed. Cache-busted live requests to `https://precisionperformance.com.au/`, `https://www.precisionperformance.com.au/`, and `https://pnr-precision-performance.vercel.app/` returned the Sprint 029 marketing-preview markers and no old-page markers. DNS resolved apex and `www` to Vercel records, Vercel inspect still mapped the production alias to deployment `dpl_9gPytpAofTSHcTJJMM1Qw9TxKpAd`, and final public route smoke passed. No alias correction, redeploy, DNS change, Vercel setting/environment mutation, Supabase mutation, Stripe mutation, or production data mutation was performed.
 
+Sprint 029I update: live public content reconciliation passed after a later old-content observation. Source, clean-worktree production build, Vercel inspect, DNS, cache headers, apex, `www`, and Vercel app alias checks agree that the public site serves Sprint 029 marketing-preview content. The specific reported URL `https://precisionperformance.com.au/?review029h=1` returned Sprint markers and no old-page markers. The raw deployment URL is Vercel SSO-gated. No redeploy, alias correction, DNS change, Vercel setting/environment mutation, Supabase mutation, Stripe mutation, or production data mutation was performed.
+
 ## Implemented Page
 
 Route: `/`
@@ -134,6 +136,8 @@ Sprint 029F deployed smoke passed on `https://precisionperformance.com.au`. This
 Sprint 029G reconfirmed the same production alias as the current public smoke target.
 
 Sprint 029H reconfirmed the same production alias from multiple live public perspectives. Browser automation remained unavailable in this environment, so any remaining old-content observation should be reproduced with a live hard-refresh/private-window HTTP request before treating it as current production behavior.
+
+Sprint 029I reconciled the same production alias across source, build, Vercel, DNS/header, and public internet layers. Browser automation still remained unavailable because the browser runtime failed to start, but cache-busted public HTTP checks for apex, `www`, the Vercel app alias, and the exact reported old-content URL all returned the Sprint 029 marketing-preview page.
 
 ## Deployment Blocker
 
