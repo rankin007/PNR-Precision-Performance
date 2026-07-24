@@ -46,7 +46,7 @@ export const metadata: Metadata = {
 
 export default function HomePage() {
   return (
-    <main className="min-h-screen bg-canvas text-technical">
+    <main className="min-h-screen overflow-x-hidden bg-canvas text-technical">
       <section className="relative min-h-[92svh] overflow-hidden bg-technical text-white">
         <Image
           src="/under-construction-thoroughbred.jpg"
@@ -80,14 +80,18 @@ export default function HomePage() {
         </header>
 
         <div className="relative z-10 mx-auto grid min-h-[calc(92svh-5rem)] w-full max-w-[1180px] items-center gap-10 px-4 pb-20 pt-8 md:px-6 lg:grid-cols-[1.05fr_0.8fr] xl:px-0">
-          <div className="max-w-4xl">
-            <p className="text-xs font-semibold uppercase tracking-[0.24em] text-accent md:text-sm">
-              Equine Biochemistry and Recovery Intelligence
+          <div className="min-w-0 max-w-full md:max-w-4xl">
+            <p className="max-w-full text-xs font-semibold uppercase leading-6 tracking-[0.18em] text-accent sm:tracking-[0.24em] md:text-sm">
+              <span className="block sm:inline">Equine Biochemistry and</span>{" "}
+              <span className="block sm:inline">Recovery Intelligence</span>
             </p>
-            <h1 className="mt-6 max-w-4xl font-display text-5xl leading-[0.98] text-white md:text-7xl">
-              See what observation alone cannot show.
+            <h1 className="mt-6 max-w-full font-display text-4xl leading-[0.98] text-white sm:text-5xl md:max-w-4xl md:text-7xl">
+              <span className="block md:inline">See what </span>
+              <span className="block md:inline">observation </span>
+              <span className="block md:inline">alone cannot </span>
+              <span className="block md:inline">show.</span>
             </h1>
-            <p className="mt-7 max-w-2xl text-base leading-8 text-white/84 md:text-lg">
+            <p className="mt-7 max-w-full text-base leading-8 text-white/84 md:max-w-2xl md:text-lg">
               Precision Performance helps trainers bring practical stable observation together with
               measurable biochemistry trends, supporting more informed decisions about recovery,
               workload, and horse-by-horse review.
@@ -95,13 +99,13 @@ export default function HomePage() {
             <div className="mt-9 flex flex-col gap-3 sm:flex-row">
               <a
                 href="#trial"
-                className="inline-flex min-h-12 items-center justify-center rounded-full bg-white px-6 py-3 text-sm font-semibold text-brand transition hover:bg-canvas"
+                className="inline-flex min-h-12 w-full max-w-full items-center justify-center rounded-full bg-white px-6 py-3 text-sm font-semibold text-brand transition hover:bg-canvas sm:w-auto"
               >
                 Request a Stable Trial
               </a>
               <a
                 href="#method"
-                className="inline-flex min-h-12 items-center justify-center rounded-full border border-white/45 px-6 py-3 text-sm font-semibold text-white transition hover:border-white hover:bg-white/10"
+                className="inline-flex min-h-12 w-full max-w-full items-center justify-center rounded-full border border-white/45 px-6 py-3 text-sm font-semibold text-white transition hover:border-white hover:bg-white/10 sm:w-auto"
               >
                 See How It Works
               </a>
