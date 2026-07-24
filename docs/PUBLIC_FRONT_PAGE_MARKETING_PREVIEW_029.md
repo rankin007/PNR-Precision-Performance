@@ -16,6 +16,8 @@ Sprint 029E update: validation, reparse-safe production build, and safe HTTP rou
 
 Sprint 029F update: validation, reparse-safe production build, HTTP route smoke, operator-assisted visual smoke, Vercel deployment, and deployed smoke passed. The marketing-preview front page is live at `https://precisionperformance.com.au`.
 
+Sprint 029G update: production alias reconciliation passed after a reported discrepancy. `https://precisionperformance.com.au/` returned the Sprint 029 page markers, old-page markers were absent, Vercel inspect mapped the alias to deployment `dpl_9gPytpAofTSHcTJJMM1Qw9TxKpAd`, and public route-safety smoke passed. No alias correction, DNS change, Vercel setting/environment mutation, Supabase mutation, Stripe mutation, or production data mutation was performed.
+
 ## Implemented Page
 
 Route: `/`
@@ -126,6 +128,8 @@ Limitations:
 - During Sprint 029F, Edge headless screenshot capture again produced no screenshot files because of GPU process failures, and Node REPL browser tooling remained unavailable.
 
 Sprint 029F deployed smoke passed on `https://precisionperformance.com.au`. This sprint must not claim full public website completion, product Done, commerce readiness, authenticated readiness, SEO/indexing launch, final launch readiness, or production readiness.
+
+Sprint 029G reconfirmed the same production alias as the current public smoke target.
 
 ## Deployment Blocker
 

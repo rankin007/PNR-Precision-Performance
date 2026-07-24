@@ -2,9 +2,9 @@
 
 ## Current Status
 
-Sprint `029F-browser-proof-release-and-live-deployment` is closed as marketing-preview deployed. The Sprint 029 root marketing-preview page is live at `https://precisionperformance.com.au`, and 029B corrected the suspect front-page width/layout classes in `app/page.tsx`.
+Sprint `029G-production-alias-reconciliation-and-public-smoke` is closed as marketing-preview deployed. The Sprint 029 root marketing-preview page is live at `https://precisionperformance.com.au`, and 029B corrected the suspect front-page width/layout classes in `app/page.tsx`.
 
-Sprint 029F applied the browser-proof release follow-up. JSON/static validation, TypeScript, lint, reparse-safe production build, and safe local HTTP route smoke pass. Headless Edge is present but did not produce screenshot evidence because of GPU process failures, and the connected Node REPL browser route is unavailable. Operator-assisted visual smoke passed for mobile/tablet/desktop, hero image visibility, keyboard traversal, overflow/readability, and status indicators. Vercel deployment and deployed route safety smoke passed. Unresolved active Sprint 021AA dirty-tree state remains outside the 029F scope.
+Sprint 029F deployed the browser-proof marketing-preview release. Sprint 029G reconciled the production alias after a reported discrepancy: `https://precisionperformance.com.au/` returns Sprint 029 markers, Vercel inspect maps the alias to deployment `dpl_9gPytpAofTSHcTJJMM1Qw9TxKpAd`, and public route-safety smoke passes. No alias correction, DNS change, Vercel setting/environment mutation, Supabase mutation, Stripe mutation, or production data mutation occurred in 029G. Unresolved active Sprint 021AA dirty-tree state remains outside the 029G scope.
 
 Prior authenticated branch status remains: Sprint `021Z-onedrive-runtime-file-and-complete-browser-proof` is closed **browser-bootstrap-agreement-failed-clean**. OneDrive-aware runtime validation, protected selected-alias equality, one clean production build, client-secret exclusion, runtime readiness, and local safety gates passed. The bounded rendered bootstrap run timed out after one owned actor; exact Auth-last recovery restored Auth/application/Storage zero. The main browser matrix did not begin.
 
@@ -26,9 +26,9 @@ The bounded direct RLS matrix passed in 021P, comment result agreement was corre
 
 ## Product Readiness
 
-Sprint 029/029B/029C/029D/029E/029F provides a marketing-preview front page release path only. It does not establish full public website completion, product Done, commerce readiness, authenticated readiness, final launch readiness, or production readiness.
+Sprint 029/029B/029C/029D/029E/029F/029G provides a marketing-preview front page release path only. It does not establish full public website completion, product Done, commerce readiness, authenticated readiness, final launch readiness, or production readiness.
 
-Sprint 029 local production build passed before 029B. Sprint 029C restored JSON/static/typecheck validation through project-local Node script resolution. Sprint 029D restored lint and proved production build in a reparse-safe temp workspace. Sprint 029E reconfirmed validation/build/HTTP route smoke. Sprint 029F reconfirmed validation/build/HTTP route smoke, completed operator-assisted visual smoke, deployed to Vercel, and passed deployed smoke on `https://precisionperformance.com.au`. None of this establishes complete browser application proof, approved score thresholds, production recommendation content, final commerce truth, upload/privacy design, production readiness, or SEO/indexing launch.
+Sprint 029 local production build passed before 029B. Sprint 029C restored JSON/static/typecheck validation through project-local Node script resolution. Sprint 029D restored lint and proved production build in a reparse-safe temp workspace. Sprint 029E reconfirmed validation/build/HTTP route smoke. Sprint 029F reconfirmed validation/build/HTTP route smoke, completed operator-assisted visual smoke, deployed to Vercel, and passed deployed smoke on `https://precisionperformance.com.au`. Sprint 029G reconfirmed the production alias content markers and route-safety smoke. None of this establishes complete browser application proof, approved score thresholds, production recommendation content, final commerce truth, upload/privacy design, production readiness, or SEO/indexing launch.
 
 ## Workflow And Boundaries
 

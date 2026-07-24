@@ -2,15 +2,15 @@
 
 ## Where Things Stand
 
-Sprint 029F was applied as the browser-proof release and live-deployment follow-up for Sprint 029. The front-page marketing preview has passed local validation/build/HTTP smoke, operator-assisted visual smoke, Vercel deployment, and deployed smoke. It is live at `https://precisionperformance.com.au`.
+Sprint 029G reconciled the production alias after a reported discrepancy. The front-page marketing preview is live at `https://precisionperformance.com.au`, and the alias currently serves the Sprint 029 page markers with route-safety smoke passing.
 
 The authenticated/Supabase branch remains at the prior 021Z clean close state. Do not resume or retry 021Z without a new bounded Pack.
 
 ## Current Status
 
-Sprint 029F status: `marketing-preview-deployed`.
+Sprint 029G status: `marketing-preview-deployed`.
 
-The known root front-page width/layout source issue was corrected in 029B. Sprint 029C restored JSON/static/typecheck validation through project-local Node script resolution. Sprint 029D aligned ESLint 9/Next linting and proved a successful production build in a non-OneDrive temp workspace. Sprint 029E reconfirmed validation/build/HTTP route smoke. Sprint 029F reconfirmed validation/build/HTTP route smoke, completed operator-assisted visual smoke after automated browser capture remained unavailable, deployed through Vercel, and passed deployed safety smoke. Unrelated active 021AA dirty work remained excluded from staging/deployment.
+The known root front-page width/layout source issue was corrected in 029B. Sprint 029C restored JSON/static/typecheck validation through project-local Node script resolution. Sprint 029D aligned ESLint 9/Next linting and proved a successful production build in a non-OneDrive temp workspace. Sprint 029E reconfirmed validation/build/HTTP route smoke. Sprint 029F reconfirmed validation/build/HTTP route smoke, completed operator-assisted visual smoke after automated browser capture remained unavailable, deployed through Vercel, and passed deployed safety smoke. Sprint 029G rechecked the public alias, confirmed it serves Sprint 029 markers, and confirmed Vercel maps the alias to deployment `dpl_9gPytpAofTSHcTJJMM1Qw9TxKpAd`. Unrelated active 021AA dirty work remained excluded.
 
 ## Since Last Sprint
 
@@ -24,6 +24,12 @@ The known root front-page width/layout source issue was corrected in 029B. Sprin
 - Deployed with Vercel CLI archive mode after ordinary upload attempts failed with `fetch failed`.
 - Verified `https://precisionperformance.com.au` returns the 029F front page, redirects stale public routes, keeps protected routes behind sign-in redirects, and leaves checkout/product slug unavailable.
 - Captured 029F evidence in `planning/reviews/029F-browser-proof-release-and-live-deployment-evidence.md`.
+- Applied `planning/architect-packs/architect-pack-029G-production-alias-reconciliation-and-public-smoke.md`.
+- Created `planning/sprints/029G-production-alias-reconciliation-and-public-smoke/SPRINT.md`.
+- Reconfirmed `https://precisionperformance.com.au/` contains Sprint 029 markers: descriptor, headline, CTA, and recreated-sample wording.
+- Confirmed old-page markers `Biochemistry Analysis for Elite Equine` and `Apply Now` are absent.
+- Confirmed Vercel alias inspection points `precisionperformance.com.au` at the Sprint 029F deployment ID.
+- Captured 029G evidence in `planning/reviews/029G-production-alias-reconciliation-and-public-smoke-evidence.md`.
 
 ## Architecture / File Map
 
@@ -36,7 +42,8 @@ The known root front-page width/layout source issue was corrected in 029B. Sprin
 - `planning/reviews/029D-lint-build-workspace-and-deployment-proof-evidence.md`: 029D lint/build workspace, route smoke, Vercel metadata, and manual intervention evidence.
 - `planning/reviews/029E-visual-smoke-stage-push-and-vercel-deploy-evidence.md`: 029E validation/build/HTTP smoke and browser-smoke blocker evidence.
 - `planning/reviews/029F-browser-proof-release-and-live-deployment-evidence.md`: 029F validation/build/HTTP smoke, automated-browser failure, operator-assisted visual proof, staging/deployment evidence.
-- `planning/sprints/029F-browser-proof-release-and-live-deployment/SPRINT.md`: active 029F sprint source.
+- `planning/reviews/029G-production-alias-reconciliation-and-public-smoke-evidence.md`: 029G production-alias marker proof, Vercel inspect result, and public route smoke.
+- `planning/sprints/029G-production-alias-reconciliation-and-public-smoke/SPRINT.md`: active 029G sprint source.
 
 ## Decisions
 
@@ -68,11 +75,14 @@ Passed:
 - `npm.cmd run build` in `C:\Users\rrank\AppData\Local\Temp\pnr-029f-build-workspace-20260724151849` after locked dependency install.
 - Safe local HTTP route smoke for `/`, `/home`, `/contact`, `/shop`, `/shop/example`, `/sign-in`, `/admin`, `/portal`, `/data-entry`, and `/api/checkout`.
 - Operator-assisted visual smoke for mobile, tablet, desktop, keyboard traversal, hero image visibility, overflow/readability, and status indicators.
+- Public alias marker smoke for Sprint 029 content.
+- Public route-safety smoke on `https://precisionperformance.com.au`.
+- Read-only Vercel inspect of the production alias.
 
 Blocked/limited:
 
-- Local SSH push was unavailable (`Permission denied (publickey)`), so the remote release branch was created/updated through the GitHub API connector.
 - The raw Vercel deployment URL redirects to Vercel SSO; public smoke used the production alias `https://precisionperformance.com.au`.
+- Local SSH push was unavailable in 029F (`Permission denied (publickey)`), so the remote release branch was created/updated through the GitHub API connector.
 
 ## Recommended Next Architect Action
 
