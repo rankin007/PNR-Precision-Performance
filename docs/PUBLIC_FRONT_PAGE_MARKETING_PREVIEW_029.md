@@ -2,9 +2,9 @@
 
 ## Status
 
-Sprint 029 has been applied and the root public page has been replaced locally with a marketing-preview front page.
+Sprint 029 has been applied and the root public page is live as a noindex/nofollow marketing-preview front page.
 
-Deployment status: blocked before deployment.
+Deployment status: live marketing preview on the intended Vercel project after Sprint 029J; release-state hygiene completed in Sprint 029K.
 
 Sprint 029B update: the known width/layout source concern was corrected locally.
 
@@ -23,6 +23,8 @@ Sprint 029H update: stronger external-public verification passed. Cache-busted l
 Sprint 029I update: live public content reconciliation passed after a later old-content observation. Source, clean-worktree production build, Vercel inspect, DNS, cache headers, apex, `www`, and Vercel app alias checks agree that the public site serves Sprint 029 marketing-preview content. The specific reported URL `https://precisionperformance.com.au/?review029h=1` returned Sprint markers and no old-page markers. The raw deployment URL is Vercel SSO-gated. No redeploy, alias correction, DNS change, Vercel setting/environment mutation, Supabase mutation, Stripe mutation, or production data mutation was performed.
 
 Sprint 029J update: rendered-live visual reconciliation found that the live page had correct text markers but the hero image asset was missing from the production deployment, causing the public page to render as a pale broken-image layout. Sprint 029J added a narrow mobile hero wrapping correction, redeployed the intended Vercel production project, and proved local/apex/`www` rendered parity with Edge DevTools screenshots at desktop, tablet, and mobile sizes. Deployment `dpl_CMahP7G62gim3t6HmkhPFwSC1JMy` is live on the production aliases. No DNS change, Vercel settings/environment mutation, Supabase mutation, Stripe mutation, or production data mutation was performed.
+
+Sprint 029K update: release-state hygiene passed. Production aliases still inspect to the intended `pnr-precision-performance` deployment `dpl_CMahP7G62gim3t6HmkhPFwSC1JMy`; post-cleanup public marker, hero asset, and route-safety smoke passed; and the accidental unlinked Sprint 029J release-worktree Vercel project `pnr-029j-release-worktree-20260724210200` was removed after confirming it had no production custom-domain aliases. No DNS change, intended Vercel project setting/environment mutation, Supabase mutation, Stripe mutation, production data mutation, or runtime source change was performed.
 
 ## Implemented Page
 
@@ -143,6 +145,15 @@ Sprint 029I reconciled the same production alias across source, build, Vercel, D
 
 Sprint 029J corrected rendered-live visual evidence after confirming the production hero image asset returned 404 before redeploy. Final Edge DevTools rendered screenshots show the hero image visible and non-zero image dimensions on local, apex, and `www`, with viewport `scrollWidth` equal to viewport width at desktop, tablet, and mobile sizes.
 
+Sprint 029K additional evidence:
+
+- `npm.cmd exec -- vercel inspect https://precisionperformance.com.au --timeout 2m` mapped apex to intended project `pnr-precision-performance`, deployment `dpl_CMahP7G62gim3t6HmkhPFwSC1JMy`, status Ready.
+- `npm.cmd exec -- vercel inspect https://www.precisionperformance.com.au --timeout 2m` mapped `www` to the same intended project and deployment.
+- The accidental temporary Vercel project `pnr-029j-release-worktree-20260724210200` was removed with `npm.cmd exec -- vercel remove pnr-029j-release-worktree-20260724210200 --yes`.
+- Post-cleanup public checks for apex, `www`, and `pnr-precision-performance.vercel.app` returned Sprint 029 hero/CTA/recreated-sample markers and zero old-page markers.
+- Post-cleanup hero asset check returned `200`, `image/jpeg`, and content length `394632`.
+- Post-cleanup route smoke passed for root, stale public redirects, sign-in, anonymous protected redirects, and safe checkout GET unavailable behavior.
+
 ## Deployment Blocker
 
 Deployment proceeded through explicit Sprint 029/029B/029C/029D/029E/029F file staging and an isolated release worktree/branch. The following remain controlled constraints:
@@ -156,7 +167,7 @@ Deployment proceeded through explicit Sprint 029/029B/029C/029D/029E/029F file s
 
 What is blocked:
 
-No blocking Sprint 029F deployment action remains.
+No blocking Sprint 029K release-state hygiene action remains.
 
 Evidence checked:
 
@@ -171,6 +182,7 @@ Exact user/manual action needed:
 1. Preserve the active Sprint 021AA dirty state outside Sprint 029 staging.
 2. Treat the deployed page as a marketing preview only.
 3. Require a later sprint for full public website, commerce, authenticated, SEO/indexing, or production readiness claims.
+4. Decide separately whether to push a scoped Sprint 029 release branch or reconcile local `develop` history.
 
 Builder will verify afterward:
 

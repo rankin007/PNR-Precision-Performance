@@ -1,8 +1,8 @@
 {
     "schemaVersion":  1,
     "phase":  "deployed-marketing-preview",
-    "sprint":  "029J-rendered-live-visual-reconciliation-and-deploy-correction",
-    "status":  "rendered-live-marketing-preview-corrected",
-    "updated":  "2026-07-24T21:15:00+10:00",
-    "summary":  "Sprint 029J corrected the rendered-live marketing preview after proving the prior live page had the Sprint 029 text but a missing hero image asset. The root page received a narrow mobile hero wrapping correction, deployment dpl_CMahP7G62gim3t6HmkhPFwSC1JMy was deployed to the intended pnr-precision-performance Vercel project, apex/www/app aliases map to that deployment, hero image endpoints return 200, Edge DevTools screenshots prove local/apex/www parity at desktop/tablet/mobile widths, and final route-safety smoke passes. This remains a noindex/nofollow marketing preview, not full public website completion, commerce readiness, authenticated readiness, SEO/indexing launch, final launch readiness, or production readiness."
+    "sprint":  "029K-release-state-hygiene-and-vercel-cleanup",
+    "status":  "release-state-hygiene-complete",
+    "updated":  "2026-07-26T00:00:00+10:00",
+    "summary":  "Sprint 029K reconciled the Sprint 029 release-control state after 029J. Production aliases still inspect to the intended pnr-precision-performance deployment dpl_CMahP7G62gim3t6HmkhPFwSC1JMy, post-cleanup public marker/route/hero-asset smoke passes, and the accidental temporary Vercel project pnr-029j-release-worktree-20260724210200 was removed after confirming it had no production custom-domain aliases. Local develop remains ahead of origin/develop and unrelated 021-series/auth/Supabase dirty work remains isolated. This remains a noindex/nofollow marketing preview, not full public website completion, commerce readiness, authenticated readiness, SEO/indexing launch, final launch readiness, or production readiness."
 }

@@ -2,15 +2,15 @@
 
 ## Where Things Stand
 
-Sprint 029J completed rendered-live visual reconciliation after the public page still looked unlike the approved local presentation. The front-page marketing preview is live at `https://precisionperformance.com.au`, and local/apex/`www` Edge DevTools screenshots now show the same Sprint 029 presentation at desktop, tablet, and mobile widths with the hero image visible.
+Sprint 029K completed release-state hygiene after Sprint 029J corrected the rendered-live public marketing preview. The front-page marketing preview is live at `https://precisionperformance.com.au`; production aliases still inspect to intended project `pnr-precision-performance` deployment `dpl_CMahP7G62gim3t6HmkhPFwSC1JMy`; and the accidental temporary Vercel project from the first unlinked 029J deploy attempt has been removed.
 
 The authenticated/Supabase branch remains at the prior 021Z clean close state. Do not resume or retry 021Z without a new bounded Pack.
 
 ## Current Status
 
-Sprint 029J status: `rendered-live-marketing-preview-corrected`.
+Sprint 029K status: `release-state-hygiene-complete`.
 
-The known root front-page width/layout source issue was corrected in 029B. Sprint 029C restored JSON/static/typecheck validation through project-local Node script resolution. Sprint 029D aligned ESLint 9/Next linting and proved a successful production build in a non-OneDrive temp workspace. Sprint 029E reconfirmed validation/build/HTTP route smoke. Sprint 029F reconfirmed validation/build/HTTP route smoke, completed operator-assisted visual smoke after automated browser capture remained unavailable, deployed through Vercel, and passed deployed safety smoke. Sprint 029G rechecked the public alias, confirmed it serves Sprint 029 markers, and confirmed Vercel maps the alias to deployment `dpl_9gPytpAofTSHcTJJMM1Qw9TxKpAd`. Sprint 029H then confirmed live cache-busted apex, `www`, and Vercel app alias checks serve Sprint 029 markers, DNS resolves apex/`www` to Vercel records, Vercel inspect still maps the alias to `dpl_9gPytpAofTSHcTJJMM1Qw9TxKpAd`, and final route smoke passes. Sprint 029I reconciled a later reported old-content observation by proving source, clean-worktree build, Vercel alias/deployment, DNS/header, and live public checks agree; the exact `https://precisionperformance.com.au/?review029h=1` URL served Sprint markers and no old-page markers. Sprint 029J then found the rendered visual failure: the live hero image asset returned 404/invalid optimized image while local served it correctly, and narrow mobile hero text needed explicit wrapping. Sprint 029J corrected `app/page.tsx`, deployed commit `14bc568` to the intended `pnr-precision-performance` Vercel project as `dpl_CMahP7G62gim3t6HmkhPFwSC1JMy`, confirmed the hero image endpoints return 200, and captured local/apex/`www` rendered parity screenshots. Unrelated active 021AA dirty work remained excluded.
+The known root front-page width/layout source issue was corrected in 029B. Sprint 029C restored JSON/static/typecheck validation through project-local Node script resolution. Sprint 029D aligned ESLint 9/Next linting and proved a successful production build in a non-OneDrive temp workspace. Sprint 029E reconfirmed validation/build/HTTP route smoke. Sprint 029F reconfirmed validation/build/HTTP route smoke, completed operator-assisted visual smoke after automated browser capture remained unavailable, deployed through Vercel, and passed deployed safety smoke. Sprint 029G rechecked the public alias, confirmed it serves Sprint 029 markers, and confirmed Vercel maps the alias to deployment `dpl_9gPytpAofTSHcTJJMM1Qw9TxKpAd`. Sprint 029H then confirmed live cache-busted apex, `www`, and Vercel app alias checks serve Sprint 029 markers, DNS resolves apex/`www` to Vercel records, Vercel inspect still maps the alias to `dpl_9gPytpAofTSHcTJJMM1Qw9TxKpAd`, and final route smoke passes. Sprint 029I reconciled a later reported old-content observation by proving source, clean-worktree build, Vercel alias/deployment, DNS/header, and live public checks agree; the exact `https://precisionperformance.com.au/?review029h=1` URL served Sprint markers and no old-page markers. Sprint 029J then found the rendered visual failure: the live hero image asset returned 404/invalid optimized image while local served it correctly, and narrow mobile hero text needed explicit wrapping. Sprint 029J corrected `app/page.tsx`, deployed commit `14bc568` to the intended `pnr-precision-performance` Vercel project as `dpl_CMahP7G62gim3t6HmkhPFwSC1JMy`, confirmed the hero image endpoints return 200, and captured local/apex/`www` rendered parity screenshots. Sprint 029K removed temporary Vercel project `pnr-029j-release-worktree-20260724210200` after confirming it had no production custom-domain aliases, then reverified production alias mapping, public markers, hero asset, and route safety. Unrelated active 021AA dirty work remained excluded.
 
 ## Since Last Sprint
 
@@ -61,6 +61,16 @@ The known root front-page width/layout source issue was corrected in 029B. Sprin
 - Captured Edge DevTools rendered screenshots for local, apex, and `www` at desktop, tablet, and mobile sizes; all have matching viewport scroll widths and non-zero hero image dimensions.
 - Confirmed final public route smoke passes.
 - Captured 029J evidence in `planning/reviews/029J-rendered-live-visual-reconciliation-and-deploy-correction-evidence.md`.
+- Applied `planning/architect-packs/architect-pack-029K-release-state-hygiene-and-vercel-cleanup.md`.
+- Created `planning/sprints/029K-release-state-hygiene-and-vercel-cleanup/SPRINT.md`.
+- Reconciled `develop...origin/develop [ahead 14]`, Sprint 029F through 029J commit provenance, source-vs-evidence commit classes, and remaining dirty/untracked boundaries.
+- Confirmed `.vercel/project.json` has the expected non-secret link shape without printing project or org identifiers.
+- Confirmed apex and `www` inspect to intended project `pnr-precision-performance`, deployment `dpl_CMahP7G62gim3t6HmkhPFwSC1JMy`, status Ready.
+- Confirmed accidental deployment `dpl_83Yatsa6D3ZmUTA8byspKqnAvPYT` belonged to temporary project `pnr-029j-release-worktree-20260724210200` and had no production custom-domain aliases.
+- Removed temporary Vercel project `pnr-029j-release-worktree-20260724210200`.
+- Confirmed the removed temporary deployment is no longer inspectable.
+- Reconfirmed post-cleanup public alias markers, hero asset 200, and route-safety smoke.
+- Captured 029K evidence in `planning/reviews/029K-release-state-hygiene-and-vercel-cleanup-evidence.md`.
 
 ## Architecture / File Map
 
@@ -78,7 +88,8 @@ The known root front-page width/layout source issue was corrected in 029B. Sprin
 - `planning/reviews/029I-live-public-content-reconciliation-and-hard-deploy-evidence.md`: 029I source/build/Vercel/DNS/public-content reconciliation of the reported old-content URL, raw deployment SSO finding, and final route smoke.
 - `planning/reviews/029J-rendered-live-visual-reconciliation-and-deploy-correction-evidence.md`: 029J rendered-live mismatch reproduction, hero asset/mobile correction, intended Vercel deployment, visual screenshot parity, and route smoke.
 - `planning/reviews/029J-visual-artifacts/`: final local/apex/`www` Edge DevTools screenshots.
-- `planning/sprints/029J-rendered-live-visual-reconciliation-and-deploy-correction/SPRINT.md`: latest 029J sprint source.
+- `planning/reviews/029K-release-state-hygiene-and-vercel-cleanup-evidence.md`: 029K release ledger, temporary Vercel cleanup, production alias verification, public smoke, and repository-boundary evidence.
+- `planning/sprints/029K-release-state-hygiene-and-vercel-cleanup/SPRINT.md`: latest Sprint 029 follow-up source.
 
 ## Decisions
 
@@ -93,7 +104,7 @@ The known root front-page width/layout source issue was corrected in 029B. Sprin
 - Production build depends on a non-OneDrive workspace or equivalent reparse-safe output/dependency path.
 - The worktree still contains unresolved active Sprint 021AA changes outside 029B scope.
 - Deployed rendered smoke passed on the production alias after 029J. If a reviewer still sees old content or a broken visual, first test the exact URL in a private-window or hard-refresh live request and compare against the 029J screenshot evidence before treating search/browser cache as current production evidence.
-- A temporary non-target Vercel project/deployment was created by an initial unlinked release-worktree deploy attempt. It is not aliased to production and may be removed manually by an operator after confirming it is not `pnr-precision-performance`.
+- Sprint 029K removed the temporary non-target Vercel project after confirming it was not the intended project and had no production custom-domain aliases.
 - Do not claim public relaunch, SEO launch, full public website completion, product Done, commerce readiness, authenticated readiness, deployment readiness, or production readiness.
 
 ## Open Questions For The Architect
@@ -120,6 +131,7 @@ Passed:
 - Sprint 029I live cache-busted checks for apex, `www`, Vercel app alias, and the exact reported `?review029h=1` URL.
 - Sprint 029I final public route smoke.
 - Sprint 029J root-page source correction, clean-worktree build, intended Vercel deployment, live hero image 200 checks, Edge DevTools local/apex/`www` screenshot parity, and final route smoke.
+- Sprint 029K release ledger, temporary Vercel project cleanup, post-cleanup Vercel inspect, public marker smoke, hero asset check, route-safety smoke, and JSON/static/diff validation.
 
 Blocked/limited:
 
@@ -128,4 +140,4 @@ Blocked/limited:
 
 ## Recommended Next Architect Action
 
-Plan any broader public website, commerce, authenticated, SEO/indexing, final launch, or production-readiness work separately. Preserve the Sprint 029J marketing-preview boundary.
+Plan any broader public website, commerce, authenticated, SEO/indexing, final launch, or production-readiness work separately. Preserve the Sprint 029K marketing-preview and release-state boundary, and choose a scoped repository push/review strategy before publishing local `develop` history.
