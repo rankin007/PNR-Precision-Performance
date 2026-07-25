@@ -26,6 +26,8 @@ Sprint 029J update: rendered-live visual reconciliation found that the live page
 
 Sprint 029K update: release-state hygiene passed. Production aliases still inspect to the intended `pnr-precision-performance` deployment `dpl_CMahP7G62gim3t6HmkhPFwSC1JMy`; post-cleanup public marker, hero asset, and route-safety smoke passed; and the accidental unlinked Sprint 029J release-worktree Vercel project `pnr-029j-release-worktree-20260724210200` was removed after confirming it had no production custom-domain aliases. No DNS change, intended Vercel project setting/environment mutation, Supabase mutation, Stripe mutation, production data mutation, or runtime source change was performed.
 
+Sprint 029L update: scoped remote backup passed. The Sprint 029 release lineage through the Sprint 029K closeout commit is backed up on remote branch `codex/029-marketing-preview-release` at SHA `7e21c9767f3d53e0f2b8ddf126e22b7352c6def4`. `origin/develop` was not pushed or targeted. Light public production verification still passed, and no deployment, source/content change, DNS change, Vercel setting/environment mutation, Supabase mutation, Stripe mutation, production data mutation, or runtime source change was performed.
+
 ## Implemented Page
 
 Route: `/`
@@ -154,6 +156,13 @@ Sprint 029K additional evidence:
 - Post-cleanup hero asset check returned `200`, `image/jpeg`, and content length `394632`.
 - Post-cleanup route smoke passed for root, stale public redirects, sign-in, anonymous protected redirects, and safe checkout GET unavailable behavior.
 
+Sprint 029L additional evidence:
+
+- Remote backup branch `codex/029-marketing-preview-release` exists at `7e21c9767f3d53e0f2b8ddf126e22b7352c6def4`.
+- The backed-up commit is Sprint 029K closeout commit `7e21c97`.
+- Light production verification returned all eight Sprint marker pieces, zero old markers, hero asset `200`, and Vercel inspect still mapped apex to deployment `dpl_CMahP7G62gim3t6HmkhPFwSC1JMy`.
+- The branch is a scoped release backup only and does not reconcile local or remote `develop`.
+
 ## Deployment Blocker
 
 Deployment proceeded through explicit Sprint 029/029B/029C/029D/029E/029F file staging and an isolated release worktree/branch. The following remain controlled constraints:
@@ -167,7 +176,7 @@ Deployment proceeded through explicit Sprint 029/029B/029C/029D/029E/029F file s
 
 What is blocked:
 
-No blocking Sprint 029K release-state hygiene action remains.
+No blocking Sprint 029L scoped release-branch backup action remains.
 
 Evidence checked:
 
@@ -182,7 +191,8 @@ Exact user/manual action needed:
 1. Preserve the active Sprint 021AA dirty state outside Sprint 029 staging.
 2. Treat the deployed page as a marketing preview only.
 3. Require a later sprint for full public website, commerce, authenticated, SEO/indexing, or production readiness claims.
-4. Decide separately whether to push a scoped Sprint 029 release branch or reconcile local `develop` history.
+4. Use `codex/029-marketing-preview-release` as the scoped backup/review branch for Sprint 029 release lineage.
+5. Reconcile local `develop`, remote `develop`, and active 021-series dirty work separately before any broad merge or `develop` push.
 
 Builder will verify afterward:
 

@@ -1,8 +1,8 @@
 {
     "schemaVersion":  1,
     "phase":  "deployed-marketing-preview",
-    "sprint":  "029K-release-state-hygiene-and-vercel-cleanup",
-    "status":  "release-state-hygiene-complete",
+    "sprint":  "029L-scoped-release-branch-and-remote-backup",
+    "status":  "scoped-release-branch-backed-up",
     "updated":  "2026-07-26T00:00:00+10:00",
-    "summary":  "Sprint 029K reconciled the Sprint 029 release-control state after 029J. Production aliases still inspect to the intended pnr-precision-performance deployment dpl_CMahP7G62gim3t6HmkhPFwSC1JMy, post-cleanup public marker/route/hero-asset smoke passes, and the accidental temporary Vercel project pnr-029j-release-worktree-20260724210200 was removed after confirming it had no production custom-domain aliases. Local develop remains ahead of origin/develop and unrelated 021-series/auth/Supabase dirty work remains isolated. This remains a noindex/nofollow marketing preview, not full public website completion, commerce readiness, authenticated readiness, SEO/indexing launch, final launch readiness, or production readiness."
+    "summary":  "Sprint 029L backed up the Sprint 029 marketing-preview release lineage to scoped remote branch codex/029-marketing-preview-release at SHA 7e21c9767f3d53e0f2b8ddf126e22b7352c6def4, the Sprint 029K closeout commit. The direct HTTPS push timed out locally but read-only ls-remote verification confirmed the branch exists; origin/develop was not targeted or moved by Sprint 029L. Light production verification still maps precisionperformance.com.au to intended Vercel deployment dpl_CMahP7G62gim3t6HmkhPFwSC1JMy, the hero asset returns 200, and Sprint markers are present with old markers absent. Unrelated 021-series/auth/Supabase dirty work remains isolated. This remains a noindex/nofollow marketing preview, not full public website completion, commerce readiness, authenticated readiness, SEO/indexing launch, final launch readiness, production readiness, or develop reconciliation."
 }
