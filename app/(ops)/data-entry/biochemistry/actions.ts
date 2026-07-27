@@ -81,6 +81,13 @@ function resultRedirect(testId: string, status: string): never {
   redirect(`/data-entry/biochemistry/${testId}?comment=${encodeURIComponent(status)}`);
 }
 
+function hasExactlyOneAffectedComment(data: unknown): data is Array<{ id: string }> {
+  return Array.isArray(data)
+    && data.length === 1
+    && typeof data[0]?.id === "string"
+    && data[0].id.length > 0;
+}
+
 export async function createBiochemistryCommentAction(formData: FormData) {
   const testId = readString(formData, "testId");
   const validated = validateCommentText(readString(formData, "comment"));
@@ -106,10 +113,10 @@ export async function updateBiochemistryCommentAction(formData: FormData) {
   const context = await requirePortalAppContext(`/data-entry/biochemistry/${testId}`);
   if (!commentId || !context.appUserId || !validated.ok) resultRedirect(testId, "invalid");
   const supabase = await createSupabaseServerClient();
-  const { error } = await supabase.from("biochemistry_test_notes").update({
+  const { data, error } = await supabase.from("biochemistry_test_notes").update({
     note_text: validated.text, updated_at: new Date().toISOString(), updated_by_user_id: context.appUserId,
-  }).eq("id", commentId).eq("test_id", testId).is("deleted_at", null);
-  if (error) resultRedirect(testId, "denied");
+  }).eq("id", commentId).eq("test_id", testId).is("deleted_at", null).select("id");
+  if (error || !hasExactlyOneAffectedComment(data)) resultRedirect(testId, "denied");
   revalidatePath(`/data-entry/biochemistry/${testId}`);
   resultRedirect(testId, "updated");
 }
@@ -120,11 +127,11 @@ export async function deleteBiochemistryCommentAction(formData: FormData) {
   const context = await requirePortalAppContext(`/data-entry/biochemistry/${testId}`);
   if (!commentId || !context.appUserId) resultRedirect(testId, "denied");
   const supabase = await createSupabaseServerClient();
-  const { error } = await supabase.from("biochemistry_test_notes").update({
-    deleted_at: new Date().toISOString(), deleted_by_user_id: context.appUserId,
-    delete_reason: "user-request", updated_at: new Date().toISOString(), updated_by_user_id: context.appUserId,
-  }).eq("id", commentId).eq("test_id", testId).is("deleted_at", null);
-  if (error) resultRedirect(testId, "denied");
+  const { data, error } = await supabase.rpc("soft_delete_biochemistry_comment", {
+    target_note_id: commentId,
+    target_test_id: testId,
+  });
+  if (error || data !== true) resultRedirect(testId, "denied");
   revalidatePath(`/data-entry/biochemistry/${testId}`);
   resultRedirect(testId, "deleted");
 }
@@ -138,11 +145,13 @@ function readRequiredNumber(formData: FormData, key: string) {
   const value = readString(formData, key);
 
   if (!value) {
-    return null;
+    return { status: "missing" as const, value: null };
   }
 
   const parsed = Number(value);
-  return Number.isFinite(parsed) ? parsed : null;
+  return Number.isFinite(parsed)
+    ? { status: "valid" as const, value: parsed }
+    : { status: "invalid" as const, value: null };
 }
 
 function isTimeOfDay(value: string): value is BiochemistryTimeOfDay {
@@ -234,19 +243,32 @@ export async function submitBiochemistryTestAction(formData: FormData) {
   const timeOfDayValue = readString(formData, "timeOfDay") || "unspecified";
   const notes = readString(formData, "notes");
   const validatedInitialNote = notes ? validateCommentText(notes) : null;
+  const numericReadings = {
+    carbsReading: readRequiredNumber(formData, "carbsReading"),
+    phSaliva: readRequiredNumber(formData, "phSaliva"),
+    phUrine: readRequiredNumber(formData, "phUrine"),
+    conductivityRawMeterValue: readRequiredNumber(formData, "conductivityRawMeterValue"),
+    ureaReading: readRequiredNumber(formData, "ureaReading"),
+  };
   const rawReadings: BiochemistryRawReadings = {
-    carbsReading: readRequiredNumber(formData, "carbsReading") ?? Number.NaN,
-    phSaliva: readRequiredNumber(formData, "phSaliva") ?? Number.NaN,
-    phUrine: readRequiredNumber(formData, "phUrine") ?? Number.NaN,
-    conductivityRawMeterValue: readRequiredNumber(formData, "conductivityRawMeterValue") ?? Number.NaN,
-    ureaReading: readRequiredNumber(formData, "ureaReading") ?? Number.NaN,
+    carbsReading: numericReadings.carbsReading.value ?? Number.NaN,
+    phSaliva: numericReadings.phSaliva.value ?? Number.NaN,
+    phUrine: numericReadings.phUrine.value ?? Number.NaN,
+    conductivityRawMeterValue: numericReadings.conductivityRawMeterValue.value ?? Number.NaN,
+    ureaReading: numericReadings.ureaReading.value ?? Number.NaN,
   };
 
-  if (!horseId || !testDate || !isTimeOfDay(timeOfDayValue) || !context.appUserId) {
+  if (
+    !horseId
+    || !testDate
+    || !isTimeOfDay(timeOfDayValue)
+    || !context.appUserId
+    || Object.values(numericReadings).some((reading) => reading.status === "missing")
+  ) {
     redirectWithError("missing-fields");
   }
 
-  if (Object.values(rawReadings).some((value) => !Number.isFinite(value))) {
+  if (Object.values(numericReadings).some((reading) => reading.status === "invalid")) {
     redirectWithError("invalid-number");
   }
   if (validatedInitialNote && !validatedInitialNote.ok) {

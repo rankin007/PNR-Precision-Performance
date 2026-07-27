@@ -4023,3 +4023,429 @@ grant execute on function public.can_manage_horse_access_assignment(uuid,uuid,te
 grant execute on function public.can_manage_stable_role_assignment(uuid,uuid,text) to authenticated;
 
 -- <<< END 0012_role_lifecycle_policy_hardening.sql
+
+-- >>> BEGIN 0013_atomic_initial_administrator_claim.sql
+-- Sprint 021V - transactionally serialized initial-Administrator claim.
+
+create or replace function public.claim_initial_administrator()
+returns text
+language plpgsql
+security definer
+set search_path = pg_catalog, public
+as $$
+declare
+  actor_auth_id uuid := auth.uid();
+  actor_user_id uuid;
+  canonical_level_id uuid;
+  actor_count integer;
+  profile_count integer;
+  history_count integer;
+  canonical_level_count integer;
+  legacy_level_count integer;
+  recognized_assignment_count integer;
+  intended_assignment_count integer;
+  intended_role_count integer;
+  affected_count integer;
+begin
+  -- Stable project-specific transaction lock; every eligibility read and write follows it.
+  perform pg_catalog.pg_advisory_xact_lock(581732104913021);
+
+  if actor_auth_id is null then
+    return 'denied';
+  end if;
+
+  select count(*), (array_agg(u.id))[1]
+    into actor_count, actor_user_id
+  from public.users u
+  where u.auth_user_id = actor_auth_id
+    and u.status = 'active';
+  if actor_count <> 1 or actor_user_id is null then
+    return 'denied';
+  end if;
+
+  select count(*) into profile_count
+  from public.member_profiles mp
+  where mp.user_id = actor_user_id
+    and mp.is_active is true;
+  if profile_count <> 1 then
+    return 'denied';
+  end if;
+
+  select count(*) into history_count
+  from public.user_membership_levels uml
+  where uml.user_id = actor_user_id;
+  if history_count <> 0 then
+    return 'denied';
+  end if;
+
+  select count(*), (array_agg(ml.id))[1]
+    into canonical_level_count, canonical_level_id
+  from public.membership_levels ml
+  where ml.code = 'administrator';
+  select count(*) into legacy_level_count
+  from public.membership_levels ml
+  where ml.code = 'admin';
+  if canonical_level_count <> 1 or canonical_level_id is null or legacy_level_count > 1 then
+    return 'denied';
+  end if;
+
+  select count(*) into recognized_assignment_count
+  from public.user_membership_levels uml
+  join public.membership_levels ml on ml.id = uml.membership_level_id
+  where ml.code in ('administrator', 'admin');
+  if recognized_assignment_count <> 0 then
+    return 'denied';
+  end if;
+
+  insert into public.user_membership_levels (user_id, membership_level_id)
+  values (actor_user_id, canonical_level_id);
+  get diagnostics affected_count = row_count;
+  if affected_count <> 1 then
+    raise exception using errcode = 'P0001', message = 'claim_denied';
+  end if;
+
+  update public.users
+  set primary_role_code = 'administrator', updated_at = now()
+  where id = actor_user_id and status = 'active';
+  get diagnostics affected_count = row_count;
+  if affected_count <> 1 then
+    raise exception using errcode = 'P0001', message = 'claim_denied';
+  end if;
+
+  select count(*) into intended_assignment_count
+  from public.user_membership_levels uml
+  where uml.user_id = actor_user_id
+    and uml.membership_level_id = canonical_level_id;
+  select count(*) into recognized_assignment_count
+  from public.user_membership_levels uml
+  join public.membership_levels ml on ml.id = uml.membership_level_id
+  where ml.code in ('administrator', 'admin');
+  select count(*) into intended_role_count
+  from public.users u
+  where u.id = actor_user_id
+    and u.primary_role_code = 'administrator';
+
+  if intended_assignment_count <> 1
+    or recognized_assignment_count <> 1
+    or intended_role_count <> 1 then
+    raise exception using errcode = 'P0001', message = 'claim_denied';
+  end if;
+
+  return 'claimed';
+end
+$$;
+
+revoke execute on function public.claim_initial_administrator() from public, anon;
+grant execute on function public.claim_initial_administrator() to authenticated;
+
+-- <<< END 0013_atomic_initial_administrator_claim.sql
+
+-- >>> BEGIN 0014_authenticated_biochemistry_comment_soft_delete.sql
+-- Sprint 021AD - authenticated, RLS-governed comment soft-delete.
+
+create or replace function public.soft_delete_biochemistry_comment(
+  target_note_id uuid,
+  target_test_id uuid
+)
+returns boolean
+language plpgsql
+volatile
+security invoker
+set search_path = pg_catalog, public
+as $$
+declare
+  actor_user_id uuid := public.current_app_user_id();
+  mutation_time timestamptz := pg_catalog.now();
+  affected_count integer;
+begin
+  if actor_user_id is null then
+    return false;
+  end if;
+
+  update public.biochemistry_test_notes
+  set deleted_at = mutation_time,
+      deleted_by_user_id = actor_user_id,
+      delete_reason = 'user-request',
+      updated_at = mutation_time,
+      updated_by_user_id = actor_user_id
+  where id = target_note_id
+    and test_id = target_test_id
+    and deleted_at is null;
+
+  get diagnostics affected_count = row_count;
+  return affected_count = 1;
+end
+$$;
+
+revoke all on function public.soft_delete_biochemistry_comment(uuid, uuid) from public;
+revoke all on function public.soft_delete_biochemistry_comment(uuid, uuid) from anon;
+grant execute on function public.soft_delete_biochemistry_comment(uuid, uuid) to authenticated;
+
+-- <<< END 0014_authenticated_biochemistry_comment_soft_delete.sql
+
+-- >>> BEGIN 0015_hardened_authenticated_biochemistry_comment_soft_delete.sql
+-- Sprint 021AF - hardened authenticated comment soft-delete boundary.
+
+create or replace function public.soft_delete_biochemistry_comment(
+  target_note_id uuid,
+  target_test_id uuid
+)
+returns boolean
+language plpgsql
+volatile
+security definer
+set search_path = pg_catalog, public
+as $$
+declare
+  actor_ids uuid[];
+  actor_count bigint;
+  active_profile_count bigint;
+  target_note record;
+  mutation_time timestamptz;
+  affected_count integer;
+begin
+  select pg_catalog.array_agg(u.id order by u.id), pg_catalog.count(*)
+  into actor_ids, actor_count
+  from public.users u
+  where u.auth_user_id = auth.uid()
+    and u.status = 'active';
+
+  if actor_count <> 1 then
+    return false;
+  end if;
+
+  select pg_catalog.count(*)
+  into active_profile_count
+  from public.member_profiles mp
+  where mp.user_id = actor_ids[1]
+    and mp.is_active;
+
+  if active_profile_count < 1 then
+    return false;
+  end if;
+
+  select n.id, n.horse_id, n.created_by_user_id
+  into target_note
+  from public.biochemistry_test_notes n
+  where n.id = target_note_id
+    and n.test_id = target_test_id
+    and n.deleted_at is null
+  for update;
+
+  if not found then
+    return false;
+  end if;
+
+  if not (
+    public.is_admin()
+    or (
+      target_note.created_by_user_id = actor_ids[1]
+      and public.can_comment_biochemistry_horse(target_note.horse_id)
+    )
+  ) then
+    return false;
+  end if;
+
+  mutation_time := pg_catalog.now();
+
+  update public.biochemistry_test_notes
+  set deleted_at = mutation_time,
+      deleted_by_user_id = actor_ids[1],
+      delete_reason = 'user-request',
+      updated_at = mutation_time,
+      updated_by_user_id = actor_ids[1]
+  where id = target_note.id
+    and test_id = target_test_id
+    and deleted_at is null;
+
+  get diagnostics affected_count = row_count;
+  return affected_count = 1;
+end
+$$;
+
+revoke all on function public.soft_delete_biochemistry_comment(uuid, uuid) from public;
+revoke all on function public.soft_delete_biochemistry_comment(uuid, uuid) from anon;
+grant execute on function public.soft_delete_biochemistry_comment(uuid, uuid) to authenticated;
+
+-- <<< END 0015_hardened_authenticated_biochemistry_comment_soft_delete.sql
+
+-- >>> BEGIN 0016_null_safe_authenticated_biochemistry_comment_soft_delete.sql
+-- Sprint 021AG - null-safe authenticated comment soft-delete authorization.
+
+create or replace function public.soft_delete_biochemistry_comment(
+  target_note_id uuid,
+  target_test_id uuid
+)
+returns boolean
+language plpgsql
+volatile
+security definer
+set search_path = pg_catalog, public
+as $$
+declare
+  actor_ids uuid[];
+  actor_count bigint;
+  active_profile_count bigint;
+  target_note record;
+  actor_is_admin boolean;
+  actor_is_author boolean;
+  actor_can_comment boolean;
+  authorized boolean;
+  mutation_time timestamptz;
+  affected_count integer;
+begin
+  select pg_catalog.array_agg(u.id order by u.id), pg_catalog.count(*)
+  into actor_ids, actor_count
+  from public.users u
+  where u.auth_user_id = auth.uid()
+    and u.status = 'active';
+
+  if actor_count <> 1 then
+    return false;
+  end if;
+
+  select pg_catalog.count(*)
+  into active_profile_count
+  from public.member_profiles mp
+  where mp.user_id = actor_ids[1]
+    and mp.is_active;
+
+  if active_profile_count < 1 then
+    return false;
+  end if;
+
+  select n.id, n.horse_id, n.created_by_user_id
+  into target_note
+  from public.biochemistry_test_notes n
+  where n.id = target_note_id
+    and n.test_id = target_test_id
+    and n.deleted_at is null
+  for update;
+
+  if not found then
+    return false;
+  end if;
+
+  actor_is_admin := pg_catalog.coalesce(public.is_admin(), false);
+  actor_is_author := pg_catalog.coalesce(target_note.created_by_user_id = actor_ids[1], false);
+  actor_can_comment := pg_catalog.coalesce(
+    public.can_comment_biochemistry_horse(target_note.horse_id),
+    false
+  );
+  authorized := actor_is_admin or (actor_is_author and actor_can_comment);
+
+  if authorized is distinct from true then
+    return false;
+  end if;
+
+  mutation_time := pg_catalog.now();
+
+  update public.biochemistry_test_notes
+  set deleted_at = mutation_time,
+      deleted_by_user_id = actor_ids[1],
+      delete_reason = 'user-request',
+      updated_at = mutation_time,
+      updated_by_user_id = actor_ids[1]
+  where id = target_note.id
+    and test_id = target_test_id
+    and deleted_at is null;
+
+  get diagnostics affected_count = row_count;
+  return affected_count = 1;
+end
+$$;
+
+revoke all on function public.soft_delete_biochemistry_comment(uuid, uuid) from public;
+revoke all on function public.soft_delete_biochemistry_comment(uuid, uuid) from anon;
+grant execute on function public.soft_delete_biochemistry_comment(uuid, uuid) to authenticated;
+
+-- <<< END 0016_null_safe_authenticated_biochemistry_comment_soft_delete.sql
+
+-- >>> BEGIN 0017_valid_null_safe_authenticated_biochemistry_comment_soft_delete.sql
+-- Sprint 021AH - valid null-safe authenticated comment soft-delete authorization.
+
+create or replace function public.soft_delete_biochemistry_comment(
+  target_note_id uuid,
+  target_test_id uuid
+)
+returns boolean
+language plpgsql
+volatile
+security definer
+set search_path = pg_catalog, public
+as $$
+declare
+  actor_ids uuid[];
+  actor_count bigint;
+  active_profile_count bigint;
+  target_note record;
+  actor_is_admin boolean;
+  actor_is_author boolean;
+  actor_can_comment boolean;
+  authorized boolean;
+  mutation_time timestamptz;
+  affected_count integer;
+begin
+  select pg_catalog.array_agg(u.id order by u.id), pg_catalog.count(*)
+  into actor_ids, actor_count
+  from public.users u
+  where u.auth_user_id = auth.uid()
+    and u.status = 'active';
+
+  if actor_count <> 1 then
+    return false;
+  end if;
+
+  select pg_catalog.count(*)
+  into active_profile_count
+  from public.member_profiles mp
+  where mp.user_id = actor_ids[1]
+    and mp.is_active;
+
+  if active_profile_count < 1 then
+    return false;
+  end if;
+
+  select n.id, n.horse_id, n.created_by_user_id
+  into target_note
+  from public.biochemistry_test_notes n
+  where n.id = target_note_id
+    and n.test_id = target_test_id
+    and n.deleted_at is null
+  for update;
+
+  if not found then
+    return false;
+  end if;
+
+  actor_is_admin := public.is_admin() is true;
+  actor_is_author := (target_note.created_by_user_id = actor_ids[1]) is true;
+  actor_can_comment := public.can_comment_biochemistry_horse(target_note.horse_id) is true;
+  authorized := actor_is_admin or (actor_is_author and actor_can_comment);
+
+  if authorized is not true then
+    return false;
+  end if;
+
+  mutation_time := pg_catalog.now();
+
+  update public.biochemistry_test_notes
+  set deleted_at = mutation_time,
+      deleted_by_user_id = actor_ids[1],
+      delete_reason = 'user-request',
+      updated_at = mutation_time,
+      updated_by_user_id = actor_ids[1]
+  where id = target_note.id
+    and test_id = target_test_id
+    and deleted_at is null;
+
+  get diagnostics affected_count = row_count;
+  return affected_count = 1;
+end
+$$;
+
+revoke all on function public.soft_delete_biochemistry_comment(uuid, uuid) from public;
+revoke all on function public.soft_delete_biochemistry_comment(uuid, uuid) from anon;
+grant execute on function public.soft_delete_biochemistry_comment(uuid, uuid) to authenticated;
+
+-- <<< END 0017_valid_null_safe_authenticated_biochemistry_comment_soft_delete.sql

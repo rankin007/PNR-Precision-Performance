@@ -16,6 +16,7 @@ This file navigates evidence; it does not replace the linked records.
 
 | Area | Canonical evidence | Evidence class |
 |---|---|---|
+| Sprint 023B clean product baseline reconciliation | `planning/reviews/023B-dirty-source-classification-and-provenance.md`, `planning/reviews/023B-base-ancestry-and-isolation.md`, `planning/reviews/023B-reconciled-source-manifest.md`, `planning/reviews/023B-validation-and-non-mutation-evidence.md`, `planning/reviews/023B-clean-baseline-closeout.md` | Isolated local source/validation; ready for a separately instructed local commit |
 | Clean repository baseline | `planning/reviews/017F-local-baseline-completion-review.md`; commits `9d7478657d1220777758e40e8611456dbce46ce1`, `1d507193a048b0d5dbb3b90e4dcec3247b71679d` | Local Git/static |
 | Validation/CI consolidation | `planning/reviews/002B-delivery-system-and-project-state-consolidation.md` | Local/CI-equivalent |
 | Design and messaging | `docs/DESIGN_AND_MESSAGING_AUTHORITY.md`, `docs/DESIGN_SYSTEM_BASELINE_019.md` | Local authority/static |

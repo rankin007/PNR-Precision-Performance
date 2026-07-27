@@ -2,6 +2,8 @@
 
 ## Current Status
 
+Sprint `023B-source-reconciliation-and-clean-product-baseline` is closed `clean-product-baseline-established` in isolated worktree `C:\tmp\pnr-023b-source-reconciliation` on branch `codex/023B-source-reconciliation-and-clean-product-baseline`, based on accepted Sprint 029M tip `ad9d419bc40f0be2e13aa297535d3d8e5e151625`. The user approved the validated local reconciliation commit on 2026-07-28. Accepted Sprint 021AH migrations/auth application source and Sprint 022/022B workflow source, tests, documents, and evidence are reconciled locally. Focused tests, JSON, domain, roles, Supabase self-tests, TypeScript, lint, production build, and diff checks pass. Static/CI/local suites stop only at the inherited migration 0009 Windows byte-hash mismatch; migration 0009 was not edited. No dependency, upload/Storage behaviour, public route, deployment, remote mutation, or original `develop` worktree mutation occurred. Builder reports the resulting local clean baseline SHA at handoff because a commit cannot contain its own final SHA.
+
 Sprint `029M-public-website-content-enquiry-and-pricing-follow-up` is closed `public-website-follow-up-partial-safe`. Final visual/content sign-off passed; scoped commit `387707afa58d1d77cfb6cea97e4caacf9141203b` was pushed only to the 029M branch and deployed through intended Vercel project `pnr-precision-performance` as `dpl_6F1TMjNRECmTCyMbyWXA6ohG8Q2R`. Apex, `www`, and `pnr-precision-performance.vercel.app` map to the deployment and passed content, asset, Pricing, visibly non-submitting enquiry, redirect, checkout-unavailable, protected-route, robots, and rendered mobile/desktop smoke. Enquiry transmission/storage/email, Information/Electrolytes publication, the undefined twelve-month term, and testimonial/video publication remain deferred. Sprint 023 and the original dirty `develop` worktree were not touched.
 
 Sprint `029L-scoped-release-branch-and-remote-backup` is closed as `scoped-release-branch-backed-up`. The Sprint 029 root marketing-preview page is live at `https://precisionperformance.com.au`, and the release lineage through Sprint 029K is backed up on remote branch `codex/029-marketing-preview-release` at SHA `7e21c9767f3d53e0f2b8ddf126e22b7352c6def4`.
@@ -10,7 +12,7 @@ Sprint 029F deployed the browser-proof marketing-preview release. Sprint 029G re
 
 Prior authenticated branch status remains: Sprint `021Z-onedrive-runtime-file-and-complete-browser-proof` is closed **browser-bootstrap-agreement-failed-clean**. OneDrive-aware runtime validation, protected selected-alias equality, one clean production build, client-secret exclusion, runtime readiness, and local safety gates passed. The bounded rendered bootstrap run timed out after one owned actor; exact Auth-last recovery restored Auth/application/Storage zero. The main browser matrix did not begin.
 
-Branch: `develop`. The existing local repository baseline and Sprint 002B delivery-consolidation evidence remain recorded in `planning/reviews/002B-delivery-system-and-project-state-consolidation.md`.
+Active reconciliation branch: `codex/023B-source-reconciliation-and-clean-product-baseline`; original dirty `develop` remains at `b8961b9647507af87e6887cf78c1d6e262f944b6` and unchanged. The existing local repository baseline and Sprint 002B delivery-consolidation evidence remain recorded in `planning/reviews/002B-delivery-system-and-project-state-consolidation.md`.
 
 ## Delivery And Validation State
 

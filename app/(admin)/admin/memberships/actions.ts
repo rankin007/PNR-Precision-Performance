@@ -3,8 +3,9 @@
 import { redirect } from "next/navigation";
 import {
   assignMembershipLevelToUser,
+  claimInitialAdministrator,
+  getInitialAdminEligibility,
   getMembershipAdminSnapshot,
-  hasAnyAdminAssignment,
 } from "@/lib/auth/bootstrap";
 import { requireAdminAppContext, requireSignedInAppContext } from "@/lib/auth/session";
 import { hasSupabaseAdminEnv } from "@/lib/supabase/admin";
@@ -23,20 +24,20 @@ export async function bootstrapInitialAdminAction() {
     redirect("/portal?bootstrap=service-role-missing");
   }
 
-  const hasAdmin = await hasAnyAdminAssignment();
-
-  if (hasAdmin) {
-    redirect("/portal?bootstrap=already-configured");
-  }
-
-  if (!context.appUserId) {
-    redirect("/portal?bootstrap=user-missing");
-  }
-
-  await assignMembershipLevelToUser({
-    userId: context.appUserId,
-    levelCode: "admin",
+  const eligibility = await getInitialAdminEligibility({
+    sessionPresent: Boolean(context.sessionUser),
+    appUserId: context.appUserId,
+    appUserStatus: context.appUserStatus,
+    memberProfilePresent: Boolean(context.memberProfileId),
+    memberProfileActive: context.memberProfileActive,
+    activeMembershipLevelCodes: context.membershipLevelCodes,
   });
+
+  if (!eligibility.eligible || !context.appUserId) redirect("/portal?bootstrap=denied");
+
+  if ((await claimInitialAdministrator()) !== "claimed") {
+    redirect("/portal?bootstrap=denied");
+  }
 
   redirect("/admin?bootstrapped=admin");
 }

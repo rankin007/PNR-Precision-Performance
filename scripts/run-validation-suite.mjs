@@ -59,6 +59,7 @@ export function commandPlan(mode, commands = platformCommands()) {
     domain: [
       ["biochemistry-scoring", node, ["--experimental-strip-types", "scripts/validate-biochemistry-scoring.ts"]],
       ["biochemistry-recommendations", node, ["--experimental-strip-types", "scripts/validate-biochemistry-recommendations.ts"]],
+      ["biochemistry-workflow-022", node, ["--experimental-strip-types", "scripts/test-biochemistry-workflow-022.mjs"]],
     ],
     roles: [["role-tests", node, ["--experimental-strip-types", "--disable-warning=MODULE_TYPELESS_PACKAGE_JSON", "scripts/test-role-matrix-021.mjs"]]],
     "supabase-self": SUPABASE_SELF_TESTS.map((path) => [`self:${path}`, node, [path]]),

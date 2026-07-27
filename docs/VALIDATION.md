@@ -5,7 +5,7 @@
 | Command | Purpose |
 |---|---|
 | `npm run validate:json` | Self-test deterministic JSON parsing and parse the maintained JSON set. |
-| `npm run test:domain` | Run scoring and recommendation fixtures. |
+| `npm run test:domain` | Run scoring, recommendation, and Sprint 022 biochemistry workflow fixtures. |
 | `npm run test:roles` | Run focused role/comment tests. |
 | `npm run test:supabase-self` | Run exact credential-free Supabase harness self-tests only. |
 | `npm run validate:static` | Run cross-platform static validators for Sprints 019–021. |
@@ -382,6 +382,25 @@ Sprint 012D branch update:
 
 ---
 
+# Sprint 021AG Validation Results
+
+- Focused 021AG/021AF and preserved 021AD/021R/021T/021V/021AC tests passed.
+- Exact 0001–0016 clean-rebuild validation, bundle regeneration, JSON/domain/roles/Supabase/static validation, TypeScript, lint, diff/index/scope scans, and the reparse-safe clean production build passed before migration application.
+- Candidate/refusal/`0/0/0`/ledger gates passed; dry run named only 0016; migration 0016 applied once; metadata/grants/policy-count verification and the clean second dry run passed.
+- The direct-first protected matrix stopped at active-author assertion `0/1`; rendered assertions were correctly not run. Auth-last cleanup and independent preflight returned final `0/0/0` with ledger `0001`–`0016`.
+- Final status: `direct-authorization-proof-failed-clean`.
+
+# Sprint 021AH Validation Results
+
+- One-shot genuine-author diagnostic passed with fixed class `rpc-syntax-or-resolution-error-no-row` and closing `0/0/0`.
+- Focused 021AH/021AG/021AF and preserved 021AD/021R/021T/021V/021AC tests passed.
+- Exact 0001–0017 validation, bundle/header checks, canonical validation, TypeScript, lint, scans, diff/index checks, and reparse-safe production builds passed.
+- Only migration 0017 applied once; metadata/grants/expression/policy checks and clean second dry run passed.
+- Direct authorization passed 17/17 before rendered proof passed 48/48. Auth-last cleanup and independent preflight proved final `0/0/0` with ledger `0001`–`0017`.
+- Final status: `supabase-application-proof-complete-clean`.
+
+---
+
 # Sprint 012E Validation Results
 
 | Check | Result | Notes |
@@ -403,3 +422,11 @@ Sprint 012D branch update:
 | Deployment/push/PR | Not performed | Sprint 012E did not authorize deployment, push, PR, DNS, Vercel setting, Supabase, Stripe, or production data changes. |
 
 Final Sprint 012E status: complete. Cleanup was archive-first and reversible; no runtime behavior change was introduced.
+
+## Sprint 021AE Validation Closeout
+
+Validator alignment, focused 021AD/021R/021T/021V/021AC regressions, JSON/domain/roles/Supabase/static gates, TypeScript, lint, governed bundle regeneration, clean production build, hashes, index isolation, and final diff checks passed. Migration 0014 applied once and remote metadata passed. The unchanged genuine rendered matrix failed own soft-delete at 42/43 and cleaned Auth/application/Storage to `0/0/0`; final outcome is `rendered-proof-failed-clean`.
+
+## Sprint 021AF Validation Closeout
+
+Direct isolation, Branch B static tests, canonical gates, TypeScript, lint, bundle 0001-0015, clean reparse-safe builds, migration metadata, author direct proof, and rendered 48/48 passed. The expanded direct matrix failed the Owner denial through an unsafe mutation, then cleaned to `0/0/0`. Final outcome is `direct-authorization-proof-failed-clean`; local validation success does not override the runtime authorization failure.

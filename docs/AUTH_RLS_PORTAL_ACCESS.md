@@ -128,3 +128,46 @@ Builder will verify after action:
 - unassigned-horse write denial
 - admin access and non-admin denial
 - phone-width and desktop-width critical route smoke
+# Sprint 021T Initial-Administrator Enforcement
+
+Portal fallback and the directly callable bootstrap action share one server-only eligibility decision. Eligibility requires an active application user and profile, zero active membership, authoritative zero membership history, reliable zero canonical/legacy Administrator assignments, and no configuration/query uncertainty. New claims assign canonical `administrator`; legacy `admin` remains read-compatible only.
+
+Concurrent global first-claim safety remains unproven. Sprint 021T stopped before claim assertions because the bounded Next.js response did not expose the expected progressive-enhancement action handle. Do not treat the shared application check as a global atomic guarantee.
+
+# Sprint 021U Supported Transport Boundary
+
+The installed supported browser surface can interact with rendered forms but cannot inject or establish the genuine isolated session required by the passwordless email-link flow. Sprint 021U therefore closed `bootstrap-action-transport-unproven-clean` before hosted work. Private action protocol, direct action invocation, mailbox inspection, protected-value transfer, and test-only production endpoints remain invalid substitutes. A later 021V Pack must define a safe ephemeral session bridge or separately authorize atomic database enforcement.
+
+# Sprint 021V Atomic Initial-Administrator Claim
+
+Candidate migration 0013 makes the first-Administrator mutation authoritative in a no-argument authenticated database function. It derives the caller from `auth.uid()`, serializes the entire eligibility/read/write/verification boundary with a transaction advisory lock, assigns canonical `administrator`, and fails closed. Public and anonymous execution are revoked. The server action retains the shared eligibility preflight but calls this session-bound RPC for mutation.
+
+Sequential and near-simultaneous genuine-actor RPC controls passed with exactly one canonical assignment and one matching primary role. This does not prove browser/server-action transport or the complete application matrix; those remain 021W.
+
+# Sprint 021W Protected Browser Bridge
+
+Installed Chrome 150 and loopback CDP can create/destroy isolated contexts and exact temporary profiles safely. The protected bridge cannot complete passwordless sign-in to its required loopback callback while the candidate Auth configuration remains production-only, and 021W did not authorize a callback change. The sprint therefore stopped `protected-browser-bridge-unavailable-clean` before any hosted request or actor creation.
+
+A later 021X requires explicit authority for a temporary exact callback addition plus production-only restoration, or another compliant same-process authentication completion. Direct authenticated atomic RPC success from 021V remains valid; browser/application agreement remains unproven.
+
+# Sprint 021X Protected SSR Cookie Bridge
+
+The normal `@supabase/ssr` cookie adapter and installed Chrome/CDP are available, so callback mutation is not intrinsically required. The production-built local app still needs `SUPABASE_SERVICE_ROLE_KEY` for its fail-closed bootstrap preflight. The accepted environment contract keeps that value out of `.env.local` and only in development/test sources. Because 021X prohibited environment mutation and protected cross-process transfer, it stopped `protected-session-cookie-bridge-unavailable-clean` before protected loading or hosted work.
+
+A future 021Y must govern a normal server-only production runtime source, preserve client exclusion, and then repeat the bridge/bootstrap gates. Email delivery and `/auth/callback` remain unproven.
+
+# Sprint 021AE Authenticated Soft-Delete Result
+
+Migration 0014 is applied once and exposes the exact authenticated-only, security-invoker boolean RPC with hardened search path. Static, metadata, and grant checks pass, but the genuine rendered author path remains generically denied and produces no soft-delete under the preserved active-row visibility/update policy boundary. Final hosted state is `0/0/0`. A later strict Pack must explicitly approve the revised database authorization design.
+
+# Sprint 021AF Direct Authorization Result
+
+Migration 0015 is applied once and fixes the author mutation boundary, but its authorization guard is not null-safe: an active Owner with no primary role can produce a nullable Administrator predicate and fall through the denial condition. Direct proof detected and contained this unsafe mutation. Do not use the soft-delete RPC as authorization-complete until additive migration 0016 enforces exact-true/null-safe authorization and the complete direct denial matrix passes.
+
+# Sprint 021AG Direct Authorization Result
+
+Migration 0016 is applied once and normalizes nullable authorization predicates, but the first genuine active-author direct positive failed exact true/one-row/attribution. The matrix stopped before later denials and before rendered proof; exact cleanup restored `0/0/0`. Do not use the soft-delete RPC as authorization-complete. Preserve 0014–0016 and require an additive 0017 diagnostic/correction before any retry.
+
+# Sprint 021AH Application-Proof Completion
+
+Migration 0017 is applied once and replaces only the exact authenticated soft-delete RPC with valid `IS TRUE`/`IS NOT TRUE` null-safe authorization. The genuine direct authorization matrix passed 17/17 and the unchanged rendered lifecycle passed 48/48. Final Auth/application/Storage state is `0/0/0`, ledger is `0001`–`0017`, and the RPC boundary is authorization-complete for the proven matrix.

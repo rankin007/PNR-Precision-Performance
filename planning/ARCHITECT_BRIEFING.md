@@ -2,6 +2,8 @@
 
 ## Where things stand
 
+Sprint 023B is closed `clean-product-baseline-established`. In an isolated worktree based on accepted Sprint 029M tip `ad9d419`, Builder reconciled the accepted Sprint 021AH ledger/auth application source and Sprint 022/022B typed mobile workflow source, tests, documentation, and evidence. The user approved the one local reconciliation commit on 2026-07-28. The original dirty `develop` worktree remains unchanged. Builder reports the final clean baseline SHA at handoff because a commit cannot contain its own final SHA.
+
 Sprint 029M is closed `public-website-follow-up-partial-safe`. The signed-off public content, bounded Pricing page, approved local assets, and visibly non-submitting enquiry presentation are live through the intended Vercel project. This is not a working enquiry backend, commerce launch, SEO launch, full public relaunch, or production-readiness claim.
 
 ## Current status
@@ -56,4 +58,4 @@ Passed: Australian-English validator, focused 029M tests 11/11, JSON, typecheck,
 
 ## Recommended next Architect action
 
-Treat Sprint 029M as closed partial-safe. Plan any deferred enquiry backend, Information/Electrolytes, testimonial/video, twelve-month/commercial, broader public relaunch, SEO, or production-readiness work separately. Sprint 023 remains untouched and requires its own Architect Pack.
+Resume Sprint 023 from the reported Sprint 023B clean baseline SHA and run its twenty privacy/storage/lifecycle decision gates before any upload or Storage implementation. Treat Sprint 029M as closed partial-safe and keep its deferred public work separate.

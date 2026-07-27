@@ -3,7 +3,7 @@
 ## Canonical Validation
 
 - `npm run validate:json` — JSON parser self-test plus maintained project JSON.
-- `npm run test:domain` — biochemistry scoring and recommendation fixtures.
+- `npm run test:domain` — biochemistry scoring, recommendation, and Sprint 022 workflow fixtures.
 - `npm run test:roles` — focused role/comment tests with only the known module-type warning suppressed at the command boundary.
 - `npm run test:supabase-self` — exact credential-free Supabase harness self-tests; never execution harnesses.
 - `npm run validate:static` — cross-platform PowerShell static validators for Sprints 019–021.

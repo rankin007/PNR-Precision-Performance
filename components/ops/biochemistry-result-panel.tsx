@@ -21,6 +21,21 @@ function blockerLabel(reason: string) {
     .join(" ");
 }
 
+function lookupTypeLabel(value: string) {
+  switch (value) {
+    case "carbs":
+      return "Carbs";
+    case "ph_average":
+      return "pH Average";
+    case "salts":
+      return "Salts";
+    case "urea":
+      return "Urea";
+    default:
+      return value;
+  }
+}
+
 type BiochemistryResultPanelProps = {
   scoringResult: BiochemistryScoringResult;
   zones: {
@@ -37,6 +52,17 @@ export function BiochemistryResultPanel({
 }: BiochemistryResultPanelProps) {
   return (
     <div className="grid gap-4">
+      <div className="rounded-[1.5rem] border border-ink/10 bg-white p-5 shadow-panel">
+        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-ember">Entered Readings</p>
+        <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
+          <ReadingValue label="Carbs" value={formatNumber(scoringResult.rawReadings.carbsReading)} />
+          <ReadingValue label="pH Saliva" value={formatNumber(scoringResult.rawReadings.phSaliva)} />
+          <ReadingValue label="pH Urine" value={formatNumber(scoringResult.rawReadings.phUrine)} />
+          <ReadingValue label="Conductivity raw" value={formatNumber(scoringResult.rawReadings.conductivityRawMeterValue)} />
+          <ReadingValue label="Urea" value={formatNumber(scoringResult.rawReadings.ureaReading)} />
+        </div>
+      </div>
+
       <div className="rounded-[1.5rem] border border-ink/10 bg-sand p-5">
         <p className="text-xs font-semibold uppercase tracking-[0.18em] text-ember">Derived Readings</p>
         <div className="mt-4 grid gap-3 sm:grid-cols-2">
@@ -59,18 +85,12 @@ export function BiochemistryResultPanel({
         <p className="text-xs font-semibold uppercase tracking-[0.18em] text-ember">Scoring</p>
         {scoringResult.scoringStatus === "scored" ? (
           <div className="mt-4 grid gap-3 sm:grid-cols-2">
-            <div>
-              <p className="text-sm text-steel">Hydration Score</p>
-              <p className="mt-1 text-3xl font-semibold text-ink">
-                {formatNumber(scoringResult.hydrationScore)}
-              </p>
-            </div>
-            <div>
-              <p className="text-sm text-steel">Biochemistry Trend Score <span className="text-xs">(provisional)</span></p>
-              <p className="mt-1 text-3xl font-semibold text-ink">
-                {formatNumber(scoringResult.healthScore)}
-              </p>
-            </div>
+            <ReadingValue label="Hydration Score" value={formatNumber(scoringResult.hydrationScore)} emphasis />
+            <ReadingValue
+              label="Biochemistry Trend Score (display-only label)"
+              value={formatNumber(scoringResult.healthScore)}
+              emphasis
+            />
           </div>
         ) : (
           <Notice className="mt-4" tone="warning" title="Scoring blocked">
@@ -86,11 +106,14 @@ export function BiochemistryResultPanel({
                 tone="warning"
                 title="Exact lookup unavailable"
               >
-                Missing exact {blocker.lookupType} lookup for reading {blocker.exactReading}.
+                Missing exact {lookupTypeLabel(blocker.lookupType)} lookup for reading {blocker.exactReading}.
               </Notice>
             ))}
           </div>
         ) : null}
+        <p className="mt-4 text-xs leading-5 text-steel">
+          Formula source: {scoringResult.formulaVersion}; lookup source: {scoringResult.lookupSourceDocument} {scoringResult.lookupSourceVersion}.
+        </p>
       </div>
 
       <div className="rounded-[1.5rem] border border-ink/10 bg-white p-5 shadow-panel">
@@ -113,7 +136,7 @@ export function BiochemistryResultPanel({
                 )}
               </div>
               {zone.blockers.length > 0 ? (
-                <p className="mt-2 text-xs text-amber-700">
+                <p className="mt-2 text-xs text-steel">
                   {zone.blockers.map((blocker) => blockerLabel(blocker.reason)).join(", ")}
                 </p>
               ) : null}
@@ -139,11 +162,30 @@ export function BiochemistryResultPanel({
           </Notice>
         )}
         {recommendations.blockers.length > 0 ? (
-          <p className="mt-3 text-xs text-amber-700">
+          <p className="mt-3 text-xs text-steel">
             {recommendations.blockers.map((blocker) => blockerLabel(blocker.reason)).join(", ")}
           </p>
         ) : null}
       </div>
+    </div>
+  );
+}
+
+function ReadingValue({
+  label,
+  value,
+  emphasis = false,
+}: {
+  label: string;
+  value: string;
+  emphasis?: boolean;
+}) {
+  return (
+    <div>
+      <p className="text-sm text-steel">{label}</p>
+      <p className={`mt-1 font-semibold text-ink ${emphasis ? "text-3xl" : "text-2xl"}`}>
+        {value}
+      </p>
     </div>
   );
 }

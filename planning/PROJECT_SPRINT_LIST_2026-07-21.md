@@ -95,10 +95,11 @@ This workstream waits for a substantive Supabase response or remediation.
 
 **Child stages:**
 
-- **023B:** approve file types, limits, retention, deletion, privacy, ownership, and audit rules.
-- **023C:** design attachment schema, private bucket/path model, signed/server upload path, and Storage RLS.
-- **023D:** implement upload, preview/download, retry, soft-delete, and audit behavior.
-- **023E:** prove role boundaries, wrong-horse/cross-stable denial, cleanup, and restoration remotely.
+- **023B:** reconcile accepted Sprint 021AH and 022/022B source onto the verified 029M lineage and establish a clean product baseline.
+- **023C:** approve file types, limits, retention, deletion, privacy, ownership, and audit rules.
+- **023D:** design attachment schema, private bucket/path model, signed/server upload path, and Storage RLS.
+- **023E:** implement upload, preview/download, retry, soft-delete, and audit behavior.
+- **023F:** prove role boundaries, wrong-horse/cross-stable denial, cleanup, and restoration remotely.
 
 **Dependencies:** Sprint 021 authenticated proof and approved privacy/storage decisions.
 

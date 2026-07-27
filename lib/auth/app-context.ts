@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import type { User } from "@supabase/supabase-js";
-import { bootstrapAuthenticatedUser, hasAnyAdminAssignment } from "@/lib/auth/bootstrap";
+import { bootstrapAuthenticatedUser, getInitialAdminEligibility } from "@/lib/auth/bootstrap";
 import { normalizeAppRedirectPath } from "@/lib/auth/access";
 import { hasSupabaseEnv } from "@/lib/supabase/env";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
@@ -201,9 +201,16 @@ export async function requirePortalAppContext(nextPath = "/portal") {
     return context;
   }
 
-  const canClaimInitialAdmin = Boolean(context.appUserId) && !(await hasAnyAdminAssignment());
+  const initialAdmin = await getInitialAdminEligibility({
+    sessionPresent: Boolean(context.sessionUser),
+    appUserId: context.appUserId,
+    appUserStatus: context.appUserStatus,
+    memberProfilePresent: Boolean(context.memberProfileId),
+    memberProfileActive: context.memberProfileActive,
+    activeMembershipLevelCodes: context.membershipLevelCodes,
+  });
 
-  if (canClaimInitialAdmin) {
+  if (initialAdmin.eligible) {
     return context;
   }
 

@@ -4,6 +4,8 @@
 
 Sprint 018 implemented a local authenticated mobile biochemistry capture/results foundation under the operations area.
 
+Sprint 022 is now the current workflow authority for the guided typed capture -> review -> submit -> result/recovery experience. See `docs/BIOCHEMISTRY_WORKFLOW_022.md` and `docs/BIOCHEMISTRY_FIELD_TRIAL_022.md`.
+
 No remote Supabase migration, production data mutation, deployment, push, PR, Stripe change, public reopening, uploads, OCR, voice-to-text provider integration, trend chart, production threshold, or Table of Knowledge recommendation content was added.
 
 ## Implemented Routes

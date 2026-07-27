@@ -1,4 +1,5 @@
 import { createSupabaseAdminClient, hasSupabaseAdminEnv } from "@/lib/supabase/admin";
+import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 type AuthUserBootstrapInput = {
   authUserId: string;
@@ -24,6 +25,115 @@ type AdminUserRow = {
   email: string;
   status: string;
 };
+
+export type InitialAdminEligibilityInput = {
+  sessionPresent: boolean;
+  appUserId: string | null;
+  appUserStatus: string | null;
+  memberProfilePresent: boolean;
+  memberProfileActive: boolean;
+  activeMembershipLevelCodes: string[];
+};
+
+export type InitialAdminEligibilityResult = {
+  eligible: boolean;
+  reason:
+    | "eligible"
+    | "actor-ineligible"
+    | "active-membership"
+    | "membership-history"
+    | "administrator-exists"
+    | "uncertain";
+};
+
+type InitialAdminEligibilityFacts = InitialAdminEligibilityInput & {
+  membershipHistoryReliable: boolean;
+  membershipHistoryCount: number;
+  administratorStateReliable: boolean;
+  administratorAssignmentExists: boolean;
+};
+
+const administratorCodes = ["administrator", "admin"];
+
+export type AtomicInitialAdminClaimResult = "claimed" | "denied";
+
+export function classifyAtomicInitialAdminClaim(data: unknown, hasError: boolean): AtomicInitialAdminClaimResult {
+  return !hasError && data === "claimed" ? "claimed" : "denied";
+}
+
+export async function claimInitialAdministrator(): Promise<AtomicInitialAdminClaimResult> {
+  const client = await createSupabaseServerClient();
+  const { data, error } = await client.rpc("claim_initial_administrator");
+  return classifyAtomicInitialAdminClaim(data, Boolean(error));
+}
+
+export function classifyInitialAdminEligibility(
+  facts: InitialAdminEligibilityFacts,
+): InitialAdminEligibilityResult {
+  if (!facts.sessionPresent || !facts.appUserId || facts.appUserStatus !== "active"
+    || !facts.memberProfilePresent || !facts.memberProfileActive) {
+    return { eligible: false, reason: "actor-ineligible" };
+  }
+  if (!Array.isArray(facts.activeMembershipLevelCodes) || facts.activeMembershipLevelCodes.length > 0) {
+    return { eligible: false, reason: "active-membership" };
+  }
+  if (!facts.membershipHistoryReliable || !Number.isInteger(facts.membershipHistoryCount)
+    || facts.membershipHistoryCount < 0 || !facts.administratorStateReliable) {
+    return { eligible: false, reason: "uncertain" };
+  }
+  if (facts.membershipHistoryCount > 0) return { eligible: false, reason: "membership-history" };
+  if (facts.administratorAssignmentExists) return { eligible: false, reason: "administrator-exists" };
+  return { eligible: true, reason: "eligible" };
+}
+
+async function getAdministratorAssignmentState() {
+  if (!hasSupabaseAdminEnv()) return { reliable: false, hasAssignment: true };
+  const admin = createSupabaseAdminClient();
+  const levels = await admin.from("membership_levels").select("id,code").in("code", administratorCodes);
+  if (levels.error || !Array.isArray(levels.data)) return { reliable: false, hasAssignment: true };
+  const canonical = levels.data.filter((row) => row?.code === "administrator" && typeof row.id === "string");
+  const recognized = levels.data.filter((row) => administratorCodes.includes(row?.code) && typeof row.id === "string");
+  if (canonical.length !== 1 || recognized.length < 1 || recognized.length > 2) return { reliable: false, hasAssignment: true };
+  const assignments = await admin
+    .from("user_membership_levels")
+    .select("id", { count: "exact", head: true })
+    .in("membership_level_id", recognized.map((row) => row.id));
+  if (assignments.error || typeof assignments.count !== "number" || assignments.count < 0) {
+    return { reliable: false, hasAssignment: true };
+  }
+  return { reliable: true, hasAssignment: assignments.count > 0 };
+}
+
+export async function getInitialAdminEligibility(
+  input: InitialAdminEligibilityInput,
+): Promise<InitialAdminEligibilityResult> {
+  if (!hasSupabaseAdminEnv()) return classifyInitialAdminEligibility({ ...input, membershipHistoryReliable: false, membershipHistoryCount: -1, administratorStateReliable: false, administratorAssignmentExists: true });
+  const admin = createSupabaseAdminClient();
+  const history = await admin
+    .from("user_membership_levels")
+    .select("id", { count: "exact", head: true })
+    .eq("user_id", input.appUserId);
+  const globalState = await getAdministratorAssignmentState();
+  return classifyInitialAdminEligibility({
+    ...input,
+    membershipHistoryReliable: !history.error && typeof history.count === "number",
+    membershipHistoryCount: typeof history.count === "number" ? history.count : -1,
+    administratorStateReliable: globalState.reliable,
+    administratorAssignmentExists: globalState.hasAssignment,
+  });
+}
+
+export async function verifyCanonicalAdministratorAssignment(userId: string) {
+  if (!hasSupabaseAdminEnv() || !userId) return false;
+  const admin = createSupabaseAdminClient();
+  const level = await admin.from("membership_levels").select("id").eq("code", "administrator").maybeSingle();
+  if (level.error || !level.data?.id) return false;
+  const intended = await admin.from("user_membership_levels").select("id", { count: "exact", head: true })
+    .eq("user_id", userId).eq("membership_level_id", level.data.id);
+  const global = await admin.from("user_membership_levels").select("id", { count: "exact", head: true })
+    .eq("membership_level_id", level.data.id);
+  return !intended.error && !global.error && intended.count === 1 && global.count === 1;
+}
 
 export async function bootstrapAuthenticatedUser(input: AuthUserBootstrapInput) {
   if (!hasSupabaseAdminEnv()) {
@@ -91,27 +201,8 @@ export async function bootstrapAuthenticatedUser(input: AuthUserBootstrapInput) 
 }
 
 export async function hasAnyAdminAssignment() {
-  if (!hasSupabaseAdminEnv()) {
-    return false;
-  }
-
-  const admin = createSupabaseAdminClient();
-  const { data: adminLevel } = await admin
-    .from("membership_levels")
-    .select("id")
-    .eq("code", "admin")
-    .maybeSingle();
-
-  if (!adminLevel) {
-    return false;
-  }
-
-  const { count } = await admin
-    .from("user_membership_levels")
-    .select("id", { count: "exact", head: true })
-    .eq("membership_level_id", adminLevel.id);
-
-  return Boolean(count && count > 0);
+  const state = await getAdministratorAssignmentState();
+  return !state.reliable || state.hasAssignment;
 }
 
 export async function assignMembershipLevelToUser(params: {

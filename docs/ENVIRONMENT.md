@@ -46,6 +46,17 @@ This sprint did not validate actual values, test remote Supabase/Stripe connecti
 - Keep `SUPABASE_SERVICE_ROLE_KEY`, `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `RAILWAY_API_TOKEN`, and `VERCEL_OIDC_TOKEN` out of client bundles and logs.
 - Treat auth/RLS, Stripe behavior, webhook reconciliation, and production deployment verification as later sprint work unless explicitly authorized.
 
+## Sprint 021P Selected Candidate Loading Contract
+
+Sprint 021O selected the administrative aliases `PUBLIC_SPRINT01` and `SERVER_SPRINT01` after independent acceptance checks. Values remain operator-managed and must never appear in documentation, logs, screenshots, shell arguments, or committed files.
+
+- `.env.local`: exact candidate `NEXT_PUBLIC_SUPABASE_URL` plus `PUBLIC_SPRINT01` as `NEXT_PUBLIC_SUPABASE_ANON_KEY`; no server/service-role variable.
+- `.env.development.local`: `SERVER_SPRINT01` as the sole Supabase server variable `SUPABASE_SERVICE_ROLE_KEY`; no public Supabase variables.
+- `.env.test.local`: the same server alias as `SUPABASE_SERVICE_ROLE_KEY`; no public Supabase variables.
+- `.env.021o.local`: ignored diagnostic source only; it is not an application runtime source and remains operator-managed.
+
+Sprint 021P verifies alias equality only in protected memory and reports fixed categories. Public values may feed client configuration; the server value must remain server-only and absent from client/static output.
+
 ---
 
 # Sprint 007 Launch Environment Update
