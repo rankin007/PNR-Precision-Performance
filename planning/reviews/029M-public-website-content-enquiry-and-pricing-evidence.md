@@ -97,15 +97,16 @@ Limited:
 - Screenshots: `planning/reviews/029M-visual-artifacts/local-mobile.png`, `local-tablet.png`, `local-desktop.png`, and `local-pricing-desktop.png`.
 - The four screenshots were regenerated from the restarted local server after the accepted content corrections. CDP measurements were mobile `390/390`, tablet `768/768`, desktop `1440/1440`, and Pricing `1440/1440` for inner/scroll width, with no horizontal overflow.
 
-### Sign-off and proposed deployment source
+### Sign-off and deployment source
 
 - Final visual/content sign-off: confirmed by the user on 2026-07-28 after review of the corrected temporary approach treatment, visitor-facing Pricing wording, active local preview, and regenerated mobile/tablet/desktop/Pricing screenshots.
 - Partial-safe release path: explicitly accepted. The deployed form must remain visibly unavailable for submission; Information/Electrolytes, the undefined twelve-month term, and testimonial/video publication remain deferred.
-- Exact proposed deployment worktree: `C:\tmp\pnr-029m-public-website`.
-- Exact proposed branch: `codex/029M-public-website-content-enquiry-and-pricing-follow-up`.
+- Deployment worktree: `C:\tmp\pnr-029m-public-website`.
+- Deployment branch: `codex/029M-public-website-content-enquiry-and-pricing-follow-up`.
 - Verified base: `b8961b9647507af87e6887cf78c1d6e262f944b6`.
-- Proposed deployment source: the eventual scoped 029M commit created from the currently verified isolated changes after user sign-off and any approved corrections. No commit SHA exists yet because committing before sign-off is prohibited.
-- No commit, push, Vercel deployment, DNS mutation, production mutation, or original dirty-worktree mutation occurred.
+- Exact deployed source commit: `387707afa58d1d77cfb6cea97e4caacf9141203b`.
+- The scoped remote branch was independently verified at `387707afa58d1d77cfb6cea97e4caacf9141203b` before deployment.
+- `develop` was not targeted, merged, modified, or pushed.
 
 ### Scoped staging record
 
@@ -137,6 +138,34 @@ The final pre-commit index contained exactly 23 approved Sprint 029M paths:
 
 The staged diff was inspected by complete name/status list, summary, text patch, binary inventory, and `git diff --cached --check`. It contained 1,027 insertions, 261 deletions, seven approved binary evidence/public assets, and no unstaged 029M source changes. It included no `develop` operation, Sprint 021/022/023 file, protected application route/component, Supabase file, Stripe file, checkout file, secret/configuration file, environment file, migration, auth/RLS file, upload/scoring/recommendation file, or unrelated project architecture.
 
+### Deployment and alias record
+
+- Vercel project: intended existing project `pnr-precision-performance`.
+- Command: `vercel deploy --prod --yes --archive=tgz` from the clean release commit with the established ignored project link.
+- Deployment ID: `dpl_6F1TMjNRECmTCyMbyWXA6ohG8Q2R`.
+- Deployment URL: `https://pnr-precision-performance-lenbb3me5-rankin007s-projects.vercel.app`.
+- Target/status: production / Ready.
+- Alias inspection proved `precisionperformance.com.au`, `www.precisionperformance.com.au`, and `pnr-precision-performance.vercel.app` all map to that deployment.
+- No DNS, project-setting, environment, Supabase, Stripe, checkout, secret, or production-data mutation was made.
+- Rollback target: prior intended production deployment `dpl_CMahP7G62gim3t6HmkhPFwSC1JMy`.
+
+### Post-deployment smoke
+
+- Apex, `www`, and stable Vercel alias returned 200 for `/` and `/pricing`.
+- All three aliases returned 200 for `be-kit.jpeg`, the hydration demonstration, and the conductivity demonstration.
+- All aliases contained the signed-off hero, approach, CTA, unavailable-enquiry, confirmed price, and visitor-facing consultation markers.
+- Rendered mobile `390/390` and desktop `1440/1440` inner/scroll-width checks passed on all three aliases; every image had non-zero natural dimensions.
+- The form has no action and retains the visible `submission unavailable` state. No transmission, persistence, email, logging, or analytics was added.
+- `noindex` and `nofollow` are present.
+- `/home`, `/contact`, `/shop`, and `/shop/example` return 307 to `/`.
+- `/sign-in` returns 200; `/admin`, `/portal`, and `/data-entry` return 307 to sign-in.
+- checkout GET returns 405 and no checkout CTA or flow is exposed.
+- Pricing contains only the confirmed commercial terms and consultation wording; `$150`, `$250`, `12 months`, and `twelve-month` are absent.
+
+## Closeout Outcome
+
+`public-website-follow-up-partial-safe`
+
 ## Outstanding Manual Interventions
 
 ### Enquiry privacy and data handling
@@ -163,9 +192,3 @@ The staged diff was inspected by complete name/status list, summary, text patch,
 - Blocked: actual testimonial/video publication because no durable selected file was embedded and the iCloud share is not suitable as a production hotlink.
 - User action: identify/provide exact local approved files plus final attribution/anonymisation and captions.
 - Afterward: Builder will ingest, optimise, caption, add accessible alternatives, and verify local delivery.
-
-### Visual/content sign-off
-
-- Blocked: commit, push, and deployment.
-- User action: review the supplied mobile, tablet, desktop, and Pricing screenshots plus `http://127.0.0.1:3029/` and `http://127.0.0.1:3029/pricing` while the local server remains available; either sign off or provide one consolidated correction list.
-- Afterward: Builder will apply in-scope corrections, rerun affected gates, stage explicit 029M paths, inspect the staged diff, and present the final release action without touching `develop`.

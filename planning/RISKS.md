@@ -6,6 +6,7 @@ Historical and closed risks through Sprint 017F are preserved in `planning/histo
 
 | Risk | Likelihood | Impact | Control |
 |---|---:|---:|---|
+| The deployed Sprint 029M enquiry presentation is mistaken for a working submission channel. | Medium | High | Keep the unavailable state visible; prohibit transmission, storage, email, logging, or analytics until the twelve-item privacy/data gate and exact scope expansion are approved. |
 | Supabase continues rejecting candidate-issued JWTs. | High | Critical | Await provider response; run 021N/021O minimal proof before any full matrix. |
 | Structural/local evidence is mistaken for authenticated or production readiness. | Medium | High | Keep readiness classes explicit in state, evidence index, and sprint acceptance. |
 | Unapproved formulas, thresholds, or recommendation content mislead trainers. | High | High | Block production-facing classifications/advice until domain authority is supplied. |

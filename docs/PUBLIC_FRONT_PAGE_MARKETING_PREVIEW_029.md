@@ -2,7 +2,7 @@
 
 ## Sprint 029M local follow-up
 
-Sprint 029M has a locally implemented and rendered public-content, enquiry-presentation and bounded-pricing follow-up in the isolated branch `codex/029M-public-website-content-enquiry-and-pricing-follow-up`. Final visual/content sign-off and the partial-safe release path were confirmed on 2026-07-28. Enquiry transmission/storage/email, Information/Electrolytes publication, the undefined twelve-month term, and testimonial/video publication remain deferred.
+Sprint 029M closed `public-website-follow-up-partial-safe` after final visual/content sign-off. Release commit `387707afa58d1d77cfb6cea97e4caacf9141203b` is deployed through intended Vercel project `pnr-precision-performance` as `dpl_6F1TMjNRECmTCyMbyWXA6ohG8Q2R`; apex, `www`, and the stable Vercel alias passed live smoke. Enquiry transmission/storage/email, Information/Electrolytes publication, the undefined twelve-month term, and testimonial/video publication remain deferred.
 
 ## Status
 

@@ -180,6 +180,7 @@ This workstream waits for a substantive Supabase response or remediation.
 - **029C:** approve or prepare authentic imagery, releases, anonymised charts, founder/company material, and accessibility/SEO requirements.
 - **029D:** implement responsive public sections behind the existing gate using the accepted design system.
 - **029E:** complete content, claims, privacy, accessibility, responsive, and route-gate review.
+- **029M:** deployed the signed-off public content, approved local assets, bounded Pricing, and visibly non-submitting enquiry presentation as `public-website-follow-up-partial-safe` before Sprint 023 work; Information/Electrolytes, testimonial/video publication, the undefined twelve-month term, and enquiry transmission/storage/email remain deferred.
 
 **Dependency:** approved content, photography, releases, and claims review. Public reopening remains Sprint 032 work.
 

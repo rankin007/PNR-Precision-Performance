@@ -1,8 +1,8 @@
 {
     "schemaVersion":  1,
-    "phase":  "local-public-website-follow-up",
+    "phase":  "deployed-partial-safe-public-website-follow-up",
     "sprint":  "029M-public-website-content-enquiry-and-pricing-follow-up",
-    "status":  "partial-safe-release-approved",
+    "status":  "public-website-follow-up-partial-safe",
     "updated":  "2026-07-28T00:00:00+10:00",
-    "summary":  "Sprint 029M is implemented and rendered locally in an isolated worktree from verified Sprint 029L base b8961b9. Final visual/content sign-off and the partial-safe release path were confirmed on 2026-07-28. Front-page content/design, Australian-English enforcement, bounded Pricing, approved local assets, and a visibly non-submitting enquiry presentation are ready for the scoped commit, push and intended-project deployment. Enquiry transmission/storage/email, Information/Electrolytes publication, the undefined twelve-month term, and testimonial/video publication remain deferred."
+    "summary":  "Sprint 029M closed public-website-follow-up-partial-safe. Signed-off commit 387707afa58d1d77cfb6cea97e4caacf9141203b was pushed only to codex/029M-public-website-content-enquiry-and-pricing-follow-up and deployed through intended project pnr-precision-performance as dpl_6F1TMjNRECmTCyMbyWXA6ohG8Q2R. Apex, www and stable Vercel alias mapping, public content/assets, Pricing, non-submitting enquiry behaviour, redirects, protected routes, checkout unavailability, noindex/nofollow, and rendered mobile/desktop delivery passed. Enquiry transmission/storage/email, Information/Electrolytes, testimonial/video publication, and the undefined twelve-month term remain deferred."
 }

@@ -6,6 +6,8 @@ Record durable decisions future sprints must respect.
 
 ## Decision Log
 
+| 2026-07-28 | Release Sprint 029M as `public-website-follow-up-partial-safe`. | The user approved the verified public content/Pricing release while requiring enquiry submission to remain visibly unavailable. | Preserve the deployed content and form-presentation boundary; any transmission/storage/email, Information/Electrolytes, testimonial/video, or twelve-month work requires later explicit scope. |
+
 | 2026-07-22 | Use the eight canonical package commands and dependency-free allowlisted orchestrator as the validation interface for local development and CI. | Scattered commands made coverage and remote-safety difficult to maintain consistently. | CI and Builders use `validate:ci` / `validate:local`; component commands remain directly runnable and remote harnesses stay excluded. |
 | 2026-07-22 | Keep current planning records concise and archive superseded state through Sprint 017F under `planning/history/`. | Duplicated historical narrative obscured current authority and next action. | `planning/EVIDENCE_INDEX.md` navigates current, historical, provider-pending, and protected evidence without deleting history. |
 

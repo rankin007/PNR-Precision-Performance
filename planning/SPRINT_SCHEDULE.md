@@ -2,6 +2,9 @@
 
 ## Current Position
 
+- Latest closed public follow-up: **029M - Public Website Content, Enquiry, And Pricing**, outcome `public-website-follow-up-partial-safe`.
+- Next product sprint remains **023**, subject to its own Architect Pack; 029M did not begin it.
+
 - Current completed delivery sprint: **002B — Delivery System And Project-State Consolidation**, outcome `delivery-consolidation-complete`.
 - Repository-control sequence through **017F**: complete locally.
 - Next product sprint: **022 — Mobile Biochemistry Workflow Completion**.

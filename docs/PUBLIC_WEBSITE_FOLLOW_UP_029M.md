@@ -2,7 +2,7 @@
 
 ## Status
 
-Sprint 029M is implemented and verified locally in the isolated worktree. Final visual and content sign-off, including the partial-safe release path, was confirmed by the user on 2026-07-28. The scoped release sequence is in progress; enquiry submission remains visibly unavailable.
+Sprint 029M closed `public-website-follow-up-partial-safe` on 2026-07-28. Final visual/content sign-off was confirmed, release commit `387707afa58d1d77cfb6cea97e4caacf9141203b` was pushed only to the scoped 029M branch, and that exact source was deployed through the intended Vercel project as `dpl_6F1TMjNRECmTCyMbyWXA6ohG8Q2R`. Enquiry submission remains visibly unavailable.
 
 ## Public Content
 

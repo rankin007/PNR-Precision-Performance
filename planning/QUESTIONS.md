@@ -6,6 +6,7 @@ Historical and superseded questions through Sprint 017F are preserved in `planni
 
 | Question | Owner | Needed by |
 |---|---|---|
+| What are the twelve enquiry privacy/data decisions, Information/Electrolytes structure and treatment, twelve-month disposition, and durable testimonial/video publication inputs deferred by Sprint 029M? | Business/privacy/content owner | Before any corresponding follow-up implementation |
 | What production Hydration and Health/Biochemistry Trend Score formulas and Green/Amber/Red thresholds are approved? | Domain owner / Architect | Before production-facing scoring |
 | What pH ideal range, `.1` calibration, and pink Horiba `1.43` applicability rules are authoritative? | Domain owner | Before final capture/scoring rules |
 | What Table of Knowledge rules, disclaimers, and review controls may be trainer-facing? | Domain owner / Veterinarian / Architect | Before recommendation UI |

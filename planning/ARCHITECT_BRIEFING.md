@@ -1,154 +1,59 @@
 # Architect Briefing
 
-## Where Things Stand
+## Where things stand
 
-Sprint 029L completed scoped remote backup after Sprint 029K release-state hygiene. The front-page marketing preview is live at `https://precisionperformance.com.au`; production aliases still inspect to intended project `pnr-precision-performance` deployment `dpl_CMahP7G62gim3t6HmkhPFwSC1JMy`; and remote branch `codex/029-marketing-preview-release` backs up the Sprint 029 release lineage through Sprint 029K at SHA `7e21c9767f3d53e0f2b8ddf126e22b7352c6def4`.
+Sprint 029M is closed `public-website-follow-up-partial-safe`. The signed-off public content, bounded Pricing page, approved local assets, and visibly non-submitting enquiry presentation are live through the intended Vercel project. This is not a working enquiry backend, commerce launch, SEO launch, full public relaunch, or production-readiness claim.
 
-The authenticated/Supabase branch remains at the prior 021Z clean close state. Do not resume or retry 021Z without a new bounded Pack.
+## Current status
 
-## Current Status
+- Release source commit: `387707afa58d1d77cfb6cea97e4caacf9141203b`.
+- Scoped remote branch: `codex/029M-public-website-content-enquiry-and-pricing-follow-up`, verified at the same SHA before deployment.
+- Deployment: `dpl_6F1TMjNRECmTCyMbyWXA6ohG8Q2R`, target production, status Ready.
+- Aliases: `precisionperformance.com.au`, `www.precisionperformance.com.au`, and `pnr-precision-performance.vercel.app` map to that deployment.
+- Rollback target: prior intended deployment `dpl_CMahP7G62gim3t6HmkhPFwSC1JMy`.
 
-Sprint 029L status: `scoped-release-branch-backed-up`.
+## Since last sprint
 
-The known root front-page width/layout source issue was corrected in 029B. Sprint 029C restored JSON/static/typecheck validation through project-local Node script resolution. Sprint 029D aligned ESLint 9/Next linting and proved a successful production build in a non-OneDrive temp workspace. Sprint 029E reconfirmed validation/build/HTTP route smoke. Sprint 029F reconfirmed validation/build/HTTP route smoke, completed operator-assisted visual smoke after automated browser capture remained unavailable, deployed through Vercel, and passed deployed safety smoke. Sprint 029G rechecked the public alias, confirmed it serves Sprint 029 markers, and confirmed Vercel maps the alias to deployment `dpl_9gPytpAofTSHcTJJMM1Qw9TxKpAd`. Sprint 029H then confirmed live cache-busted apex, `www`, and Vercel app alias checks serve Sprint 029 markers, DNS resolves apex/`www` to Vercel records, Vercel inspect still maps the alias to `dpl_9gPytpAofTSHcTJJMM1Qw9TxKpAd`, and final route smoke passes. Sprint 029I reconciled a later reported old-content observation by proving source, clean-worktree build, Vercel alias/deployment, DNS/header, and live public checks agree; the exact `https://precisionperformance.com.au/?review029h=1` URL served Sprint markers and no old-page markers. Sprint 029J then found the rendered visual failure: the live hero image asset returned 404/invalid optimized image while local served it correctly, and narrow mobile hero text needed explicit wrapping. Sprint 029J corrected `app/page.tsx`, deployed commit `14bc568` to the intended `pnr-precision-performance` Vercel project as `dpl_CMahP7G62gim3t6HmkhPFwSC1JMy`, confirmed the hero image endpoints return 200, and captured local/apex/`www` rendered parity screenshots. Sprint 029K removed temporary Vercel project `pnr-029j-release-worktree-20260724210200` after confirming it had no production custom-domain aliases, then reverified production alias mapping, public markers, hero asset, and route safety. Sprint 029L pushed scoped backup branch `codex/029-marketing-preview-release` to remote SHA `7e21c9767f3d53e0f2b8ddf126e22b7352c6def4`; `develop` was not targeted. Unrelated active 021AA dirty work remained excluded.
+- Rebuilt the public front page in the approved racing-green/gold direction with professionally edited Australian-English content.
+- Added the lighter bounded Pricing page with only AUD $5,500 including GST, postage additional, and consultation wording.
+- Added approved local BE Kit and anonymised demonstration assets plus a code-native horse mark.
+- Added an accessible client-only enquiry presentation. It has no form action, transmission, persistence, email, logging, analytics, or backend integration.
+- Added Australian-English and focused 029M validators.
+- Completed local responsive/accessibility review, sign-off, exact-path staging, scoped commit/push, intended-project deployment, alias inspection, HTTP smoke, and rendered mobile/desktop live checks.
 
-## Since Last Sprint
+## Architecture / file map
 
-- Applied `planning/architect-packs/architect-pack-029F-browser-proof-release-and-live-deployment.md`.
-- Created `planning/sprints/029F-browser-proof-release-and-live-deployment/SPRINT.md`.
-- Reconfirmed `npm.cmd run validate:json`, `npm.cmd run validate:static`, `npm.cmd run typecheck`, and `npm.cmd run lint` pass.
-- Reproved `npm.cmd run build` in a disposable non-OneDrive temp workspace with locked dependencies installed there.
-- Reconfirmed safe local HTTP route smoke for `/`, stale public redirects, sign-in, protected anonymous redirects, and checkout GET unavailable behavior.
-- Attempted automated browser/viewport smoke with installed Edge and the connected Node REPL route; neither produced usable screenshot evidence.
-- Completed operator-assisted visual smoke after the user confirmed the mobile/tablet/desktop visual smoke passes.
-- Deployed with Vercel CLI archive mode after ordinary upload attempts failed with `fetch failed`.
-- Verified `https://precisionperformance.com.au` returns the 029F front page, redirects stale public routes, keeps protected routes behind sign-in redirects, and leaves checkout/product slug unavailable.
-- Captured 029F evidence in `planning/reviews/029F-browser-proof-release-and-live-deployment-evidence.md`.
-- Applied `planning/architect-packs/architect-pack-029G-production-alias-reconciliation-and-public-smoke.md`.
-- Created `planning/sprints/029G-production-alias-reconciliation-and-public-smoke/SPRINT.md`.
-- Reconfirmed `https://precisionperformance.com.au/` contains Sprint 029 markers: descriptor, headline, CTA, and recreated-sample wording.
-- Confirmed old-page markers `Biochemistry Analysis for Elite Equine` and `Apply Now` are absent.
-- Confirmed Vercel alias inspection points `precisionperformance.com.au` at the Sprint 029F deployment ID.
-- Captured 029G evidence in `planning/reviews/029G-production-alias-reconciliation-and-public-smoke-evidence.md`.
-- Applied `planning/architect-packs/architect-pack-029H-external-public-alias-correction-and-final-smoke.md`.
-- Created `planning/sprints/029H-external-public-alias-correction-and-final-smoke/SPRINT.md`.
-- Confirmed cache-busted live public checks for apex, `www`, and the Vercel app alias return Sprint 029 markers and no old-page markers.
-- Confirmed DNS resolves apex and `www` to Vercel A records.
-- Reconfirmed Vercel inspect maps `precisionperformance.com.au` to deployment `dpl_9gPytpAofTSHcTJJMM1Qw9TxKpAd`.
-- Confirmed final public route smoke passes for root, stale redirects, sign-in, protected anonymous redirects, and checkout unavailable behavior.
-- Captured 029H evidence in `planning/reviews/029H-external-public-alias-correction-and-final-smoke-evidence.md`.
-- Applied `planning/architect-packs/architect-pack-029I-live-public-content-reconciliation-and-hard-deploy.md`.
-- Created `planning/sprints/029I-live-public-content-reconciliation-and-hard-deploy/SPRINT.md`.
-- Reconfirmed source layer provenance for `app/page.tsx`, `package.json`, and `eslint.config.mjs` with no local source drift.
-- Reconfirmed `npm.cmd run validate:json`, `npm.cmd run validate:static`, `npm.cmd run typecheck`, and `npm.cmd run lint` pass.
-- Proved `npm.cmd run build` from clean detached worktree `C:\Users\rrank\AppData\Local\Temp\pnr-029i-worktree-20260724182400`.
-- Reconfirmed Vercel inspect maps the production aliases to deployment `dpl_9gPytpAofTSHcTJJMM1Qw9TxKpAd`.
-- Confirmed DNS resolves apex and `www` to Vercel A records.
-- Confirmed apex, `www`, and Vercel app alias cache-busted checks return Sprint 029 markers and no old-page markers.
-- Confirmed the exact reported old-content URL `https://precisionperformance.com.au/?review029h=1` returns Sprint 029 markers and no old-page markers.
-- Confirmed the raw deployment URL redirects to Vercel SSO/login rather than anonymously serving public content.
-- Confirmed final public route smoke passes for root, stale redirects, sign-in, protected anonymous redirects, and checkout unavailable behavior.
-- Captured 029I evidence in `planning/reviews/029I-live-public-content-reconciliation-and-hard-deploy-evidence.md`.
-- Applied `planning/architect-packs/architect-pack-029J-rendered-live-visual-reconciliation-and-deploy-correction.md`.
-- Created `planning/sprints/029J-rendered-live-visual-reconciliation-and-deploy-correction/SPRINT.md`.
-- Reproduced the rendered-live mismatch: live text markers were present, but the hero image asset returned 404 and the optimized image request failed.
-- Corrected the root-page mobile hero wrapping and width containment in `app/page.tsx`.
-- Reconfirmed `npm.cmd run validate:json`, `npm.cmd run validate:static`, `npm.cmd run typecheck`, and `npm.cmd run lint` pass.
-- Proved `npm.cmd run build` in clean release worktree `C:\Users\rrank\AppData\Local\Temp\pnr-029j-release-worktree-20260724210200`.
-- Deployed commit `14bc568` to the intended Vercel project as deployment `dpl_CMahP7G62gim3t6HmkhPFwSC1JMy`.
-- Confirmed Vercel inspect maps production aliases to `dpl_CMahP7G62gim3t6HmkhPFwSC1JMy`.
-- Confirmed apex and `www` hero image endpoints return 200.
-- Captured Edge DevTools rendered screenshots for local, apex, and `www` at desktop, tablet, and mobile sizes; all have matching viewport scroll widths and non-zero hero image dimensions.
-- Confirmed final public route smoke passes.
-- Captured 029J evidence in `planning/reviews/029J-rendered-live-visual-reconciliation-and-deploy-correction-evidence.md`.
-- Applied `planning/architect-packs/architect-pack-029K-release-state-hygiene-and-vercel-cleanup.md`.
-- Created `planning/sprints/029K-release-state-hygiene-and-vercel-cleanup/SPRINT.md`.
-- Reconciled `develop...origin/develop [ahead 14]`, Sprint 029F through 029J commit provenance, source-vs-evidence commit classes, and remaining dirty/untracked boundaries.
-- Confirmed `.vercel/project.json` has the expected non-secret link shape without printing project or org identifiers.
-- Confirmed apex and `www` inspect to intended project `pnr-precision-performance`, deployment `dpl_CMahP7G62gim3t6HmkhPFwSC1JMy`, status Ready.
-- Confirmed accidental deployment `dpl_83Yatsa6D3ZmUTA8byspKqnAvPYT` belonged to temporary project `pnr-029j-release-worktree-20260724210200` and had no production custom-domain aliases.
-- Removed temporary Vercel project `pnr-029j-release-worktree-20260724210200`.
-- Confirmed the removed temporary deployment is no longer inspectable.
-- Reconfirmed post-cleanup public alias markers, hero asset 200, and route-safety smoke.
-- Captured 029K evidence in `planning/reviews/029K-release-state-hygiene-and-vercel-cleanup-evidence.md`.
-- Applied `planning/architect-packs/architect-pack-029L-scoped-release-branch-and-remote-backup.md`.
-- Created `planning/sprints/029L-scoped-release-branch-and-remote-backup/SPRINT.md`.
-- Confirmed preferred branch `codex/029-marketing-preview-release` did not exist before the scoped push.
-- Confirmed existing remote `codex/029F-browser-proof-release-and-live-deployment` has incompatible older history and was not used.
-- Pushed current local `HEAD` through Sprint 029K to scoped branch `codex/029-marketing-preview-release`; the HTTPS push command timed out locally, but read-only remote verification confirmed the branch exists at `7e21c9767f3d53e0f2b8ddf126e22b7352c6def4`.
-- Confirmed `origin/develop` was not targeted or moved by Sprint 029L.
-- Reconfirmed light production markers, hero asset 200, and Vercel inspect for deployment `dpl_CMahP7G62gim3t6HmkhPFwSC1JMy`.
-- Captured 029L evidence in `planning/reviews/029L-scoped-release-branch-and-remote-backup-evidence.md`.
-
-## Architecture / File Map
-
-- `app/page.tsx`: Sprint 029 marketing-preview front page; 029B layout correction only.
-- `eslint.config.mjs`: Sprint 029D ESLint 9 flat-config bridge for existing Next/TypeScript lint coverage.
-- `package.json`: Sprint 029C script correction for project-local Node command resolution.
-- `docs/PUBLIC_FRONT_PAGE_MARKETING_PREVIEW_029.md`: current public page, claims, validation, and deployment-blocker record.
-- `planning/reviews/029B-deployment-completion-evidence.md`: 029B pack, correction, worktree isolation, validation, Vercel metadata, and manual intervention evidence.
-- `planning/reviews/029C-validation-build-and-deployment-unblock-evidence.md`: 029C validation/build diagnosis and manual intervention evidence.
-- `planning/reviews/029D-lint-build-workspace-and-deployment-proof-evidence.md`: 029D lint/build workspace, route smoke, Vercel metadata, and manual intervention evidence.
-- `planning/reviews/029E-visual-smoke-stage-push-and-vercel-deploy-evidence.md`: 029E validation/build/HTTP smoke and browser-smoke blocker evidence.
-- `planning/reviews/029F-browser-proof-release-and-live-deployment-evidence.md`: 029F validation/build/HTTP smoke, automated-browser failure, operator-assisted visual proof, staging/deployment evidence.
-- `planning/reviews/029G-production-alias-reconciliation-and-public-smoke-evidence.md`: 029G production-alias marker proof, Vercel inspect result, and public route smoke.
-- `planning/reviews/029H-external-public-alias-correction-and-final-smoke-evidence.md`: 029H stronger external-public live checks, DNS/header evidence, Vercel inspect result, and final route smoke.
-- `planning/reviews/029I-live-public-content-reconciliation-and-hard-deploy-evidence.md`: 029I source/build/Vercel/DNS/public-content reconciliation of the reported old-content URL, raw deployment SSO finding, and final route smoke.
-- `planning/reviews/029J-rendered-live-visual-reconciliation-and-deploy-correction-evidence.md`: 029J rendered-live mismatch reproduction, hero asset/mobile correction, intended Vercel deployment, visual screenshot parity, and route smoke.
-- `planning/reviews/029J-visual-artifacts/`: final local/apex/`www` Edge DevTools screenshots.
-- `planning/reviews/029K-release-state-hygiene-and-vercel-cleanup-evidence.md`: 029K release ledger, temporary Vercel cleanup, production alias verification, public smoke, and repository-boundary evidence.
-- `planning/reviews/029L-scoped-release-branch-and-remote-backup-evidence.md`: 029L scoped remote backup branch, remote SHA, push behavior, production verification, and remaining repository-boundary evidence.
-- `planning/sprints/029L-scoped-release-branch-and-remote-backup/SPRINT.md`: latest Sprint 029 follow-up source.
+- `app/page.tsx`: public 029M content and non-submitting enquiry entry point.
+- `app/pricing/page.tsx`: confirmed partial-safe commercial facts only.
+- `components/forms/trainer-enquiry-form.tsx`: local validation and explicit unavailable state only.
+- `components/marketing/horse-mark.tsx`: original code-native decorative brand mark.
+- `public/029m/`: approved publication assets.
+- `scripts/validate-public-australian-english-029M.mjs`, `scripts/test-public-website-029M.mjs`: focused enforcement.
+- `docs/PUBLIC_WEBSITE_FOLLOW_UP_029M.md` and `planning/reviews/029M-public-website-content-enquiry-and-pricing-evidence.md`: canonical scope and release evidence.
 
 ## Decisions
 
-- Keep `noindex`/`nofollow` and preview-only classification.
-- Do not deploy until browser/viewport smoke and sprint-only staging pass. Operator-assisted visual smoke passed in 029F.
-- Do not stage or commit unrelated active 021AA work.
-- `.vercel/project.json` may be read only for non-secret target shape; do not commit or reproduce its identifiers unnecessarily.
+- Preserve the partial-safe release: public content/Pricing live, enquiry submission visibly unavailable.
+- Keep Information/Electrolytes, testimonial/video publication, and the undefined twelve-month term deferred.
+- Do not infer that “additional services and software options” are currently available; they are discussed during consultation.
 
-## Risks / Watch Items
+## Risks / watch-items
 
-- Automated browser/viewport screenshot capture remains unavailable in the current environment: installed Edge did not emit screenshot evidence, and the connected Node REPL browser path failed to start.
-- Production build depends on a non-OneDrive workspace or equivalent reparse-safe output/dependency path.
-- The worktree still contains unresolved active Sprint 021AA changes outside 029B scope.
-- Deployed rendered smoke passed on the production alias after 029J. If a reviewer still sees old content or a broken visual, first test the exact URL in a private-window or hard-refresh live request and compare against the 029J screenshot evidence before treating search/browser cache as current production evidence.
-- Sprint 029K removed the temporary non-target Vercel project after confirming it was not the intended project and had no production custom-domain aliases.
-- Sprint 029L backed up Sprint 029 release lineage to `codex/029-marketing-preview-release`; do not treat this as local or remote `develop` reconciliation.
-- Do not claim public relaunch, SEO launch, full public website completion, product Done, commerce readiness, authenticated readiness, deployment readiness, or production readiness.
+- Visitors may mistake the enquiry presentation for a working submission channel; the visible unavailable state must remain until the complete privacy/data gate is approved.
+- Full static validation remains limited by the inherited migration 0009 Windows working-tree byte-hash mismatch. Sprint 029M did not edit that migration.
+- `develop` and unrelated 021/022 work remain separate and were not merged, cleaned, reset, or pushed by 029M.
 
-## Open Questions For The Architect
+## Open questions for the Architect
 
-- No new Architect question for 029F before staging; Builder is proceeding through explicit sprint-only staging while preserving unrelated 021AA dirty state.
+- Resolve all twelve enquiry privacy/data decisions before any backend work.
+- Define Information page structure/access and Electrolytes treatment.
+- Define or permanently omit the twelve-month term.
+- Supply durable testimonial/video files, attribution, captions, and accessible alternatives before publication.
 
-## Validation / Test Status
+## Validation / test status
 
-Passed:
+Passed: Australian-English validator, focused 029M tests 11/11, JSON, typecheck, lint, production build, local mobile/tablet/desktop/keyboard/reflow/reduced-motion review, exact staged allowlist, Vercel build, alias mapping, public markers/assets/Pricing/form boundary/robots smoke, redirects, protected-route redirects, checkout GET 405, and rendered mobile/desktop checks on all three aliases.
 
-- `npm.cmd run validate:static`
-- `npm.cmd run validate:json`
-- `npm.cmd run typecheck`
-- `npm.cmd run lint`
-- `npm.cmd run build` in `C:\Users\rrank\AppData\Local\Temp\pnr-029f-build-workspace-20260724151849` after locked dependency install.
-- Safe local HTTP route smoke for `/`, `/home`, `/contact`, `/shop`, `/shop/example`, `/sign-in`, `/admin`, `/portal`, `/data-entry`, and `/api/checkout`.
-- Operator-assisted visual smoke for mobile, tablet, desktop, keyboard traversal, hero image visibility, overflow/readability, and status indicators.
-- Public alias marker smoke for Sprint 029 content.
-- Public route-safety smoke on `https://precisionperformance.com.au`.
-- Read-only Vercel inspect of the production alias.
-- Sprint 029H live cache-busted checks for apex, `www`, and Vercel app alias.
-- Sprint 029H DNS checks for apex and `www`.
-- Sprint 029I source/build/Vercel/DNS/public-content reconciliation.
-- Sprint 029I live cache-busted checks for apex, `www`, Vercel app alias, and the exact reported `?review029h=1` URL.
-- Sprint 029I final public route smoke.
-- Sprint 029J root-page source correction, clean-worktree build, intended Vercel deployment, live hero image 200 checks, Edge DevTools local/apex/`www` screenshot parity, and final route smoke.
-- Sprint 029K release ledger, temporary Vercel project cleanup, post-cleanup Vercel inspect, public marker smoke, hero asset check, route-safety smoke, and JSON/static/diff validation.
-- Sprint 029L scoped remote backup branch verification, light production marker smoke, hero asset check, Vercel inspect, and JSON/static/diff validation.
+## Recommended next Architect action
 
-Blocked/limited:
-
-- The raw Vercel deployment URL redirects to Vercel SSO; public smoke used the production alias `https://precisionperformance.com.au`.
-- Local SSH push was unavailable in 029F (`Permission denied (publickey)`), so the remote release branch was created/updated through the GitHub API connector.
-
-## Recommended Next Architect Action
-
-Plan any broader public website, commerce, authenticated, SEO/indexing, final launch, or production-readiness work separately. Preserve the Sprint 029L marketing-preview and scoped-backup boundary, and reconcile local `develop`, remote `develop`, and active 021-series dirty work in a separate repository-control sprint before any broad merge or `develop` push.
+Treat Sprint 029M as closed partial-safe. Plan any deferred enquiry backend, Information/Electrolytes, testimonial/video, twelve-month/commercial, broader public relaunch, SEO, or production-readiness work separately. Sprint 023 remains untouched and requires its own Architect Pack.
