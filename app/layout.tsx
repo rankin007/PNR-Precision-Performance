@@ -6,7 +6,7 @@ export const metadata: Metadata = {
     default: "Equine Precision Performance",
     template: "%s | Precision Performance",
   },
-  description: "Equine biochemistry and recovery intelligence supporting informed trainer decisions.",
+  description: "Elite equine performance and recovery analysis supporting informed trainer decisions.",
 };
 
 export default function RootLayout({
@@ -15,7 +15,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en-AU">
       <body>{children}</body>
     </html>
   );

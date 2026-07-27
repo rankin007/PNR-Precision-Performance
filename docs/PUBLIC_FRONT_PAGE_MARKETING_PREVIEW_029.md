@@ -1,5 +1,9 @@
 # Public Front Page Marketing Preview 029
 
+## Sprint 029M local follow-up
+
+Sprint 029M has a locally implemented and rendered public-content, enquiry-presentation and bounded-pricing follow-up in the isolated branch `codex/029M-public-website-content-enquiry-and-pricing-follow-up`. Final visual/content sign-off and the partial-safe release path were confirmed on 2026-07-28. Enquiry transmission/storage/email, Information/Electrolytes publication, the undefined twelve-month term, and testimonial/video publication remain deferred.
+
 ## Status
 
 Sprint 029 has been applied and the root public page is live as a noindex/nofollow marketing-preview front page.
