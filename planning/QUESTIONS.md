@@ -19,6 +19,8 @@ Historical and superseded questions through Sprint 017F are preserved in `planni
 |---|---|---|
 | How will Supabase resolve the candidate project’s persistent rejection of newly issued exact-project JWTs? | Supabase / Operator | Supply substantive provider response or confirmed remediation; then plan 021N. |
 | When is a remote migration/deployment/public reopening authorized? | User / Operator | Provide explicit scoped authorization in a future sprint. |
+| Is the intended Supabase project actually Sydney `ap-southeast-2`, and are provider/subprocessor terms and separate Storage-object backup/recovery/restoration arrangements suitable? | Aprec8 / authorised operator | Supply sanitised project-region and approved recovery/contract evidence before production; `ap-southeast-1` blocks the Australian-storage claim. |
+| Which governed CSV registry and approved scanner/sanitiser boundary will enable evidence availability? | Aprec8 privacy/security owner | Supply registry fixtures and separately approve any dependency/provider/service/secret before enablement. |
 
 ## Future Roadmap Input
 

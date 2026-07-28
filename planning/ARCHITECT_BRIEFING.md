@@ -2,51 +2,36 @@
 
 ## Where things stand
 
-Sprint 023C is closed `decision-contract-approved-clean`. Aprec8's authorised decision owner approved one canonical twenty-answer privacy, storage and lifecycle contract for Sprint 023, effective 28 July 2026. Sprint 023B remains the clean product baseline. No implementation, provider, remote, deployment, or commit action occurred.
+Sprint 023D is locally complete `upload-storage-architecture-approved-clean` from clean Sprint 023C commit `50ee7e133e03b82c5f4f14cc296f6d29cf3f74ca`. The twenty-decision privacy/storage contract and Aprec8's eight design decisions are translated into a fail-closed implementation architecture. No implementation or remote action occurred.
 
 ## Current status
 
-- Branch: `codex/023C-privacy-storage-and-lifecycle-decision-approval`.
-- Worktree: `C:\tmp\pnr-023c-privacy-storage-lifecycle`.
-- Base: `a7759f691f0e01482f3a396acd14b2a23dbca5ec`.
-- Outcome: `decision-contract-approved-clean`.
+- Branch: `codex/023D-upload-and-storage-architecture-design`.
+- Worktree: `C:\tmp\pnr-023d-upload-storage-design`.
+- Base: `50ee7e133e03b82c5f4f14cc296f6d29cf3f74ca`.
+- Outcome: `upload-storage-architecture-approved-clean`.
 - Commit/push: not performed.
 
-## Since last sprint
+## Architecture result
 
-- Reconciled the stopped Sprint 023 decision evidence and clean 023B lineage.
-- Recorded all twenty approved decisions in canonical Markdown and stakeholder Word forms.
-- Recorded the authorised owner, role, effective date, monitored incident email, consolidated approval, and supersession of earlier standalone annotations.
-- Reconciled Sprint 013's proposed categories and 2 MiB limit as superseded.
+- Authenticated direct standard upload to a future private bucket under exact server-created intent; server finalisation and 60-second signed download.
+- Additive future metadata/intent/CSV/hold/audit design with blocking legacy inventory, unavailable backfill, named category/size constraint replacement, exact foreign keys/composite scope invariant and stable version lineage; migration `0009` immutable and no `0018` created.
+- Exact role/assignment/RLS/Storage agreement, unavailable-until-safe state machine, quota concurrency, idempotency, replacement, compensation and audit.
+- Exact quota-counting states and a bounded, atomic, capacity-neutral replacement cutover that never displaces the predecessor on failure.
+- Quarterly retention review; 30-day Administrator restoration; explicit `evidence.purge`; holds override purge.
+- Daily production-only UTC Vercel Cron with bearer `CRON_SECRET`, DB-backed lock, bounded idempotent work and durable next-run recovery.
 
-## Architecture / file map
+## Mandatory later gates
 
-- `docs/SPRINT_023C_PRIVACY_STORAGE_LIFECYCLE_DECISIONS.md`: canonical diffable contract.
-- `docs/SPRINT_023C_PRIVACY_STORAGE_LIFECYCLE_DECISION_RECORD.docx`: stakeholder-readable approval record.
-- `planning/reviews/023C-*`: source reconciliation, final contract, document validation, and closeout evidence.
-- `planning/sprints/023C-privacy-storage-and-lifecycle-decision-approval/`: applied strict sprint source.
+- CSV is disabled until Aprec8 supplies a governed source/template/version/schema/formula fixture.
+- Scanner and sanitiser remain fail-closed adapters; any dependency/provider/service/secret requires separate approval.
+- Verify the intended live project is Sydney `ap-southeast-2`; `ap-southeast-1` is Singapore and blocks compliance.
+- Approve provider/subprocessor/overseas-access suitability and separate Storage-object backup, recovery, expiry and restoration agreement before production.
 
-## Decisions
+## Validation
 
-- Permit JPEG, PNG, PDF, and controlled CSV; 5 MiB/file, 10 files/test, 30 MiB/test.
-- Apply the approved role, assignment, retention, deletion, audit, Australian-region, 60-second signed-link, unsafe-content, metadata, retry, orphan, backup/request, acknowledgement, and incident contracts.
-- Earlier standalone `Accept` annotations are fully superseded.
-
-## Risks / watch-items
-
-- Do not treat decision approval as architecture, implementation, provider approval, legal certification, deployment, or production readiness.
-- Controlled-CSV registration, scanner/provider selection, provider suitability, retention review cadence, and recommended legal/privacy review remain pre-production inputs.
-- DOCX structural QA passed, but LibreOffice was unavailable, so no rendered page count or visual PNG QA is claimed.
-
-## Open questions for the Architect
-
-- Select the narrow Sprint 023D design scope and identify which residual inputs must be resolved before or during design.
-- Keep Sprint 023E implementation and 023F remote proof separate.
-
-## Validation / test status
-
-Passed: pack check/application/post-apply verification, copied-artifact hashes, 20/20 Markdown/Word agreement, DOCX package/heading/table/accessibility structure, placeholder/comment/tracked-change/metadata checks, JSON validation, diff checks, approved-path scope, and source-worktree non-mutation. Visual render QA was unavailable because LibreOffice is absent.
+Passed: pack/baseline/hash verification, twenty-decision trace, schema/state/permission/compensation structure, official primary-source support, JSON parse, approved-path and no-`0018` checks, secret/privacy scan, `git diff --check`, and source-worktree/non-remote boundaries.
 
 ## Recommended next Architect action
 
-Create Sprint 023D architecture/design scope from the approved contract. Do not apply or implement 023D within the Architect session.
+Only after a separate instruction, create a narrow Sprint 023E local implementation/proof pack from this architecture. Keep provider/dependency approval and all Sprint 023F remote bucket/migration/policy/hosted proof separate.

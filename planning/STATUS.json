@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "phase": "closed",
-  "sprint": "023C-privacy-storage-and-lifecycle-decision-approval",
-  "status": "decision-contract-approved-clean",
+  "sprint": "023D-upload-and-storage-architecture-design",
+  "status": "upload-storage-architecture-approved-clean",
   "updated": "2026-07-28T00:00:00+10:00",
-  "summary": "Sprint 023C established the approved twenty-decision privacy, storage and lifecycle contract for Sprint 023. Phillip Norman Rankin supplied authority, consolidated approval, effective date, monitored incident email and annotation supersession. Markdown and Word records agree and pass structural checks; visual PNG QA remains unavailable because LibreOffice is absent. No product, schema, Storage, provider, remote, deployment or source-worktree mutation occurred."
+  "summary": "Sprint 023D translated the approved contract and Aprec8 decisions into a corrected fail-closed local design with exact legacy inventory/backfill, constraint replacement, foreign keys/invariants, stable version lineage, quota states and atomic replacement behavior. CSV, safety providers, actual Sydney region and Storage-object recovery remain later gates. No source, migration, dependency, remote, commit or Sprint 023E action occurred."
 }

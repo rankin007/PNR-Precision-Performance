@@ -97,7 +97,7 @@ This workstream waits for a substantive Supabase response or remediation.
 
 - **023B:** reconcile accepted Sprint 021AH and 022/022B source onto the verified 029M lineage and establish a clean product baseline.
 - **023C:** closed `decision-contract-approved-clean`; approved file types, limits, retention, deletion, privacy, ownership, role, audit, region, delivery, safety, lifecycle, acknowledgement, and incident-response rules are canonical in the Markdown and Word contract.
-- **023D:** design attachment schema, private bucket/path model, signed/server upload path, and Storage RLS.
+- **023D:** complete locally `upload-storage-architecture-approved-clean`; approved design covers additive metadata, private Storage, authenticated direct upload/finalisation, permissions, lifecycle/safety, retention and daily locked/idempotent reconciliation.
 - **023E:** implement upload, preview/download, retry, soft-delete, and audit behavior.
 - **023F:** prove role boundaries, wrong-horse/cross-stable denial, cleanup, and restoration remotely.
 

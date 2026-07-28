@@ -3,8 +3,8 @@
 ## Current Position
 
 - Latest closed public follow-up: **029M - Public Website Content, Enquiry, And Pricing**, outcome `public-website-follow-up-partial-safe`.
-- Current corrective sprint: **023C - Privacy, Storage And Lifecycle Decision Approval**, closed `decision-contract-approved-clean`; local commit remains separately instructed.
-- Next product work is **023D - Test Evidence Uploads And Storage Architecture/Design** from the approved 023C contract.
+- Current corrective sprint: **023D - Test Evidence Uploads And Storage Architecture/Design**, locally complete `upload-storage-architecture-approved-clean`; commit remains separately instructed.
+- Next product work is **023E**, but it must not begin without a separate Architect Pack/application instruction.
 
 - Current completed delivery sprint: **002B — Delivery System And Project-State Consolidation**, outcome `delivery-consolidation-complete`.
 - Repository-control sequence through **017F**: complete locally.

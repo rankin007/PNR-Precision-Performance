@@ -37,3 +37,9 @@ The full Done target requires these future modules to be designed deliberately b
 - Require trainer confirmation before any automatically extracted value affects scoring.
 - Keep score and recommendation snapshots on test records so history remains stable if formulas or Table of Knowledge content changes later.
 - Preserve Sprint 010 live acceptance blockers as production readiness work, not as evidence of full Done.
+
+## Sprint 023D Test-Evidence Design
+
+The approved, unimplemented upload/storage design is in `docs/TEST_EVIDENCE_UPLOAD_ARCHITECTURE_023D.md`. It selects authenticated direct standard upload to a proposed private Supabase bucket, server-created opaque keys/intents, server finalisation, fail-closed scanning/sanitisation, 60-second signed downloads, additive metadata/lifecycle tables, and daily idempotent Vercel Cron reconciliation authenticated by `CRON_SECRET` with a database-backed lock.
+
+Australian storage is a pre-production evidence gate: the actual project must be verified as Sydney `ap-southeast-2`; `ap-southeast-1` is Singapore. Separate Storage-object recovery evidence is required because database backups exclude object bytes. Sprint 023D creates no bucket, policy, migration, route, dependency, secret or runtime behavior.
