@@ -60,6 +60,12 @@ Sprint 023H evidence: `planning/reviews/023H-*.md` and `scripts/test-repository-
 
 ## Historical Evidence
 
+Sprint 023O local pgcrypto correction: `planning/reviews/023O-local-correction-and-validation.md`, `planning/reviews/023O-remote-0020-and-function-proof.md`, `planning/reviews/023O-governed-initiation-and-recovery-proof.md`, `planning/reviews/023O-cleanup-and-023L-resumption-boundary.md` and `planning/reviews/023O-closeout.md`. Local additive `0020` candidate and complete validation pass; commit and all remote proof remain pending.
+
+Sprint 023N governed initiation diagnosis: `planning/reviews/023N-initiation-contract-reconciliation.md`, `planning/reviews/023N-bounded-hosted-diagnostic.md`, `planning/reviews/023N-cleanup-and-correction-classification.md` and `planning/reviews/023N-closeout.md`. Static contract and rolled-back catalog evidence classify `database-function-resolution-or-grant-defect`; initial/final `0/0/0/0` and zero orphans pass. A later additive `0020` should schema-qualify the approved pgcrypto dependency without broadening the security-definer search path; no correction is included here.
+
+Sprint 023L immediate-preflight stop: `planning/reviews/023L-baseline-target-and-immediate-preflight.md` and `planning/reviews/023L-closeout.md`. Supporting phase records under `planning/reviews/023L-*.md` distinguish work not run from safe target checks completed. No remote mutation occurred.
+
 Pre-consolidation state, briefing, questions, and risks through Sprint 017F are preserved in `planning/history/`. Sprint-specific source artifacts and reviews remain under `planning/sprints/`, `planning/architect-packs/`, and `planning/reviews/`.
 
 Archived statements are not current authority unless a current file explicitly carries them forward.

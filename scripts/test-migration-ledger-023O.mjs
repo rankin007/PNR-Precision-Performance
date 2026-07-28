@@ -1,0 +1,20 @@
+import assert from "node:assert/strict";
+import fs from "node:fs";
+
+const actual = fs.readdirSync("supabase/migrations").filter((name) => /^\d/.test(name)).sort();
+const expected = Array.from({ length: 20 }, (_, index) => String(index + 1).padStart(4, "0"));
+function validate(names) {
+  assert(names.every((name) => /^\d{4}_.+\.sql$/.test(name)), "malformed filename");
+  const versions = names.map((name) => name.slice(0, 4));
+  assert.equal(new Set(versions).size, versions.length, "duplicate version");
+  assert.deepEqual(versions, expected, "ledger must be exactly 0001-0020");
+  assert.equal(names.at(-1), "0020_schema_qualified_pgcrypto_initiation.sql", "0020 identity");
+}
+validate(actual);
+const mustReject = (mutate) => assert.throws(() => validate(mutate([...actual])));
+mustReject((names) => names.filter((name) => !name.startsWith("0007_")));
+mustReject((names) => [...names, "0007_duplicate.sql"].sort());
+mustReject((names) => names.map((name) => name.startsWith("0020_") ? "0020_renamed.sql" : name));
+mustReject((names) => [...names, "0021_future.sql"].sort());
+mustReject((names) => names.map((name) => name.startsWith("0012_") ? "012_bad.sql" : name));
+console.log("023O exact/adversarial candidate ledger proof passed.");

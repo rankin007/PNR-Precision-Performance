@@ -34,6 +34,6 @@ assert.match(sql, /if upload\.state='purged' then return true/);
 assert.match(sql, /if attempt\.state='expired' and upload\.state='failed' then return true/);
 
 const migrations = fs.readdirSync("supabase/migrations").filter((name) => /^\d{4}_/.test(name)).sort();
-assert.deepEqual(migrations.map((name) => name.slice(0, 4)), Array.from({ length: 19 }, (_, i) => String(i + 1).padStart(4, "0")));
-assert.equal(migrations.at(-1), "0019_test_evidence_remote_contract_completion.sql");
+assert.deepEqual(migrations.map((name) => name.slice(0, 4)), Array.from({ length: 20 }, (_, i) => String(i + 1).padStart(4, "0")));
+assert.equal(migrations.at(-1), "0020_schema_qualified_pgcrypto_initiation.sql");
 console.log("023J additive migration/RPC/private Storage contract proof passed (candidate only; not applied). ");
