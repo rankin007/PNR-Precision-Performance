@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "phase": "ready-for-commit",
-  "sprint": "023J-provider-remote-storage-migration-application-and-hosted-proof",
-  "status": "remote-candidate-ready-for-commit",
+  "sprint": "023M-committed-candidate-state-reconciliation",
+  "status": "committed-candidate-state-reconciled-ready-for-commit",
   "updated": "2026-07-29T00:00:00+10:00",
-  "summary": "Corrected 023J candidate is ready for commit with no application Data API access to the storage schema. Purge and expired compensation delete through Storage API, then service-role-only PostgreSQL completion guards atomically prove absence before idempotent metadata completion. Failures stay retryable and the full matrix passes; work is unstaged/uncommitted with no remote mutation."
+  "summary": "Superseding its historical remote-candidate-ready-for-commit state, Sprint 023J is remote-candidate-committed-clean at local commit fcf818fe3a8001b12941adc9dd121c6dbe8c002f. The bounded four-record Sprint 023M reconciliation is validated but remains uncommitted; no remote application, hosted proof, provider mutation or deployment occurred."
 }
