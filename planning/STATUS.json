@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "phase": "review",
+  "phase": "complete",
   "sprint": "023P-postgresql-filename-extension-parser-correction-and-final-governed-reproof",
-  "status": "extension-parser-correction-ready-for-commit",
+  "status": "extension-parser-corrected-final-governed-recovery-proven-clean",
   "updated": "2026-07-29T00:00:00+10:00",
-  "summary": "Sprint 023P local candidate is ready for commit review. Additive migration 0021 preserves the exact applied 0020 governed initiation function and changes only the diagnosed filename-extension regex to the approved single-backslash PostgreSQL form, plus the approved comment. Focused semantic/input, exact/adversarial ledger, migration immutability, CI/local, ESLint, TypeScript and production-build validation pass. Work is unstaged, uncommitted and remotely unapplied."
+  "summary": "Sprint 023P applied migration 0021 exactly once after an exact sole-selection dry run. Remote/local ledger is exactly 0001-0021. The final governed proof passed initiation, no-overwrite JPEG transfer, fail-closed finalisation, protected export, DPAPI restored-byte hash agreement, governed removal, verified absence and Auth-last cleanup. Final Auth/application/Storage/recovery state is 0/0/0/0 with zero orphans. Sprint 023L is ready to resume at protected Vercel Preview configuration; no Vercel or deployment action occurred."
 }

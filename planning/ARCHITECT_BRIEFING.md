@@ -1,5 +1,9 @@
 # Architect Briefing
 
+Sprint 023P is complete `extension-parser-corrected-final-governed-recovery-proven-clean`. Migration `0021` was applied exactly once after the supported dry run selected only that migration; remote/local ledger is exactly `0001` through `0021`. The final governed JPEG proof passed exact initiation/intent, signed no-overwrite transfer, fail-closed finalisation, protected export, DPAPI restored-byte hash agreement, governed removal, verified absence and Auth-last cleanup. Final state is `0/0/0/0` with zero proof orphans. This local closeout commit records the bounded harness correction and evidence. Sprint 023L is ready to resume at protected Vercel Preview configuration; no Vercel/deployment/push/merge action occurred.
+
+Historical pre-application Sprint 023P briefing, now superseded:
+
 Sprint 023P is `extension-parser-correction-ready-for-commit`. Additive migration `0021_postgresql_filename_extension_parser_correction.sql` preserves the exact applied `0020` initiation function and changes only the classified filename-extension regex to the approved single-backslash PostgreSQL form, plus the approved comment. SHA-256 is `3325B5EF803D3197768A42DB2AA9AED6177B73C371B2B4F83F2FC771E89F0962`. Focused semantic/input, exact/adversarial `0001`–`0021`, migration immutability, CI/local, full ESLint, TypeScript and production-build gates pass. The candidate is unstaged/uncommitted and remotely unapplied; remote ledger remains `0001`–`0020`, final state remains `0/0/0/0`, and no Vercel/deployment/push/merge action occurred.
 
 Sprint 023O applied migration `0020` exactly once and aligned remote/local ledger through `0020`. Governed runtime then failed clean at the classified double-backslash filename-extension validation stage before authority lookup and before `extensions.digest(...)`; exact Auth-last cleanup restored `0/0/0/0`. Sprint 023P supersedes the correction boundary. No Vercel, deployment, push or merge action occurred.

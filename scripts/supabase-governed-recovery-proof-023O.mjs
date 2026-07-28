@@ -101,9 +101,9 @@ try {
   fs.writeFileSync(exportPath, exported);
   const dpapi = spawnSync("powershell.exe", ["-NoProfile", "-Command",
     "$ErrorActionPreference='Stop'; Add-Type -AssemblyName System.Security; " +
-    "$plain=[IO.File]::ReadAllBytes($args[0]); $cipher=[Security.Cryptography.ProtectedData]::Protect($plain,$null,[Security.Cryptography.DataProtectionScope]::CurrentUser); " +
-    "[IO.File]::WriteAllBytes($args[1],$cipher); $round=[Security.Cryptography.ProtectedData]::Unprotect([IO.File]::ReadAllBytes($args[1]),$null,[Security.Cryptography.DataProtectionScope]::CurrentUser); [IO.File]::WriteAllBytes($args[2],$round)",
-    exportPath, encryptedPath, restoredPath], { stdio: "pipe" });
+    "$plain=[IO.File]::ReadAllBytes($env:PP023P_DPAPI_SOURCE); $cipher=[Security.Cryptography.ProtectedData]::Protect($plain,$null,[Security.Cryptography.DataProtectionScope]::CurrentUser); " +
+    "[IO.File]::WriteAllBytes($env:PP023P_DPAPI_ENCRYPTED,$cipher); $round=[Security.Cryptography.ProtectedData]::Unprotect([IO.File]::ReadAllBytes($env:PP023P_DPAPI_ENCRYPTED),$null,[Security.Cryptography.DataProtectionScope]::CurrentUser); [IO.File]::WriteAllBytes($env:PP023P_DPAPI_RESTORED,$round)"],
+  { stdio: "pipe", env: { ...process.env, PP023P_DPAPI_SOURCE: exportPath, PP023P_DPAPI_ENCRYPTED: encryptedPath, PP023P_DPAPI_RESTORED: restoredPath } });
   assert.equal(dpapi.status, 0);
   assert.equal(digest(fs.readFileSync(restoredPath)), digest(exported));
   result.recoveryRoundTrip = true;

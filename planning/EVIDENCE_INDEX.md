@@ -14,6 +14,10 @@ This file navigates evidence; it does not replace the linked records.
 
 ## Delivery And Product Evidence
 
+Sprint 023P parser correction and final governed proof: `planning/reviews/023P-*.md`, `planning/sprints/023P-postgresql-filename-extension-parser-correction-and-final-governed-reproof/`, `scripts/test-filename-extension-parser-023P.mjs`, `scripts/test-governed-recovery-harness-023P.mjs`. Migration `0021` was applied exactly once; remote/local ledger is `0001` through `0021`; governed JPEG/DPAPI recovery/removal and Auth-last cleanup passed with final `0/0/0/0`. Sprint 023L is ready to resume at protected Vercel Preview configuration.
+
+Historical local-candidate Sprint 023P evidence, now superseded:
+
 Sprint 023P local parser correction: `planning/reviews/023P-local-parser-correction-and-validation.md`, `planning/sprints/023P-postgresql-filename-extension-parser-correction-and-final-governed-reproof/`, `scripts/test-filename-extension-parser-023P.mjs`, `scripts/test-migration-ledger-023P.mjs`. Additive `0021` candidate preserves the applied `0020` function except the classified regex/comment boundary; complete local validation passes; candidate remains unstaged, uncommitted and remotely unapplied.
 
 Sprint 023K authority: `docs/SPRINT_023K_SINGAPORE_REGION_AUTHORITY_AMENDMENT.md`, `planning/reviews/023K-*.md`. Exact `ap-southeast-1` Singapore is approved; no Australian-only storage claim or external mutation.
