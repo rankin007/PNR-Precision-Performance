@@ -29,6 +29,15 @@ export type UploadRequest = {
   replacesId?: string;
 };
 
+export type EvidenceUploadIntent = {
+  attemptId: string;
+  uploadId: string;
+  bucket: "test-evidence";
+  key: string;
+  token: string;
+  expiresAt: string;
+};
+
 export type SafeEvidenceMetadata = {
   id: string;
   displayName: string;

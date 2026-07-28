@@ -149,3 +149,9 @@ Preserve the two repository tools as intentional CommonJS and handle their five 
 # Sprint 023I decision — 2026-07-28
 
 Use a disposable physical dependency copy outside the OneDrive junction as the governed production-build proof for the combined candidate. The first reparse-safe build completed in 57.5 seconds and the final matrix passed, so the earlier junction-path build non-completion is superseded as an environment-path limitation rather than a demonstrated source error.
+# Sprint 023J stop decision — 2026-07-28
+
+Stop `remote-target-authority-blocked-clean` before external access. Existing Supabase records are Singapore `ap-southeast-1`; no exact authorised Sydney non-production Supabase/Vercel mapping, operator/rollback approval, provider suitability or Storage-object recovery method was supplied.
+# Sprint 023K decision — 2026-07-28
+
+Aprec8 approves Supabase `ap-southeast-1` Singapore for Precision Performance. This supersedes the active Sydney-only `ap-southeast-2` requirement and Singapore-stop condition on region only. International processing must be described accurately; no Australian-only storage claim or external/production authority follows.

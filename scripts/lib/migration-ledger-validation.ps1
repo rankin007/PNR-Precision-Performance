@@ -8,9 +8,9 @@ function Test-CandidateMigrationLedger {
   $migrations = @($files | Where-Object Name -Match '^\d{4}_.+\.sql$' | Sort-Object { [int]$_.Name.Substring(0,4) }, Name)
   $groups = $migrations | Group-Object { $_.Name.Substring(0,4) }
   if ($groups | Where-Object Count -ne 1) { throw 'Candidate repository migration chain contains a duplicate version.' }
-  $expected = 1..18 | ForEach-Object { '{0:D4}' -f $_ }
+  $expected = 1..19 | ForEach-Object { '{0:D4}' -f $_ }
   $actual = $migrations | ForEach-Object { $_.Name.Substring(0,4) }
-  if (Compare-Object $expected $actual) { throw 'Candidate repository migration versions must be exactly 0001 through 0018.' }
+  if (Compare-Object $expected $actual) { throw 'Candidate repository migration versions must be exactly 0001 through 0019.' }
   $candidate = @($migrations | Where-Object Name -EQ '0018_test_evidence_upload_and_storage.sql')
   if ($candidate.Count -ne 1) { throw 'Candidate repository chain requires exact 0018_test_evidence_upload_and_storage.sql.' }
   $bytes = [IO.File]::ReadAllBytes($candidate[0].FullName)
@@ -23,5 +23,17 @@ function Test-CandidateMigrationLedger {
     'evidence_upload_attempts','evidence_csv_registry','evidence_holds','evidence_audit_events',
     'pg_advisory_xact_lock','enable row level security','revoke insert, update, delete'
   )) { if ($sql -notmatch [regex]::Escape($marker)) { throw "Candidate 0018 missing identity marker: $marker" } }
-  [pscustomobject]@{ Migrations=$migrations; Candidate=$candidate[0]; Diagnostic='Candidate repository migration chain is aligned through 0018; no applied or remote status was inspected.' }
+  $completion = @($migrations | Where-Object Name -EQ '0019_test_evidence_remote_contract_completion.sql')
+  if ($completion.Count -ne 1) { throw 'Candidate repository chain requires exact 0019_test_evidence_remote_contract_completion.sql.' }
+  $completionBytes = [IO.File]::ReadAllBytes($completion[0].FullName)
+  if ($completionBytes.Length -ge 3 -and $completionBytes[0] -eq 0xEF -and $completionBytes[1] -eq 0xBB -and $completionBytes[2] -eq 0xBF) { throw 'Candidate 0019 must be UTF-8 without BOM.' }
+  $completionSql = [Text.UTF8Encoding]::new($false,$true).GetString($completionBytes)
+  foreach ($marker in @(
+    'initiate_test_evidence_upload','mutate_test_evidence_lifecycle','reconcile_test_evidence_batch',
+    'test-evidence','test_evidence_exact_intent_insert','can_insert_test_evidence_object',
+    "array['image/jpeg','image/png','application/pdf']",'evidence.purge',
+    'safety_services_unavailable','revoke all on function','to service_role',
+    'complete_test_evidence_purge','complete_test_evidence_compensation','object_absence_verified'
+  )) { if ($completionSql -notmatch [regex]::Escape($marker)) { throw "Candidate 0019 missing identity marker: $marker" } }
+  [pscustomobject]@{ Migrations=$migrations; Candidate=$completion[0]; Diagnostic='Candidate repository migration chain is aligned through 0019; no applied or remote status was inspected.' }
 }

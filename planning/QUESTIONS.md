@@ -4,6 +4,14 @@ Historical and superseded questions through Sprint 017F are preserved in `planni
 
 ## Active Decision Required
 
+Sprint 023K resolves region: `ap-southeast-1` Singapore is approved. Sprint 023J still requires exact Supabase/Vercel targets, non-production/synthetic classification, operator/rollback authority, provider/privacy suitability and Storage-object recovery approval.
+
+Subsequent authority resolves every listed item except the Vercel Preview designation: `precisionperformance.com.au` is a production alias and must be replaced with the actual non-production `Preview` environment target.
+
+The authority owner corrected the designation to Vercel `Preview`, generated `*.rankin007s-projects.vercel.app`, no custom domain, exclusively mapped to Supabase `uvskssaecdhxcgytkasc`. This question is resolved for read-only preflight.
+
+Sprint 023J requires the consolidated named-target/provider/recovery authority statement listed in `planning/reviews/023J-closeout.md` before external access.
+
 Sprint 023I resolved the local production-build blocker. Remaining Sprint 023 questions concern only separately scoped remote/provider/database/Storage proof; Sprint 023J has not begun.
 
 Sprint 023H requires a separately authorised narrow build-environment diagnosis/retry before combined clean reconciliation; see `planning/reviews/023H-closeout.md`.
@@ -23,7 +31,7 @@ Sprint 023H requires a separately authorised narrow build-environment diagnosis/
 |---|---|---|
 | How will Supabase resolve the candidate project’s persistent rejection of newly issued exact-project JWTs? | Supabase / Operator | Supply substantive provider response or confirmed remediation; then plan 021N. |
 | When is a remote migration/deployment/public reopening authorized? | User / Operator | Provide explicit scoped authorization in a future sprint. |
-| Is the intended Supabase project actually Sydney `ap-southeast-2`, and are provider/subprocessor terms and separate Storage-object backup/recovery/restoration arrangements suitable? | Aprec8 / authorised operator | Supply sanitised project-region and approved recovery/contract evidence before production; `ap-southeast-1` blocks the Australian-storage claim. |
+| Is the intended Supabase project verified as exact approved `ap-southeast-1` Singapore, and are provider/subprocessor terms and separate Storage-object backup/recovery/restoration arrangements suitable? | Aprec8 / authorised operator | Supply sanitised project-region and approved recovery/contract evidence; describe international processing accurately and make no Australian-only storage claim. |
 | Which governed CSV registry and approved scanner/sanitiser boundary will enable evidence availability? | Aprec8 privacy/security owner | Supply registry fixtures and separately approve any dependency/provider/service/secret before enablement. |
 
 ## Future Roadmap Input

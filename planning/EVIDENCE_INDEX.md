@@ -14,6 +14,10 @@ This file navigates evidence; it does not replace the linked records.
 
 ## Delivery And Product Evidence
 
+Sprint 023K authority: `docs/SPRINT_023K_SINGAPORE_REGION_AUTHORITY_AMENDMENT.md`, `planning/reviews/023K-*.md`. Exact `ap-southeast-1` Singapore is approved; no Australian-only storage claim or external mutation.
+
+Sprint 023J blocked evidence: `planning/reviews/023J-*.md`. Clean baseline/isolation pass; Sprint 023K later approved Singapore region, but no external access occurred because exact non-production target/operator/provider/recovery authority remains absent.
+
 Sprint 023I evidence: `planning/reviews/023I-*.md`. The physically reparse-safe build passed on its first attempt in 57.5 seconds and the complete combined local matrix passed; 023E–023H local outcomes are reconciled clean while all remote/database/provider proof remains deferred.
 
 Sprint 023H evidence: `planning/reviews/023H-*.md` and `scripts/test-repository-lint-baseline-023H.mjs`. Six errors are corrected; behavior/full lint/all pre-build gates pass; the bounded production build remains blocked.

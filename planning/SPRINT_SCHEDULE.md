@@ -2,6 +2,10 @@
 
 ## Current Position
 
+- Current authority amendment: **023K - Singapore Region Authority Amendment And 023J Unblock**, `singapore-region-authority-recorded-023J-region-unblocked-clean`; 023J awaits remaining non-regional authority inputs.
+
+- Current provider/remote sprint: **023J - Provider, Remote Storage, Migration Application And Hosted Proof**, `remote-target-authority-blocked-clean`; Singapore region is approved by 023K, while exact non-production targets and recovery/provider authority remain required before external access.
+
 - Latest closed public follow-up: **029M - Public Website Content, Enquiry, And Pricing**, outcome `public-website-follow-up-partial-safe`.
 - Current corrective sprint: **023I - Reparse-Safe Production Build Proof And Combined Closeout**, `reparse-safe-build-proven-combined-local-proof-clean`; physical build and the complete combined local matrix pass.
 - Next product work is **023E**, but it must not begin without a separate Architect Pack/application instruction.

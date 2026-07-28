@@ -38,6 +38,12 @@ The full Done target requires these future modules to be designed deliberately b
 - Keep score and recommendation snapshots on test records so history remains stable if formulas or Table of Knowledge content changes later.
 - Preserve Sprint 010 live acceptance blockers as production readiness work, not as evidence of full Done.
 
+## Sprint 023J regional and remote-contract amendment
+
+Sprint 023K supersedes the historical Sydney-only gate below. Exact approved project region is `ap-southeast-1` Singapore, accurately classified as international processing; no Australian-only storage claim is permitted. Separate Storage-object recovery remains required because database backups exclude object bytes. For the bounded synthetic non-production proof, the approved method is encrypted Aprec8-controlled copy, SHA-256 restore verification, 30-day retention and secure deletion unless an incident or governance hold applies.
+
+Sprint 023J candidate migration `0019` additively completes private bucket configuration, exact live-intent INSERT policy, server-derived initiation/lifecycle/reconciliation and the signed-direct browser transfer. Transferred objects remain unavailable and finalise to a blocked state while approved scanner/sanitiser adapters are absent; CSV remains disabled.
+
 ## Sprint 023D Test-Evidence Design
 
 The approved design is in `docs/TEST_EVIDENCE_UPLOAD_ARCHITECTURE_023D.md`; its local candidate implementation is documented in `docs/TEST_EVIDENCE_UPLOAD_IMPLEMENTATION_023E.md`. Sprint 023E adds candidate migration 0018, typed fail-closed modules, server boundaries, Cron authentication and focused UI without applying schema/Storage or enabling availability.

@@ -19,6 +19,9 @@
     "test:public-029m": "npm exec -- node scripts/test-public-website-029M.mjs",
     "test:evidence-023e": "node scripts/test-test-evidence-023E.mjs",
     "test:evidence-migration-023e": "node scripts/test-test-evidence-migration-023E.mjs",
+    "test:evidence-023j": "node scripts/test-test-evidence-signed-upload-023J.mjs",
+    "test:evidence-migration-023j": "node scripts/test-test-evidence-migration-023J.mjs",
+    "test:evidence-review-023j": "node scripts/test-test-evidence-review-corrections-023J.mjs",
     "db:bundle": "powershell -ExecutionPolicy Bypass -File scripts/export-supabase-bootstrap.ps1"
   },
   "dependencies": {

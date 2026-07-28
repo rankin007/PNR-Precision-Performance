@@ -275,3 +275,9 @@ Repository lint correction and focused behavior proof pass. Combined clean recon
 # Sprint 023I status — 2026-07-28
 
 Reparse-safe production build and complete combined local proof pass. Candidate migration 0018 remains unapplied and Sprint 023J has not begun.
+# Sprint 023J status — 2026-07-28
+
+Baseline and isolated worktree pass. Remote work is blocked clean before external access pending exact authorised Sydney non-production Supabase/Vercel targets, synthetic-only/provider suitability and Storage-object recovery authority.
+# Sprint 023K status — 2026-07-28
+
+Singapore `ap-southeast-1` authority is recorded and the Sydney-only 023J stop is superseded. Remaining non-regional 023J gates still apply.

@@ -12,7 +12,7 @@ Historical and closed risks through Sprint 017F are preserved in `planning/histo
 | Unapproved formulas, thresholds, or recommendation content mislead trainers. | High | High | Block production-facing classifications/advice until domain authority is supplied. |
 | Conflicting pricing or catalogue terms reach public surfaces. | Medium | High | Preserve public gate; require one approved commercial schedule before reopening. |
 | Upload implementation diverges from the approved privacy/storage/lifecycle contract or silently selects an unapproved processor. | Medium | High | Sprint 023D must design from the canonical 023C contract; keep CSV registration, scanner/provider, provider suitability, retention review, RLS, and lifecycle controls explicit before implementation. |
-| The Supabase project is assumed Australian or database backup is mistaken for Storage-object recovery. | Medium | Critical | Require sanitised proof that the intended project is Sydney `ap-southeast-2`; treat `ap-southeast-1` as Singapore/non-compliant; require separate object backup, recovery, expiry and restoration-agreement evidence before production. |
+| Singapore hosting is misrepresented as Australian-only storage or database backup is mistaken for Storage-object recovery. | Medium | Critical | Require sanitised proof that the intended project is exact approved `ap-southeast-1` Singapore; state international processing accurately; require separate object backup, recovery, expiry and restoration-agreement evidence before production. |
 | Duplicate/overlapping Cron invocations or duration exhaustion cause repeated or partial reconciliation. | Medium | High | Verify bearer `CRON_SECRET`, DB-backed concurrency lock, idempotent per-item transitions, bounded UTC batches, durable cursor/eligibility and next-run recovery; service-role access never replaces scope/state/audit. |
 | Voice transcription misrecords horse names, quantities, or readings. | Medium | High | Require provider/privacy choice, review-before-save, editable confirmation, and typed fallback. |
 | Identifiable horse/stable/person evidence is published without authority. | Medium | High | Use anonymised/recreated assets and require explicit releases. |
@@ -35,3 +35,9 @@ The corrected CommonJS tools pass focused behavior and full lint proof, but the 
 # Sprint 023I residual risk — 2026-07-28
 
 Local combined proof is clean only when the dependency/build path is physically isolated from the OneDrive junction. Original-path build timing remains unreliable. Remote migration, Storage, hosted roles, safety adapters, CSV, Cron, region and recovery evidence remain separate pre-production risks.
+# Sprint 023J authority risk — 2026-07-28
+
+Selecting a recorded project merely because it is approved-region `ap-southeast-1`, relying on cached links/names, or proceeding without exact Vercel mapping, synthetic-only classification, provider approval and Storage-object recovery would breach the remaining 023J gates. No external access occurred.
+# Sprint 023K regional risk — 2026-07-28
+
+Singapore `ap-southeast-1` is approved international processing and must not be represented as Australian-only storage. Region acceptance does not waive exact-target, provider/privacy, recovery or production-mutation controls.

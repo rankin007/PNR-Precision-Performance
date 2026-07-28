@@ -2,6 +2,16 @@
 
 Status: local candidate implementation; fail closed; uncommitted and unapplied
 
+## Sprint 023J additive completion
+
+Candidate migration `0019_test_evidence_remote_contract_completion.sql` completes the missing local hosted contract additively. It creates private `test-evidence` bucket configuration through migration SQL, enables only JPEG/PNG/PDF at 5 MiB, adds exact actor-owned live-intent Storage INSERT enforcement, implements server-derived initiation/lifecycle/reconciliation RPCs, preserves a separate unassigned `evidence.purge` permission, and grants reconciliation only to `service_role`. CSV remains disabled.
+
+The browser flow receives a narrowly scoped server-generated signed upload token, uploads directly to the exact opaque key with overwrite disabled, and finalises through the authenticated lifecycle RPC. Finalisation verifies authoritative Storage metadata and always ends unavailable as `blocked` with `safety_services_unavailable`; it cannot become `available` while approved scanner/sanitiser adapters are absent. No signed URL, token, raw key, filename or payload is logged.
+
+Both migrations remain local candidate files. Neither migration, bucket, policy, secret nor deployment has been applied or created remotely.
+
+The corrected replacement action initiates a successor upload carrying `replacesId`; it does not use a lifecycle `replace` operation. With safety unavailable, the successor becomes blocked and the predecessor remains unchanged. Governed purge and expired-object compensation are server-only two-phase flows: claim/authorize metadata, delete via Supabase Storage API, verify exact absence, then finalize an audited tombstone or failed-attempt state. Any deletion, verification or completion error remains retryable and produces no success claim.
+
 Sprint 023E implements the approved local boundaries: candidate migration `0018`, typed lifecycle/validation/safety contracts, server-scoped actions/repository, Vercel Cron bearer authentication, and a focused accessible test-evidence panel. The migration was structurally inspected only and was not applied to any database. No bucket or Storage policy exists from this sprint.
 
 JPEG, PNG and PDF signature/MIME/extension/size checks are deterministic. CSV is disabled. Default scanner and sanitiser adapters return unavailable; test fakes require explicit construction. Consequently transferred bytes cannot become available through the default runtime.

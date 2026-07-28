@@ -17,6 +17,6 @@ assert(safety.includes("failClosedScanner") && safety.includes("code: \"unavaila
 assert(contracts.includes("I confirm that I am authorised to upload this evidence and that it is relevant to this test.") && ui.includes("EVIDENCE_ACKNOWLEDGEMENT"));
 for (const token of ["role=\"alert\"", "aria-live=\"polite\"", "disabled=", "CSV evidence is not enabled", "safety checks are still pending"]) assert(ui.includes(token), token);
 assert(route.includes("timingSafeEqual") && route.includes("process.env.CRON_SECRET") && !route.includes("EVIDENCE_RECONCILIATION_SECRET"));
-assert(repository.includes("createSignedUrl(data.object_key, 60)") && repository.includes("v1/${randomUUID()}/${randomUUID()}"));
+assert(repository.includes("createSignedUrl(data.object_key, 60)") && repository.includes('row.object_key.startsWith("v1/")'));
 assert(!repository.includes("console.") && !route.includes("console."));
 console.log("023E domain/server/UI structural and deterministic contract proof passed.");

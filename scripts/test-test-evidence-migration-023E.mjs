@@ -17,6 +17,7 @@ for (const token of [
 assert.match(sql, /size_bytes between 1 and 5242880/);
 assert.match(sql, /state <> 'available'.*scan_outcome='clean'.*sanitisation_outcome='passed'/s);
 const migrations = fs.readdirSync("supabase/migrations").filter((name) => /^\d{4}_/.test(name)).sort();
-assert.equal(migrations.at(-1), "0018_test_evidence_upload_and_storage.sql");
-assert.equal(migrations.length, 18);
+assert(migrations.includes("0018_test_evidence_upload_and_storage.sql"));
+assert.equal(migrations.at(-1), "0019_test_evidence_remote_contract_completion.sql");
+assert.equal(migrations.length, 19);
 console.log("023E migration structural proof passed (candidate SQL not applied).");

@@ -31,3 +31,7 @@ Current project evidence includes health/setup routes, checkout, Stripe webhook,
 Local server-action boundaries now exist for initiation, finalisation, cancellation, list, 60-second download signing, replacement, soft deletion, restoration request/execution, holds and governed purge, plus `GET /api/internal/evidence/reconcile`. They remain unavailable until candidate migration/Storage is separately applied and approved safety adapters exist.
 
 The Cron route must verify `Authorization: Bearer <CRON_SECRET>`, use bounded idempotent batches and a database-backed concurrency lock, preserve durable retry eligibility, and stop within the function-duration margin. `SUPABASE_SERVICE_ROLE_KEY` stays server-only and never substitutes for record scope, expected-state, hold/age or audit checks. These contracts are documentation only; no endpoint or secret is created by Sprint 023D.
+
+## Sprint 023J Signed-Direct Candidate
+
+`initiateEvidenceUpload` now requests a database-derived actor/scope reservation and returns a server-generated, short-lived Storage upload token for one opaque `test-evidence` key. The browser uses `uploadToSignedUrl` with overwrite disabled, then calls `finaliseEvidenceUpload`. Finalisation verifies exact object metadata and remains fail closed as unavailable because approved scanner/sanitiser services do not exist. CSV, public access, client listing, overwrite and unsafe availability remain disabled. This is an uncommitted/unapplied local candidate, not a hosted API claim.

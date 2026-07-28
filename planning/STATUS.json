@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "phase": "closed",
-  "sprint": "023I-reparse-safe-production-build-proof-and-combined-closeout",
-  "status": "reparse-safe-build-proven-combined-local-proof-clean",
-  "updated": "2026-07-28T00:00:00+10:00",
-  "summary": "Sprint 023I completed the physically reparse-safe production build on the first attempt in 57.5 seconds and every final combined local gate passes. Earlier 023E-023H outcomes are reconciled clean locally. No migration, dependency, remote, deployment, stage or commit occurred."
+  "phase": "ready-for-commit",
+  "sprint": "023J-provider-remote-storage-migration-application-and-hosted-proof",
+  "status": "remote-candidate-ready-for-commit",
+  "updated": "2026-07-29T00:00:00+10:00",
+  "summary": "Corrected 023J candidate is ready for commit with no application Data API access to the storage schema. Purge and expired compensation delete through Storage API, then service-role-only PostgreSQL completion guards atomically prove absence before idempotent metadata completion. Failures stay retryable and the full matrix passes; work is unstaged/uncommitted with no remote mutation."
 }
