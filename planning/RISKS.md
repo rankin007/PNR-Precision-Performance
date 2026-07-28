@@ -11,7 +11,7 @@ Historical and closed risks through Sprint 017F are preserved in `planning/histo
 | Structural/local evidence is mistaken for authenticated or production readiness. | Medium | High | Keep readiness classes explicit in state, evidence index, and sprint acceptance. |
 | Unapproved formulas, thresholds, or recommendation content mislead trainers. | High | High | Block production-facing classifications/advice until domain authority is supplied. |
 | Conflicting pricing or catalogue terms reach public surfaces. | Medium | High | Preserve public gate; require one approved commercial schedule before reopening. |
-| Uploads expose operational or personal data without retention/access design. | Medium | High | Require bucket, RLS/access, file-type, retention, deletion, consent, and privacy scope first. |
+| Upload implementation diverges from the approved privacy/storage/lifecycle contract or silently selects an unapproved processor. | Medium | High | Sprint 023D must design from the canonical 023C contract; keep CSV registration, scanner/provider, provider suitability, retention review, RLS, and lifecycle controls explicit before implementation. |
 | Voice transcription misrecords horse names, quantities, or readings. | Medium | High | Require provider/privacy choice, review-before-save, editable confirmation, and typed fallback. |
 | Identifiable horse/stable/person evidence is published without authority. | Medium | High | Use anonymised/recreated assets and require explicit releases. |
 | Local commits are lost because no remote backup was authorized. | Medium | High | Treat current commits as local only; request separately scoped push/backup approval. |

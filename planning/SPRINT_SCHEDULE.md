@@ -3,12 +3,12 @@
 ## Current Position
 
 - Latest closed public follow-up: **029M - Public Website Content, Enquiry, And Pricing**, outcome `public-website-follow-up-partial-safe`.
-- Current corrective sprint: **023B - Source Reconciliation And Clean Product Baseline**, outcome `source-reconciled-ready-for-commit`; one separate local commit instruction remains.
-- Next product sprint remains **023 - Test Evidence Uploads And Storage** after a clean 023B baseline commit and Sprint 023 decision gates.
+- Current corrective sprint: **023C - Privacy, Storage And Lifecycle Decision Approval**, closed `decision-contract-approved-clean`; local commit remains separately instructed.
+- Next product work is **023D - Test Evidence Uploads And Storage Architecture/Design** from the approved 023C contract.
 
 - Current completed delivery sprint: **002B — Delivery System And Project-State Consolidation**, outcome `delivery-consolidation-complete`.
 - Repository-control sequence through **017F**: complete locally.
-- Next product sprint: **022 — Mobile Biochemistry Workflow Completion**.
+- Next product work: **023D — Test Evidence Uploads And Storage Architecture/Design**.
 - Provider branch: **021N** waits for substantive Supabase response/remediation.
 - Production deployment, public reopening, remote migration, push, and PR remain separate explicit actions.
 

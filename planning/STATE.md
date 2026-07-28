@@ -2,6 +2,8 @@
 
 ## Current Status
 
+Sprint `023C-privacy-storage-and-lifecycle-decision-approval` is closed `decision-contract-approved-clean` in isolated worktree `C:\tmp\pnr-023c-privacy-storage-lifecycle` on branch `codex/023C-privacy-storage-and-lifecycle-decision-approval`, based on clean product baseline `a7759f691f0e01482f3a396acd14b2a23dbca5ec`. Phillip Norman Rankin, Director of Aprec8 Pty Ltd and authorised to approve privacy and data-handling decisions, approved the consolidated twenty-answer contract effective 28 July 2026. The monitored incident address and full supersession of earlier standalone `Accept` annotations are recorded. Markdown and Word records agree and pass structural checks; LibreOffice was absent, so PNG visual QA and rendered page count are not claimed. No product, schema, Storage, provider, remote, deployment, commit, or source-worktree mutation occurred.
+
 Sprint `023B-source-reconciliation-and-clean-product-baseline` is closed `clean-product-baseline-established` in isolated worktree `C:\tmp\pnr-023b-source-reconciliation` on branch `codex/023B-source-reconciliation-and-clean-product-baseline`, based on accepted Sprint 029M tip `ad9d419bc40f0be2e13aa297535d3d8e5e151625`. The user approved the validated local reconciliation commit on 2026-07-28. Accepted Sprint 021AH migrations/auth application source and Sprint 022/022B workflow source, tests, documents, and evidence are reconciled locally. Focused tests, JSON, domain, roles, Supabase self-tests, TypeScript, lint, production build, and diff checks pass. Static/CI/local suites stop only at the inherited migration 0009 Windows byte-hash mismatch; migration 0009 was not edited. No dependency, upload/Storage behaviour, public route, deployment, remote mutation, or original `develop` worktree mutation occurred. Builder reports the resulting local clean baseline SHA at handoff because a commit cannot contain its own final SHA.
 
 Sprint `029M-public-website-content-enquiry-and-pricing-follow-up` is closed `public-website-follow-up-partial-safe`. Final visual/content sign-off passed; scoped commit `387707afa58d1d77cfb6cea97e4caacf9141203b` was pushed only to the 029M branch and deployed through intended Vercel project `pnr-precision-performance` as `dpl_6F1TMjNRECmTCyMbyWXA6ohG8Q2R`. Apex, `www`, and `pnr-precision-performance.vercel.app` map to the deployment and passed content, asset, Pricing, visibly non-submitting enquiry, redirect, checkout-unavailable, protected-route, robots, and rendered mobile/desktop smoke. Enquiry transmission/storage/email, Information/Electrolytes publication, the undefined twelve-month term, and testimonial/video publication remain deferred. Sprint 023 and the original dirty `develop` worktree were not touched.
@@ -44,7 +46,7 @@ No Builder may inspect protected local-only content, contact external systems, m
 
 Immediate Sprint 029 follow-up: preserve the marketing-preview deployment boundary and use `codex/029-marketing-preview-release` as the scoped release backup/review branch. Reconcile local `develop`, remote `develop`, and active 021-series dirty work separately before any broad merge or `develop` push. If an operator or reviewer still sees old public content or a broken visual, first hard-refresh/private-window test the exact live URL and compare against the Sprint 029J Edge DevTools screenshot evidence and Sprint 029K/029L public smoke.
 
-Next product sprint: **022 — Mobile Biochemistry Workflow Completion**. It may proceed locally within existing schema and typed-note boundaries without waiting for the provider.
+Next product work: **023D - Test Evidence Uploads And Storage Architecture/Design**, subject to its own Architect Pack. It must design from the approved 023C contract without silently selecting a controlled-CSV format, scanner/provider, processor, paid service, dependency, secret, retention-review cadence, or provider contractual conclusion.
 
 Authenticated-proof branch: a separately planned later Sprint 021 suffix may diagnose the fixed 021Z protected bootstrap timeout. Do not resume or retry 021Z.
 
@@ -54,7 +56,7 @@ Authenticated-proof branch: a separately planned later Sprint 021 suffix may dia
 2. Architect action: plan a bounded fixed-class diagnosis of the 021Z bootstrap timeout while preserving OneDrive-aware runtime acceptance and exact cleanup.
 3. Domain authority for production thresholds, score terminology, pH/device rules, and Table of Knowledge recommendations before production-facing scoring/advice.
 4. Business authority for final catalogue, pricing, GST, kit/support terms, and public reopening.
-5. Privacy/provider decisions for uploads, retention, access, voice transcription, and identifiable photography before those capabilities are built or published.
+5. Sprint 023C resolves the upload privacy/storage/lifecycle business contract. Legal/privacy review, controlled-CSV registration, scanner/provider selection, provider contractual suitability, and operational retention-review cadence remain pre-production inputs; voice transcription and identifiable public photography remain separately unresolved.
 6. Explicit authorization for any remote migration, deployment, push/PR, production mutation, or public reopening.
 
 ## Authority

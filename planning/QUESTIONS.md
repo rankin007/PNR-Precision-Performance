@@ -24,7 +24,6 @@ Historical and superseded questions through Sprint 017F are preserved in `planni
 
 | Question | Owner | Relevant sprint |
 |---|---|---|
-| What upload types, size limits, retention, bucket/access policy, and privacy controls apply? | Architect / Privacy owner | Upload/storage sprint after authenticated proof |
 | What voice-to-text provider, permission flow, review step, retention, and fallback apply? | Architect / Business owner | Voice sprint |
 | What limited write and access-management workflows apply to staff, veterinarians, and consultants? | Product owner / Architect | Role-workflow sprint |
 | Who supplies approved photography and releases for identifiable people, horses, and stables? | Business owner | Public content sprint |
