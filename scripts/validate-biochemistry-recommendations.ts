@@ -5,7 +5,6 @@ import { fileURLToPath } from "node:url";
 import type {
   BiochemistryLookupRow,
   BiochemistryRawReadings,
-  BiochemistryRecommendationCategory,
   BiochemistryRecommendationRule,
   BiochemistryZoneThresholdSet,
 } from "../lib/domain/biochemistry";

@@ -269,3 +269,9 @@ This workstream waits for a substantive Supabase response or remediation.
 - **Evidence checked:** existing written and seeded pricing sources conflict, and Stripe live acceptance is incomplete.
 - **User/business-owner action:** approve one commercial schedule covering all Sprint 030 dimensions.
 - **Builder verification afterward:** reconcile catalogue/configuration and either prove test-mode commerce or preserve an explicitly disabled launch state.
+# Sprint 023H status — 2026-07-28
+
+Repository lint correction and focused behavior proof pass. Combined clean reconciliation remains blocked by a non-completing bounded production build; Sprint 023I has not begun.
+# Sprint 023I status — 2026-07-28
+
+Reparse-safe production build and complete combined local proof pass. Candidate migration 0018 remains unapplied and Sprint 023J has not begun.

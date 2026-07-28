@@ -1,0 +1,7 @@
+{
+  "schemaVersion": 1,
+  "classification": "synthetic-generated-only",
+  "fixtures": ["minimal-jpeg", "minimal-png", "minimal-pdf", "active-pdf", "encrypted-pdf", "disabled-csv", "oversize-metadata"],
+  "containsRealData": false,
+  "containsMalware": false
+}

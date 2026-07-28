@@ -1,0 +1,3 @@
+# Sprint 023F — Portability Test Results
+
+`scripts/test-biochemistry-remote-readiness-hash-portability-023F.ps1` passed. The shared helper strictly decodes UTF-8, rejects BOM/invalid UTF-8, converts CRLF to LF only, and hashes canonical bytes. LF and CRLF equivalents agree canonically while raw hashes differ. Content, trailing-space, final-newline and lone-CR mutations change the hash; BOM and invalid bytes throw; temporary files are removed. The maintained validator then passed unchanged migration 0009 at governed canonical hash `6DD2238DE81A92E63146895B1EB681585E145C4C51727E7B1555D2D854E65CC9` with all existing count/structure checks intact.

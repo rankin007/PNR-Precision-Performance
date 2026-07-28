@@ -40,6 +40,6 @@ The full Done target requires these future modules to be designed deliberately b
 
 ## Sprint 023D Test-Evidence Design
 
-The approved, unimplemented upload/storage design is in `docs/TEST_EVIDENCE_UPLOAD_ARCHITECTURE_023D.md`. It selects authenticated direct standard upload to a proposed private Supabase bucket, server-created opaque keys/intents, server finalisation, fail-closed scanning/sanitisation, 60-second signed downloads, additive metadata/lifecycle tables, and daily idempotent Vercel Cron reconciliation authenticated by `CRON_SECRET` with a database-backed lock.
+The approved design is in `docs/TEST_EVIDENCE_UPLOAD_ARCHITECTURE_023D.md`; its local candidate implementation is documented in `docs/TEST_EVIDENCE_UPLOAD_IMPLEMENTATION_023E.md`. Sprint 023E adds candidate migration 0018, typed fail-closed modules, server boundaries, Cron authentication and focused UI without applying schema/Storage or enabling availability.
 
 Australian storage is a pre-production evidence gate: the actual project must be verified as Sydney `ap-southeast-2`; `ap-southeast-1` is Singapore. Separate Storage-object recovery evidence is required because database backups exclude object bytes. Sprint 023D creates no bucket, policy, migration, route, dependency, secret or runtime behavior.

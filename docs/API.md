@@ -26,8 +26,8 @@ Current project evidence includes health/setup routes, checkout, Stripe webhook,
 - Recalculation behavior must be explicit; historical recommendations should not silently change unless the product decides that is acceptable.
 - Any OCR/photo-derived or voice-derived numeric value must be confirmable before persistence as an authoritative reading.
 
-## Proposed Sprint 023E Evidence Contracts — Unimplemented
+## Sprint 023E Evidence Contracts — Local Candidate
 
-The approved design proposes server actions for initiation, finalisation, cancellation, list, 60-second download signing, replacement, soft deletion, restoration request/execution, holds and governed purge, plus `GET /api/internal/evidence/reconcile` for Vercel Cron. Direct bytes travel from the authenticated browser to a private Supabase bucket only under an exact live upload intent; clients cannot list, overwrite, delete or sign objects.
+Local server-action boundaries now exist for initiation, finalisation, cancellation, list, 60-second download signing, replacement, soft deletion, restoration request/execution, holds and governed purge, plus `GET /api/internal/evidence/reconcile`. They remain unavailable until candidate migration/Storage is separately applied and approved safety adapters exist.
 
 The Cron route must verify `Authorization: Bearer <CRON_SECRET>`, use bounded idempotent batches and a database-backed concurrency lock, preserve durable retry eligibility, and stop within the function-duration margin. `SUPABASE_SERVICE_ROLE_KEY` stays server-only and never substitutes for record scope, expected-state, hold/age or audit checks. These contracts are documentation only; no endpoint or secret is created by Sprint 023D.

@@ -29,3 +29,9 @@ Historical and closed risks through Sprint 017F are preserved in `planning/histo
 ## Closed / Historical
 
 See `planning/history/RISKS-THROUGH-017F.md`. Archived risks remain evidence but are not automatically active.
+# Sprint 023H residual risk — 2026-07-28
+
+The corrected CommonJS tools pass focused behavior and full lint proof, but the required production-build rerun did not complete in two bounded attempts. Treat build completion as unproven until a narrow reparse-safe environment diagnosis passes; do not infer a source defect or production readiness from the timeout alone.
+# Sprint 023I residual risk — 2026-07-28
+
+Local combined proof is clean only when the dependency/build path is physically isolated from the OneDrive junction. Original-path build timing remains unreliable. Remote migration, Storage, hosted roles, safety adapters, CSV, Cron, region and recovery evidence remain separate pre-production risks.

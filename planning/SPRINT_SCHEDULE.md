@@ -3,7 +3,7 @@
 ## Current Position
 
 - Latest closed public follow-up: **029M - Public Website Content, Enquiry, And Pricing**, outcome `public-website-follow-up-partial-safe`.
-- Current corrective sprint: **023D - Test Evidence Uploads And Storage Architecture/Design**, locally complete `upload-storage-architecture-approved-clean`; commit remains separately instructed.
+- Current corrective sprint: **023I - Reparse-Safe Production Build Proof And Combined Closeout**, `reparse-safe-build-proven-combined-local-proof-clean`; physical build and the complete combined local matrix pass.
 - Next product work is **023E**, but it must not begin without a separate Architect Pack/application instruction.
 
 - Current completed delivery sprint: **002B — Delivery System And Project-State Consolidation**, outcome `delivery-consolidation-complete`.

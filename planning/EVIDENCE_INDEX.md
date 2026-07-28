@@ -14,11 +14,18 @@ This file navigates evidence; it does not replace the linked records.
 
 ## Delivery And Product Evidence
 
+Sprint 023I evidence: `planning/reviews/023I-*.md`. The physically reparse-safe build passed on its first attempt in 57.5 seconds and the complete combined local matrix passed; 023E–023H local outcomes are reconciled clean while all remote/database/provider proof remains deferred.
+
+Sprint 023H evidence: `planning/reviews/023H-*.md` and `scripts/test-repository-lint-baseline-023H.mjs`. Six errors are corrected; behavior/full lint/all pre-build gates pass; the bounded production build remains blocked.
+
 | Area | Canonical evidence | Evidence class |
 |---|---|---|
 | Sprint 023B clean product baseline reconciliation | `planning/reviews/023B-dirty-source-classification-and-provenance.md`, `planning/reviews/023B-base-ancestry-and-isolation.md`, `planning/reviews/023B-reconciled-source-manifest.md`, `planning/reviews/023B-validation-and-non-mutation-evidence.md`, `planning/reviews/023B-clean-baseline-closeout.md` | Committed isolated local baseline `a7759f691f0e01482f3a396acd14b2a23dbca5ec`; not pushed |
 | Sprint 023C approved privacy/storage/lifecycle contract | `docs/SPRINT_023C_PRIVACY_STORAGE_LIFECYCLE_DECISIONS.md`, `docs/SPRINT_023C_PRIVACY_STORAGE_LIFECYCLE_DECISION_RECORD.docx`, `planning/reviews/023C-decision-source-reconciliation.md`, `planning/reviews/023C-final-decision-contract.md`, `planning/reviews/023C-document-validation.md`, `planning/reviews/023C-closeout.md` | Approved local decision authority; Word structural QA passed, visual render unavailable; no implementation |
 | Sprint 023D upload/storage architecture | `docs/TEST_EVIDENCE_UPLOAD_ARCHITECTURE_023D.md`, `planning/reviews/023D-baseline-and-contract-verification.md`, `planning/reviews/023D-existing-schema-and-runtime-gap-analysis.md`, `planning/reviews/023D-application-storage-permission-agreement.md`, `planning/reviews/023D-file-safety-provider-and-operations-decisions.md`, `planning/reviews/023D-design-validation.md`, `planning/reviews/023D-closeout.md` | Approved local design only; actual region/backup and safety/CSV inputs remain pre-production gates; no implementation or remote action |
+| Sprint 023E local upload/storage implementation | `docs/TEST_EVIDENCE_UPLOAD_IMPLEMENTATION_023E.md`, `planning/reviews/023E-*.md` | Uncommitted/unapplied local candidate; focused/typecheck/build passed; 0009 blocker superseded by 023F, downstream 020G candidate-ledger gate remains |
+| Sprint 023F migration-hash portability correction | `planning/reviews/023F-*.md`, `scripts/lib/migration-content-hash.ps1`, `scripts/test-biochemistry-remote-readiness-hash-portability-023F.ps1` | Strict LF/CRLF portability passed; 020G blocker superseded by 023G; full ESLint remains downstream |
+| Sprint 023G candidate-ledger alignment | `planning/reviews/023G-*.md`, `scripts/lib/migration-ledger-validation.ps1`, `scripts/test-supabase-clean-rebuild-ledger-023G.ps1` | Candidate 0001–0018 and full static pass; downstream full-repository ESLint gate remains blocked |
 | Clean repository baseline | `planning/reviews/017F-local-baseline-completion-review.md`; commits `9d7478657d1220777758e40e8611456dbce46ce1`, `1d507193a048b0d5dbb3b90e4dcec3247b71679d` | Local Git/static |
 | Validation/CI consolidation | `planning/reviews/002B-delivery-system-and-project-state-consolidation.md` | Local/CI-equivalent |
 | Design and messaging | `docs/DESIGN_AND_MESSAGING_AUTHORITY.md`, `docs/DESIGN_SYSTEM_BASELINE_019.md` | Local authority/static |

@@ -1,6 +1,8 @@
 #!/usr/bin/env node
 
+// eslint-disable-next-line @typescript-eslint/no-require-imports -- Preserve this intentional CommonJS CLI contract.
 const fs = require("fs");
+// eslint-disable-next-line @typescript-eslint/no-require-imports -- Preserve this intentional CommonJS CLI contract.
 const path = require("path");
 
 const DELIMITER = "============================================================";

@@ -4,6 +4,10 @@ Historical and superseded questions through Sprint 017F are preserved in `planni
 
 ## Active Decision Required
 
+Sprint 023I resolved the local production-build blocker. Remaining Sprint 023 questions concern only separately scoped remote/provider/database/Storage proof; Sprint 023J has not begun.
+
+Sprint 023H requires a separately authorised narrow build-environment diagnosis/retry before combined clean reconciliation; see `planning/reviews/023H-closeout.md`.
+
 | Question | Owner | Needed by |
 |---|---|---|
 | What are the twelve enquiry privacy/data decisions, Information/Electrolytes structure and treatment, twelve-month disposition, and durable testimonial/video publication inputs deferred by Sprint 029M? | Business/privacy/content owner | Before any corresponding follow-up implementation |

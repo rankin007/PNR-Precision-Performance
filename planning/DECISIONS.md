@@ -8,6 +8,7 @@ Record durable decisions future sprints must respect.
 
 | 2026-07-28 | Approve the Sprint 023C consolidated twenty-decision privacy, storage and lifecycle contract effective 28 July 2026. | Phillip Norman Rankin supplied Aprec8 authority, explicit consolidated approval, monitored incident email, and complete supersession of earlier standalone `Accept` annotations. | Sprint 023D and later upload work must follow `docs/SPRINT_023C_PRIVACY_STORAGE_LIFECYCLE_DECISIONS.md`; no architecture, provider, processor, dependency, secret, or production action is approved by this decision alone. |
 | 2026-07-28 | Approve Sprint 023D architecture choices 1–5, amend reconciliation/configuration choices 6 and 8, and accept region/backup choice 7 with mandatory verification. | Aprec8 selected controlled-CSV deferral, fail-closed safety adapters, quarterly retention review, explicit `evidence.purge`, daily production-only UTC Vercel Cron with `CRON_SECRET`, bounded idempotent batches and DB lock, and mandatory Sydney/Storage-backup proof. | Do not create `EVIDENCE_RECONCILIATION_SECRET`; keep `SUPABASE_SERVICE_ROLE_KEY` server-only; actual `ap-southeast-2`, provider suitability and Storage-object recovery evidence are pre-production gates; no provider/dependency/remote action is approved. |
+| 2026-07-28 | Govern immutable text-migration hashes over strict UTF-8 content with CRLF canonicalised to LF only. | Git checkout line-ending transformation changed raw Windows bytes without changing migration 0009 content. | BOM, invalid UTF-8, lone CR, whitespace, final-newline and SQL mutations remain substantive failures; the governed LF hash is unchanged. |
 
 | 2026-07-28 | Release Sprint 029M as `public-website-follow-up-partial-safe`. | The user approved the verified public content/Pricing release while requiring enquiry submission to remain visibly unavailable. | Preserve the deployed content and form-presentation boundary; any transmission/storage/email, Information/Electrolytes, testimonial/video, or twelve-month work requires later explicit scope. |
 
@@ -142,3 +143,9 @@ Classify two consistent provider-directed windows as `provider-internal-inconsis
 # Sprint 017C decisions — 2026-07-21
 
 Preserve root `.release-main/` and `.claude/` as local-only boundaries ignored by exact anchored rules; retain unchanged `samples/README.md` as a project-scaffold staging candidate; retain the supplied sprint-list DOCX byte-identically under `references/client-docs/` as a reference staging candidate. Staging and commit decisions remain 017D work.
+# Sprint 023H decision — 2026-07-28
+
+Preserve the two repository tools as intentional CommonJS and handle their five built-in `require()` declarations with justified line-local rule suppressions. Remove only the unused recommendation type import. Full repository lint now passes without changing module semantics or dependencies. Combined clean reconciliation remains withheld because two bounded production builds did not complete.
+# Sprint 023I decision — 2026-07-28
+
+Use a disposable physical dependency copy outside the OneDrive junction as the governed production-build proof for the combined candidate. The first reparse-safe build completed in 57.5 seconds and the final matrix passed, so the earlier junction-path build non-completion is superseded as an environment-path limitation rather than a demonstrated source error.

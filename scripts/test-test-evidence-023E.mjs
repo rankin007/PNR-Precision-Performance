@@ -1,0 +1,22 @@
+import assert from "node:assert/strict";
+import fs from "node:fs";
+
+const contracts = fs.readFileSync("lib/evidence/contracts.ts", "utf8");
+const lifecycle = fs.readFileSync("lib/evidence/lifecycle.ts", "utf8");
+const validation = fs.readFileSync("lib/evidence/validation.ts", "utf8");
+const safety = fs.readFileSync("lib/evidence/safety.ts", "utf8");
+const ui = fs.readFileSync("components/ops/test-evidence-upload.tsx", "utf8");
+const route = fs.readFileSync("app/api/internal/evidence/reconcile/route.ts", "utf8");
+const repository = fs.readFileSync("lib/evidence/server/repository.ts", "utf8");
+const fixture = JSON.parse(fs.readFileSync("scripts/fixtures/023E-test-evidence/manifest.json", "utf8"));
+assert.equal(fixture.containsRealData, false); assert.equal(fixture.containsMalware, false);
+for (const state of ["initiated","upload_pending","uploaded_unverified","legacy_unverified","validation_failed","scan_pending","sanitisation_pending","available","blocked","failed","soft_deleted","restore_pending","purge_pending","purged","object_missing"]) assert(contracts.includes(`\"${state}\"`) && lifecycle.includes(`${state}:`), state);
+assert(contracts.includes("5 * 1024 * 1024") && contracts.includes("30 * 1024 * 1024") && contracts.includes("EVIDENCE_MAX_FILES_PER_TEST = 10"));
+assert(validation.includes("%PDF-") && validation.includes("/Encrypt") && validation.includes("/JavaScript") && validation.includes("/EmbeddedFiles"));
+assert(safety.includes("failClosedScanner") && safety.includes("code: \"unavailable\"") && safety.includes("createDeterministicTestSafetyAdapters"));
+assert(contracts.includes("I confirm that I am authorised to upload this evidence and that it is relevant to this test.") && ui.includes("EVIDENCE_ACKNOWLEDGEMENT"));
+for (const token of ["role=\"alert\"", "aria-live=\"polite\"", "disabled=", "CSV evidence is not enabled", "safety checks are still pending"]) assert(ui.includes(token), token);
+assert(route.includes("timingSafeEqual") && route.includes("process.env.CRON_SECRET") && !route.includes("EVIDENCE_RECONCILIATION_SECRET"));
+assert(repository.includes("createSignedUrl(data.object_key, 60)") && repository.includes("v1/${randomUUID()}/${randomUUID()}"));
+assert(!repository.includes("console.") && !route.includes("console."));
+console.log("023E domain/server/UI structural and deterministic contract proof passed.");

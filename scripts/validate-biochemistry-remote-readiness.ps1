@@ -2,12 +2,14 @@ $ErrorActionPreference = 'Stop'
 
 $migrationPath = Join-Path $PSScriptRoot '..\supabase\migrations\0009_biochemistry_test_data_model.sql'
 $migrationPath = (Resolve-Path -LiteralPath $migrationPath).Path
-$sql = Get-Content -LiteralPath $migrationPath -Raw
+. (Join-Path $PSScriptRoot 'lib\migration-content-hash.ps1')
+$migrationContent = Get-CanonicalMigrationContentHash -LiteralPath $migrationPath
+$sql = $migrationContent.Text
 
 $expectedHash = '6DD2238DE81A92E63146895B1EB681585E145C4C51727E7B1555D2D854E65CC9'
-$actualHash = (Get-FileHash -LiteralPath $migrationPath -Algorithm SHA256).Hash
+$actualHash = $migrationContent.CanonicalHash
 if ($actualHash -ne $expectedHash) {
-    throw "Migration 0009 hash changed. Expected $expectedHash, found $actualHash. Re-review is required."
+    throw "Migration 0009 canonicalized content hash changed. Expected $expectedHash, found $actualHash (raw worktree hash $($migrationContent.RawHash)). Re-review is required."
 }
 
 $expectedLookupCounts = [ordered]@{

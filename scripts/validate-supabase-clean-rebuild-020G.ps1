@@ -6,10 +6,10 @@ $oldRef = 'tagnbgkroihagjmvehlx'
 $newRef = 'uvskssaecdhxcgytkasc'
 $legacyNames = @('Test User','Test User_id_seq','client_applications','etrakka_sessions',
   'etrakka_biochem_comparison','horse_biochemistry_results','horse_gallery_items')
-$migrations = Get-ChildItem -LiteralPath $migrationDir -Filter '*.sql' | Sort-Object Name
-$expected = 1..17 | ForEach-Object { '{0:D4}' -f $_ }
-$actual = $migrations | ForEach-Object { $_.BaseName.Substring(0,4) }
-if (Compare-Object $expected $actual) { throw 'Migration versions must be exactly 0001 through 0017.' }
+. (Join-Path $PSScriptRoot 'lib\migration-ledger-validation.ps1')
+$ledger = Test-CandidateMigrationLedger -MigrationDirectory $migrationDir
+$migrations = $ledger.Migrations
+$ledger.Diagnostic
 $allSql = ($migrations | Get-Content -Raw) -join [Environment]::NewLine
 foreach ($legacy in $legacyNames) {
   if ($allSql -match [regex]::Escape($legacy)) { throw "Migration chain references retired legacy surface: $legacy" }
@@ -210,4 +210,4 @@ foreach ($requiredMarker in @(
 }
 if ($harness -match 'console\.(log|debug|info|warn|error)') { throw 'Harness must not use console output.' }
 if ($harness -match '(?i)truncate|migration\s+repair|reset\s+database') { throw 'Harness contains a prohibited broad/destructive operation.' }
-Write-Output 'Sprint 020G aligned 0001-0017 migration, target, and verification safety checks passed.'
+Write-Output 'Candidate repository migration chain 0001-0018, target, and verification safety checks passed; applied/remote status was not inspected.'

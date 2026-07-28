@@ -17,6 +17,8 @@
     "validate:local": "npm exec -- node scripts/run-validation-suite.mjs local",
     "validate:public-au-029m": "npm exec -- node scripts/validate-public-australian-english-029M.mjs",
     "test:public-029m": "npm exec -- node scripts/test-public-website-029M.mjs",
+    "test:evidence-023e": "node scripts/test-test-evidence-023E.mjs",
+    "test:evidence-migration-023e": "node scripts/test-test-evidence-migration-023E.mjs",
     "db:bundle": "powershell -ExecutionPolicy Bypass -File scripts/export-supabase-bootstrap.ps1"
   },
   "dependencies": {
