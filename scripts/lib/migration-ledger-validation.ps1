@@ -8,9 +8,9 @@ function Test-CandidateMigrationLedger {
   $migrations = @($files | Where-Object Name -Match '^\d{4}_.+\.sql$' | Sort-Object { [int]$_.Name.Substring(0,4) }, Name)
   $groups = $migrations | Group-Object { $_.Name.Substring(0,4) }
   if ($groups | Where-Object Count -ne 1) { throw 'Candidate repository migration chain contains a duplicate version.' }
-  $expected = 1..20 | ForEach-Object { '{0:D4}' -f $_ }
+  $expected = 1..21 | ForEach-Object { '{0:D4}' -f $_ }
   $actual = $migrations | ForEach-Object { $_.Name.Substring(0,4) }
-  if (Compare-Object $expected $actual) { throw 'Candidate repository migration versions must be exactly 0001 through 0020.' }
+  if (Compare-Object $expected $actual) { throw 'Candidate repository migration versions must be exactly 0001 through 0021.' }
   $candidate = @($migrations | Where-Object Name -EQ '0018_test_evidence_upload_and_storage.sql')
   if ($candidate.Count -ne 1) { throw 'Candidate repository chain requires exact 0018_test_evidence_upload_and_storage.sql.' }
   $bytes = [IO.File]::ReadAllBytes($candidate[0].FullName)
@@ -46,5 +46,17 @@ function Test-CandidateMigrationLedger {
     'revoke all on function','to authenticated','Sprint 023O additive pgcrypto resolution'
   )) { if ($correctionSql -notmatch [regex]::Escape($marker)) { throw "Candidate 0020 missing identity marker: $marker" } }
   if ($correctionSql -match 'search_path[^\r\n]*extensions') { throw 'Candidate 0020 must not widen the function search path.' }
-  [pscustomobject]@{ Migrations=$migrations; Candidate=$correction[0]; Diagnostic='Candidate repository migration chain is aligned through 0020; no applied or remote status was inspected.' }
+  $parserCorrection = @($migrations | Where-Object Name -EQ '0021_postgresql_filename_extension_parser_correction.sql')
+  if ($parserCorrection.Count -ne 1) { throw 'Candidate repository chain requires exact 0021_postgresql_filename_extension_parser_correction.sql.' }
+  $parserBytes = [IO.File]::ReadAllBytes($parserCorrection[0].FullName)
+  if ($parserBytes.Length -ge 3 -and $parserBytes[0] -eq 0xEF -and $parserBytes[1] -eq 0xBB -and $parserBytes[2] -eq 0xBF) { throw 'Candidate 0021 must be UTF-8 without BOM.' }
+  $parserSql = [Text.UTF8Encoding]::new($false,$true).GetString($parserBytes)
+  foreach ($marker in @(
+    'initiate_test_evidence_upload',"substring(normal_name from '\.([A-Za-z0-9]+)$')",
+    'extensions.digest(p_idempotency_key','set search_path = pg_catalog, public',
+    "to_regprocedure('extensions.digest(text,text)')",'revoke all on function','to authenticated',
+    'Sprint 023P additive PostgreSQL filename extension parser correction'
+  )) { if (-not $parserSql.Contains($marker)) { throw "Candidate 0021 missing identity marker: $marker" } }
+  if ($parserSql -match 'search_path[^\r\n]*extensions') { throw 'Candidate 0021 must not widen the function search path.' }
+  [pscustomobject]@{ Migrations=$migrations; Candidate=$parserCorrection[0]; Diagnostic='Candidate repository migration chain is aligned through 0021; no applied or remote status was inspected.' }
 }

@@ -42,6 +42,7 @@ assert.doesNotMatch(migration20, /grant execute[^;]*to (?:public|anon|service_ro
 assert.match(migration20, /Sprint 023O additive pgcrypto resolution/);
 
 const migrations = fs.readdirSync("supabase/migrations").filter((name) => /^\d{4}_.+\.sql$/.test(name)).sort();
-assert.deepEqual(migrations.map((name) => name.slice(0, 4)), Array.from({ length: 20 }, (_, i) => String(i + 1).padStart(4, "0")));
-assert.equal(migrations.at(-1), "0020_schema_qualified_pgcrypto_initiation.sql");
+assert.deepEqual(migrations.slice(0, 20).map((name) => name.slice(0, 4)), Array.from({ length: 20 }, (_, i) => String(i + 1).padStart(4, "0")));
+assert.equal(migrations[19], "0020_schema_qualified_pgcrypto_initiation.sql");
+assert.equal(migrations.at(-1), "0021_postgresql_filename_extension_parser_correction.sql");
 console.log(`023O pgcrypto correction semantic/security proof passed; 0020 SHA-256 ${canonicalHash(migration20)}`);

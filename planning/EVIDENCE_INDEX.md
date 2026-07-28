@@ -14,6 +14,8 @@ This file navigates evidence; it does not replace the linked records.
 
 ## Delivery And Product Evidence
 
+Sprint 023P local parser correction: `planning/reviews/023P-local-parser-correction-and-validation.md`, `planning/sprints/023P-postgresql-filename-extension-parser-correction-and-final-governed-reproof/`, `scripts/test-filename-extension-parser-023P.mjs`, `scripts/test-migration-ledger-023P.mjs`. Additive `0021` candidate preserves the applied `0020` function except the classified regex/comment boundary; complete local validation passes; candidate remains unstaged, uncommitted and remotely unapplied.
+
 Sprint 023K authority: `docs/SPRINT_023K_SINGAPORE_REGION_AUTHORITY_AMENDMENT.md`, `planning/reviews/023K-*.md`. Exact `ap-southeast-1` Singapore is approved; no Australian-only storage claim or external mutation.
 
 Sprint 023J blocked evidence: `planning/reviews/023J-*.md`. Clean baseline/isolation pass; Sprint 023K later approved Singapore region, but no external access occurred because exact non-production target/operator/provider/recovery authority remains absent.
@@ -60,7 +62,7 @@ Sprint 023H evidence: `planning/reviews/023H-*.md` and `scripts/test-repository-
 
 ## Historical Evidence
 
-Sprint 023O local pgcrypto correction: `planning/reviews/023O-local-correction-and-validation.md`, `planning/reviews/023O-remote-0020-and-function-proof.md`, `planning/reviews/023O-governed-initiation-and-recovery-proof.md`, `planning/reviews/023O-cleanup-and-023L-resumption-boundary.md` and `planning/reviews/023O-closeout.md`. Local additive `0020` candidate and complete validation pass; commit and all remote proof remain pending.
+Sprint 023O pgcrypto correction and parser diagnosis: `planning/reviews/023O-local-correction-and-validation.md`, `planning/reviews/023O-remote-0020-and-function-proof.md`, `planning/reviews/023O-governed-initiation-and-recovery-proof.md`, `planning/reviews/023O-cleanup-and-023L-resumption-boundary.md` and `planning/reviews/023O-closeout.md`. Migration `0020` was applied once; runtime classified the filename-extension parser defect before authority/digest; exact cleanup restored `0/0/0/0`; Sprint 023P supersedes correction.
 
 Sprint 023N governed initiation diagnosis: `planning/reviews/023N-initiation-contract-reconciliation.md`, `planning/reviews/023N-bounded-hosted-diagnostic.md`, `planning/reviews/023N-cleanup-and-correction-classification.md` and `planning/reviews/023N-closeout.md`. Static contract and rolled-back catalog evidence classify `database-function-resolution-or-grant-defect`; initial/final `0/0/0/0` and zero orphans pass. A later additive `0020` should schema-qualify the approved pgcrypto dependency without broadening the security-definer search path; no correction is included here.
 

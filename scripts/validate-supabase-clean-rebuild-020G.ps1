@@ -210,4 +210,4 @@ foreach ($requiredMarker in @(
 }
 if ($harness -match 'console\.(log|debug|info|warn|error)') { throw 'Harness must not use console output.' }
 if ($harness -match '(?i)truncate|migration\s+repair|reset\s+database') { throw 'Harness contains a prohibited broad/destructive operation.' }
-Write-Output 'Candidate repository migration chain 0001-0020, target, and verification safety checks passed; applied/remote status was not inspected.'
+Write-Output 'Candidate repository migration chain 0001-0021, target, and verification safety checks passed; applied/remote status was not inspected.'

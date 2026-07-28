@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "phase": "review",
-  "sprint": "023O-schema-qualified-pgcrypto-initiation-correction-and-governed-reproof",
-  "status": "pgcrypto-initiation-correction-ready-for-commit",
+  "sprint": "023P-postgresql-filename-extension-parser-correction-and-final-governed-reproof",
+  "status": "extension-parser-correction-ready-for-commit",
   "updated": "2026-07-29T00:00:00+10:00",
-  "summary": "Sprint 023O local candidate is ready for commit review. Additive migration 0020 preserves the exact governed initiation function and restricted search path while schema-qualifying only extensions.digest, with fail-closed dependency checking and exact grants. Focused, adversarial, CI/local, ESLint, TypeScript and production-build validation pass. Work is unstaged, uncommitted and remotely unapplied."
+  "summary": "Sprint 023P local candidate is ready for commit review. Additive migration 0021 preserves the exact applied 0020 governed initiation function and changes only the diagnosed filename-extension regex to the approved single-backslash PostgreSQL form, plus the approved comment. Focused semantic/input, exact/adversarial ledger, migration immutability, CI/local, ESLint, TypeScript and production-build validation pass. Work is unstaged, uncommitted and remotely unapplied."
 }

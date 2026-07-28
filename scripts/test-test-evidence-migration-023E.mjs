@@ -18,6 +18,6 @@ assert.match(sql, /size_bytes between 1 and 5242880/);
 assert.match(sql, /state <> 'available'.*scan_outcome='clean'.*sanitisation_outcome='passed'/s);
 const migrations = fs.readdirSync("supabase/migrations").filter((name) => /^\d{4}_/.test(name)).sort();
 assert(migrations.includes("0018_test_evidence_upload_and_storage.sql"));
-assert.equal(migrations.at(-1), "0020_schema_qualified_pgcrypto_initiation.sql");
-assert.equal(migrations.length, 20);
+assert.equal(migrations.at(-1), "0021_postgresql_filename_extension_parser_correction.sql");
+assert.equal(migrations.length, 21);
 console.log("023E migration structural proof passed (candidate SQL not applied).");
