@@ -15,6 +15,8 @@
 
 10. `planning/sprints/035B-preview-configuration-and-trainer-pilot-completion/SPRINT.md` — applied corrective completion authority.
 11. `planning/reviews/035B-preview-configuration-and-trainer-pilot-completion.md` — exact Preview, authenticated synthetic acceptance, permission correction, cleanup and partial-participation closeout.
+12. `planning/sprints/035C-trainer-participation-and-final-mvp-acceptance/SPRINT.md` — active participant and final MVP acceptance authority.
+13. `planning/reviews/035C-approved-run-manifest.md` — approved targets, ceilings, privacy boundary and cleanup plan.
 
 ## Accepted product lineage
 
