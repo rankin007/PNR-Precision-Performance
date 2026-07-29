@@ -7,7 +7,7 @@ import {
 } from "@/app/(ops)/data-entry/biochemistry/actions";
 import { SectionCard } from "@/components/layout/section-card";
 import { BiochemistryResultPanel } from "@/components/ops/biochemistry-result-panel";
-import { TestEvidenceUpload } from "@/components/ops/test-evidence-upload";
+import { TestEvidenceManager } from "@/components/ops/test-evidence-manager";
 
 type BiochemistryResultPageProps = {
   params: Promise<{ testId: string }>;
@@ -105,7 +105,7 @@ export default async function BiochemistryResultPage({
             zones={result.zones}
             recommendations={result.recommendations}
           />
-          <TestEvidenceUpload testId={testId} />
+          <TestEvidenceManager testId={testId} />
           <section className="rounded-[1.5rem] border border-ink/10 bg-white p-5 shadow-panel" aria-labelledby="comments-heading">
             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-ember">Entry notes</p>
             <h2 id="comments-heading" className="mt-2 text-xl font-semibold text-ink">Comments</h2>

@@ -6,7 +6,10 @@ import type { UploadRequest } from "@/lib/evidence";
 
 async function actorFor(testId: string) {
   const context = await requirePortalAppContext(`/data-entry/biochemistry/${testId}`);
-  return resolveEvidenceActor(testId, context.appUserId);
+  return resolveEvidenceActor(testId, context.appUserId, {
+    primaryRole: context.primaryRole,
+    permissionCodes: context.permissionCodes,
+  });
 }
 
 export async function initiateEvidenceUpload(input: UploadRequest) {

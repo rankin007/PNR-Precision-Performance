@@ -3,10 +3,10 @@
 import { useReducer, useRef, useState } from "react";
 import { EVIDENCE_ACKNOWLEDGEMENT, EVIDENCE_MAX_BYTES } from "@/lib/evidence";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
-import { cancelEvidenceUpload, finaliseEvidenceUpload, initiateEvidenceUpload } from "@/app/(ops)/data-entry/biochemistry/evidence-actions";
+import { cancelEvidenceUpload, finaliseEvidenceUpload, initiateEvidenceUpload, replaceEvidence } from "@/app/(ops)/data-entry/biochemistry/evidence-actions";
 import { evidenceUiReducer } from "./test-evidence-state";
 
-export function TestEvidenceUpload({ testId }: { testId: string }) {
+export function TestEvidenceUpload({ testId, predecessorId, onChanged }: { testId: string; predecessorId?: string; onChanged?: () => void }) {
   const [state, dispatch] = useReducer(evidenceUiReducer, "idle");
   const [acknowledged, setAcknowledged] = useState(false);
   const [file, setFile] = useState<File | null>(null);
@@ -24,8 +24,9 @@ export function TestEvidenceUpload({ testId }: { testId: string }) {
   async function upload() {
     if (!file || !acknowledged || error) return;
     dispatch({ type: "start" });
-    const intent = await initiateEvidenceUpload({ testId, displayName: file.name, declaredMime: file.type,
-      declaredBytes: file.size, acknowledgement: true, idempotencyKey });
+    const request = { testId, displayName: file.name, declaredMime: file.type,
+      declaredBytes: file.size, acknowledgement: true, idempotencyKey };
+    const intent = predecessorId ? await replaceEvidence(request, predecessorId) : await initiateEvidenceUpload(request);
     if (!intent.ok) { dispatch({ type: "error" }); return; }
     const db = createSupabaseBrowserClient();
     const transfer = await db.storage.from(intent.value.bucket).uploadToSignedUrl(
@@ -39,12 +40,13 @@ export function TestEvidenceUpload({ testId }: { testId: string }) {
     dispatch({ type: "transferred" });
     const finalised = await finaliseEvidenceUpload(testId, intent.value.uploadId);
     dispatch({ type: finalised.ok ? "blocked" : "error" });
+    if (finalised.ok) onChanged?.();
   }
 
   return <section className="mt-6 rounded-[1.5rem] border border-ink/10 bg-white p-5 shadow-panel" aria-labelledby="evidence-heading">
     <p className="text-xs font-semibold uppercase tracking-[0.18em] text-ember">Private test evidence</p>
-    <h2 id="evidence-heading" className="mt-2 text-xl font-semibold text-ink">Supporting files</h2>
-    <p className="mt-2 text-sm text-steel">JPEG, PNG or PDF; up to 5 MiB each, 10 files and 30 MiB per test. CSV remains disabled. Files stay unavailable while safety checks are pending.</p>
+    <h3 id="evidence-heading" className="mt-2 text-lg font-semibold text-ink">{predecessorId ? "Upload replacement" : "Add supporting file"}</h3>
+    <p className="mt-2 text-sm text-steel">JPEG, PNG or PDF; up to 5 MiB each, 10 files and 30 MiB per test. CSV remains disabled. Files are processed privately in Singapore, outside Australia, and stay unavailable while approved safety services are absent. Retention, restoration and removal are role controlled.</p>
     {error ? <div ref={errorRef} tabIndex={-1} role="alert" className="mt-3 rounded-xl border border-red-300 bg-red-50 p-3 text-sm text-red-800">{error}</div> : null}
     <label className="mt-4 grid gap-2 text-sm font-semibold text-ink" htmlFor={`evidence-file-${testId}`}>
       Select evidence

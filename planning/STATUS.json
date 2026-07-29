@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "phase": "complete",
-  "sprint": "023L-remote-application-and-hosted-proof",
-  "status": "remote-application-and-preview-proof-complete-clean",
+  "sprint": "027B-completed-product-lineage-reconciliation",
+  "status": "completed-product-lineage-reconciled-combined-proof-clean",
   "updated": "2026-07-29T00:00:00+10:00",
-  "summary": "Sprint 023L is complete for non-production remote application and protected Preview proof. Remote/local ledger is exactly 0001-0021. Exact commit 379573e4d70a3266f2a8849468b4420e9ddce9c3 is READY on pnr-precision-performance-4e6qad1ga-rankin007s-projects.vercel.app with only the four approved Preview bindings. Governed upload/recovery, authority, idempotency, cancellation and missing/wrong/correct reconciliation-secret boundaries pass. Final Auth/application/Storage/recovery is 0/0/0/0 with zero recovery/fixture orphans. Production configuration, deployment, custom/production aliases, scheduled Cron, push and merge were untouched."
+  "summary": "Sprint 027B reconciles completed Sprints 025, 026 and 027 from exact immutable baseline 6f8543020e126a4620f09be017744dcc75061e6e. Domain authority, fail-closed evidence management and typed/device-keyboard note review coexist; shared tests run exactly once. Full focused/regression/canonical/static/ESLint/TypeScript/production-build proof passes. Lockfile and migrations 0018-0021 are byte-identical; source fingerprints are unchanged. No provider, remote, Production, deployment, staging, commit, push, PR or merge action occurred."
 }

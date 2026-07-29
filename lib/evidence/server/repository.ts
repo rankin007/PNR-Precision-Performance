@@ -4,14 +4,21 @@ import { createSupabaseAdminClient } from "@/lib/supabase/admin";
 import type { EvidenceUploadIntent, SafeEvidenceMetadata, SafeEvidenceResult, UploadRequest } from "../contracts";
 import { deleteVerifyAndComplete, type StorageWorkItem } from "../storage-operations";
 
-export type EvidenceActor = { appUserId: string; testId: string; horseId: string; stableId: string };
+export type EvidenceActor = {
+  appUserId: string; testId: string; horseId: string; stableId: string;
+  primaryRole?: string | null; permissionCodes?: readonly string[];
+};
 
-export async function resolveEvidenceActor(testId: string, appUserId: string | null): Promise<EvidenceActor | null> {
+export async function resolveEvidenceActor(
+  testId: string,
+  appUserId: string | null,
+  authority: Pick<EvidenceActor, "primaryRole" | "permissionCodes"> = {},
+): Promise<EvidenceActor | null> {
   if (!appUserId || !testId) return null;
   const db = await createSupabaseServerClient();
   const { data } = await db.from("biochemistry_tests").select("id,horse_id,stable_id").eq("id", testId).is("deleted_at", null).maybeSingle();
   if (!data?.stable_id) return null;
-  return { appUserId, testId: data.id, horseId: data.horse_id, stableId: data.stable_id };
+  return { appUserId, testId: data.id, horseId: data.horse_id, stableId: data.stable_id, ...authority };
 }
 
 type InitiationRow = { attempt_id: string; upload_id: string; bucket_id: "test-evidence"; object_key: string; expires_at: string };
@@ -43,13 +50,37 @@ export async function initiateUpload(actor: EvidenceActor, input: UploadRequest)
 export async function listEvidence(actor: EvidenceActor): Promise<SafeEvidenceMetadata[]> {
   const db = await createSupabaseServerClient();
   const { data, error } = await db.from("biochemistry_test_uploads")
-    .select("id,display_name,file_category,size_bytes,state,version_no,created_at")
+    .select("id,display_name,file_category,size_bytes,state,version_no,created_at,updated_at,replaces_id,replaced_by_id,restore_until,purge_eligible_at")
     .eq("test_id", actor.testId).eq("horse_id", actor.horseId).eq("stable_id", actor.stableId)
     .neq("state", "purged").order("created_at", { ascending: false });
   if (error) return [];
-  return (data ?? []).map((row) => ({ id: row.id, displayName: row.display_name,
-    category: row.file_category, bytes: row.size_bytes, state: row.state,
-    version: row.version_no, createdAt: row.created_at, canDownload: row.state === "available" } as SafeEvidenceMetadata));
+  const ids = (data ?? []).map((row) => row.id);
+  const admin = createSupabaseAdminClient();
+  const holds = ids.length
+    ? await admin.from("evidence_holds").select("upload_id").in("upload_id", ids).is("released_at", null)
+    : { data: [] };
+  const heldIds = new Set((holds.data ?? []).map((row) => row.upload_id));
+  const now = Date.now();
+  return (data ?? []).map((row) => {
+    const held = heldIds.has(row.id);
+    const administrator = actor.primaryRole === "administrator";
+    const purgeEligible = Boolean(row.purge_eligible_at && Date.parse(row.purge_eligible_at) <= now);
+    return { id: row.id, displayName: row.display_name, category: row.file_category,
+      bytes: row.size_bytes, state: row.state, version: row.version_no,
+      createdAt: row.created_at, updatedAt: row.updated_at, canDownload: row.state === "available",
+      lineage: row.replaced_by_id ? "superseded" : row.replaces_id && row.state !== "available" ? "replacement-pending" : "active",
+      held,
+      capabilities: {
+        replace: row.state === "available" && !row.replaced_by_id,
+        softDelete: ["available", "blocked", "legacy_unverified", "object_missing"].includes(row.state),
+        requestRestore: row.state === "soft_deleted" && Boolean(row.restore_until && Date.parse(row.restore_until) > now),
+        restore: administrator && row.state === "restore_pending" && !row.replaced_by_id,
+        createHold: administrator && !held && !["purged", "purge_pending"].includes(row.state),
+        releaseHold: administrator && held,
+        purge: actor.permissionCodes?.includes("evidence.purge") === true && purgeEligible && !held && ["soft_deleted", "purge_pending"].includes(row.state),
+      },
+    } as SafeEvidenceMetadata;
+  });
 }
 
 export async function requestDownload(actor: EvidenceActor, uploadId: string): Promise<SafeEvidenceResult<{ url: string; expiresIn: 60 }>> {

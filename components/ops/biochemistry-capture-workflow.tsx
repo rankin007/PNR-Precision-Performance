@@ -13,6 +13,8 @@ import {
   type BiochemistryFieldName,
   type BiochemistryWorkflowStage,
   biochemistryServerErrorMessage,
+  biochemistryNoteRequiresReview,
+  canSubmitBiochemistryNote,
   timeOfDayLabel,
   validateBiochemistryCaptureValues,
 } from "@/components/ops/biochemistry-workflow-state";
@@ -47,6 +49,8 @@ export function BiochemistryCaptureWorkflow({
   const [values, setValues] = useState<BiochemistryCaptureValues>(EMPTY_BIOCHEMISTRY_CAPTURE_VALUES);
   const [errors, setErrors] = useState<BiochemistryFieldError[]>([]);
   const [submitLocked, setSubmitLocked] = useState(false);
+  const [noteReviewConfirmed, setNoteReviewConfirmed] = useState(false);
+  const [noteReviewError, setNoteReviewError] = useState(false);
   const submittedRef = useRef(false);
   const serverMessage = biochemistryServerErrorMessage(serverError);
   const unavailable = !envReady;
@@ -57,6 +61,10 @@ export function BiochemistryCaptureWorkflow({
   );
 
   function updateField(field: BiochemistryFieldName, value: string) {
+    if (field === "notes") {
+      setNoteReviewConfirmed(false);
+      setNoteReviewError(false);
+    }
     setValues((current) => {
       if (field === "horseId") {
         return {
@@ -82,6 +90,8 @@ export function BiochemistryCaptureWorkflow({
     }
 
     setValues({ ...result.values, horseName: selectedHorseName });
+    setNoteReviewConfirmed(false);
+    setNoteReviewError(false);
     setErrors([]);
     setStage("review");
   }
@@ -89,10 +99,17 @@ export function BiochemistryCaptureWorkflow({
   function editCapture() {
     setSubmitLocked(false);
     submittedRef.current = false;
+    setNoteReviewConfirmed(false);
+    setNoteReviewError(false);
     setStage("capture");
   }
 
   function handleSubmit() {
+    if (!canSubmitBiochemistryNote(values.notes, noteReviewConfirmed)) {
+      setNoteReviewError(true);
+      document.getElementById("note-review-confirmation")?.focus();
+      return false;
+    }
     if (submittedRef.current) {
       return false;
     }
@@ -180,7 +197,15 @@ export function BiochemistryCaptureWorkflow({
             updateField={updateField}
           />
         ) : (
-          <ReviewFields values={{ ...values, horseName: selectedHorseName }} />
+          <ReviewFields
+            values={{ ...values, horseName: selectedHorseName }}
+            noteReviewConfirmed={noteReviewConfirmed}
+            noteReviewError={noteReviewError}
+            setNoteReviewConfirmed={(confirmed) => {
+              setNoteReviewConfirmed(confirmed);
+              if (confirmed) setNoteReviewError(false);
+            }}
+          />
         )}
 
         <div className="grid gap-3 border-t border-ink/10 pt-5 sm:flex sm:items-center sm:justify-between">
@@ -337,6 +362,9 @@ function CaptureFields({
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-ember">Optional typed notes</p>
           <h2 id="notes-heading" className="mt-2 text-xl font-semibold text-ink">Add context</h2>
+          <p id="notes-dictation-guidance" className="mt-2 max-w-3xl text-sm leading-6 text-steel">
+            Typing is always available. If your device keyboard provides a microphone, you may use its dictation into this same editable field. This application does not record or store audio; dictation availability and behaviour are controlled by your device and keyboard settings. If dictation is unavailable, offline, interrupted or inaccurate, continue typing and review the text before submission.
+          </p>
         </div>
         <FieldErrorWrapper field="notes" errors={errors}>
           <label className="grid gap-2 text-sm font-medium text-ink" htmlFor="notes">
@@ -348,7 +376,7 @@ function CaptureFields({
               maxLength={BIOCHEMISTRY_NOTES_LIMIT + 1}
               disabled={disabled}
               aria-invalid={Boolean(firstErrorFor(errors, "notes"))}
-              aria-describedby={firstErrorFor(errors, "notes") ? `${errorId("notes")} notes-count` : "notes-count"}
+              aria-describedby={firstErrorFor(errors, "notes") ? `${errorId("notes")} notes-dictation-guidance notes-count` : "notes-dictation-guidance notes-count"}
               onChange={(event) => updateField("notes", event.target.value)}
               className="min-h-32 rounded-2xl border border-technical/20 bg-canvas px-4 py-3 text-base text-technical transition focus:border-data focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-data"
             />
@@ -384,8 +412,18 @@ function FieldErrorWrapper({
   );
 }
 
-function ReviewFields({ values }: { values: BiochemistryCaptureValues }) {
-  const notes = values.notes.trim();
+function ReviewFields({
+  values,
+  noteReviewConfirmed,
+  noteReviewError,
+  setNoteReviewConfirmed,
+}: {
+  values: BiochemistryCaptureValues;
+  noteReviewConfirmed: boolean;
+  noteReviewError: boolean;
+  setNoteReviewConfirmed: (confirmed: boolean) => void;
+}) {
+  const hasNotes = biochemistryNoteRequiresReview(values.notes);
   return (
     <section className="grid gap-5 rounded-2xl border border-ink/10 bg-white p-4 shadow-panel" aria-labelledby="review-heading">
       <div>
@@ -406,9 +444,33 @@ function ReviewFields({ values }: { values: BiochemistryCaptureValues }) {
       <div className="rounded-2xl border border-ink/10 bg-sand p-4">
         <p className="text-sm font-semibold text-ink">Typed notes</p>
         <p className="mt-2 whitespace-pre-wrap text-sm leading-6 text-steel">
-          {notes || "No notes added"}
+          {hasNotes ? values.notes : "No notes added"}
         </p>
       </div>
+      {hasNotes ? (
+        <div className="grid gap-2 rounded-2xl border border-ink/10 bg-canvas p-4">
+          <label className="flex min-h-11 items-start gap-3 text-sm font-medium leading-6 text-ink" htmlFor="note-review-confirmation">
+            <input
+              id="note-review-confirmation"
+              type="checkbox"
+              checked={noteReviewConfirmed}
+              aria-describedby={noteReviewError ? "note-review-guidance note-review-error" : "note-review-guidance"}
+              aria-invalid={noteReviewError}
+              onChange={(event) => setNoteReviewConfirmed(event.target.checked)}
+              className="mt-1 h-5 w-5 shrink-0 accent-brand focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-data"
+            />
+            I reviewed this note and corrected any dictation errors.
+          </label>
+          <p id="note-review-guidance" className="text-xs leading-5 text-steel">
+            Check the exact note text above. Use Edit values to make corrections before submitting.
+          </p>
+          {noteReviewError ? (
+            <p id="note-review-error" className="text-sm font-medium text-danger" role="alert" tabIndex={-1}>
+              Review and confirm the note, or edit it before submission.
+            </p>
+          ) : null}
+        </div>
+      ) : null}
     </section>
   );
 }

@@ -10,6 +10,7 @@
     "typecheck": "npm exec -- node node_modules/typescript/bin/tsc --noEmit --incremental false",
     "validate:json": "npm exec -- node scripts/run-validation-suite.mjs json",
     "test:domain": "npm exec -- node scripts/run-validation-suite.mjs domain",
+    "test:voice-027": "npm exec -- node --experimental-strip-types scripts/test-biochemistry-voice-027.mjs",
     "test:roles": "npm exec -- node scripts/run-validation-suite.mjs roles",
     "test:supabase-self": "npm exec -- node scripts/run-validation-suite.mjs supabase-self",
     "validate:static": "npm exec -- node scripts/run-validation-suite.mjs static",
@@ -22,6 +23,7 @@
     "test:evidence-023j": "node scripts/test-test-evidence-signed-upload-023J.mjs",
     "test:evidence-migration-023j": "node scripts/test-test-evidence-migration-023J.mjs",
     "test:evidence-review-023j": "node scripts/test-test-evidence-review-corrections-023J.mjs",
+    "test:evidence-026": "node --experimental-strip-types scripts/test-test-evidence-026.mjs",
     "db:bundle": "powershell -ExecutionPolicy Bypass -File scripts/export-supabase-bootstrap.ps1"
   },
   "dependencies": {

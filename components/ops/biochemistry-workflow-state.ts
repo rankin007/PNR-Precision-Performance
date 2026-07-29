@@ -2,6 +2,14 @@ import type { BiochemistryTimeOfDay } from "@/lib/domain/biochemistry";
 
 export const BIOCHEMISTRY_NOTES_LIMIT = 2000;
 
+export function biochemistryNoteRequiresReview(notes: string) {
+  return notes.trim().length > 0;
+}
+
+export function canSubmitBiochemistryNote(notes: string, reviewConfirmed: boolean) {
+  return !biochemistryNoteRequiresReview(notes) || reviewConfirmed;
+}
+
 export type BiochemistryWorkflowStage = "capture" | "review" | "submitting";
 
 export type BiochemistryCaptureValues = {

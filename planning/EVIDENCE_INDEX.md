@@ -1,5 +1,18 @@
 # Evidence Index
 
+## Sprint 027B — Combined product lineage
+
+- Source freeze: `planning/reviews/027B-source-worktree-snapshot-manifest.md`.
+- Overlap decisions: `planning/reviews/027B-overlap-and-reconciliation-matrix.md`.
+- Combined proof: `planning/reviews/027B-combined-validation-and-security-proof.md`.
+- Closeout: `planning/reviews/027B-product-lineage-reconciliation-closeout.md`.
+- Lineage authority: `docs/COMPLETED_PRODUCT_LINEAGE_027B.md`.
+- Preserved source authorities/closeouts: Sprint 025 `docs/SPRINT_025_BIOCHEMISTRY_DOMAIN_AUTHORITY.md` and closeout; Sprint 026 `docs/TEST_EVIDENCE_MANAGEMENT_026.md` and closeout; Sprint 027 `docs/VOICE_ASSISTED_CAPTURE_027.md` and closeout.
+
+## Sprint 026 — Uploads and evidence management
+
+- `planning/reviews/026-uploads-and-evidence-management-closeout.md`, `docs/TEST_EVIDENCE_MANAGEMENT_026.md`, `scripts/test-test-evidence-026.mjs`: local synthetic executable/markup proof and production-build evidence; no rendered, remote or Production claim.
+
 This file navigates evidence; it does not replace the linked records.
 
 ## Current Authority
@@ -84,3 +97,16 @@ Archived statements are not current authority unless a current file explicitly c
 - **Hosted structural:** remote schema/configuration evidence without authenticated application proof.
 - **Authenticated/runtime:** genuine-session minimal Auth proof passed in 021O; role/RLS and application-route runtime proof remain incomplete.
 - **Production:** deployed/current behavior and approved business/domain content; must be evidenced separately.
+
+## Sprint 025 — Biochemistry authority
+
+- Canonical authority: `docs/SPRINT_025_BIOCHEMISTRY_DOMAIN_AUTHORITY.md`.
+- Closeout: `planning/reviews/025-four-reading-biochemistry-authority-closeout.md`.
+- Deterministic proof: `scripts/test-biochemistry-authority-025.mjs`.
+
+## Sprint 027 — Voice-assisted capture
+
+- Decision authority: `docs/VOICE_ASSISTED_CAPTURE_027.md`.
+- Implementation proof: `scripts/test-biochemistry-voice-027.mjs`.
+- Closeout: `planning/reviews/027-voice-assisted-capture-closeout.md`.
+- Accessibility/responsive conclusions remain source/static/build evidence; no rendered browser or real-device proof is claimed.

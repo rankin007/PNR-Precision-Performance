@@ -1,0 +1,12 @@
+{
+  "fixturePolicy": "synthetic-only",
+  "states": [
+    "initiated", "upload_pending", "uploaded_unverified", "legacy_unverified",
+    "validation_failed", "scan_pending", "sanitisation_pending", "available",
+    "blocked", "failed", "soft_deleted", "restore_pending", "purge_pending",
+    "purged", "object_missing", "unexpected"
+  ],
+  "supportedTypes": ["image/jpeg", "image/png", "application/pdf"],
+  "disabledTypes": ["text/csv"],
+  "limits": { "itemBytes": 5242880, "filesPerTest": 10, "testBytes": 31457280 }
+}

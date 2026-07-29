@@ -46,3 +46,15 @@ Sprint 023H requires a separately authorised narrow build-environment diagnosis/
 ## Historical / Superseded
 
 See `planning/history/QUESTIONS-THROUGH-017F.md`. Archived questions are evidence, not current authority.
+# Sprint 025 authority questions — 2026-07-29
+
+- Who is the named Aprec8 domain decision owner, and what role/effective date approves biological thresholds and Table of Knowledge content?
+- What are the authoritative unit, device, calibration, precision, step and permitted range for each of the five raw measurements?
+- What complete Green/Amber/Red boundaries, boundary semantics, labels and contextual explanations apply independently to Hydration Score and internal `healthScore`?
+- What is the final trainer-facing label for internal `healthScore`?
+- Which informational recommendation categories, levels, exact wording, triggers, sources, review classes, escalation rules and supersession relationships are approved?
+## Sprint 027B retained unresolved questions — 2026-07-29
+
+- Which named domain owner will approve production thresholds, final score language, biological/device limits and Table of Knowledge content?
+- Which approved evidence safety scanner/sanitiser providers and operational activation controls will make blocked evidence available, if any?
+- Will any future application-controlled microphone/transcription capability be pursued, and if so which provider, processing region, subprocessors, consent, retention/deletion, security, accuracy/correction and incident rules will govern it?

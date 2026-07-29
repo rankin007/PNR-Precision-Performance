@@ -6,6 +6,11 @@ Record durable decisions future sprints must respect.
 
 ## Decision Log
 
+| 2026-07-29 | Sprint 027B combines the accepted Sprint 025, 026 and 027 candidates without selecting one shared planning file as a whole-file winner. | The three candidates share a baseline but independently close domain, private-evidence and voice/privacy boundaries. | Single-owner product bytes remain exact; shared executable registrations are additive; durable state preserves all outcomes and limitations. |
+| 2026-07-29 | Keep Sprint 026 lifecycle controls as server-projected presentation hints while every mutation remains database-authoritative. | Client role inference cannot safely govern evidence privacy, retention or destructive operations. | Unknown states expose no actions; purge additionally requires `evidence.purge`, elapsed eligibility and no active hold; blocked evidence has no read affordance. |
+| 2026-07-29 | Sprint 027 launches only a typed/device-keyboard dictation fallback; the application does not control a microphone or use a transcription provider. | Provider processing, retention, subprocessor, consent, accuracy and incident boundaries are not approved. | One editable textarea remains authoritative; substantive notes require review confirmation; audio/provider capability fails closed. |
+| 2026-07-29 | Typed, pasted and device-dictated note text is equivalent after user review and carries no origin metadata. | Origin cannot be reliably established from an ordinary textarea and is unnecessary for the bounded workflow. | Notes remain plain text, never populate structured fields and persist through the unchanged manual-note path. |
+
 | 2026-07-28 | Approve the Sprint 023C consolidated twenty-decision privacy, storage and lifecycle contract effective 28 July 2026. | Phillip Norman Rankin supplied Aprec8 authority, explicit consolidated approval, monitored incident email, and complete supersession of earlier standalone `Accept` annotations. | Sprint 023D and later upload work must follow `docs/SPRINT_023C_PRIVACY_STORAGE_LIFECYCLE_DECISIONS.md`; no architecture, provider, processor, dependency, secret, or production action is approved by this decision alone. |
 | 2026-07-28 | Approve Sprint 023D architecture choices 1–5, amend reconciliation/configuration choices 6 and 8, and accept region/backup choice 7 with mandatory verification. | Aprec8 selected controlled-CSV deferral, fail-closed safety adapters, quarterly retention review, explicit `evidence.purge`, daily production-only UTC Vercel Cron with `CRON_SECRET`, bounded idempotent batches and DB lock, and mandatory Sydney/Storage-backup proof. | Do not create `EVIDENCE_RECONCILIATION_SECRET`; keep `SUPABASE_SERVICE_ROLE_KEY` server-only; actual `ap-southeast-2`, provider suitability and Storage-object recovery evidence are pre-production gates; no provider/dependency/remote action is approved. |
 | 2026-07-28 | Govern immutable text-migration hashes over strict UTF-8 content with CRLF canonicalised to LF only. | Git checkout line-ending transformation changed raw Windows bytes without changing migration 0009 content. | BOM, invalid UTF-8, lone CR, whitespace, final-newline and SQL mutations remain substantive failures; the governed LF hash is unchanged. |
@@ -155,3 +160,12 @@ Stop `remote-target-authority-blocked-clean` before external access. Existing Su
 # Sprint 023K decision — 2026-07-28
 
 Aprec8 approves Supabase `ap-southeast-1` Singapore for Precision Performance. This supersedes the active Sydney-only `ap-southeast-2` requirement and Singapore-stop condition on region only. International processing must be described accurately; no Australian-only storage claim or external/production authority follows.
+
+# Sprint 025 decisions — 2026-07-29
+
+- The operational contract is explicitly five raw measurements producing four exact lookup inputs; “four readings” must not erase either pH measurement.
+- Existing `biochemistry-score-v1`, `Reading Tables v1.csv` `v1`, six-decimal normalization, pH averaging, conductivity `1.43` conversion compatibility and score formulas remain active.
+- No production threshold, trainer-facing status language or Table of Knowledge content is inferred from Sprint 015 fixtures. Those slices remain unavailable until named-owner authority is supplied.
+- Internal `healthScore` remains unchanged. “Biochemistry Trend Score” remains provisional display language, not a persisted rename or final domain decision.
+- No additive migration is necessary for this bounded outcome because existing snapshots retain formula/lookup/threshold/recommendation source/version and copied recommendation wording.
+- Sprint 025 does not activate or configure deferred upload/provider/voice capabilities; CSV remains disabled and evidence safety remains fail closed.

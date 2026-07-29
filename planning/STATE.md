@@ -1,5 +1,11 @@
 # Project State
 
+## Sprint 027B Combined Product Lineage — 2026-07-29
+
+Sprint `027B-completed-product-lineage-reconciliation` integrates the completed, validated, uncommitted Sprint 025, 026 and 027 candidates from their immutable exact-baseline worktrees into one isolated lineage. Source outcomes are `four-reading-structured-operation-proven-authority-partial-clean`, `uploads-and-evidence-management-complete-fail-closed-clean` and `voice-assisted-typed-device-fallback-complete-provider-deferred-clean`.
+
+The combined candidate preserves: five raw measurements to four exact lookup inputs with production thresholds/knowledge unavailable; authenticated permission-aware evidence management with unknown/blocked safety states fail closed; and typed/device-keyboard note capture with mandatory non-empty-note review and no application audio/transcription path. Dependencies, `package-lock.json`, migrations `0018`–`0021`, schema, RLS and persistence contracts are unchanged. Current validation and final source-preservation results are recorded in the 027B closeout evidence.
+
 ## Current Status
 
 Sprint `023L-remote-application-and-hosted-proof` is complete `remote-application-and-preview-proof-complete-clean`. Remote/local ledger is exactly `0001` through `0021`. Exact clean commit `379573e4d70a3266f2a8849468b4420e9ddce9c3` is READY on protected generated Preview `pnr-precision-performance-4e6qad1ga-rankin007s-projects.vercel.app` with only the four approved Preview bindings. Evidence-proportional runtime proof covers governed upload/recovery/removal, authority denial/acceptance, acknowledgement, idempotency, cancellation and missing/wrong/correct reconciliation-secret behavior. Final Auth/application/Storage/recovery state is `0/0/0/0` with zero recovery/fixture orphans. No Production configuration/deployment, custom-domain or production-alias movement, scheduled Production Cron, push or merge occurred.

@@ -263,6 +263,23 @@ export type BiochemistryZoneThresholdSet = {
   thresholds: BiochemistryZoneThreshold[];
 };
 
+export type BiochemistryAuthorityValidationIssue = {
+  code:
+    | "wrong_score_kind"
+    | "missing_zone"
+    | "duplicate_zone"
+    | "non_finite_bound"
+    | "inverted_range"
+    | "outside_score_domain"
+    | "overlapping_ranges"
+    | "gapped_ranges";
+  detail: string;
+};
+
+export type BiochemistryAuthorityValidationResult =
+  | { valid: true; issues: [] }
+  | { valid: false; issues: BiochemistryAuthorityValidationIssue[] };
+
 export type BiochemistryZoneSnapshot = {
   scoreKind: BiochemistryScoreKind;
   score?: number;
@@ -356,6 +373,72 @@ export function classifyBiochemistryScore(
     thresholdSourceVersion: thresholdSet.sourceVersion,
     blockers: [],
   };
+}
+
+/**
+ * Validates the legacy inclusive threshold representation against the
+ * established normalized score domain. Because the legacy representation is
+ * inclusive at both ends, adjacent ranges must differ by exactly one
+ * representable six-decimal step; a shared boundary would overlap.
+ */
+export function validateBiochemistryThresholdSet(
+  scoreKind: BiochemistryScoreKind,
+  thresholdSet: BiochemistryZoneThresholdSet,
+): BiochemistryAuthorityValidationResult {
+  const issues: BiochemistryAuthorityValidationIssue[] = [];
+  const requiredZones: BiochemistryScoreZone[] = ["green", "amber", "red"];
+
+  if (thresholdSet.scoreKind !== scoreKind) {
+    issues.push({ code: "wrong_score_kind", detail: `Expected ${scoreKind}; received ${thresholdSet.scoreKind}.` });
+  }
+
+  for (const zone of requiredZones) {
+    const count = thresholdSet.thresholds.filter((threshold) => threshold.zone === zone).length;
+    if (count === 0) issues.push({ code: "missing_zone", detail: `Missing ${zone} threshold.` });
+    if (count > 1) issues.push({ code: "duplicate_zone", detail: `Multiple ${zone} thresholds supplied.` });
+  }
+
+  const ordered = thresholdSet.thresholds
+    .map((threshold) => ({
+      ...threshold,
+      minScore: Number(threshold.minScore),
+      maxScore: Number(threshold.maxScore),
+    }))
+    .sort((left, right) => left.minScore - right.minScore);
+
+  for (const threshold of ordered) {
+    if (!Number.isFinite(threshold.minScore) || !Number.isFinite(threshold.maxScore)) {
+      issues.push({ code: "non_finite_bound", detail: `${threshold.zone} has a non-finite bound.` });
+      continue;
+    }
+    if (threshold.minScore > threshold.maxScore) {
+      issues.push({ code: "inverted_range", detail: `${threshold.zone} minimum exceeds its maximum.` });
+    }
+    if (threshold.minScore < 0 || threshold.maxScore > 1) {
+      issues.push({ code: "outside_score_domain", detail: `${threshold.zone} is outside the normalized 0–1 score domain.` });
+    }
+  }
+
+  if (ordered.length === requiredZones.length && ordered.every((threshold) => Number.isFinite(threshold.minScore) && Number.isFinite(threshold.maxScore))) {
+    if (ordered[0]?.minScore !== 0 || ordered.at(-1)?.maxScore !== 1) {
+      issues.push({ code: "gapped_ranges", detail: "Thresholds must cover the complete normalized 0–1 score domain." });
+    }
+
+    const step = 10 ** -BIOCHEMISTRY_NUMERIC_SCALE;
+    for (let index = 1; index < ordered.length; index += 1) {
+      const previous = ordered[index - 1];
+      const current = ordered[index];
+      if (!previous || !current) continue;
+      const delta = normalizeBiochemistryNumber(current.minScore - previous.maxScore);
+      if (delta <= 0) {
+        issues.push({ code: "overlapping_ranges", detail: `${previous.zone} and ${current.zone} overlap.` });
+      } else if (delta > step) {
+        issues.push({ code: "gapped_ranges", detail: `${previous.zone} and ${current.zone} leave a gap.` });
+      }
+    }
+  }
+
+  return issues.length === 0 ? { valid: true, issues: [] } : { valid: false, issues };
 }
 
 export function classifyBiochemistryScoringResult(
@@ -487,14 +570,5 @@ function buildBlockedZone(
 }
 
 function hasCompleteZoneThresholds(thresholdSet: BiochemistryZoneThresholdSet) {
-  const requiredZones: BiochemistryScoreZone[] = ["green", "amber", "red"];
-
-  return requiredZones.every((zone) => {
-    const threshold = thresholdSet.thresholds.find((candidate) => candidate.zone === zone);
-
-    return Boolean(threshold)
-      && Number.isFinite(threshold?.minScore)
-      && Number.isFinite(threshold?.maxScore)
-      && Number(threshold?.minScore) <= Number(threshold?.maxScore);
-  });
+  return validateBiochemistryThresholdSet(thresholdSet.scoreKind, thresholdSet).valid;
 }

@@ -2,6 +2,8 @@
 
 ## Current Position
 
+- Current integrated candidate: **027B — Completed Product-Lineage Reconciliation** combines completed Sprints 025–027 without consuming Sprint 028. Domain authority remains partial, evidence safety remains fail closed without approved adapters, and app-controlled voice/transcription remains deferred.
+
 - Current authority amendment: **023K - Singapore Region Authority Amendment And 023J Unblock**, `singapore-region-authority-recorded-023J-region-unblocked-clean`; 023J awaits remaining non-regional authority inputs.
 
 - Current provider/remote sprint: **023J - Provider, Remote Storage, Migration Application And Hosted Proof**, `remote-target-authority-blocked-clean`; Singapore region is approved by 023K, while exact non-production targets and recovery/provider authority remain required before external access.

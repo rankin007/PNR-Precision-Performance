@@ -1,35 +1,41 @@
 # Architect Briefing
 
-Sprint 023L is complete `remote-application-and-preview-proof-complete-clean`. Remote/local ledger is `0001` through `0021`; exact commit `379573e4d70a3266f2a8849468b4420e9ddce9c3` is READY on protected generated Preview `pnr-precision-performance-4e6qad1ga-rankin007s-projects.vercel.app` with only the four approved Preview bindings. Governed upload/recovery/removal, authority/idempotency/cancellation and manual reconciliation-route proof pass. Final state is `0/0/0/0` with zero orphans. Production configuration, deployment, custom/production aliases, scheduled Cron, push and merge were untouched. This local closeout commit records the approved evidence.
+## Where things stand
 
-Historical Sprint 023P briefing and pre-Preview state, now superseded:
+Sprint 027B is complete `completed-product-lineage-reconciled-combined-proof-clean`. It integrates the completed Sprint 025, 026 and 027 candidates into one isolated lineage from exact baseline `6f8543020e126a4620f09be017744dcc75061e6e` and is the single trustworthy candidate for future Sprint 028 planning.
 
-Sprint 023P is complete `extension-parser-corrected-final-governed-recovery-proven-clean`. Migration `0021` was applied exactly once after the supported dry run selected only that migration; remote/local ledger is exactly `0001` through `0021`. The final governed JPEG proof passed exact initiation/intent, signed no-overwrite transfer, fail-closed finalisation, protected export, DPAPI restored-byte hash agreement, governed removal, verified absence and Auth-last cleanup. Final state is `0/0/0/0` with zero proof orphans. This local closeout commit records the bounded harness correction and evidence. Sprint 023L is ready to resume at protected Vercel Preview configuration; no Vercel/deployment/push/merge action occurred.
+## Current status
 
-Historical pre-application Sprint 023P briefing, now superseded:
+Domain authority, permission-aware evidence management and safe typed/device-keyboard note capture coexist. Production thresholds/knowledge remain unavailable; evidence remains fail closed without approved safety adapters; application audio/transcription remains unavailable.
 
-Sprint 023P is `extension-parser-correction-ready-for-commit`. Additive migration `0021_postgresql_filename_extension_parser_correction.sql` preserves the exact applied `0020` initiation function and changes only the classified filename-extension regex to the approved single-backslash PostgreSQL form, plus the approved comment. SHA-256 is `3325B5EF803D3197768A42DB2AA9AED6177B73C371B2B4F83F2FC771E89F0962`. Focused semantic/input, exact/adversarial `0001`–`0021`, migration immutability, CI/local, full ESLint, TypeScript and production-build gates pass. The candidate is unstaged/uncommitted and remotely unapplied; remote ledger remains `0001`–`0020`, final state remains `0/0/0/0`, and no Vercel/deployment/push/merge action occurred.
+## Since last sprint
 
-Sprint 023O applied migration `0020` exactly once and aligned remote/local ledger through `0020`. Governed runtime then failed clean at the classified double-backslash filename-extension validation stage before authority lookup and before `extensions.digest(...)`; exact Auth-last cleanup restored `0/0/0/0`. Sprint 023P supersedes the correction boundary. No Vercel, deployment, push or merge action occurred.
+Single-owner source bytes were reproduced exactly, shared package/validation registrations were merged additively, canonical Packs and historical sprint artifacts were preserved, and shared durable planning state was reconciled semantically.
 
-Sprint 023N is complete `governed-initiation-failure-classified-clean`. Exact baseline, remote/local `0001`–`0019`, protected target and initial/final `0/0/0/0` passed. Static contract comparison found no caller mismatch. The rolled-back catalog aggregate proved remote pgcrypto digest exists only in `extensions`, excluded by the initiation function's `pg_catalog, public` search path. Classification is `database-function-resolution-or-grant-defect`; authenticated grant state is correct. No fixture was required and orphan counts are zero. Recommend a separately authorised additive migration `0020` that schema-qualifies the approved pgcrypto dependency without broadening the security-definer search path; Sprint 023N made no correction, Storage transfer or Vercel action.
+## Architecture / file map
 
-Sprint 023L is stopped `storage-recovery-proof-blocked-clean`. Immediate preflight, DPAPI readiness, application of only `0018`/`0019`, exact remote `0001`–`0019` ledger and the all-true structural/security/zero-state aggregate passed. Protected exact-project bindings passed, but the bounded recovery run stopped at governed upload initiation with sanitised classification `INITIATION_FAILED`, before Storage transfer or recovery-copy creation. Exact owned cleanup and Auth-last deletion passed with final Auth/application/Storage/recovery-artifact counts `0/0/0/0`. No Preview configuration/deployment, hosted proof or production action followed.
+- `lib/domain/biochemistry.ts`: Sprint 025 structural authority.
+- `lib/evidence/**`, evidence actions/components/result route: Sprint 026 management.
+- biochemistry capture workflow/state: Sprint 027 note fallback.
+- `docs/COMPLETED_PRODUCT_LINEAGE_027B.md`: combined lineage map.
+- `planning/reviews/027B-*.md`: source, overlap, proof and closeout evidence.
 
-Sprint 023M is `committed-candidate-state-reconciled-ready-for-commit`. Sprint 023J is `remote-candidate-committed-clean` at local commit `fcf818fe3a8001b12941adc9dd121c6dbe8c002f`, parent `ae5470cb79e7f41f7a8ce30a7ce07e2c796897a9`. The commit contains 51 approved files with 2,362 insertions and 42 deletions. Migration `0018` is unchanged and migration `0019` SHA-256 remains `67C0877038738EC5D3C4965DE10F3048D37D4E920407C4E675CB948C3450B80A`. Production `.schema("storage")` references, generated artifacts, unrelated files and secret indicators remain zero; the commit index and worktree were clean. This four-record reconciliation and its generated sprint file remain uncommitted. No remote application, hosted proof, Supabase/Storage/Vercel mutation, deployment, alias change or production action occurred. Sprint 023L must be reissued against the future committed 023M reconciliation baseline.
+## Decisions
 
-Historical pre-commit Sprint 023J state: the corrected candidate was `remote-candidate-ready-for-commit`. Application code contained no `.schema("storage")` access and exposed schemas remained unchanged. Replacement used successor initiation with `replacesId`; purge and expired compensation deleted through the Storage API and then used service-role-only PostgreSQL completion RPCs whose atomic `storage.objects` guards refused premature completion. Failures remained retryable, completed retries were idempotent and no false success was returned. Exact candidate/region/ledger/preflight and authority boundaries remained intact.
+No whole-file winner was used for shared planning. Product semantics remain those accepted by each source sprint. Dependencies, lockfile, migrations, schema and persistence contracts remain unchanged.
 
-Additive candidate migration `0019` completes server-derived initiation/lifecycle/reconciliation, private JPEG/PNG/PDF-only `test-evidence` configuration, exact live-intent INSERT policy and narrow grants. The application now uses a signed-direct no-overwrite upload and authoritative finalisation. Safety remains fail closed as unavailable/blocked because approved scanner/sanitiser adapters do not exist; CSV remains disabled.
+## Risks / watch-items
 
-Historical pre-commit validation state: focused 023E/023J tests, exact/adversarial `0001`–`0019` ledger, all maintained validation, TypeScript, full ESLint and production build passed. At that point candidate files remained unstaged and uncommitted, and no migration, remote Storage resource, protected configuration, deployment, push or production action had occurred.
+Do not activate fixture domain content, blocked evidence reads or application voice providers. Keep the three fail-closed boundaries visible in Sprint 028 planning.
 
-Historical Sprint 023K state: `singapore-region-authority-recorded-023J-region-unblocked-clean` in the isolated 023J worktree from committed baseline `ae5470cb79e7f41f7a8ce30a7ce07e2c796897a9`. At that point candidate 0018 remained unapplied and migration 0019 had not been created.
+## Open questions for the Architect
 
-Implemented: legacy inventory/backfill SQL, composite scope/lineage/state tables, typed validation/lifecycle/safety boundaries, server actions/repository, `CRON_SECRET` route, evidence UI and focused deterministic scripts. CSV and default safety remain unavailable.
+Resolve the existing roadmap naming conflict that also described core Sprint 027 as trends/filters. Plan Sprint 028 only from the eventual 027B reconciled candidate; do not infer commit or Production readiness.
 
-Sprint 023F portability, Sprint 023G candidate-ledger alignment and Sprint 023H focused behavior/full repository lint pass. Sprint 023I physically copied dependencies outside the OneDrive junction and completed the production build on its first attempt in 57.5 seconds; the complete final combined matrix passes. Earlier 023E–023H outcomes are reconciled clean locally.
+## Validation / test status
 
-Historical authority state at 023K closeout: exact `ap-southeast-1` Singapore was approved and region alone no longer blocked 023J. The exact non-production Supabase/Vercel mapping, synthetic-only declaration, operator/rollback authority, international-processing/provider/privacy suitability and Storage-object recovery method still had to be supplied before external access.
+Focused 025/026/027 and required 022/023 regressions pass. The full canonical matrix, encoding/static checks, ESLint, TypeScript and production build pass. Lockfile/migrations are byte-identical and all source fingerprints are unchanged. No rendered browser/device proof was run.
 
-Historical 023K boundary: no source, migration, bucket/policy, provider, secret, remote access, deployment, stage or commit occurred during that sprint.
+## Recommended next Architect action
+
+After 027B closes cleanly, define Sprint 028 against this integrated lineage without broadening domain, evidence-provider or voice-provider authority.

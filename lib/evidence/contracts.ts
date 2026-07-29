@@ -46,5 +46,17 @@ export type SafeEvidenceMetadata = {
   state: EvidenceState;
   version: number;
   createdAt: string;
+  updatedAt: string;
   canDownload: boolean;
+  lineage: "active" | "replacement-pending" | "superseded";
+  held: boolean;
+  capabilities: {
+    replace: boolean;
+    softDelete: boolean;
+    requestRestore: boolean;
+    restore: boolean;
+    createHold: boolean;
+    releaseHold: boolean;
+    purge: boolean;
+  };
 };

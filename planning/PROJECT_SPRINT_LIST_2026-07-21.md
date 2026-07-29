@@ -1,6 +1,11 @@
 # Precision Performance Sprint List
 
 **Accepted direction:** 2026-07-21
+**Current position:** Sprint 027B reconciles completed Sprints 025, 026 and 027 into one combined candidate for future Sprint 028 planning. It adds no Sprint 028 behaviour and authorises no Production action.
+
+## Sprint 027B status — 2026-07-29
+
+Sprint 025 structured domain authority, Sprint 026 fail-closed evidence management and Sprint 027 typed/device-keyboard note fallback coexist in the isolated 027B lineage. Production thresholds/knowledge, evidence safety providers and application-controlled transcription remain unavailable.
 **Workflow profile:** standard by default for ordinary repository, UI, documentation, local tooling, tests, and product features. Strict controls remain mandatory for auth/RLS, secrets or protected evidence, remote migrations, production data, billing/Stripe, destructive operations, external publication, and production deployment.
 **Current position:** Sprint 002B consolidates local/CI validation and current planning authority after the clean 017F baseline. Sprint 022 is the next product sprint. Sprint 021N remains waiting on substantive Supabase response/remediation.
 
@@ -258,10 +263,10 @@ This workstream waits for a substantive Supabase response or remediation.
 
 ### Domain authority
 
-- **Blocked:** production thresholds, score terminology, Table of Knowledge recommendations, and clinical/non-clinical interpretation rules.
-- **Evidence checked:** the engine accepts supplied versioned inputs and safely returns unavailable states when authority is missing.
+- **Partially complete:** Sprint 025 proves the structured five-measurement/four-lookup path, accepted formulas and structural fail-closed validation. Production thresholds, final score terminology, measurement/device limits and Table of Knowledge recommendations remain unavailable.
+- **Evidence checked:** `docs/SPRINT_025_BIOCHEMISTRY_DOMAIN_AUTHORITY.md` and maintained Sprint 025 proof cover boundaries, invalid-set rejection, snapshots and safe unavailable states without activating fixture values.
 - **User/domain-owner action:** approve the measurement, threshold, terminology, evidence, disclaimer, and recommendation content defined by Sprint 025.
-- **Builder verification afterward:** encode only approved values, validate versioning and unavailable states, and map each output to its accepted source.
+- **Builder verification afterward:** a separately scoped authority completion must encode only approved values, validate every boundary and map each output to its accepted source/version without rewriting historical snapshots.
 
 ### Commercial authority
 

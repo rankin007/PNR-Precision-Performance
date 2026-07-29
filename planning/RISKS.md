@@ -41,3 +41,14 @@ Selecting a recorded project merely because it is approved-region `ap-southeast-
 # Sprint 023K regional risk — 2026-07-28
 
 Singapore `ap-southeast-1` is approved international processing and must not be represented as Australian-only storage. Region acceptance does not waive exact-target, provider/privacy, recovery or production-mutation controls.
+# Sprint 025 current risks — 2026-07-29
+
+- Production classifications remain unavailable until complete non-overlapping score boundaries, inclusivity, labels and context are approved by a named domain owner.
+- Measurement units, device applicability, calibration, display precision, steps and permitted biological/device ranges are unresolved; presenting guessed values would create health-adjacent misinformation risk.
+- Table of Knowledge categories, triggers, wording, review class and veterinary escalation language remain unresolved; fixture content must never enter runtime authority.
+- The selected committed lineage contains prior evidence-transfer functionality, while Sprint 025 defers new evidence/provider activation. Sprint 025 made no change to that separate subsystem; safety processing still fails closed and Production activation remains outside this sprint.
+## Sprint 027B retained risks — 2026-07-29
+
+- Unapproved biological thresholds or knowledge content could create misleading health-adjacent outputs; unavailable states must remain fail closed.
+- Evidence safety services are not approved/activated; blocked or unknown evidence must expose no preview/download path.
+- Device-keyboard dictation must not be misrepresented as application-managed, local-only, private, offline, secure or accurate; application audio/transcription remains unavailable.
