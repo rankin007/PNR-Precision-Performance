@@ -2,6 +2,8 @@
 
 The 120x method uses a workflow profile so the process matches the risk of the work. `standard` is the default for ordinary repository, UI, documentation, local tooling, test, and product-feature work.
 
+All profiles follow the hard Evidence-Proportional Execution Standard in `AGENTS.md`. Workflow rigor changes the strength of safety boundaries and evidence required; it does not require redundant gates or stopping merely because a preferred supporting tool is unavailable.
+
 ## fast
 
 Use for single-agent, low-risk, local or internal utilities.
@@ -25,6 +27,8 @@ Default behavior:
 - Keep mechanical, formatting, encoding, and deterministic local-validation corrections in the current sprint when they do not change product behavior or cross a strict boundary.
 - Create a child sprint only for material scope expansion, a true external blocker, or a substantially different product outcome.
 - Keep closeout concise and refer to canonical evidence instead of repeating full project history.
+- Substitute equivalent or stronger safe proof when a supporting tool is unavailable, and keep the substitution inside the current sprint when scope and risk boundaries are unchanged.
+- Do not open a follow-up sprint for a tooling limitation, credential refresh, deterministic harness correction, or redundant verification step.
 
 ## strict
 
@@ -36,3 +40,7 @@ Default behavior:
 - Treat auth, permissions, migrations, data deletion, secrets, billing, and production deployment as stop-and-confirm work.
 - Apply strict controls to protected evidence, remote migrations, production data, destructive operations, external publication, and production deployment.
 - Include stronger validation, rollback notes, and permission-boundary checks.
+- Stop for material security, privacy, target, migration, destructive, production, integrity, or cleanup risk—not for ceremony or an unavailable optional tool.
+- Use equivalent or stronger evidence when it preserves the same strict boundary. A successful governed runtime result may supersede a redundant metadata check when it proves the same contract end to end.
+- Keep diagnosis, in-scope correction, revalidation, and proof in the current sprint unless the correction materially changes approved source/schema behavior or requires new external authority.
+- Manual intervention is required only after safe in-scope alternatives and substitute evidence are exhausted.

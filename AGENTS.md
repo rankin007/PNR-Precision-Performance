@@ -103,9 +103,27 @@ This is a hard project rule.
 - At sprint close, refresh `planning/ARCHITECT_BRIEFING.md` using `docs/ARCHITECT_BRIEFING_SPEC.md`.
 - Do not commit unless asked.
 
+## Evidence-Proportional Execution Standard
+
+This is a hard project rule for Architect and Builder across every workflow profile, including `strict`.
+
+- Stop only for a material boundary: wrong or ambiguous target, real or unexpected protected data, secret exposure, destructive uncertainty, unauthorized scope expansion, migration/application failure or partial state, failed integrity/security behavior, production impact, or cleanup that cannot be proven safe.
+- A supporting tool failure is not, by itself, a sprint blocker when the required fact can be established by equivalent or stronger safe evidence.
+- Prefer executable end-to-end behavior over repetitive metadata or tooling proof when the executable result covers the same acceptance boundary.
+- Accept a documented substitute proof when it is at least as strong, remains within sprint scope, does not weaken a security/privacy/data boundary, and records what original check was unavailable and why the substitute is sufficient.
+- Continue within the current sprint for tooling substitutions, deterministic validator corrections, formatting/encoding issues, credential refreshes, test-harness defects, and other non-product corrections already inside the approved outcome.
+- Do not create a new sprint solely because Docker, a browser driver, clipboard automation, schema dump, visual renderer, optional CLI path, or another supporting tool is unavailable.
+- Create a corrective follow-up sprint only for a material source/schema/contract change outside current scope, a genuinely different outcome, or an external action that lacks authority.
+- Do not repeat a failed action blindly. Diagnose once, select the safest effective alternate path, and continue when its evidence is sufficient.
+- Manual intervention is the last safe option, not the default response to inconvenience. Use it only when the agent cannot perform the required action safely and no approved equivalent proof or alternate mechanism is available.
+- Keep evidence and closeout proportional. Record decisions, mutations, material risks, failures, substitute proof and final outcomes; do not reproduce the full project history at every gate.
+- Strict means stronger boundaries and proof, not maximum ceremony. It must not convert redundant checks or environment limitations into artificial delivery blockers.
+
 ## Manual Intervention Rule
 
-Whenever something required for the sprint does not work, is blocked, or needs user/manual input, Builder must flag it clearly instead of leaving it implicit.
+When something required for the sprint does not work, Builder must first apply the Evidence-Proportional Execution Standard: determine whether an approved equivalent or stronger proof, safe alternate tool, or in-scope correction can complete the boundary without user action. If so, continue and record the substitution.
+
+Only when the requirement remains materially blocked or genuinely needs user/manual input must Builder flag it clearly instead of leaving it implicit.
 
 For each manual intervention, Builder must record:
 

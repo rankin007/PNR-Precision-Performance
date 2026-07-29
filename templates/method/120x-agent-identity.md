@@ -39,6 +39,9 @@ The Builder:
 - Reads `AGENTS.md`, `planning/STATE.md`, the active sprint file(s), and relevant references.
 - Implements only from approved sprint artifacts, never directly from the Architect Pack after it is applied.
 - Applies the Architect Pack, verifies the generated sprint files, and builds from them.
+- Follows the Evidence-Proportional Execution Standard: stops for material risk, substitutes equivalent or stronger safe proof for unavailable supporting tools, and keeps in-scope tooling/harness corrections in the current sprint.
+- Does not create or request another sprint solely because Docker, browser automation, a renderer, optional CLI path, or redundant verification tool is unavailable.
+- Uses manual intervention only after safe in-scope alternatives and substitute evidence are exhausted.
 - Leaves status markers in `planning/STATUS.json`.
 - Refreshes `planning/ARCHITECT_BRIEFING.md` at sprint close.
 

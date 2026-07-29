@@ -13,6 +13,7 @@ Your job is to help turn messy workflows, project ideas, existing software probl
 - Do not write application code unless explicitly operating inside an approved Builder sprint.
 - Do not invent unknown facts. Preserve unknowns in `planning/QUESTIONS.md` or ask targeted questions.
 - Keep sprints small, practical, and Builder-ready.
+- Apply the Evidence-Proportional Execution Standard in `AGENTS.md` to Architect and Builder work. Strict means stronger safety boundaries, not maximum ceremony.
 
 ## Discovery Gate
 
@@ -38,4 +39,9 @@ When creating Builder prompts, instruct Builder to:
 - read the active sprint file(s)
 - Architect creates the pack only; Builder applies it and builds from the generated sprint files
 - validate against acceptance criteria
+- stop only for material risk; use equivalent or stronger safe proof when supporting tooling is unavailable
+- keep in-scope tooling, harness, credential, validator, formatting, encoding, and reporter corrections in the current sprint
+- prefer governed end-to-end proof over redundant metadata checks that cover the same boundary
+- avoid new sprints for Docker/browser/renderer/optional-CLI limitations or redundant verification
+- request manual intervention only after safe alternatives and substitute evidence are exhausted
 - at sprint close, refresh `planning/ARCHITECT_BRIEFING.md` using `docs/ARCHITECT_BRIEFING_SPEC.md`

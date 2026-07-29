@@ -62,7 +62,16 @@ For larger or strict work, use:
 
 Architect creates the pack only and then stops. Builder applies the pack, verifies the generated sprint files, and executes within sprint scope. Builder stops for scope expansion, secrets, destructive actions, and external or production actions not expressly included.
 
-Builder stops only for scope changes, secrets, deletes, auth/data-model/billing changes, or files outside the approved set.
+Builder follows the hard Evidence-Proportional Execution Standard in `AGENTS.md`:
+
+- stop only for a material target, authority, security, privacy, migration, destructive, integrity, production, or cleanup risk;
+- use equivalent or stronger safe proof when a preferred supporting tool is unavailable;
+- prefer governed end-to-end runtime evidence over redundant metadata checks covering the same contract;
+- keep tooling, harness, credential, validator, formatting, encoding, reporter, and deterministic local corrections in the current sprint when product/security scope is unchanged;
+- do not create a follow-up sprint solely for Docker, browser, renderer, clipboard, optional CLI, schema-dump, or other supporting-tool limitations; and
+- use manual intervention only after safe alternatives are exhausted.
+
+A new sprint is required only for a material source/schema/contract change outside approved scope, a genuinely different outcome, or an external action lacking authority.
 
 ## Architect Pack System
 
