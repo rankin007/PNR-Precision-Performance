@@ -1,6 +1,6 @@
 {
   "sprint": "035-trainer-pilot-and-dashboard-mvp",
-  "status": "implementation-validated-preview-and-pilot-pending",
+  "status": "trainer-dashboard-validation-blocked-clean",
   "branch": "codex/035-trainer-pilot-and-dashboard-mvp",
   "reconciliationCommit": "aeb24d2d038f9875973764b25538caaea6473d02",
   "closeoutCommit": "aa87dfe010ca1ae900f0ce633ee7b2fad2a076bf",
@@ -12,6 +12,9 @@
   "sourceBaselineSha": "d949069834c375ce4b485a4336eb701944b2d984",
   "previewDeployed": false,
   "trainerPilotComplete": false,
+  "previewTargetVerified": false,
+  "participantConsentConfirmed": false,
+  "providerMutationsPerformed": false,
   "verifiedSprint035RemoteTip": "12e3f81b3d1b9fb84a5385372b4e1b5a719b0c74",
   "nextSprint": null,
   "updated": "2026-07-30"

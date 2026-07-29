@@ -11,6 +11,7 @@
 
 7. `planning/reviews/035-implementation-manifest-and-state-matrix.md` — Sprint 035 approved-path and typed state/action authority.
 8. `planning/reviews/035-trainer-dashboard-implementation-and-validation.md` — local implementation, validation and remaining preview/pilot boundary.
+9. `planning/reviews/035-preview-target-and-participation-stop.md` — read-only Preview target checks, privacy-safe participant boundary and blocked-clean closeout.
 
 ## Accepted product lineage
 

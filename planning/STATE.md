@@ -1,10 +1,10 @@
 # Project State
 
-## Sprint 035 open — 2026-07-30
+## Sprint 035 closeout — 2026-07-30
 
-Sprint `035-trainer-pilot-and-dashboard-mvp` is open `implementation-validated-preview-and-pilot-pending` on branch `codex/035-trainer-pilot-and-dashboard-mvp`, created from exact baseline `d949069834c375ce4b485a4336eb701944b2d984`. The trainer dashboard and focused horse workspace are locally implemented; sample fallbacks are removed; focused, retained regression, canonical validation and two production builds pass.
+Sprint `035-trainer-pilot-and-dashboard-mvp` is closed `trainer-dashboard-validation-blocked-clean` on branch `codex/035-trainer-pilot-and-dashboard-mvp`, created from exact baseline `d949069834c375ce4b485a4336eb701944b2d984`. The trainer dashboard and focused horse workspace are locally implemented; sample fallbacks are removed; focused, retained regression, canonical validation and production builds pass.
 
-Authenticated rendered dashboard proof, exact-candidate non-production preview and designated trainer participation remain pending because no approved preview configuration, synthetic pilot account or trainer representatives are available. No preview deployment, participant contact, provider mutation or production change occurred. Sprint 035 is not closed and trainer acceptance is not claimed.
+Authenticated rendered dashboard proof and trainer participation did not run. Required branch-scoped Preview Supabase values were empty and existing Ready Preview metadata did not prove exact Sprint 035 SHA identity. Participant consent was not privately confirmed. No account, fixture, Storage object, callback, provider or production mutation occurred; trainer acceptance is not claimed.
 
 The horse-detail composition now isolates biochemistry-query failure from horse-access success. An accessible horse with failed workflow loading renders sanitized `Unavailable`, no normal/no-result inference and no record action; inaccessible, cross-stable and revoked horses retain identity-free denial. Focused and full canonical validation plus production build pass. Preview and trainer acceptance remain outstanding.
 

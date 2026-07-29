@@ -2,7 +2,7 @@
 
 ## Active direction
 
-Sprint 035 is open on `codex/035-trainer-pilot-and-dashboard-mvp`. Local implementation and canonical validation pass; authenticated non-production preview and designated trainer participation remain pending.
+Sprint 035 is closed `trainer-dashboard-validation-blocked-clean`. Local implementation and canonical validation pass; authenticated Preview and trainer pilot did not run because exact-candidate/provider binding and private consent prerequisites were not established.
 
 | Sprint | Outcome | Profile / proof |
 |---|---|---|

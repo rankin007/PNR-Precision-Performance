@@ -1,4 +1,4 @@
-# Architect Briefing — Sprint 035 In Progress
+# Architect Briefing — Sprint 035 Closeout
 
 ## Where things stand
 
@@ -6,7 +6,7 @@ Sprint 035 is open from exact reconciled baseline `d949069`. The trainer dashboa
 
 ## Current status
 
-In progress `implementation-validated-preview-and-pilot-pending`. Authenticated preview proof and designated trainer participation remain outstanding, so trainer acceptance and Sprint 035 completion are not claimed. The public release remains valid and unchanged.
+Closed `trainer-dashboard-validation-blocked-clean`. Authenticated Preview proof and the trainer pilot did not run: required branch-scoped Preview Supabase values were empty, available Preview metadata did not prove exact candidate identity, and private participant consent was not confirmed. Trainer acceptance is not claimed. The public release remains valid and unchanged.
 
 Horse-detail workflow loading now fails closed independently of horse access: sanitized unavailable state, no normal-state inference and no record action. Focused regressions and the full canonical/build suite pass.
 
