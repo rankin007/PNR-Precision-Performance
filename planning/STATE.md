@@ -4,6 +4,8 @@
 
 Sprint `035C-trainer-participation-and-final-mvp-acceptance` is active on branch `codex/035C-trainer-participation-and-final-mvp-acceptance` from exact clean Sprint 035B local/remote SHA `497c8628c2fe481dcf2ca1d205f379e311b3df75`. The product-owner/provider-operator confirms protected inbox readiness and availability for Trainer Participants A, B and C. Sprint 035B remains closed `trainer-pilot-participation-partial-clean`; historical outcomes are unchanged.
 
+Exact Preview deployment `dpl_3YuZ36Jh8h6U5CgCGw9NQzpDTDfy` is Ready/Preview, tied to candidate `aa0cf5ddb598a73056677e030ec6a39141764cb9`, and has zero aliases. Its exact callback is temporarily present alongside the unchanged production callback. Participant-account handoff is pending and Sprint-owned application/Auth/Storage creation remains `0/0/0`. The accepted protected matcher uses only administrator-controlled `app_metadata` field names `participant_alias` and `pilot_sprint`; it is not authorization authority.
+
 ## Sprint 035B closeout — 2026-07-30
 
 Sprint `035B-preview-configuration-and-trainer-pilot-completion` is closed `trainer-pilot-participation-partial-clean`. Exact-candidate Preview deployment `dpl_HDtvZnnz9osHuyQ7zW7WX1w1mpWE` at SHA `dedc19001acd9229d435718e51ceabbbdd208860` passed the authenticated passwordless synthetic matrix on phone, desktop and tablet. Exact-owned application/Auth/Storage cleanup is `0/0/0`, and the temporary Preview callback is removed. Trainer Participants A, B and C did not start because no protected inbox/provider-operator coordination path was available. Trainer acceptance is not claimed, production remains unchanged and product-wide Done is not met.

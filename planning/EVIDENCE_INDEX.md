@@ -17,6 +17,7 @@
 11. `planning/reviews/035B-preview-configuration-and-trainer-pilot-completion.md` — exact Preview, authenticated synthetic acceptance, permission correction, cleanup and partial-participation closeout.
 12. `planning/sprints/035C-trainer-participation-and-final-mvp-acceptance/SPRINT.md` — active participant and final MVP acceptance authority.
 13. `planning/reviews/035C-approved-run-manifest.md` — approved targets, ceilings, privacy boundary and cleanup plan.
+14. `planning/reviews/035C-protected-participant-matching-contract.md` — accepted administrator-controlled app-metadata matching, non-authorization boundary and cleanup contract.
 
 ## Accepted product lineage
 
