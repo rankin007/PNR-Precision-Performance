@@ -9,6 +9,9 @@
 5. `planning/reviews/034-repository-reconciliation-and-project-simplification.md` — Sprint 034 validation and closeout.
 6. `planning/SPRINT_LIFECYCLE_LEDGER.md` — proposed/applied/completed/superseded/historical classification.
 
+7. `planning/reviews/035-implementation-manifest-and-state-matrix.md` — Sprint 035 approved-path and typed state/action authority.
+8. `planning/reviews/035-trainer-dashboard-implementation-and-validation.md` — local implementation, validation and remaining preview/pilot boundary.
+
 ## Accepted product lineage
 
 - Sprint 032 release: `planning/reviews/032-public-relaunch-and-production-deployment.md`; exact SHA `f7242ee0785ae9b87022394206c89ebdd5c9f6ad`.

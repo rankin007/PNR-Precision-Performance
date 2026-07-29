@@ -1,12 +1,14 @@
-# Architect Briefing — Sprint 034 Closeout
+# Architect Briefing — Sprint 035 In Progress
 
 ## Where things stand
 
-Sprint 034 established one clean product baseline on `codex/034-reconciled-product-baseline`, rooted at accepted release SHA `f7242ee`. It preserves accepted auth/application, mobile biochemistry, migrations `0001`–`0017`, public release, final acceptance and operations evidence without changing production behavior.
+Sprint 035 is open from exact reconciled baseline `d949069`. The trainer dashboard and focused horse workspace are implemented and locally validated without schema, auth/RLS, clinical, public or production change.
 
 ## Current status
 
-Closed `reconciled-product-baseline-and-project-simplification-complete-clean`. The public release remains valid. Product-wide Done remains false for the reasons in the final acceptance matrix.
+In progress `implementation-validated-preview-and-pilot-pending`. Authenticated preview proof and designated trainer participation remain outstanding, so trainer acceptance and Sprint 035 completion are not claimed. The public release remains valid and unchanged.
+
+Horse-detail workflow loading now fails closed independently of horse access: sanitized unavailable state, no normal-state inference and no record action. Focused regressions and the full canonical/build suite pass.
 
 The intentional commit series began with reconciliation commit `aeb24d2d038f9875973764b25538caaea6473d02`; planning closeout commit `aa87dfe010ca1ae900f0ce633ee7b2fad2a076bf` was pushed and verified as the exact remote branch tip before the final evidence attestation.
 

@@ -2,7 +2,7 @@
 
 ## Active direction
 
-No sprint is open after Sprint 034 closeout.
+Sprint 035 is open on `codex/035-trainer-pilot-and-dashboard-mvp`. Local implementation and canonical validation pass; authenticated non-production preview and designated trainer participation remain pending.
 
 | Sprint | Outcome | Profile / proof |
 |---|---|---|

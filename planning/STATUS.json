@@ -1,7 +1,7 @@
 {
-  "sprint": "034-repository-reconciliation-and-project-simplification",
-  "status": "reconciled-product-baseline-and-project-simplification-complete-clean",
-  "branch": "codex/034-reconciled-product-baseline",
+  "sprint": "035-trainer-pilot-and-dashboard-mvp",
+  "status": "implementation-validated-preview-and-pilot-pending",
+  "branch": "codex/035-trainer-pilot-and-dashboard-mvp",
   "reconciliationCommit": "aeb24d2d038f9875973764b25538caaea6473d02",
   "closeoutCommit": "aa87dfe010ca1ae900f0ce633ee7b2fad2a076bf",
   "remoteBackupVerified": true,
@@ -9,6 +9,9 @@
   "sourceReleaseSha": "f7242ee0785ae9b87022394206c89ebdd5c9f6ad",
   "productionChanged": false,
   "productDone": false,
-  "nextSprint": "035-trainer-pilot-and-dashboard-mvp",
+  "sourceBaselineSha": "d949069834c375ce4b485a4336eb701944b2d984",
+  "previewDeployed": false,
+  "trainerPilotComplete": false,
+  "nextSprint": null,
   "updated": "2026-07-30"
 }
