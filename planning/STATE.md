@@ -9,6 +9,7 @@ The public release remains valid at deployment `dpl_fPWqinnfL4YZJq41MQPaXhhuh7hi
 ## Repository truth
 
 - Governing product baseline: `codex/034-reconciled-product-baseline`.
+- Reconciliation commit: `aeb24d2d038f9875973764b25538caaea6473d02`; planning closeout and first verified remote tip: `aa87dfe010ca1ae900f0ce633ee7b2fad2a076bf`.
 - Source release: `codex/032-public-relaunch-production` at `f7242ee`.
 - Local `develop` (`b8961b9`) and `origin/develop` (`502b45a`) remain separate historical/divergent lineages and were not merged, rebased or pushed.
 - The original dirty root remains untouched except for applying the Sprint 034 Pack; its uncommitted material is classified in the Sprint 034 reconciliation ledger.

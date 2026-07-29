@@ -8,6 +8,8 @@ Sprint 034 established one clean product baseline on `codex/034-reconciled-produ
 
 Closed `reconciled-product-baseline-and-project-simplification-complete-clean`. The public release remains valid. Product-wide Done remains false for the reasons in the final acceptance matrix.
 
+The intentional commit series began with reconciliation commit `aeb24d2d038f9875973764b25538caaea6473d02`; planning closeout commit `aa87dfe010ca1ae900f0ce633ee7b2fad2a076bf` was pushed and verified as the exact remote branch tip before the final evidence attestation.
+
 ## What changed
 
 Repository lineages and the dirty root were classified; current authority was compressed into state, schedule, evidence index and lifecycle ledger; lean-delivery controls were made durable. No uncertain history was deleted or archived.
