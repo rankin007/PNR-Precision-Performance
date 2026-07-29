@@ -1,8 +1,8 @@
 # Project State
 
-## Sprint 035B active — 2026-07-30
+## Sprint 035B closeout — 2026-07-30
 
-Sprint `035B-preview-configuration-and-trainer-pilot-completion` is active on branch `codex/035B-preview-configuration-and-trainer-pilot-completion`, created from exact closed Sprint 035 local/remote SHA `57bfca225a0a41f639b9fa7b0875589bde9372f1`. Sprint 035 remains closed `trainer-dashboard-validation-blocked-clean`; earlier remote tips are intermediate publication evidence only. Sprint 035B is the current corrective completion authority.
+Sprint `035B-preview-configuration-and-trainer-pilot-completion` is closed `trainer-pilot-participation-partial-clean`. Exact-candidate Preview deployment `dpl_HDtvZnnz9osHuyQ7zW7WX1w1mpWE` at SHA `dedc19001acd9229d435718e51ceabbbdd208860` passed the authenticated passwordless synthetic matrix on phone, desktop and tablet. Exact-owned application/Auth/Storage cleanup is `0/0/0`, and the temporary Preview callback is removed. Trainer Participants A, B and C did not start because no protected inbox/provider-operator coordination path was available. Trainer acceptance is not claimed, production remains unchanged and product-wide Done is not met.
 
 ## Sprint 035 closeout — 2026-07-30
 
@@ -31,7 +31,7 @@ The public release remains valid at deployment `dpl_fPWqinnfL4YZJq41MQPaXhhuh7hi
 
 ## Active product outcome
 
-Sprint 035B is the active corrective completion sprint for exact Preview configuration, authenticated synthetic acceptance, trainer pilot and exact-owned cleanup. Voice, OCR, transactional commerce, sophisticated saved views and broad public enhancements remain deferred.
+Sprint 035B is closed partial-clean. The next product sprint requires Architect selection and should retain trainer-visible participation as outstanding acceptance. Voice, OCR, transactional commerce, sophisticated saved views and broad public enhancements remain deferred.
 
 ## Governing authorities
 

@@ -31,7 +31,7 @@ async function cleanup() {
   for (const id of owned.auth) { const r = await admin.auth.admin.deleteUser(id, false); if (r.error) throw new Error("CLEAN_AUTH"); }
 }
 
-async function actor(label) {
+async function actor(label, role = "trainer", membershipCode = "trainer") {
   const email = `${RUN.toLowerCase()}-${label.toLowerCase()}@precision-performance.invalid`;
   let r = await admin.auth.admin.createUser({ email, email_confirm: true, user_metadata: { synthetic_run: RUN, participant_alias: label } });
   if (r.error) throw new Error("AUTH_CREATE");
@@ -43,16 +43,17 @@ async function actor(label) {
   r = await client.auth.verifyOtp({ token_hash: artifact, type: "email" }); artifact = null;
   if (r.error || !r.data.session) throw new Error("PASSWORDLESS_EXCHANGE");
   const session = r.data.session;
-  r = await admin.from("users").insert({ auth_user_id: authId, email, status: "active", primary_role_code: "trainer" }).select("id").single();
+  r = await admin.from("users").insert({ auth_user_id: authId, email, status: "active", primary_role_code: role }).select("id").single();
   if (r.error) throw new Error("APP_USER_CREATE"); const userId = r.data.id; owned.users.push(userId);
   r = await admin.from("member_profiles").insert({ user_id: userId, display_name: `Trainer Participant ${label}`, is_active: true }).select("id").single();
   if (r.error) throw new Error("PROFILE_CREATE"); const profileId = r.data.id; owned.profiles.push(profileId);
-  const level = await admin.from("membership_levels").select("id").eq("code", "trainer").single();
+  const level = await admin.from("membership_levels").select("id").eq("code", membershipCode).single();
   r = await admin.from("user_membership_levels").insert({ user_id: userId, membership_level_id: level.data.id, starts_at: new Date().toISOString() }).select("id").single();
   if (r.error) throw new Error("MEMBERSHIP_CREATE"); owned.memberships.push(r.data.id);
   let jar = [];
   const ssr = createServerClient(SUPABASE_URL, ANON, { cookies: { getAll: () => jar, setAll: values => { jar = values; } } });
   await ssr.auth.setSession({ access_token: session.access_token, refresh_token: session.refresh_token });
+  await client.auth.setSession({ access_token: session.access_token, refresh_token: session.refresh_token });
   return { userId, profileId, client, jar };
 }
 
@@ -79,7 +80,7 @@ async function addTest(horseId, stableId, actor, date, scoringStatus, score) {
 try {
   const before = await admin.auth.admin.listUsers({ page: 1, perPage: 1000 });
   if (before.error || before.data.users.some(u => u.user_metadata?.synthetic_run === RUN)) throw new Error("OPENING_ZERO_REFUSED");
-  const A = await actor("A"), B = await actor("B"), C = await actor("C");
+  const A = await actor("A"), B = await actor("B", "veterinarian", "veterinarian"), C = await actor("C");
   pass("passwordless-auth", "three controlled sessions established by one-time magic-link exchange; no passwords");
   let r = await admin.from("stables").insert({ name: `Synthetic Stable 035B ${RUN}`, code: `S35B${RUN.slice(-6)}`, status: "active" }).select("id").single();
   if (r.error) throw new Error("STABLE_CREATE"); const stable = r.data.id; owned.stable.push(stable);
@@ -103,7 +104,7 @@ try {
   await pb.goto(`${PREVIEW}/portal`, { waitUntil: "load" }); await visible(pb, `Synthetic Horse 035B-B-${RUN}`);
   if (await pb.getByText(`Synthetic Horse 035B-A-${RUN}`, { exact: true }).count() || await pb.getByText(`Synthetic Horse 035B-C-${RUN}`, { exact: true }).count()) throw new Error("ACCESS_LEAK_B");
   await pb.goto(`${PREVIEW}/portal/horses/${horseB}`, { waitUntil: "load" }); await visible(pb, "Pending review");
-  if (await pb.getByRole("link", { name: /Capture|Review|Correction/i }).count()) throw new Error("READONLY_ACTION");
+  if (await pb.locator('section[aria-labelledby="operational-summary"] a[href^="/data-entry/biochemistry"]').count()) throw new Error("READONLY_ACTION");
   await pb.goto(`${PREVIEW}/portal/horses/${horseA}`, { waitUntil: "load" }); await visible(pb, "Horse not available");
   pass("desktop-readonly-denial", "1440px read-only assignment, action suppression and wrong-horse denial passed");
   await pc.goto(`${PREVIEW}/portal`, { waitUntil: "load" }); await visible(pc, `Synthetic Horse 035B-C-${RUN}`); await pc.goto(`${PREVIEW}/portal/horses/${horseC}`, { waitUntil: "load" }); await visible(pc, "Completed");

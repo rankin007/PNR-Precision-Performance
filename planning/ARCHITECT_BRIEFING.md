@@ -1,12 +1,12 @@
-# Architect Briefing — Sprint 035 Closeout
+# Architect Briefing — Sprint 035B Closeout
 
 ## Where things stand
 
-Sprint 035 remains closed `trainer-dashboard-validation-blocked-clean` at final local/remote SHA `57bfca225a0a41f639b9fa7b0875589bde9372f1`. Sprint 035B is active from that exact baseline to complete protected Preview configuration, authenticated acceptance, the three-person trainer pilot and cleanup.
+Sprint 035B is closed `trainer-pilot-participation-partial-clean`. Exact Preview deployment `dpl_HDtvZnnz9osHuyQ7zW7WX1w1mpWE` at source SHA `dedc19001acd9229d435718e51ceabbbdd208860` passed authenticated passwordless synthetic acceptance. Cleanup is application/Auth/Storage `0/0/0`, and the temporary callback is removed.
 
 ## Current status
 
-Active. Participant consent is confirmed under protected coordination, but authenticated Preview proof and trainer acceptance are not yet claimed. The public release remains valid and unchanged.
+Closed partial-clean. Participant consent is confirmed, but no protected inbox/provider-operator coordination path was available, so Trainer Participants A, B and C did not start. Trainer acceptance is not claimed. The public release remains valid and unchanged.
 
 Horse-detail workflow loading now fails closed independently of horse access: sanitized unavailable state, no normal-state inference and no record action. Focused regressions and the full canonical/build suite pass.
 
@@ -16,9 +16,9 @@ The intentional commit series began with reconciliation commit `aeb24d2d038f9875
 
 Repository lineages and the dirty root were classified; current authority was compressed into state, schedule, evidence index and lifecycle ledger; lean-delivery controls were made durable. No uncertain history was deleted or archived.
 
-## Current Builder action
+## Next action
 
-Execute only the applied Sprint 035B authority. Prove exact non-production targets before mutation, configure only the three approved Preview variables through protected paths, run the bounded authenticated and participant matrices, and clean exact-owned state Auth-last.
+Architect should select the next product sprint without treating trainer participation as complete. A future protected pilot must be coordinated directly by the authorized provider operator; participant contact and authentication artifacts must remain outside repository files and ordinary chat.
 
 ## Watch-items
 
