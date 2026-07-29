@@ -25,10 +25,10 @@ export default async function HorseDetailPage({ params }: HorseDetailPageProps) 
       >
         <div className="mt-2">
           <Link
-            href="/portal/horses"
+            href="/portal"
             className="rounded-full border border-ink/10 bg-sand px-4 py-2 text-sm font-semibold text-ink"
           >
-            Back to horses
+            Back to trainer dashboard
           </Link>
         </div>
       </SectionCard>
@@ -39,14 +39,14 @@ export default async function HorseDetailPage({ params }: HorseDetailPageProps) 
     <SectionCard
       eyebrow="Horse Detail"
       title={result.horse.name}
-      description="Permission-aware horse profile view with recent physiological snapshots and core horse identity details."
+      description="Permission-aware horse identity and current biochemistry workflow context."
     >
       {!result.envReady ? (
         <div className="rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
-          Supabase is not configured yet, so sample horse detail data is being shown.
+          Horse workspace unavailable. The authorised data service is not configured and no sample record is shown.
         </div>
       ) : null}
-      <div className="mt-8 grid gap-6 lg:grid-cols-[0.95fr_1.05fr]">
+      <div className="mt-8 grid gap-6">
         <div className="rounded-[1.75rem] border border-ink/10 bg-sand p-6">
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-ember">Profile</p>
           <div className="mt-5 grid gap-3 text-sm text-steel">
@@ -57,56 +57,15 @@ export default async function HorseDetailPage({ params }: HorseDetailPageProps) 
             <p>Date of birth: {result.horse.dateOfBirth ?? "Awaiting date of birth"}</p>
           </div>
         </div>
-        <div className="rounded-[1.75rem] border border-ink/10 bg-white p-6 shadow-panel">
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-ember">
-            Recent Metrics
-          </p>
-          <div className="mt-5 grid gap-3">
-            {result.horse.recentMetrics.length === 0 ? (
-              <div className="rounded-2xl border border-ink/10 bg-sand px-4 py-4 text-sm text-steel">
-                No recent metric snapshots are available yet.
-              </div>
-            ) : (
-              result.horse.recentMetrics.map((metric) => (
-                <div
-                  key={metric.label}
-                  className="rounded-2xl border border-ink/10 bg-sand px-4 py-4 text-sm text-ink"
-                >
-                  <p className="font-semibold">{metric.label}</p>
-                  <p className="mt-1 text-steel">{metric.value}</p>
-                </div>
-              ))
-            )}
-          </div>
-        </div>
       </div>
       <section className="mt-8 rounded-[1.75rem] border border-ink/10 bg-white p-6 shadow-panel" aria-labelledby="operational-summary">
         <h2 id="operational-summary" className="font-display text-2xl text-ink">Operational summary</h2>
         <p className="mt-2 text-sm text-steel">Informational workflow context only; it does not indicate clinical urgency.</p>
-        <dl className="mt-5 grid gap-3 md:grid-cols-3"><div className="rounded-2xl bg-sand p-4"><dt className="font-semibold">Attention</dt><dd className="mt-1 text-sm text-steel">{result.horse.operational.attention.status}: {result.horse.operational.attention.reason}</dd></div><div className="rounded-2xl bg-sand p-4"><dt className="font-semibold">Incomplete</dt><dd className="mt-1 text-sm text-steel">{result.horse.operational.incomplete.status}: {result.horse.operational.incomplete.reason}</dd></div><div className="rounded-2xl bg-sand p-4"><dt className="font-semibold">Changed</dt><dd className="mt-1 text-sm text-steel">{result.horse.operational.changed.status}: {result.horse.operational.changed.reason}</dd></div></dl>
+        <div className={result.horse.operational.workflow.state === "failed" ? "mt-5 rounded-2xl border border-red-200 bg-red-50 p-4" : "mt-5 rounded-2xl bg-sand p-4"} role={result.horse.operational.workflow.state === "failed" ? "alert" : "status"}><p className="text-xs font-semibold uppercase tracking-[0.14em] text-ember">Workflow state</p><p className="mt-2 font-semibold text-ink">{result.horse.operational.workflow.label}</p><p className="mt-1 text-sm leading-6 text-steel">{result.horse.operational.workflow.reason}</p></div>
         {result.horse.latestBiochemistry ? <p className="mt-4 text-sm text-steel">Latest result: {result.horse.latestBiochemistry.scoringStatus}; test date {result.horse.latestBiochemistry.testDate}; formula {result.horse.latestBiochemistry.formulaVersion}; source {result.horse.latestBiochemistry.sourceVersion}.</p> : <p className="mt-4 text-sm text-steel">Latest result unavailable. No missing value is treated as normal or complete.</p>}
-        <div className="mt-5"><Link href={result.horse.operational.nextAction.href} className="rounded-full bg-ink px-4 py-2 text-sm font-semibold text-white">{result.horse.operational.nextAction.label}</Link></div>
+        {result.horse.operational.nextAction ? <div className="mt-5"><Link href={result.horse.operational.nextAction.href} className="rounded-full bg-ink px-4 py-2 text-sm font-semibold text-white">{result.horse.operational.nextAction.label}</Link></div> : <p className="mt-5 text-sm font-semibold text-steel">No record action is available while workflow information is unavailable.</p>}
       </section>
-      <div className="mt-8 rounded-[1.75rem] border border-ink/10 bg-white p-6 shadow-panel">
-        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-ember">Recent History</p>
-        <div className="mt-5 grid gap-4">
-          {result.horse.recentTimeline.length === 0 ? (
-            <div className="rounded-2xl border border-ink/10 bg-sand px-4 py-4 text-sm text-steel">
-              No recent history is available yet.
-            </div>
-          ) : (
-            result.horse.recentTimeline.map((entry) => (
-              <div
-                key={`${entry.date}-${entry.summary}`}
-                className="grid gap-2 rounded-2xl border border-ink/10 bg-sand px-4 py-4 md:grid-cols-[140px_minmax(0,1fr)]"
-              >
-                <p className="text-sm font-semibold text-ink">{entry.date}</p>
-                <p className="text-sm leading-7 text-steel">{entry.summary}</p>
-              </div>
-            ))
-          )}
-        </div>
-      </div>
+      <div className="mt-8"><Link href="/portal" className="rounded-full border border-ink/10 bg-sand px-4 py-2 text-sm font-semibold text-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2">Back to trainer dashboard</Link></div>
     </SectionCard>
   );
 }

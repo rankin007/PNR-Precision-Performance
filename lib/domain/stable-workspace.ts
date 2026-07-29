@@ -1,20 +1,141 @@
-export type RecentTestSnapshot = { id: string; horseId: string; testDate: string; scoringStatus: "scored" | "blocked" | "unscored"; healthScore: number | null; formulaVersion: string; sourceVersion: string };
-export type OperationalSummary = {
-  attention: { status: "review" | "unavailable"; reason: string };
-  incomplete: { status: "incomplete" | "complete" | "empty"; reason: string };
-  changed: { status: "changed" | "unchanged" | "unavailable"; reason: string };
-  nextAction: { label: string; href: string };
+export type RecentTestSnapshot = {
+  id: string;
+  horseId: string;
+  testDate: string;
+  scoringStatus: "scored" | "blocked" | "unscored";
+  healthScore: number | null;
+  formulaVersion: string;
+  sourceVersion: string;
 };
-export function deriveOperationalSummary(input: { horseId: string; tests: RecentTestSnapshot[]; canWrite: boolean }): OperationalSummary {
-  const tests = [...input.tests].sort((a, b) => b.testDate.localeCompare(a.testDate));
-  const latest = tests[0]; const previous = tests[1];
-  const incomplete = Boolean(latest && latest.scoringStatus !== "scored");
-  const compatible = Boolean(latest && previous && latest.formulaVersion === previous.formulaVersion && latest.sourceVersion === previous.sourceVersion);
-  const changed = Boolean(compatible && (latest!.scoringStatus !== previous!.scoringStatus || latest!.healthScore !== previous!.healthScore));
-  return {
-    attention: incomplete ? { status: "review", reason: "The latest biochemistry record is incomplete and needs operational review." } : { status: "unavailable", reason: "No approved clinical-priority rule is available. Horses remain alphabetically ordered." },
-    incomplete: !latest ? { status: "empty", reason: "No biochemistry record is available." } : incomplete ? { status: "incomplete", reason: `Latest record is ${latest.scoringStatus}.` } : { status: "complete", reason: "Latest record is scored under its stored authority version." },
-    changed: !latest || !previous ? { status: "unavailable", reason: "Two records are required for comparison." } : !compatible ? { status: "unavailable", reason: "The latest records use incompatible authority versions." } : changed ? { status: "changed", reason: "The stored score or completion state differs from the previous compatible record." } : { status: "unchanged", reason: "The stored score and completion state match the previous compatible record." },
-    nextAction: input.canWrite && incomplete ? { label: "Review record", href: `/data-entry/biochemistry/${latest!.id}` } : input.canWrite && !latest ? { label: "Capture biochemistry", href: "/data-entry/biochemistry" } : { label: "Open horse workspace", href: `/portal/horses/${input.horseId}` },
+
+export type WorkflowState =
+  | "no-result"
+  | "draft-incomplete"
+  | "pending-review"
+  | "completed"
+  | "failed";
+
+export type OperationalSummary = {
+  workflow: {
+    state: WorkflowState;
+    label: string;
+    reason: string;
+    occurredAt: string | null;
   };
+  nextAction: { label: string; href: string } | null;
+  sortRank: number;
+};
+
+const stateRank: Record<WorkflowState, number> = {
+  "draft-incomplete": 0,
+  "pending-review": 1,
+  "no-result": 2,
+  completed: 3,
+  failed: 4,
+};
+
+export function deriveFailedOperationalSummary(): OperationalSummary {
+  return {
+    workflow: {
+      state: "failed",
+      label: "Unavailable",
+      reason: "Biochemistry workflow information could not be loaded. No record state or action is inferred.",
+      occurredAt: null,
+    },
+    nextAction: null,
+    sortRank: stateRank.failed,
+  };
+}
+
+export function resolveHorseDetailWorkflow(input: {
+  horseAccessible: boolean;
+  biochemistryError: unknown;
+  tests: RecentTestSnapshot[];
+  horseId: string;
+  canWrite: boolean;
+}) {
+  if (!input.horseAccessible) {
+    return { availability: "denied" as const, error: "Horse not available." };
+  }
+  if (input.biochemistryError) {
+    return {
+      availability: "available" as const,
+      error: "Biochemistry workflow information could not be loaded.",
+      operational: deriveFailedOperationalSummary(),
+    };
+  }
+  return {
+    availability: "available" as const,
+    operational: deriveOperationalSummary({
+      horseId: input.horseId,
+      tests: input.tests,
+      canWrite: input.canWrite,
+    }),
+  };
+}
+
+export function deriveOperationalSummary(input: {
+  horseId: string;
+  tests: RecentTestSnapshot[];
+  canWrite: boolean;
+}): OperationalSummary {
+  const tests = [...input.tests].sort(
+    (a, b) => b.testDate.localeCompare(a.testDate) || b.id.localeCompare(a.id),
+  );
+  const latest = tests[0];
+  const state: WorkflowState = !latest
+    ? "no-result"
+    : latest.scoringStatus === "unscored"
+      ? "draft-incomplete"
+      : latest.scoringStatus === "blocked"
+        ? "pending-review"
+        : "completed";
+
+  const workflow = !latest
+    ? {
+        state,
+        label: "No result",
+        reason: "No current biochemistry record is available.",
+        occurredAt: null,
+      }
+    : state === "draft-incomplete"
+      ? {
+          state,
+          label: "Draft / incomplete",
+          reason: "The latest record is stored but scoring is incomplete.",
+          occurredAt: latest.testDate,
+        }
+      : state === "pending-review"
+        ? {
+            state,
+            label: "Pending review",
+            reason: "The latest record is blocked and needs operational review.",
+            occurredAt: latest.testDate,
+          }
+        : {
+            state,
+            label: "Completed",
+            reason: "The latest record is scored under its stored authority versions.",
+            occurredAt: latest.testDate,
+          };
+
+  const nextAction = input.canWrite && latest && state !== "completed"
+    ? { label: "Review current record", href: `/data-entry/biochemistry/${latest.id}` }
+    : input.canWrite && !latest
+      ? { label: "Capture biochemistry", href: "/data-entry/biochemistry" }
+      : { label: "Open horse workspace", href: `/portal/horses/${input.horseId}` };
+
+  return { workflow, nextAction, sortRank: stateRank[state] };
+}
+
+export function compareOperationalHorses(
+  a: { id: string; name: string; stableName: string | null; operational: OperationalSummary },
+  b: { id: string; name: string; stableName: string | null; operational: OperationalSummary },
+) {
+  return (
+    a.operational.sortRank - b.operational.sortRank ||
+    a.name.localeCompare(b.name, "en-AU", { sensitivity: "base" }) ||
+    (a.stableName ?? "").localeCompare(b.stableName ?? "", "en-AU", { sensitivity: "base" }) ||
+    a.id.localeCompare(b.id)
+  );
 }
