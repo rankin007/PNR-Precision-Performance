@@ -134,9 +134,16 @@ export async function getStableWorkspaceOverview(canWrite: boolean) {
   const { data, error } = await supabase.from("biochemistry_tests").select("id,horse_id,test_date,scoring_status,health_score,formula_version,lookup_source_version").in("horse_id", horseIds).is("deleted_at", null).order("test_date", { ascending: false }).limit(200);
   if (error) return { ...base, horses: [], error: "Biochemistry workflow information could not be loaded." };
   const rows = (data ?? []) as TestSummaryRow[];
+  const writeAccess = new Map<string, boolean>();
+  if (canWrite) {
+    await Promise.all(horseIds.map(async (horseId) => {
+      const result = await supabase.rpc("can_write_biochemistry_horse", { target_horse_id: horseId });
+      writeAccess.set(horseId, !result.error && result.data === true);
+    }));
+  }
   const horses = base.horses.slice(0, 100).map((horse) => {
     const tests = rows.filter((row) => row.horse_id === horse.id).slice(0, 2).map((row) => ({ id: row.id, horseId: row.horse_id, testDate: row.test_date, scoringStatus: row.scoring_status, healthScore: row.health_score, formulaVersion: row.formula_version, sourceVersion: row.lookup_source_version }));
-    return { ...horse, lastActivity: tests[0]?.testDate ?? null, operational: deriveOperationalSummary({ horseId: horse.id, tests, canWrite }) };
+    return { ...horse, lastActivity: tests[0]?.testDate ?? null, operational: deriveOperationalSummary({ horseId: horse.id, tests, canWrite: writeAccess.get(horse.id) === true }) };
   });
   return { ...base, horses: horses.sort(compareOperationalHorses) };
 }
@@ -154,6 +161,7 @@ export async function getAccessibleHorseDetail(horseId: string, canWrite = false
   const [
     { data: horse, error: horseError },
     { data: biochemistryRows, error: biochemistryError },
+    writeAccess,
   ] =
     await Promise.all([
       supabase
@@ -162,11 +170,14 @@ export async function getAccessibleHorseDetail(horseId: string, canWrite = false
         .eq("id", horseId)
         .maybeSingle(),
       supabase.from("biochemistry_tests").select("id,horse_id,test_date,scoring_status,health_score,formula_version,lookup_source_version").eq("horse_id", horseId).is("deleted_at", null).order("test_date", { ascending: false }).limit(2),
+      canWrite
+        ? supabase.rpc("can_write_biochemistry_horse", { target_horse_id: horseId })
+        : Promise.resolve({ data: false, error: null }),
     ]);
 
   return composeAccessibleHorseDetail({
     horseId,
-    canWrite,
+    canWrite: !writeAccess.error && writeAccess.data === true,
     horse: horse as HorseDetailRow | null,
     horseError,
     biochemistryRows: (biochemistryRows ?? null) as TestSummaryRow[] | null,

@@ -81,6 +81,8 @@ const dashboardSource = readFileSync("app/(portal)/portal/page.tsx", "utf8");
 const detailSource = readFileSync("app/(portal)/portal/horses/[horseId]/page.tsx", "utf8");
 assert(!horsesSource.includes("fallbackHorses"));
 assert(!horsesSource.includes("sample-horse"));
+assert(horsesSource.includes('supabase.rpc("can_write_biochemistry_horse"'));
+assert(horsesSource.includes("writeAccess.get(horse.id) === true"));
 assert(dashboardSource.includes("No sample records are shown"));
 assert(dashboardSource.includes("does not indicate clinical priority"));
 assert(detailSource.includes("Back to trainer dashboard"));
