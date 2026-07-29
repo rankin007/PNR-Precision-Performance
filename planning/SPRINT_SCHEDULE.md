@@ -2,11 +2,12 @@
 
 ## Active direction
 
-Sprint 035 is closed `trainer-dashboard-validation-blocked-clean`. Local implementation and canonical validation pass; authenticated Preview and trainer pilot did not run because exact-candidate/provider binding and private consent prerequisites were not established.
+Sprint 035 remains closed `trainer-dashboard-validation-blocked-clean` at exact final local/remote SHA `57bfca225a0a41f639b9fa7b0875589bde9372f1`. Sprint 035B is active for Preview configuration, authenticated acceptance, trainer pilot and cleanup.
 
 | Sprint | Outcome | Profile / proof |
 |---|---|---|
-| 035 | Trainer Pilot And Dashboard MVP | Standard by default; one `SPRINT.md`; trainer-visible journey and testing required |
+| 035B | Preview Configuration And Trainer Pilot Completion | Strict provider/privacy controls; exact Preview, authenticated matrix, three-person pilot and cleanup required |
+| 035 | Closed `trainer-dashboard-validation-blocked-clean` | Local implementation and validation complete; external acceptance moved to 035B |
 | 036 | Next product outcome chosen from 035 evidence | Must include trainer-visible testing if 035 does not satisfy the every-second-product-sprint cadence |
 
 ## Deferred until explicitly promoted

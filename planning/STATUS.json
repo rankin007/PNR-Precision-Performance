@@ -1,7 +1,7 @@
 {
-  "sprint": "035-trainer-pilot-and-dashboard-mvp",
-  "status": "trainer-dashboard-validation-blocked-clean",
-  "branch": "codex/035-trainer-pilot-and-dashboard-mvp",
+  "sprint": "035B-preview-configuration-and-trainer-pilot-completion",
+  "status": "active",
+  "branch": "codex/035B-preview-configuration-and-trainer-pilot-completion",
   "reconciliationCommit": "aeb24d2d038f9875973764b25538caaea6473d02",
   "closeoutCommit": "aa87dfe010ca1ae900f0ce633ee7b2fad2a076bf",
   "remoteBackupVerified": true,
@@ -13,9 +13,10 @@
   "previewDeployed": false,
   "trainerPilotComplete": false,
   "previewTargetVerified": false,
-  "participantConsentConfirmed": false,
+  "participantConsentConfirmed": true,
   "providerMutationsPerformed": false,
-  "verifiedSprint035RemoteTip": "12e3f81b3d1b9fb84a5385372b4e1b5a719b0c74",
+  "finalSprint035LocalRemoteSha": "57bfca225a0a41f639b9fa7b0875589bde9372f1",
+  "intermediateSprint035RemoteTip": "12e3f81b3d1b9fb84a5385372b4e1b5a719b0c74",
   "nextSprint": null,
   "updated": "2026-07-30"
 }

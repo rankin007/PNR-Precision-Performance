@@ -13,6 +13,8 @@
 8. `planning/reviews/035-trainer-dashboard-implementation-and-validation.md` — local implementation, validation and remaining preview/pilot boundary.
 9. `planning/reviews/035-preview-target-and-participation-stop.md` — read-only Preview target checks, privacy-safe participant boundary and blocked-clean closeout.
 
+10. `planning/sprints/035B-preview-configuration-and-trainer-pilot-completion/SPRINT.md` — active corrective completion authority.
+
 ## Accepted product lineage
 
 - Sprint 032 release: `planning/reviews/032-public-relaunch-and-production-deployment.md`; exact SHA `f7242ee0785ae9b87022394206c89ebdd5c9f6ad`.
