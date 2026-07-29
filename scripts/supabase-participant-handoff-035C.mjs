@@ -1,9 +1,14 @@
 #!/usr/bin/env node
 
+import { existsSync, readFileSync, unlinkSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
+
 const REF = "uvskssaecdhxcgytkasc";
 const REDIRECT = "https://pnr-precision-performance-osu11rk3f-rankin007s-projects.vercel.app/auth/callback";
 const ALIASES = ["A", "B", "C"];
 const allowedStates = new Set(["existing-tagged", "invited-tagged"]);
+const LEDGER = join(tmpdir(), "pnr-035c-participant-ownership.json");
 
 function fail(code) {
   const error = new Error(code);
@@ -23,13 +28,14 @@ export function removePilotMetadata(existing) {
   return next;
 }
 
-function config() {
+function config(requireMap = true) {
   const url = process.env.PP035C_SUPABASE_URL;
   const service = process.env.PP035C_SERVICE_ROLE_KEY;
   const rawMap = process.env.PP035C_PARTICIPANT_MAP;
-  if (!url || !service || !rawMap) fail("PROTECTED_CONFIG_MISSING");
+  if (!url || !service || (requireMap && !rawMap)) fail("PROTECTED_CONFIG_MISSING");
   const parsed = new URL(url);
   if (parsed.protocol !== "https:" || parsed.hostname !== `${REF}.supabase.co` || parsed.pathname !== "/") fail("TARGET_REFUSED");
+  if (!requireMap) return { url, service, mapping: null };
   let mapping;
   try { mapping = JSON.parse(rawMap); } catch { fail("MAPPING_INVALID"); }
   if (Object.keys(mapping).sort().join(",") !== ALIASES.join(",") || ALIASES.some(alias => typeof mapping[alias] !== "string" || !mapping[alias].includes("@"))) fail("MAPPING_INVALID");
@@ -52,6 +58,7 @@ async function apply() {
   const protectedConfig = config();
   const { createClient } = await import("@supabase/supabase-js");
   const admin = createClient(protectedConfig.url, protectedConfig.service, { auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false } });
+  if (existsSync(LEDGER)) fail("LEDGER_EXISTS");
   const known = await users(admin);
   const report = {};
   const changed = [];
@@ -84,6 +91,19 @@ async function apply() {
     if (!compensated) fail("COMPENSATION_FAILED");
     throw error;
   }
+  try {
+    writeFileSync(LEDGER, `${JSON.stringify({ sprint: "035C", participants: report })}\n`, { encoding: "utf8", flag: "wx" });
+  } catch {
+    let compensated = true;
+    for (const item of changed.reverse()) {
+      const result = item.state === "invited-tagged"
+        ? await admin.auth.admin.deleteUser(item.id, false)
+        : await admin.auth.admin.updateUserById(item.id, { app_metadata: item.original });
+      if (result.error) compensated = false;
+    }
+    if (!compensated) fail("COMPENSATION_FAILED");
+    fail("LEDGER_WRITE_FAILED");
+  }
   process.stdout.write(`${JSON.stringify({ state: "pass", redirect: "exact-approved-preview", fields: ["participant_alias", "pilot_sprint"], participants: report })}\n`);
   protectedConfig.mapping = null;
   protectedConfig.service = null;
@@ -92,9 +112,9 @@ async function apply() {
 }
 
 async function cleanup() {
-  const protectedConfig = config();
+  const protectedConfig = config(false);
   let ownership;
-  try { ownership = JSON.parse(process.env.PP035C_OWNERSHIP || ""); } catch { fail("OWNERSHIP_INVALID"); }
+  try { ownership = JSON.parse(readFileSync(LEDGER, "utf8")).participants; } catch { fail("OWNERSHIP_INVALID"); }
   if (Object.keys(ownership).sort().join(",") !== ALIASES.join(",") || ALIASES.some(alias => !allowedStates.has(ownership[alias]))) fail("OWNERSHIP_INVALID");
   const { createClient } = await import("@supabase/supabase-js");
   const admin = createClient(protectedConfig.url, protectedConfig.service, { auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false } });
@@ -115,11 +135,11 @@ async function cleanup() {
     }
   }
   process.stdout.write(`${JSON.stringify({ state: "pass", fieldsRemoved: ["participant_alias", "pilot_sprint"], participants: report })}\n`);
+  unlinkSync(LEDGER);
   protectedConfig.mapping = null;
   protectedConfig.service = null;
   delete process.env.PP035C_PARTICIPANT_MAP;
   delete process.env.PP035C_SERVICE_ROLE_KEY;
-  delete process.env.PP035C_OWNERSHIP;
 }
 
 function selfTest() {
@@ -127,7 +147,7 @@ function selfTest() {
   if (merged.provider !== "email" || merged.unrelated !== "preserved" || merged.participant_alias !== "A" || merged.pilot_sprint !== "035C") fail("SELF_MERGE");
   const removed = removePilotMetadata(merged);
   if (removed.provider !== "email" || removed.unrelated !== "preserved" || "participant_alias" in removed || "pilot_sprint" in removed) fail("SELF_REMOVE");
-  process.stdout.write(`${JSON.stringify({ state: "pass", checks: ["allowlist", "merge-preserves", "cleanup-preserves", "sanitized-output"], redirect: "exact-approved-preview" })}\n`);
+  process.stdout.write(`${JSON.stringify({ state: "pass", checks: ["allowlist", "merge-preserves", "cleanup-preserves", "sanitized-output", "sanitized-ledger-contract"], redirect: "exact-approved-preview" })}\n`);
 }
 
 const mode = process.argv[2] || "--self-test";

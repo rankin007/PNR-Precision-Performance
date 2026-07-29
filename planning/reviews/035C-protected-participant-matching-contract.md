@@ -27,6 +27,8 @@ If the Dashboard cannot guarantee the exact redirect, any Admin API helper must 
 
 Read-only inspection confirmed the Dashboard invitation dialog has no redirect control. Source inspection also confirmed the existing Preview sign-in action uses `NEXT_PUBLIC_SITE_URL` and otherwise falls back to localhost; that variable is outside the approved Preview configuration. Neither path guarantees the exact callback. The bounded helper `scripts/supabase-participant-handoff-035C.mjs` is therefore the accepted handoff path. It consumes the protected A/B/C inbox mapping and service credential only from protected process configuration, uses the exact approved redirect, and emits sanitized ownership states for later Auth-last cleanup.
 
+After a complete successful handoff, the helper writes one fixed temporary sanitized ownership ledger containing only sprint ID, aliases A/B/C and `existing-tagged` or `invited-tagged`. Cleanup consumes and removes that ledger. It contains no inbox, Auth UUID, token, credential or metadata payload and prevents ownership from being reconstructed from identity details or retransmitted in chat.
+
 ## Cleanup
 
 For a Sprint-035C-owned Auth identity, delete it Auth-last after application cleanup and operator approval. For a pre-existing/not-owned identity, preserve the identity and all unrelated metadata while removing only Sprint 035C fields `participant_alias` and `pilot_sprint`. Final evidence records owned Auth deletion counts or explicit not-owned/excluded treatment, never identifiers.
