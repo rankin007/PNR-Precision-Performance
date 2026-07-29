@@ -1,8 +1,10 @@
 {
-  "schemaVersion": 1,
-  "phase": "closed",
-  "sprint": "031C-two-stable-synthetic-denial-matrix-completion",
-  "status": "two-stable-authenticated-matrix-complete-with-accepted-limitations-clean",
-  "updated": "2026-07-29T00:00:00+10:00",
-  "summary": "Sprint 031C passed protected transport, genuine two-stable denial and all 25 current rendered/runtime cases. Final Auth/application/Storage, anchors, orphans and owned processes are zero. The implemented scope is accepted for Production-release planning; deployment remains separately authorised and clinical, audio, evidence-safety and commerce limitations remain unavailable."
+  "sprint": "034-repository-reconciliation-and-project-simplification",
+  "status": "reconciled-product-baseline-and-project-simplification-complete-clean",
+  "branch": "codex/034-reconciled-product-baseline",
+  "sourceReleaseSha": "f7242ee0785ae9b87022394206c89ebdd5c9f6ad",
+  "productionChanged": false,
+  "productDone": false,
+  "nextSprint": "035-trainer-pilot-and-dashboard-mvp",
+  "updated": "2026-07-30"
 }

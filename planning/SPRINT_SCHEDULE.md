@@ -1,76 +1,20 @@
-# Canonical Sprint Schedule
+# Sprint Schedule
 
-## Sprint 030 — Commercial Schedule And Commerce Decision
+## Active direction
 
-Closed `commercial-authority-pending-commerce-disabled-safe` on 2026-07-29. Complete owner authority remains prerequisite to later enablement work.
+No sprint is open after Sprint 034 closeout.
 
-## Current Position
-
-- Current integrated candidate: **027B — Completed Product-Lineage Reconciliation** combines completed Sprints 025–027 without consuming Sprint 028. Domain authority remains partial, evidence safety remains fail closed without approved adapters, and app-controlled voice/transcription remains deferred.
-
-- Current authority amendment: **023K - Singapore Region Authority Amendment And 023J Unblock**, `singapore-region-authority-recorded-023J-region-unblocked-clean`; 023J awaits remaining non-regional authority inputs.
-
-- Current provider/remote sprint: **023J - Provider, Remote Storage, Migration Application And Hosted Proof**, `remote-target-authority-blocked-clean`; Singapore region is approved by 023K, while exact non-production targets and recovery/provider authority remain required before external access.
-
-- Latest closed public follow-up: **029M - Public Website Content, Enquiry, And Pricing**, outcome `public-website-follow-up-partial-safe`.
-- Current corrective sprint: **023I - Reparse-Safe Production Build Proof And Combined Closeout**, `reparse-safe-build-proven-combined-local-proof-clean`; physical build and the complete combined local matrix pass.
-- Next product work is **023E**, but it must not begin without a separate Architect Pack/application instruction.
-
-- Current completed delivery sprint: **002B — Delivery System And Project-State Consolidation**, outcome `delivery-consolidation-complete`.
-- Repository-control sequence through **017F**: complete locally.
-- Next product work: **023D — Test Evidence Uploads And Storage Architecture/Design**.
-- Provider branch: **021N** waits for substantive Supabase response/remediation.
-- Production deployment, public reopening, remote migration, push, and PR remain separate explicit actions.
-
-## Completed Core Outcomes
-
-| Sprint | Outcome |
-|---|---|
-| 001–010 | Project truth/build/release/auth/data-entry/admin/launch foundations and production holding state established; live acceptance limitations remain evidence-qualified. |
-| 011–016 | Definition of Done, cleanup/public gate, biochemistry model, scoring/recommendation foundations, and repository alignment completed locally. |
-| 017–017F | Repository classification, treatment, validator/format remediation, and two-commit clean local baseline completed. |
-| 018 | Mobile biochemistry capture/results foundation completed locally. |
-| 019–019B | Design system, messaging baseline, and mobile heading correction completed. |
-| 020–020G | Supabase readiness/audit/replacement/rebuild work completed to the recorded candidate-ready structural state. |
-| 021–021M | Definitive roles and structural reconciliation completed; authenticated proof escalated to provider after persistent JWT rejection. |
-| 002B | Canonical validation/CI and concise planning-state consolidation completed locally. |
-
-Detailed historical outcomes remain in `planning/history/`, `planning/reviews/`, sprint artifacts, and `planning/EVIDENCE_INDEX.md`.
-
-## Forward Product Roadmap
-
-| Sprint | Main outcome | Dependency |
+| Sprint | Outcome | Profile / proof |
 |---|---|---|
-| 022 | Mobile Biochemistry Workflow Completion | May proceed locally within existing boundaries |
-| 023 | Test Evidence Uploads And Storage | Clean 023B baseline plus approved privacy/storage decisions |
-| 024 | Trends And Longitudinal Review | Stable persisted data and approved query scope |
-| 025 | Production Scoring And Knowledge Content | Domain-approved formulas, thresholds, and rules |
-| 026 | Uploads And Evidence Management | Auth proof plus privacy/storage architecture |
-| 027 | Voice-Assisted Capture | Provider/privacy/fallback decision |
-| 028 | Stable Dashboard And Horse Workspace | Stable persisted data and approved operational rules |
-| 029 | Public Website Completion | Approved content/assets; public gate stays until authorized |
-| 030 | Commerce And Onboarding Completion | Approved commercial schedule and Stripe scope |
-| 031 | End-To-End Stable Acceptance | Prior product/auth dependencies |
-| 032 | Production Readiness And Cutover Plan | Full acceptance and explicit authorization |
-| 033 | Final Done Reconciliation | Evidence-backed closeout only |
+| 035 | Trainer Pilot And Dashboard MVP | Standard by default; one `SPRINT.md`; trainer-visible journey and testing required |
+| 036 | Next product outcome chosen from 035 evidence | Must include trainer-visible testing if 035 does not satisfy the every-second-product-sprint cadence |
 
-## Provider-Response Branch
+## Deferred until explicitly promoted
 
-| Sprint | Outcome |
-|---|---|
-| 021N | Classify provider response/remediation and define supported minimal reproof. |
-| 021O | Two fresh minimal Auth-chain passes from zero state. |
-| 021P | Direct authenticated RLS role matrix after 021O passes. |
-| 021Q | Application-route agreement, comments, denial, revocation, cleanup, restoration. |
-| 021R | Reconcile authenticated evidence and candidate readiness without production cutover. |
+Voice, OCR, transactional commerce, sophisticated saved views, broad public enhancements, clinical thresholds/recommendations, upload/privacy completion and production/provider mutations.
 
-## Sequencing Rules
+## Delivery rules
 
-- Use suffixes beginning at `B` for follow-ups; historical identifiers remain unchanged.
-- Standard work targets one useful outcome in one `SPRINT.md`; strict/high-risk work uses stronger artifacts and boundaries.
-- Mechanical issues remain in the active sprint when non-behavioural and in scope.
-- Provider-dependent authenticated work does not block safe local Sprint 022 progress.
-- No structural/static result implies authenticated, hosted-runtime, cutover, or production readiness.
-# Current delivery position — 2026-07-29
+One sprint delivers one outcome. Do not create another Pack while a sprint is open. Use four-file Packs only for genuinely strict boundaries. Keep deterministic corrections in the active sprint. Close by linking evidence. A suffix is reserved for material scope/contract change, a different outcome or an unauthorized external action.
 
-- Sprint **028 — Stable Dashboard And Horse Workspace** is complete `stable-dashboard-and-horse-workspace-authority-limited-clean`. Clinical-priority authority remains unavailable; the stable overview uses neutral ordering.
+Historical sprint status is indexed in `planning/SPRINT_LIFECYCLE_LEDGER.md`; current acceptance truth is in `planning/FINAL_PRODUCT_ACCEPTANCE_MATRIX.md`.

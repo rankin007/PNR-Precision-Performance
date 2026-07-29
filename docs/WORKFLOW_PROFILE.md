@@ -1,46 +1,41 @@
 # Workflow Profile
 
-The 120x method uses a workflow profile so the process matches the risk of the work. `standard` is the default for ordinary repository, UI, documentation, local tooling, test, and product-feature work.
+The 120x method matches process to risk. `standard` is the default for ordinary repository, UI, documentation, local tooling, test and product-feature work. All profiles follow the Evidence-Proportional Execution Standard in `AGENTS.md`.
 
-All profiles follow the hard Evidence-Proportional Execution Standard in `AGENTS.md`. Workflow rigor changes the strength of safety boundaries and evidence required; it does not require redundant gates or stopping merely because a preferred supporting tool is unavailable.
+## Delivery controls
+
+- One sprint delivers one user-visible or operationally necessary outcome.
+- Do not create a new Architect Pack while the current sprint remains open.
+- Ordinary product work uses one `SPRINT.md`; reserve four-file Packs for genuinely strict or high-risk boundaries.
+- Keep deterministic tooling, validator, formatting, encoding and evidence corrections inside the active sprint when product scope is unchanged.
+- Use a follow-up suffix only for a material out-of-scope source, schema or contract change, a genuinely different outcome, or an external action without authority.
+- Closeout links to durable evidence instead of repeating the full project history.
+- Every second product sprint includes trainer-visible testing. Measure progress through accepted user journeys, not pack or document count.
+- Attach strict controls to the risky boundary, not automatically to the whole feature.
+- Voice, OCR, transactional commerce, sophisticated saved views and broad public enhancements remain deferred until explicitly promoted.
 
 ## fast
 
-Use for single-agent, low-risk, local or internal utilities.
+Use for single-agent, low-risk local or internal utilities.
 
-Default behavior:
-- One small sprint file is enough: `planning/sprints/###-name/SPRINT.md`.
-- Architect may generate a pack when the user, problem, target workflow, and smallest useful outcome are known.
-- Secondary unknowns become labeled assumptions or open questions.
-- Architect creates the pack only. Builder applies it and executes from the generated sprint files within their defined scope.
-- Builder stops only for scope changes, secrets, deletes, auth/data-model changes, or files outside the approved set.
+- One small `planning/sprints/###-name/SPRINT.md` is enough.
+- Builder stops for scope expansion, secrets, destructive uncertainty, auth/data-model changes or files outside the approved set.
 
 ## standard
 
 Use for normal Architect/Builder handoff work.
 
-Default behavior:
-- Use one `SPRINT.md` for normal work. Reserve the four-file sprint set for genuinely strict or high-risk work.
-- Keep written scope, acceptance criteria, validation, and handoff durable in the folder.
-- Builder follows the approved sprint and asks before expanding scope.
-- Target a useful product or delivery outcome rather than one diagnostic step.
-- Keep mechanical, formatting, encoding, and deterministic local-validation corrections in the current sprint when they do not change product behavior or cross a strict boundary.
-- Create a child sprint only for material scope expansion, a true external blocker, or a substantially different product outcome.
-- Keep closeout concise and refer to canonical evidence instead of repeating full project history.
-- Substitute equivalent or stronger safe proof when a supporting tool is unavailable, and keep the substitution inside the current sprint when scope and risk boundaries are unchanged.
-- Do not open a follow-up sprint for a tooling limitation, credential refresh, deterministic harness correction, or redundant verification step.
+- Use one `SPRINT.md` with durable scope, acceptance, validation and handoff.
+- Target a useful product or delivery outcome, not one diagnostic step.
+- Substitute equivalent or stronger safe proof when a supporting tool is unavailable.
+- Keep closeout concise and refer to canonical evidence.
 
 ## strict
 
-Use for regulated, multi-user, sensitive, payment, auth, production data, or high-blast-radius work.
+Use for regulated, multi-user, sensitive, payment, auth, migration, production-data or high-blast-radius boundaries.
 
-Default behavior:
-- Use the full four-file sprint set: `requirements.md`, `blueprint.md`, `acceptance.md`, and `handoff-prompt.md`.
-- Require explicit approval before implementation unless the sprint authorizes a narrower exception.
-- Treat auth, permissions, migrations, data deletion, secrets, billing, and production deployment as stop-and-confirm work.
-- Apply strict controls to protected evidence, remote migrations, production data, destructive operations, external publication, and production deployment.
-- Include stronger validation, rollback notes, and permission-boundary checks.
-- Stop for material security, privacy, target, migration, destructive, production, integrity, or cleanup risk—not for ceremony or an unavailable optional tool.
-- Use equivalent or stronger evidence when it preserves the same strict boundary. A successful governed runtime result may supersede a redundant metadata check when it proves the same contract end to end.
-- Keep diagnosis, in-scope correction, revalidation, and proof in the current sprint unless the correction materially changes approved source/schema behavior or requires new external authority.
-- Manual intervention is required only after safe in-scope alternatives and substitute evidence are exhausted.
+- Use `requirements.md`, `blueprint.md`, `acceptance.md` and `handoff-prompt.md` when the whole sprint genuinely needs strict treatment.
+- Apply stronger permission, rollback and integrity checks to protected evidence, remote migrations, production data, destructive operations, external publication and deployment.
+- Stop for material security, privacy, target, migration, destructive, production, integrity or cleanup risk—not ceremony or an unavailable optional tool.
+- Keep diagnosis, in-scope correction, revalidation and proof in the current sprint unless the correction materially changes approved behavior or needs new external authority.
+- Use manual intervention only after safe in-scope alternatives and substitute evidence are exhausted.
