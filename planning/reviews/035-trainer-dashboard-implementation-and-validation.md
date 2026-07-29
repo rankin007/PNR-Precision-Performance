@@ -61,3 +61,9 @@ Exact correction validation passed:
 - `git diff --check`
 
 No supporting-tool substitution was required. Authenticated preview and trainer-visible acceptance remain not run and are not inferred.
+
+## Scoped branch publication
+
+Implementation commit: `1b21785` (`Implement Sprint 035 trainer dashboard MVP`). Initial evidence commit: `12e3f81` (`Record Sprint 035 validation and pilot boundary`). The configured SSH push failed before remote mutation because no usable SSH identity was available. Builder diagnosed once and used the existing authenticated GitHub CLI HTTPS credential as an equivalent scoped transport. Local and remote branch tips then matched exactly at `12e3f81b3d1b9fb84a5385372b4e1b5a719b0c74`.
+
+Only `codex/035-trainer-pilot-and-dashboard-mvp` was pushed. No merge, `develop` push, PR, history rewrite, preview deployment or production action occurred.

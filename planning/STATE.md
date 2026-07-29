@@ -8,6 +8,8 @@ Authenticated rendered dashboard proof, exact-candidate non-production preview a
 
 The horse-detail composition now isolates biochemistry-query failure from horse-access success. An accessible horse with failed workflow loading renders sanitized `Unavailable`, no normal/no-result inference and no record action; inaccessible, cross-stable and revoked horses retain identity-free denial. Focused and full canonical validation plus production build pass. Preview and trainer acceptance remain outstanding.
 
+The scoped Sprint 035 branch was backed up remotely after an SSH authentication failure was safely substituted with the existing authenticated GitHub HTTPS credential. Local and remote matched at `12e3f81b3d1b9fb84a5385372b4e1b5a719b0c74` before the final evidence attestation. No PR, merge, `develop` push or deployment occurred.
+
 ## Current baseline — 2026-07-30
 
 Sprint `034-repository-reconciliation-and-project-simplification` is closed `reconciled-product-baseline-and-project-simplification-complete-clean` on branch `codex/034-reconciled-product-baseline`. The baseline starts from exact accepted Sprint 032 release SHA `f7242ee0785ae9b87022394206c89ebdd5c9f6ad`, whose ancestry includes accepted Sprint 021AH authenticated application work and Sprint 022/022B mobile biochemistry workflow work. The release migration ledger through `0021` is preserved unchanged, including the required accepted auth/mobile boundary `0001`–`0017`; current application source, focused tests, Sprint 033 final acceptance and operational handoff authorities are preserved.
