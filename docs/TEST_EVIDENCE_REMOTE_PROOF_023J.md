@@ -1,6 +1,8 @@
 # Test Evidence Remote Contract — Sprint 023J
 
-Status: local candidate only; unstaged, uncommitted and unapplied
+Current hosted boundary: Sprint 023L completed non-production remote application through migration `0021` and protected Vercel Preview deployment of exact commit `379573e4d70a3266f2a8849468b4420e9ddce9c3`. Evidence-proportional governed upload/recovery, authority, reconciliation and cleanup proof passed with final Auth/application/Storage/recovery `0/0/0/0`. This is not Production deployment, public launch, CSV enablement or live scanner/sanitiser readiness.
+
+Historical Sprint 023J candidate status, now superseded: local candidate only; unstaged, uncommitted and unapplied
 
 Migration `0019` completes the missing RPC, private Storage-policy and signed-direct upload contracts on top of immutable candidate migration `0018`. The database derives actor, active-account, test, horse and stable scope; locks quota by test; enforces exact acknowledgement, JPEG/PNG/PDF agreement, 5-MiB object and 10-file/30-MiB test ceilings; issues opaque keys; and keeps 24-hour idempotent attempts.
 

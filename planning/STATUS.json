@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "phase": "complete",
-  "sprint": "023P-postgresql-filename-extension-parser-correction-and-final-governed-reproof",
-  "status": "extension-parser-corrected-final-governed-recovery-proven-clean",
+  "sprint": "023L-remote-application-and-hosted-proof",
+  "status": "remote-application-and-preview-proof-complete-clean",
   "updated": "2026-07-29T00:00:00+10:00",
-  "summary": "Sprint 023P applied migration 0021 exactly once after an exact sole-selection dry run. Remote/local ledger is exactly 0001-0021. The final governed proof passed initiation, no-overwrite JPEG transfer, fail-closed finalisation, protected export, DPAPI restored-byte hash agreement, governed removal, verified absence and Auth-last cleanup. Final Auth/application/Storage/recovery state is 0/0/0/0 with zero orphans. Sprint 023L is ready to resume at protected Vercel Preview configuration; no Vercel or deployment action occurred."
+  "summary": "Sprint 023L is complete for non-production remote application and protected Preview proof. Remote/local ledger is exactly 0001-0021. Exact commit 379573e4d70a3266f2a8849468b4420e9ddce9c3 is READY on pnr-precision-performance-4e6qad1ga-rankin007s-projects.vercel.app with only the four approved Preview bindings. Governed upload/recovery, authority, idempotency, cancellation and missing/wrong/correct reconciliation-secret boundaries pass. Final Auth/application/Storage/recovery is 0/0/0/0 with zero recovery/fixture orphans. Production configuration, deployment, custom/production aliases, scheduled Cron, push and merge were untouched."
 }

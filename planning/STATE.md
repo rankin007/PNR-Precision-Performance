@@ -2,6 +2,10 @@
 
 ## Current Status
 
+Sprint `023L-remote-application-and-hosted-proof` is complete `remote-application-and-preview-proof-complete-clean`. Remote/local ledger is exactly `0001` through `0021`. Exact clean commit `379573e4d70a3266f2a8849468b4420e9ddce9c3` is READY on protected generated Preview `pnr-precision-performance-4e6qad1ga-rankin007s-projects.vercel.app` with only the four approved Preview bindings. Evidence-proportional runtime proof covers governed upload/recovery/removal, authority denial/acceptance, acknowledgement, idempotency, cancellation and missing/wrong/correct reconciliation-secret behavior. Final Auth/application/Storage/recovery state is `0/0/0/0` with zero recovery/fixture orphans. No Production configuration/deployment, custom-domain or production-alias movement, scheduled Production Cron, push or merge occurred.
+
+Historical Sprint 023P closeout and pre-Preview state, now superseded:
+
 Sprint `023P-postgresql-filename-extension-parser-correction-and-final-governed-reproof` is complete `extension-parser-corrected-final-governed-recovery-proven-clean`. From exact commit `1cbb437a8e357c2b48ff2b89d0d02cdf7ce5b27f`, the supported dry run selected only migration `0021`, which was applied exactly once. Remote/local ledger is exactly `0001` through `0021`. The final exact-owned governed proof passed initiation, exact intent, signed no-overwrite JPEG transfer, fail-closed finalisation, protected TLS export, DPAPI restored-byte hash agreement, governed removal, remote absence and Auth-last cleanup. Final state is `0/0/0/0` with zero proof orphans. This local closeout commit records the bounded harness correction and evidence. Sprint 023L is ready to resume at protected Vercel Preview configuration; no Vercel action, deployment, push or merge occurred.
 
 Historical pre-application Sprint 023P state, now superseded:

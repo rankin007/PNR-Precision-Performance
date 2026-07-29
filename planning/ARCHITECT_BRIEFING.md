@@ -1,5 +1,9 @@
 # Architect Briefing
 
+Sprint 023L is complete `remote-application-and-preview-proof-complete-clean`. Remote/local ledger is `0001` through `0021`; exact commit `379573e4d70a3266f2a8849468b4420e9ddce9c3` is READY on protected generated Preview `pnr-precision-performance-4e6qad1ga-rankin007s-projects.vercel.app` with only the four approved Preview bindings. Governed upload/recovery/removal, authority/idempotency/cancellation and manual reconciliation-route proof pass. Final state is `0/0/0/0` with zero orphans. Production configuration, deployment, custom/production aliases, scheduled Cron, push and merge were untouched. This local closeout commit records the approved evidence.
+
+Historical Sprint 023P briefing and pre-Preview state, now superseded:
+
 Sprint 023P is complete `extension-parser-corrected-final-governed-recovery-proven-clean`. Migration `0021` was applied exactly once after the supported dry run selected only that migration; remote/local ledger is exactly `0001` through `0021`. The final governed JPEG proof passed exact initiation/intent, signed no-overwrite transfer, fail-closed finalisation, protected export, DPAPI restored-byte hash agreement, governed removal, verified absence and Auth-last cleanup. Final state is `0/0/0/0` with zero proof orphans. This local closeout commit records the bounded harness correction and evidence. Sprint 023L is ready to resume at protected Vercel Preview configuration; no Vercel/deployment/push/merge action occurred.
 
 Historical pre-application Sprint 023P briefing, now superseded:
