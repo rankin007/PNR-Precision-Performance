@@ -1,6 +1,7 @@
 import { SectionCard } from "@/components/layout/section-card";
 import { requireAdminAppContext } from "@/lib/auth/session";
 import { getAdminCommerceSnapshot } from "@/lib/stripe/commerce";
+import { commercialAuthority } from "@/lib/commerce/commercial-authority";
 
 function formatMoney(amount: number, currencyCode: string) {
   return `${currencyCode} ${amount.toFixed(2)}`;
@@ -39,6 +40,10 @@ export default async function AdminCommercePage() {
       title="Commerce visibility"
       description="Read-only launch view for product readiness, order state, Stripe checkout session linkage, and payment reconciliation."
     >
+      <div className="rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
+        <p className="font-semibold">Commerce disabled: {commercialAuthority.reasonCode}</p>
+        <p className="mt-1">Catalogue values below are historical reconciliation data only. They are not approved offers and checkout cannot create sessions, orders or payments.</p>
+      </div>
       {!snapshot.envReady ? (
         <div className="rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
           Supabase service-role configuration is missing. Commerce records can be inspected once the admin environment is configured.

@@ -2,11 +2,19 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://precisionperformance.com.au"),
   title: {
     default: "Equine Precision Performance",
     template: "%s | Precision Performance",
   },
-  description: "Elite equine performance and recovery analysis supporting informed trainer decisions.",
+  description: "Equine biochemistry and recovery intelligence supporting informed trainer decisions.",
+  alternates: {
+    canonical: "/",
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 export default function RootLayout({

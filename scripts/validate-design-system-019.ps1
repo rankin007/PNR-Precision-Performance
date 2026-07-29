@@ -11,14 +11,16 @@ foreach ($token in $requiredTokens) {
 
 $metadata = Get-Content -LiteralPath "app/layout.tsx" -Raw
 $siteConfig = Get-Content -LiteralPath "lib/site-config.ts" -Raw
-$holding = Get-Content -LiteralPath "app/page.tsx" -Raw
+$publicPage = Get-Content -LiteralPath "app/page.tsx" -Raw
+$robots = Get-Content -LiteralPath "app/robots.ts" -Raw
 $status = Get-Content -LiteralPath "components/ui/status-indicator.tsx" -Raw
 $result = Get-Content -LiteralPath "components/ops/biochemistry-result-panel.tsx" -Raw
 
 if (-not $metadata.Contains("Equine Precision Performance")) { throw "Root metadata brand is missing." }
 if (-not $siteConfig.Contains("Precision Performance Portal")) { throw "Portal product name is missing." }
-if (-not $holding.Contains("index: false") -or -not $holding.Contains("follow: false")) { throw "Holding-page robots protection changed." }
-if (-not $holding.Contains('href="/sign-in"')) { throw "Operator sign-in path is missing." }
+if (-not $metadata.Contains("index: true") -or -not $metadata.Contains("follow: true")) { throw "Public relaunch indexing metadata is incomplete." }
+if (-not $robots.Contains('"/portal/"') -or -not $robots.Contains('"/admin/"') -or -not $robots.Contains('"/data-entry/"')) { throw "Protected-route robots exclusions are incomplete." }
+if (-not $publicPage.Contains('href="/sign-in"')) { throw "Operator sign-in path is missing." }
 if (-not $status.Contains('aria-hidden="true"') -or -not $status.Contains("label")) { throw "Status marker semantics are incomplete." }
 if (-not $result.Contains("Biochemistry Trend Score") -or -not $result.Contains("healthScore")) { throw "Display-only score terminology compatibility is incomplete." }
 

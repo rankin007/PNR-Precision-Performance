@@ -1,5 +1,19 @@
 # Evidence Index
 
+## Sprint 031C — Two-stable synthetic denial matrix completion
+
+- Complete 25-case ledger and closeout: `planning/reviews/031C-complete-authenticated-matrix-and-cleanup-closeout.md`.
+- Executable matrix: `scripts/protected-preview-matrix-031C.mjs`.
+- Shared denial control: `scripts/protected-preview-denial-031C.mjs`.
+- Independent zero verifier: `scripts/verify-field-trial-zero-031C.mjs`.
+- Outcome: `two-stable-authenticated-matrix-complete-with-accepted-limitations-clean`; final Auth/application/Storage `0/0/0`, zero anchors/orphans/processes; no Production or Stripe action.
+
+## Sprint 030 — Commercial schedule and commerce decision
+
+- Authority: `docs/COMMERCIAL_SCHEDULE_AND_COMMERCE_DECISION_030.md`
+- Evidence: `planning/reviews/030-commercial-schedule-and-commerce-decision-evidence.md`
+- Outcome: `commercial-authority-pending-commerce-disabled-safe`; no external or Production action.
+
 ## Sprint 027B — Combined product lineage
 
 - Source freeze: `planning/reviews/027B-source-worktree-snapshot-manifest.md`.
@@ -110,3 +124,17 @@ Archived statements are not current authority unless a current file explicitly c
 - Implementation proof: `scripts/test-biochemistry-voice-027.mjs`.
 - Closeout: `planning/reviews/027-voice-assisted-capture-closeout.md`.
 - Accessibility/responsive conclusions remain source/static/build evidence; no rendered browser or real-device proof is claimed.
+# Sprint 028
+
+- `docs/STABLE_DASHBOARD_AND_HORSE_WORKSPACE_028.md` — operational derivation, permission and query authority.
+- `planning/reviews/028-stable-dashboard-and-horse-workspace-evidence.md` — baseline, implementation and validation closeout.
+# Sprint 031
+
+- `planning/reviews/031-source-target-and-safety-reconciliation.md`
+- `planning/reviews/031-field-trial-matrix-results.md`
+- `planning/reviews/031-accessibility-responsive-and-failure-results.md`
+- `planning/reviews/031-cleanup-and-live-acceptance-closeout.md`
+# Sprint 031B
+
+- `planning/reviews/031B-protected-rendered-transport-results.md`
+- `planning/reviews/031B-authenticated-matrix-and-cleanup-closeout.md`

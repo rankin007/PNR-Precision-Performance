@@ -1,5 +1,9 @@
 # Precision Performance Sprint List
 
+## Sprint 030 — Commercial Schedule And Commerce Decision
+
+Outcome: `commercial-authority-pending-commerce-disabled-safe`. Safe reconciliation complete; online purchasing remains disabled pending a complete named-owner schedule.
+
 **Accepted direction:** 2026-07-21
 **Current position:** Sprint 027B reconciles completed Sprints 025, 026 and 027 into one combined candidate for future Sprint 028 planning. It adds no Sprint 028 behaviour and authorises no Production action.
 
@@ -286,3 +290,6 @@ Baseline and isolated worktree pass. Remote work is blocked clean before externa
 # Sprint 023K status — 2026-07-28
 
 Singapore `ap-southeast-1` authority is recorded and the Sydney-only 023J stop is superseded. Remaining non-regional 023J gates still apply.
+# Current sprint update — 2026-07-29
+
+- `028 — Stable Dashboard And Horse Workspace`: complete `stable-dashboard-and-horse-workspace-authority-limited-clean` on the reconciled 027B lineage.

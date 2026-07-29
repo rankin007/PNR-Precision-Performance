@@ -1,5 +1,11 @@
 # Current Risks
 
+## Sprint 030 commercial authority
+
+- Price/GST, freight, term, refunds/returns, ownership/warranty/buyback, trial and fulfilment remain unapproved.
+- `commerce-disabled-safe` is enforced in typed source, public surfaces, checkout and webhook reconciliation; seeded/historical values are non-authoritative.
+- Future business approval does not itself enable commerce; implementation and test/Production action require later authorised execution.
+
 Historical and closed risks through Sprint 017F are preserved in `planning/history/RISKS-THROUGH-017F.md`.
 
 ## Active Risks
@@ -52,3 +58,12 @@ Singapore `ap-southeast-1` is approved international processing and must not be 
 - Unapproved biological thresholds or knowledge content could create misleading health-adjacent outputs; unavailable states must remain fail closed.
 - Evidence safety services are not approved/activated; blocked or unknown evidence must expose no preview/download path.
 - Device-keyboard dictation must not be misrepresented as application-managed, local-only, private, offline, secure or accurate; application audio/transcription remains unavailable.
+# Sprint 028 watch item — 2026-07-29
+
+- Production clinical-priority authority remains unavailable. Do not convert the operational incomplete signal into severity, diagnosis, treatment or race-readiness language.
+# Sprint 031 risk — protected rendered transport
+
+The reconciled lineage lacks a Preview-compatible redacting runner that can install protected Supabase sessions into an isolated rendered browser. Production release planning remains unsupported until that exact matrix passes.
+# Sprint 031B risk — matrix ceiling conflict
+
+The unchanged cross-stable denial case cannot be genuinely executed with only one owned stable and no permitted non-owned data. Production release evidence remains incomplete.

@@ -4,6 +4,7 @@ import type Stripe from "stripe";
 import { syncCheckoutSessionToCommerce } from "@/lib/stripe/commerce";
 import { stripeEnv, hasStripeServerEnv, hasStripeWebhookEnv } from "@/lib/stripe/env";
 import { getStripeServerClient } from "@/lib/stripe/server";
+import { commercialAuthority } from "@/lib/commerce/commercial-authority";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -45,6 +46,16 @@ function checkoutSessionId(value: unknown) {
 }
 
 export async function POST(request: NextRequest) {
+  if (!commercialAuthority.checkoutEnabled) {
+    return NextResponse.json(
+      {
+        ok: false,
+        message: "Commerce reconciliation is disabled pending commercial authority.",
+      },
+      { status: 503 },
+    );
+  }
+
   if (!hasStripeServerEnv() || !hasStripeWebhookEnv()) {
     return NextResponse.json(
       {

@@ -1,5 +1,25 @@
 # Project State
 
+## Sprint 031C Two-Stable Synthetic Denial Matrix Completion — 2026-07-29
+
+Sprint `031C-two-stable-synthetic-denial-matrix-completion` is closed `two-stable-authenticated-matrix-complete-with-accepted-limitations-clean`. Protected transport, genuine two-stable denial, all 25 current rendered/runtime cases, shared revocation and independent final cleanup passed. Exact-owned Auth/application/Storage is `0/0/0`; stable/run/recovery anchors, orphans and owned processes are zero. No product/schema/RLS/dependency/Production/Stripe change occurred. The implemented scope is accepted for Production-release planning, while deployment remains separately authorised and clinical thresholds/recommendations, clinical priority, application audio/transcription and transactional commerce remain unavailable.
+
+## Sprint 031B Protected Preview Rendered Harness And Authenticated Matrix Completion — 2026-07-29
+
+Sprint `031B-protected-preview-rendered-harness-and-authenticated-matrix-completion` is closed `protected-preview-contract-expansion-required-clean`. Credential-free transport and the genuine-cookie writer Preview bootstrap/revocation gate passed with isolated Chrome, existing process-memory Vercel automation bypass, genuine Supabase SSR cookies and exact cleanup. Full matrix creation stopped because genuine cross-stable denial requires two stable scopes while the Pack ceiling permits one and forbids non-owned or downgraded proof. Primary and independent final Auth/application/Storage are `0/0/0`; owned processes and orphans are zero. Production release remains no-go.
+
+## Sprint 031 End-to-End Field Trial And Live Acceptance — 2026-07-29
+
+Sprint `031-end-to-end-field-trial-and-live-acceptance` is closed `end-to-end-field-trial-target-or-transport-blocked-clean`. Exact source freeze, canonical local validation/build, strict harness controls, exact Singapore Supabase target and ledger `0001`–`0021`, generated non-Production Preview, anonymous redirect and responsive public rendering passed. The authenticated rendered matrix stopped before fixtures because no safe Preview-compatible protected-session transport was available in the selected browser surface or reconciled lineage. Exact-run final Auth/application/Storage state is `0/0/0`; Production release planning is no-go from Sprint 031 evidence.
+
+## Sprint 030 Commercial Schedule And Commerce Decision — 2026-07-29
+
+Sprint `030-commercial-schedule-and-commerce-decision` is complete `commercial-authority-pending-commerce-disabled-safe` on exact Sprint 028 worktree baseline `355327cebf4ed7fd3e0239bf9e3cbed0c28cd469`. Conflicting and incomplete pricing, GST, freight, term, refund, ownership, trial and fulfilment authority was reconciled without inventing obligations. Public Pricing, shop/detail, direct checkout, webhook reconciliation and read-only admin commerce now share one typed disabled posture. Checkout cannot create Stripe sessions, orders or payments; webhook commerce mutation fails closed. No Stripe, Supabase, remote, Production, deployment, schema, migration, RLS, role, permission, dependency, stage, commit, push, merge or PR action occurred.
+
+## Sprint 028 Stable Dashboard And Horse Workspace — 2026-07-29
+
+Sprint `028-stable-dashboard-and-horse-workspace` is closed `stable-dashboard-and-horse-workspace-authority-limited-clean` on exact clean 027B candidate `355327cebf4ed7fd3e0239bf9e3cbed0c28cd469`. The authenticated portal now provides a bounded RLS-scoped stable overview and coherent horse workspace with deterministic incomplete, compatible-snapshot change and permission-aware next-action signals. Clinical priority remains explicitly unavailable and ordering remains neutral. No schema, migration, RPC, RLS, permission, provider, remote or deployment boundary changed.
+
 ## Sprint 027B Combined Product Lineage — 2026-07-29
 
 Sprint `027B-completed-product-lineage-reconciliation` integrates the completed, validated, uncommitted Sprint 025, 026 and 027 candidates from their immutable exact-baseline worktrees into one isolated lineage. Source outcomes are `four-reading-structured-operation-proven-authority-partial-clean`, `uploads-and-evidence-management-complete-fail-closed-clean` and `voice-assisted-typed-device-fallback-complete-provider-deferred-clean`.

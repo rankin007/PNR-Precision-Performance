@@ -4,6 +4,7 @@ const surfaces = [
   "app/page.tsx",
   "app/pricing/page.tsx",
   "components/forms/trainer-enquiry-form.tsx",
+  "lib/commerce/commercial-authority.ts",
 ];
 
 const text = surfaces.map((file) => readFileSync(file, "utf8")).join("\n");
@@ -31,11 +32,10 @@ for (const [label, pattern] of prohibited) {
 
 const required = [
   "Precision Performance",
-  "Request Trainer Consultation",
+  "Request a Stable Trial",
   "The Phil-osophy",
-  "AUD $5,500",
-  "Including GST",
-  "Postage additional",
+  "Online purchasing is unavailable",
+  "trainer consultation",
 ];
 for (const phrase of required) {
   if (!text.includes(phrase)) failures.push(`missing required phrase: ${phrase}`);

@@ -6,6 +6,8 @@ Record durable decisions future sprints must respect.
 
 ## Decision Log
 
+| 2026-07-29 | Close Sprint 030 `commercial-authority-pending-commerce-disabled-safe`. | Commercial sources conflict and material offer obligations remain unapproved. | Keep commerce consultation-led and disabled; require a named owner-approved complete schedule before later enablement planning. |
+
 | 2026-07-29 | Sprint 027B combines the accepted Sprint 025, 026 and 027 candidates without selecting one shared planning file as a whole-file winner. | The three candidates share a baseline but independently close domain, private-evidence and voice/privacy boundaries. | Single-owner product bytes remain exact; shared executable registrations are additive; durable state preserves all outcomes and limitations. |
 | 2026-07-29 | Keep Sprint 026 lifecycle controls as server-projected presentation hints while every mutation remains database-authoritative. | Client role inference cannot safely govern evidence privacy, retention or destructive operations. | Unknown states expose no actions; purge additionally requires `evidence.purge`, elapsed eligibility and no active hold; blocked evidence has no read affordance. |
 | 2026-07-29 | Sprint 027 launches only a typed/device-keyboard dictation fallback; the application does not control a microphone or use a transcription provider. | Provider processing, retention, subprocessor, consent, accuracy and incident boundaries are not approved. | One editable textarea remains authoritative; substantive notes require review confirmation; audio/provider capability fails closed. |
@@ -169,3 +171,15 @@ Aprec8 approves Supabase `ap-southeast-1` Singapore for Precision Performance. T
 - Internal `healthScore` remains unchanged. “Biochemistry Trend Score” remains provisional display language, not a persisted rename or final domain decision.
 - No additive migration is necessary for this bounded outcome because existing snapshots retain formula/lookup/threshold/recommendation source/version and copied recommendation wording.
 - Sprint 025 does not activate or configure deferred upload/provider/voice capabilities; CSV remains disabled and evidence safety remains fail closed.
+# Sprint 028 decisions — 2026-07-29
+
+- Treat only a latest `blocked` or `unscored` test as operational review attention; do not infer clinical priority.
+- Compare only the two latest snapshots with identical formula and lookup-source versions; otherwise show change as unavailable.
+- Bound the stable overview to 100 accessible horses and 200 recent test projections, using existing RLS and no note/attachment content.
+- Reuse existing permission codes and action routes; add no implicit permission contract.
+# Sprint 031 decision — 2026-07-29
+
+Do not substitute historical/static proof for the mandatory integrated authenticated rendered Preview workflow. Close cleanly at the protected transport boundary with zero fixtures and a no-go recommendation.
+# Sprint 031B decision — 2026-07-29
+
+Use the existing Vercel automation bypass only in protected process memory; do not create or rotate provider settings. Do not downgrade cross-stable denial to a nonexistent-horse assertion or exceed the one-stable ceiling.

@@ -1,15 +1,10 @@
 import { bootstrapInitialAdminAction } from "@/app/(admin)/admin/memberships/actions";
 import { SectionCard } from "@/components/layout/section-card";
-import { StatusGrid } from "@/components/layout/status-grid";
 import { getMembershipAdminSnapshot } from "@/lib/auth/bootstrap";
 import { getAppAuthContext } from "@/lib/auth/session";
-
-const portalItems = [
-  "Assigned horses entry point",
-  "Reporting area shell",
-  "Account management expansion point",
-  "Permission-aware dashboard slot",
-];
+import Link from "next/link";
+import { hasAppPermission } from "@/lib/auth/app-context";
+import { getStableWorkspaceOverview } from "@/lib/domain/horses";
 
 type PortalPageProps = {
   searchParams?: Promise<Record<string, string | string[] | undefined>>;
@@ -25,6 +20,7 @@ export default async function PortalPage({ searchParams }: PortalPageProps) {
   const denied = pickValue(params.denied);
   const context = await getAppAuthContext();
   const snapshot = await getMembershipAdminSnapshot();
+  const overview = await getStableWorkspaceOverview(hasAppPermission(context, "platform.admin") || hasAppPermission(context, "horse.records.write"));
   const shouldShowInitialAdminBootstrap =
     context.envReady && Boolean(context.sessionUser && context.appUserId) && !snapshot.hasAdmin;
 
@@ -73,7 +69,15 @@ export default async function PortalPage({ searchParams }: PortalPageProps) {
           </form>
         </div>
       ) : null}
-      <StatusGrid items={portalItems} />
+      <div className="mb-6 rounded-2xl border border-ink/10 bg-sand px-4 py-4 text-sm text-steel" role="status">Operational attention highlights incomplete records only. Clinical priority is unavailable; the list is alphabetical.</div>
+      <div className="grid gap-4" aria-label="Accessible horse operational overview">
+        {overview.horses.map((horse) => <article key={horse.id} className="rounded-[1.75rem] border border-ink/10 bg-white p-5 shadow-panel">
+          <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between"><div><p className="text-xs font-semibold uppercase tracking-[0.18em] text-ember">{horse.stableName ?? "Stable unavailable"}</p><h2 className="mt-2 font-display text-2xl text-ink">{horse.name}</h2><p className="mt-2 text-sm text-steel">Last biochemistry activity: {horse.lastActivity ?? "None available"}</p></div><Link href={`/portal/horses/${horse.id}`} className="rounded-full border border-ink/10 px-4 py-2 text-sm font-semibold text-ink">Open workspace</Link></div>
+          <dl className="mt-5 grid gap-3 md:grid-cols-3"><div className="rounded-2xl bg-sand p-4"><dt className="font-semibold text-ink">Attention</dt><dd className="mt-1 text-sm text-steel">{horse.operational?.attention.status}: {horse.operational?.attention.reason}</dd></div><div className="rounded-2xl bg-sand p-4"><dt className="font-semibold text-ink">Incomplete</dt><dd className="mt-1 text-sm text-steel">{horse.operational?.incomplete.status}: {horse.operational?.incomplete.reason}</dd></div><div className="rounded-2xl bg-sand p-4"><dt className="font-semibold text-ink">Changed</dt><dd className="mt-1 text-sm text-steel">{horse.operational?.changed.status}: {horse.operational?.changed.reason}</dd></div></dl>
+          <div className="mt-4"><Link href={horse.operational?.nextAction.href ?? `/portal/horses/${horse.id}`} className="text-sm font-semibold text-ember underline underline-offset-4">Next: {horse.operational?.nextAction.label ?? "Open workspace"}</Link></div>
+        </article>)}
+        {overview.horses.length === 0 ? <p className="rounded-2xl border border-ink/10 bg-white p-5 text-sm text-steel">No accessible horses are available for this account.</p> : null}
+      </div>
     </SectionCard>
   );
 }

@@ -1,11 +1,14 @@
 import { hasSupabaseEnv } from "@/lib/supabase/env";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { deriveOperationalSummary, type OperationalSummary, type RecentTestSnapshot } from "@/lib/domain/stable-workspace";
 
 export type HorseSummary = {
   id: string;
   name: string;
   status: string | null;
   stableName: string | null;
+  operational?: OperationalSummary;
+  lastActivity?: string | null;
 };
 
 export type HorseDetail = HorseSummary & {
@@ -20,6 +23,8 @@ export type HorseDetail = HorseSummary & {
     date: string;
     summary: string;
   }>;
+  latestBiochemistry: RecentTestSnapshot | null;
+  operational: OperationalSummary;
 };
 
 type HorseSummaryRow = {
@@ -68,6 +73,8 @@ const fallbackHorseDetails: Record<string, HorseDetail> = {
       { date: "2026-04-13", summary: "Track session recorded with stable recovery notes." },
       { date: "2026-04-12", summary: "Feeding and weight check completed without issue." },
     ],
+    latestBiochemistry: null,
+    operational: deriveOperationalSummary({ horseId: "sample-horse-1", tests: [], canWrite: false }),
   },
   "sample-horse-2": {
     id: "sample-horse-2",
@@ -87,6 +94,8 @@ const fallbackHorseDetails: Record<string, HorseDetail> = {
       { date: "2026-04-13", summary: "Track work logged with distance and context notes." },
       { date: "2026-04-12", summary: "Water intake and feeding notes updated." },
     ],
+    latestBiochemistry: null,
+    operational: deriveOperationalSummary({ horseId: "sample-horse-2", tests: [], canWrite: false }),
   },
 };
 
@@ -136,7 +145,23 @@ export async function getAccessibleHorseSummaries() {
   };
 }
 
-export async function getAccessibleHorseDetail(horseId: string) {
+type TestSummaryRow = { id: string; horse_id: string; test_date: string; scoring_status: RecentTestSnapshot["scoringStatus"]; health_score: number | null; formula_version: string; lookup_source_version: string };
+
+export async function getStableWorkspaceOverview(canWrite: boolean) {
+  const base = await getAccessibleHorseSummaries();
+  if (!base.envReady || base.horses.length === 0 || "error" in base) return { ...base, horses: base.horses.map((horse) => ({ ...horse, lastActivity: null, operational: deriveOperationalSummary({ horseId: horse.id, tests: [], canWrite }) })) };
+  const supabase = await createSupabaseServerClient();
+  const horseIds = base.horses.slice(0, 100).map((horse) => horse.id);
+  const { data, error } = await supabase.from("biochemistry_tests").select("id,horse_id,test_date,scoring_status,health_score,formula_version,lookup_source_version").in("horse_id", horseIds).is("deleted_at", null).order("test_date", { ascending: false }).limit(200);
+  if (error) return { ...base, horses: [], error: error.message };
+  const rows = (data ?? []) as TestSummaryRow[];
+  return { ...base, horses: base.horses.slice(0, 100).map((horse) => {
+    const tests = rows.filter((row) => row.horse_id === horse.id).slice(0, 2).map((row) => ({ id: row.id, horseId: row.horse_id, testDate: row.test_date, scoringStatus: row.scoring_status, healthScore: row.health_score, formulaVersion: row.formula_version, sourceVersion: row.lookup_source_version }));
+    return { ...horse, lastActivity: tests[0]?.testDate ?? null, operational: deriveOperationalSummary({ horseId: horse.id, tests, canWrite }) };
+  }) };
+}
+
+export async function getAccessibleHorseDetail(horseId: string, canWrite = false) {
   if (!hasSupabaseEnv()) {
     return {
       envReady: false,
@@ -151,7 +176,7 @@ export async function getAccessibleHorseDetail(horseId: string) {
     { data: temperatures },
     { data: weights },
     { data: waters },
-    { data: dailyRecords },
+    { data: dailyRecords }, { data: biochemistryRows },
   ] =
     await Promise.all([
       supabase
@@ -183,6 +208,7 @@ export async function getAccessibleHorseDetail(horseId: string) {
         .eq("horse_id", horseId)
         .order("record_date", { ascending: false })
         .limit(5),
+      supabase.from("biochemistry_tests").select("id,horse_id,test_date,scoring_status,health_score,formula_version,lookup_source_version").eq("horse_id", horseId).is("deleted_at", null).order("test_date", { ascending: false }).limit(2),
     ]);
 
   if (horseError || !horse) {
@@ -219,6 +245,7 @@ export async function getAccessibleHorseDetail(horseId: string) {
       date: record.record_date,
       summary: record.notes || "Daily record captured.",
     })) ?? [];
+  const tests = ((biochemistryRows ?? []) as TestSummaryRow[]).map((row) => ({ id: row.id, horseId: row.horse_id, testDate: row.test_date, scoringStatus: row.scoring_status, healthScore: row.health_score, formulaVersion: row.formula_version, sourceVersion: row.lookup_source_version }));
 
   return {
     envReady: true,
@@ -232,6 +259,8 @@ export async function getAccessibleHorseDetail(horseId: string) {
       dateOfBirth: horse.date_of_birth ?? null,
       recentMetrics,
       recentTimeline,
+      latestBiochemistry: tests[0] ?? null,
+      operational: deriveOperationalSummary({ horseId, tests, canWrite }),
     } satisfies HorseDetail,
   };
 }

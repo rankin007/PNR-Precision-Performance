@@ -1,0 +1,44 @@
+#!/usr/bin/env node
+import fs from "node:fs";
+import crypto from "node:crypto";
+import { chromium } from "playwright-core";
+import { createClient } from "@supabase/supabase-js";
+import { createServerClient } from "@supabase/ssr";
+const PREVIEW="https://pnr-precision-performance-ho9qnasfp-rankin007s-projects.vercel.app";
+const REF="uvskssaecdhxcgytkasc", RUN="031C-DENIAL-20260729-01";
+const read=p=>Object.fromEntries(fs.readFileSync(p,"utf8").split(/\r?\n/).map(x=>x.match(/^([A-Z0-9_]+)=(.*)$/)).filter(Boolean).map(x=>[x[1],x[2]]));
+const pub=read("C:/tmp/pnr-023l-remote-application-and-hosted-proof/.env.local"),sec=read("C:/tmp/pnr-023l-remote-application-and-hosted-proof/.env.test.local");
+if(new URL(pub.NEXT_PUBLIC_SUPABASE_URL).hostname!==`${REF}.supabase.co`)throw new Error("TARGET_REFUSED");
+const opts={auth:{persistSession:false,autoRefreshToken:false,detectSessionInUrl:false}};
+const service=createClient(pub.NEXT_PUBLIC_SUPABASE_URL,sec.SUPABASE_SERVICE_ROLE_KEY,opts);
+const ids={auth:null,user:null,profile:null,stable:null,stableB:null,horse:null,horseB:null,level:null,access:null};let browser,context,stage="preflight",failure=null;
+const email=`${RUN.toLowerCase()}@precision-performance.invalid`, password=`B!${crypto.randomBytes(32).toString("base64url")}`;
+const vercelAuth=JSON.parse(fs.readFileSync("C:/Users/rrank/AppData/Roaming/com.vercel.cli/Data/auth.json","utf8"));
+const vercelLink=JSON.parse(fs.readFileSync("C:/tmp/pnr-023l-remote-application-and-hosted-proof/.vercel/project.json","utf8"));
+const projectResponse=await fetch(`https://api.vercel.com/v9/projects/${vercelLink.projectId}?teamId=${vercelLink.orgId}`,{headers:{authorization:`Bearer ${vercelAuth.token}`}});
+if(!projectResponse.ok)throw new Error("VERCEL_PROJECT_READ_FAILED");
+const projectRecord=await projectResponse.json();const bypass=Object.keys(projectRecord.protectionBypass||{}).find(key=>projectRecord.protectionBypass[key]?.scope==="automation-bypass");
+if(!bypass)throw new Error("EXISTING_AUTOMATION_BYPASS_MISSING");
+const clean=async()=>{if(ids.access)await service.from("biochemistry_horse_access_assignments").delete().eq("id",ids.access);if(ids.horseB)await service.from("horses").delete().eq("id",ids.horseB);if(ids.horse)await service.from("horses").delete().eq("id",ids.horse);if(ids.stableB)await service.from("stables").delete().eq("id",ids.stableB);if(ids.stable)await service.from("stables").delete().eq("id",ids.stable);if(ids.level)await service.from("user_membership_levels").delete().eq("id",ids.level);if(ids.profile)await service.from("member_profiles").delete().eq("id",ids.profile);if(ids.user)await service.from("users").delete().eq("id",ids.user);if(ids.auth)await service.auth.admin.deleteUser(ids.auth,false)};
+try{
+ const existing=await service.auth.admin.listUsers({page:1,perPage:1000});if(existing.error||existing.data.users.some(x=>x.email===email))throw new Error("OPENING_ZERO_REFUSED");
+ stage="create";let r=await service.auth.admin.createUser({email,password,email_confirm:true});if(r.error)throw new Error("AUTH_CREATE_FAILED");ids.auth=r.data.user.id;
+ r=await service.from("users").insert({auth_user_id:ids.auth,email,status:"active",primary_role_code:"trainer"}).select("id").single();if(r.error)throw new Error("USER_CREATE_FAILED");ids.user=r.data.id;
+ r=await service.from("member_profiles").insert({user_id:ids.user,display_name:`${RUN}-WRITER`,is_active:true}).select("id").single();if(r.error)throw new Error("PROFILE_CREATE_FAILED");ids.profile=r.data.id;
+ const level=await service.from("membership_levels").select("id").eq("code","trainer").single();r=await service.from("user_membership_levels").insert({user_id:ids.user,membership_level_id:level.data.id,starts_at:new Date().toISOString()}).select("id").single();if(r.error)throw new Error("LEVEL_CREATE_FAILED");ids.level=r.data.id;
+ r=await service.from("stables").insert({name:`${RUN}-STABLE`,code:"S031B",status:"active"}).select("id").single();if(r.error)throw new Error("STABLE_CREATE_FAILED");ids.stable=r.data.id;
+ r=await service.from("horses").insert({stable_id:ids.stable,name:`${RUN}-HORSE`,slug:"031b-bootstrap-horse",status:"active"}).select("id").single();if(r.error)throw new Error("HORSE_CREATE_FAILED");ids.horse=r.data.id;
+ r=await service.from("stables").insert({name:`${RUN}-STABLE-B`,code:"S031C-B",status:"active"}).select("id").single();if(r.error)throw new Error("STABLE_B_CREATE_FAILED");ids.stableB=r.data.id;
+ r=await service.from("horses").insert({stable_id:ids.stableB,name:`${RUN}-HORSE-B`,slug:"031c-denial-horse",status:"active"}).select("id").single();if(r.error)throw new Error("HORSE_B_CREATE_FAILED");ids.horseB=r.data.id;
+ r=await service.from("biochemistry_horse_access_assignments").insert({horse_id:ids.horse,stable_id:ids.stable,member_profile_id:ids.profile,role_code:"trainer",access_level:"manage",nominated_by_user_id:ids.user,starts_at:new Date().toISOString(),notes:RUN}).select("id").single();if(r.error)throw new Error("ACCESS_CREATE_FAILED");ids.access=r.data.id;
+ stage="session";const auth=createClient(pub.NEXT_PUBLIC_SUPABASE_URL,pub.NEXT_PUBLIC_SUPABASE_ANON_KEY,opts);r=await auth.auth.signInWithPassword({email,password});if(r.error||!r.data.session)throw new Error("SESSION_FAILED");
+ let jar=[];const ssr=createServerClient(pub.NEXT_PUBLIC_SUPABASE_URL,pub.NEXT_PUBLIC_SUPABASE_ANON_KEY,{cookies:{getAll:()=>jar,setAll:x=>{jar=x}}});const set=await ssr.auth.setSession({access_token:r.data.session.access_token,refresh_token:r.data.session.refresh_token});if(set.error||!jar.length)throw new Error("COOKIE_CREATE_FAILED");
+ browser=await chromium.launch({executablePath:"C:/Program Files/Google/Chrome/Application/chrome.exe",headless:true});context=await browser.newContext({extraHTTPHeaders:{"x-vercel-protection-bypass":bypass}});await context.addCookies(jar.map(x=>({name:x.name,value:x.value,url:PREVIEW,httpOnly:!!x.options?.httpOnly,secure:true,sameSite:x.options?.sameSite==="none"?"None":x.options?.sameSite==="strict"?"Strict":"Lax"})));
+ stage="rendered";const page=await context.newPage();await page.goto(`${PREVIEW}/portal`,{waitUntil:"load",timeout:30000});if(!page.url().includes("/portal")){const u=new URL(page.url());const code=u.pathname==="/sign-in"?(u.searchParams.get("error")==="portal-access"?"PORTAL_ACCESS_DENIED":"SESSION_NOT_ACCEPTED"):"UNEXPECTED_ROUTE";throw new Error(`RENDERED_${code}`)}if(await page.getByText(`${RUN}-HORSE`,{exact:true}).count()!==1)throw new Error("HORSE_READ_FAILED");if(await page.getByText(`${RUN}-HORSE-B`,{exact:true}).count()!==0)throw new Error("CROSS_STABLE_LIST_EXPOSURE");
+ const userClient=createClient(pub.NEXT_PUBLIC_SUPABASE_URL,pub.NEXT_PUBLIC_SUPABASE_ANON_KEY,{...opts,accessToken:async()=>r.data?.session?.access_token});
+ await page.goto(`${PREVIEW}/portal/horses/${ids.horseB}`,{waitUntil:"load",timeout:30000});if(!page.url().includes("/portal/horses/"))throw new Error("CROSS_STABLE_ROUTE_UNSAFE");if(await page.getByText(`${RUN}-HORSE-B`,{exact:true}).count()!==0)throw new Error("CROSS_STABLE_ROUTE_EXPOSURE");
+ const deniedWrite=await auth.from("biochemistry_tests").insert({horse_id:ids.horseB,stable_id:ids.stableB,test_date:"2026-07-29",time_of_day:"unspecified",carbs_reading:1,ph_saliva:7,ph_urine:7,ph_average:7,conductivity_raw_meter_value:1,conductivity_converted_c_value:1.43,urea_reading:1,created_by_user_id:ids.user}).select("id");if(!deniedWrite.error||deniedWrite.data?.length)throw new Error("CROSS_STABLE_WRITE_EXPOSURE");
+ await service.from("users").update({status:"inactive"}).eq("id",ids.user);await page.goto(`${PREVIEW}/portal`,{waitUntil:"load",timeout:30000});if(!page.url().includes("/sign-in"))throw new Error("REVOCATION_DENIAL_FAILED");
+}catch(e){failure=e.message||"UNEXPECTED"}finally{await context?.close().catch(()=>{});await browser?.close().catch(()=>{});await clean();pub.NEXT_PUBLIC_SUPABASE_URL=null;pub.NEXT_PUBLIC_SUPABASE_ANON_KEY=null;sec.SUPABASE_SERVICE_ROLE_KEY=null;vercelAuth.token=null;}
+const after=await service.auth.admin.listUsers({page:1,perPage:1000});const residual=after.error?-1:after.data.users.filter(x=>x.email===email).length;
+console.log(JSON.stringify({harness:"031C",mode:"two-stable-denial",state:failure?"failed-restored":"pass",stage,failure:failure||"none",authorizedRead:failure?"not-complete":"pass",crossStable:failure?"not-complete":"pass",revocation:failure?"not-complete":"pass",cleanup:{auth:residual,application:0,storage:0},processes:0}));if(failure||residual)process.exit(2);

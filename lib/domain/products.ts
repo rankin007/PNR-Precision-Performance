@@ -1,7 +1,6 @@
 import { hasSupabaseEnv } from "@/lib/supabase/env";
-import { hasSupabaseAdminEnv } from "@/lib/supabase/admin";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
-import { hasStripeServerEnv } from "@/lib/stripe/env";
+import { commercialAuthority } from "@/lib/commerce/commercial-authority";
 
 export type ProductSummary = {
   id: string;
@@ -66,7 +65,7 @@ function formatPriceLabel(
 }
 
 export async function getPublicProductSummaries() {
-  const checkoutReady = hasSupabaseEnv() && hasSupabaseAdminEnv() && hasStripeServerEnv();
+  const checkoutReady = commercialAuthority.checkoutEnabled;
 
   if (!hasSupabaseEnv()) {
     return {
@@ -108,7 +107,7 @@ export async function getPublicProductSummaries() {
 }
 
 export async function getPublicProductDetail(slug: string) {
-  const checkoutReady = hasSupabaseEnv() && hasSupabaseAdminEnv() && hasStripeServerEnv();
+  const checkoutReady = commercialAuthority.checkoutEnabled;
 
   if (!hasSupabaseEnv()) {
     const product = fallbackProducts.find((item) => item.slug === slug);

@@ -11,16 +11,16 @@ const protectedShell = [
 ].join("\n");
 
 const assertions = [
-  [home.includes('href="#enquiry"') && home.includes("Request Trainer Consultation"), "primary CTA targets the on-page enquiry"],
+  [home.includes('href="#enquiry"') && home.includes("Request a Stable Trial"), "primary CTA targets the on-page enquiry"],
   [home.includes('id="how-it-works"') && home.includes("anonymised-hydration-demonstration.png"), "How It Works destination uses labelled approved demonstration content"],
   [home.includes("The Precision Performance Approach") && !home.includes("Testimonials and Good News Stories") && !home.includes("share.icloud.com"), "temporary approach section does not imply unfinished testimonial content or hotlink expiring media"],
-  [pricing.includes("AUD $5,500") && pricing.includes("Including GST") && pricing.includes("Postage additional"), "Pricing contains confirmed commercial terms"],
-  [pricing.includes("Additional services and software options are discussed during consultation.") && !pricing.includes("$150") && !pricing.includes("$250"), "visitor-facing consultation wording replaces speculative service and software pricing"],
+  [pricing.includes("Prices, inclusions, tax, freight, terms and availability are not confirmed") && !pricing.includes("AUD $5,500"), "Sprint 030 safely supersedes unapproved pricing"],
+  [pricing.includes("Request a Stable Trial") && !pricing.includes("$150") && !pricing.includes("$250"), "visitor-facing stable-trial wording replaces speculative pricing"],
   [!pricing.includes("checkout") && !pricing.includes("12 months") && !pricing.includes("twelve-month"), "checkout and undefined twelve-month offer are absent"],
   [form.includes("noValidate onSubmit={validate}") && !form.includes("action=") && !form.includes("fetch("), "form validation is client-only with no transmission action"],
   [form.includes("trainerName") && form.includes("stableName") && form.includes("stableAddress") && form.includes("phone") && form.includes("email") && form.includes("horseVolume") && form.includes("referredBy"), "form contains exactly the approved enquiry field concepts"],
   [form.includes("No information has been sent or saved") && form.includes("submission unavailable"), "non-submission state is explicit"],
-  [checkout.includes("checkout=under-construction"), "checkout route remains gated"],
+  [checkout.includes("commercialAuthority.reasonCode"), "checkout route remains authority-gated"],
   [protectedShell.includes("requirePortalAppContext") && protectedShell.includes("requireAdminAppContext"), "protected application shells remain authentication and role gated"],
 ];
 

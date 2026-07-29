@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "phase": "complete",
-  "sprint": "027B-completed-product-lineage-reconciliation",
-  "status": "completed-product-lineage-reconciled-combined-proof-clean",
+  "phase": "closed",
+  "sprint": "031C-two-stable-synthetic-denial-matrix-completion",
+  "status": "two-stable-authenticated-matrix-complete-with-accepted-limitations-clean",
   "updated": "2026-07-29T00:00:00+10:00",
-  "summary": "Sprint 027B reconciles completed Sprints 025, 026 and 027 from exact immutable baseline 6f8543020e126a4620f09be017744dcc75061e6e. Domain authority, fail-closed evidence management and typed/device-keyboard note review coexist; shared tests run exactly once. Full focused/regression/canonical/static/ESLint/TypeScript/production-build proof passes. Lockfile and migrations 0018-0021 are byte-identical; source fingerprints are unchanged. No provider, remote, Production, deployment, staging, commit, push, PR or merge action occurred."
+  "summary": "Sprint 031C passed protected transport, genuine two-stable denial and all 25 current rendered/runtime cases. Final Auth/application/Storage, anchors, orphans and owned processes are zero. The implemented scope is accepted for Production-release planning; deployment remains separately authorised and clinical, audio, evidence-safety and commerce limitations remain unavailable."
 }

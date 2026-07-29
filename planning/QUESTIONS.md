@@ -1,5 +1,9 @@
 # Current Questions
 
+## Sprint 030 commercial authority pending
+
+Who is the named Aprec8 business decision owner, and what versioned schedule do they approve for offer contents, price/currency/GST, freight, term/renewal, cancellation/refund/return, ownership/warranty/buyback, trial, fulfilment, checkout eligibility, effective date and historical-order treatment? Commerce remains disabled-safe until answered completely.
+
 Historical and superseded questions through Sprint 017F are preserved in `planning/history/QUESTIONS-THROUGH-017F.md`.
 
 ## Active Decision Required
@@ -58,3 +62,9 @@ See `planning/history/QUESTIONS-THROUGH-017F.md`. Archived questions are evidenc
 - Which named domain owner will approve production thresholds, final score language, biological/device limits and Table of Knowledge content?
 - Which approved evidence safety scanner/sanitiser providers and operational activation controls will make blocked evidence available, if any?
 - Will any future application-controlled microphone/transcription capability be pursued, and if so which provider, processing region, subprocessors, consent, retention/deletion, security, accuracy/correction and incident rules will govern it?
+# Sprint 031 Architect question
+
+What narrow protected rendered-transport/harness approach should be approved to complete the authenticated Preview matrix without changing schema, RLS, permissions or unavailable product authority?
+# Sprint 031B Architect question
+
+Approve a narrow 031C ceiling reconciliation from one to two exact-owned synthetic stables while retaining three horses and three identities so cross-stable denial can execute without using non-owned data?

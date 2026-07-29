@@ -1,5 +1,9 @@
 # Canonical Sprint Schedule
 
+## Sprint 030 — Commercial Schedule And Commerce Decision
+
+Closed `commercial-authority-pending-commerce-disabled-safe` on 2026-07-29. Complete owner authority remains prerequisite to later enablement work.
+
 ## Current Position
 
 - Current integrated candidate: **027B — Completed Product-Lineage Reconciliation** combines completed Sprints 025–027 without consuming Sprint 028. Domain authority remains partial, evidence safety remains fail closed without approved adapters, and app-controlled voice/transcription remains deferred.
@@ -67,3 +71,6 @@ Detailed historical outcomes remain in `planning/history/`, `planning/reviews/`,
 - Mechanical issues remain in the active sprint when non-behavioural and in scope.
 - Provider-dependent authenticated work does not block safe local Sprint 022 progress.
 - No structural/static result implies authenticated, hosted-runtime, cutover, or production readiness.
+# Current delivery position — 2026-07-29
+
+- Sprint **028 — Stable Dashboard And Horse Workspace** is complete `stable-dashboard-and-horse-workspace-authority-limited-clean`. Clinical-priority authority remains unavailable; the stable overview uses neutral ordering.

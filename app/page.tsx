@@ -3,13 +3,6 @@ import Link from "next/link";
 import { TrainerEnquiryForm } from "@/components/forms/trainer-enquiry-form";
 import { HorseMark } from "@/components/marketing/horse-mark";
 
-export const metadata = {
-  robots: {
-    index: false,
-    follow: false,
-  },
-};
-
 const methodSteps = [
   { label: "01", title: "Biochemical profiling", text: "Bring horse details, stable observations, instrument readings, team notes and feeding protocols into one consistent review." },
   { label: "02", title: "Recovery optimisation", text: "Use regular post-work analysis to observe weekly changes and support informed feeding and hydration adjustments." },
@@ -72,7 +65,7 @@ export default function HomePage() {
             <h1 className="mt-6 font-display text-5xl leading-[0.98] sm:text-6xl md:text-7xl">Precision Performance.<span className="mt-2 block text-white/92">A science for elite equine athletes.</span></h1>
             <p className="mt-7 max-w-3xl text-base leading-8 text-white/84 md:text-lg">Non-invasive urine and saliva analysis gives trainers a consistent view of hydration, electrolyte and recovery trends. Precision Performance combines practical horsemanship with measurable information to support informed decisions for each thoroughbred.</p>
             <div className="mt-9 flex flex-col gap-3 sm:flex-row">
-              <a href="#enquiry" className="inline-flex min-h-12 items-center justify-center rounded-full bg-accent px-6 py-3 text-sm font-bold text-technical hover:bg-white">Request Trainer Consultation</a>
+              <a href="#enquiry" className="inline-flex min-h-12 items-center justify-center rounded-full bg-accent px-6 py-3 text-sm font-bold text-technical hover:bg-white">Request a Stable Trial</a>
               <a href="#how-it-works" className="inline-flex min-h-12 items-center justify-center rounded-full border border-white/45 px-6 py-3 text-sm font-semibold hover:bg-white/10">See How It Works</a>
             </div>
           </div>
@@ -124,7 +117,7 @@ export default function HomePage() {
 
       <section className="px-4 py-16 md:px-8 md:py-24"><div className="mx-auto w-full max-w-[1180px]"><p className="eyebrow">The Precision Performance Approach</p><div className="mt-6 rounded-xl border border-accent/40 bg-brand p-7 text-white md:p-10"><h2 className="font-display text-3xl md:text-4xl">Practical insight for the working stable.</h2><p className="mt-5 max-w-3xl text-base leading-8 text-white/75">Precision Performance is designed around consistent observation, non-invasive measurement and informed professional review—helping trainers build a clearer picture of each horse over time.</p></div></div></section>
 
-      <section id="enquiry" className="bg-brand px-4 py-16 text-white md:px-8 md:py-24"><div className="mx-auto grid w-full max-w-[1180px] gap-10 lg:grid-cols-[0.75fr_1.25fr] lg:items-start"><div><p className="text-xs font-bold uppercase tracking-[0.22em] text-accent">Get in Touch</p><h2 className="mt-5 font-display text-4xl leading-tight md:text-5xl">Start a trainer consultation.</h2><p className="mt-5 text-base leading-8 text-white/76">Stable enquiries are personally handled by founder Phillip Rankin. Full portal, commerce and onboarding workflows remain gated.</p><Link href="/pricing" className="mt-6 inline-flex min-h-12 items-center justify-center rounded-full border border-white/35 px-6 py-3 text-sm font-semibold hover:bg-white/10">View confirmed pricing</Link></div><TrainerEnquiryForm /></div></section>
+      <section id="enquiry" className="bg-brand px-4 py-16 text-white md:px-8 md:py-24"><div className="mx-auto grid w-full max-w-[1180px] gap-10 lg:grid-cols-[0.75fr_1.25fr] lg:items-start"><div><p className="text-xs font-bold uppercase tracking-[0.22em] text-accent">Get in Touch</p><h2 className="mt-5 font-display text-4xl leading-tight md:text-5xl">Request a Stable Trial.</h2><p className="mt-5 text-base leading-8 text-white/76">Stable enquiries are personally handled by founder Phillip Rankin. Online enquiry transmission, commerce and onboarding remain unavailable while their requirements are completed.</p><Link href="/pricing" className="mt-6 inline-flex min-h-12 items-center justify-center rounded-full border border-white/35 px-6 py-3 text-sm font-semibold hover:bg-white/10">View commercial information</Link><p className="mt-6 text-sm leading-6 text-white/70">Precision Performance provides educational and informational support only. It does not diagnose or treat horses and does not replace trainer or veterinary judgement.</p><Link href="/disclaimer" className="mt-3 inline-flex text-sm font-semibold underline underline-offset-4 hover:text-accent">Read the public information disclaimer</Link></div><TrainerEnquiryForm /></div></section>
     </main>
   );
 }

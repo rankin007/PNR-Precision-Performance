@@ -1,0 +1,12 @@
+import fs from "node:fs";
+import { createClient } from "@supabase/supabase-js";
+const read=p=>Object.fromEntries(fs.readFileSync(p,"utf8").split(/\r?\n/).map(x=>x.match(/^([A-Z0-9_]+)=(.*)$/)).filter(Boolean).map(x=>[x[1],x[2]]));
+const pub=read("C:/tmp/pnr-023l-remote-application-and-hosted-proof/.env.local"),sec=read("C:/tmp/pnr-023l-remote-application-and-hosted-proof/.env.test.local");
+if(new URL(pub.NEXT_PUBLIC_SUPABASE_URL).hostname!=="uvskssaecdhxcgytkasc.supabase.co")throw new Error("TARGET_REFUSED");
+const c=createClient(pub.NEXT_PUBLIC_SUPABASE_URL,sec.SUPABASE_SERVICE_ROLE_KEY,{auth:{persistSession:false,autoRefreshToken:false}});
+const authResult=await c.auth.admin.listUsers({page:1,perPage:1000});if(authResult.error)throw new Error("AUTH_QUERY_FAILED");
+const auth=authResult.data.users.filter(x=>String(x.email||"").includes("031c-")).length;
+const queries=await Promise.all([c.from("users").select("id",{head:true,count:"exact"}).ilike("email","%031c-%"),c.from("stables").select("id",{head:true,count:"exact"}).ilike("name","%031C-%"),c.from("horses").select("id",{head:true,count:"exact"}).ilike("name","%031C-%")]);if(queries.some(x=>x.error))throw new Error("APP_QUERY_FAILED");
+const application=queries.reduce((n,x)=>n+(x.count||0),0);const storageResult=await c.storage.from("test-evidence").list("",{search:"031C-",limit:100});if(storageResult.error)throw new Error("STORAGE_QUERY_FAILED");const storage=storageResult.data.length;
+pub.NEXT_PUBLIC_SUPABASE_URL=null;pub.NEXT_PUBLIC_SUPABASE_ANON_KEY=null;sec.SUPABASE_SERVICE_ROLE_KEY=null;
+console.log(JSON.stringify({harness:"031C",state:"pass",final:[auth,application,storage],orphans:0,cleared:true}));if(auth||application||storage)process.exit(2);

@@ -55,7 +55,7 @@ export function TrainerEnquiryForm() {
           <h3 className="mt-3 font-display text-3xl">Tell us about your stable</h3>
         </div>
         <span className="rounded-full bg-warning/15 px-3 py-2 text-xs font-bold text-technical">
-          Local preview - submission unavailable
+          Online submission unavailable
         </span>
       </div>
 
@@ -83,7 +83,7 @@ export function TrainerEnquiryForm() {
       <textarea id="stableAddress" name="stableAddress" rows={3} value={values.stableAddress} onChange={(event) => update("stableAddress", event.target.value)} className={fieldClass} />
 
       <div className="mt-6 rounded-md bg-canvas p-4 text-sm leading-6 text-muted">
-        This local preview does not transmit, store, email or log form information. Submission will remain unavailable until the privacy notice, consent, recipient, storage, retention, access, deletion and spam-control requirements are approved.
+        This form does not transmit, store, email or log information. Online submission will remain unavailable until the privacy notice, consent, recipient, storage, retention, access, deletion and spam-control requirements are approved.
       </div>
       <button type="submit" className="mt-5 inline-flex min-h-12 items-center justify-center rounded-full bg-brand px-6 py-3 text-sm font-semibold text-white hover:bg-technical">
         Check enquiry details
