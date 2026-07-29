@@ -11,7 +11,8 @@ const BYPASS = process.env.PP035B_VERCEL_BYPASS;
 const RUN = process.env.PP035B_RUN;
 const REF = "uvskssaecdhxcgytkasc";
 if (!PREVIEW || !SUPABASE_URL || !ANON || !SERVICE || !BYPASS || !/^035B-[A-Z0-9-]{6,40}$/.test(RUN || "")) throw new Error("CONFIG_REFUSED");
-if (new URL(SUPABASE_URL).hostname !== `${REF}.supabase.co` || new URL(PREVIEW).hostname !== "pnr-precision-performance-p7icun3gs-rankin007s-projects.vercel.app") throw new Error("TARGET_REFUSED");
+const previewHost = new URL(PREVIEW).hostname;
+if (new URL(SUPABASE_URL).hostname !== `${REF}.supabase.co` || !/^pnr-precision-performance-[a-z0-9]+-rankin007s-projects\.vercel\.app$/.test(previewHost)) throw new Error("TARGET_REFUSED");
 
 const opts = { auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false } };
 const admin = createClient(SUPABASE_URL, SERVICE, opts);
