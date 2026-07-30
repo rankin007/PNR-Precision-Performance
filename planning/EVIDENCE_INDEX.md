@@ -23,6 +23,9 @@
 16. `planning/sprints/035D-prefetch-resistant-email-otp-authentication/` — closed four-file OTP/provider/deployment authority; outcome `email-otp-validation-blocked-clean`.
 17. `planning/reviews/035D-email-otp-cutover-and-mailbox-checkpoint.md` — OTP cutover, bounded non-delivery, privacy containment, corrected request handling, exact Preview/production, compatible forward rollback, manual-preview `0/0/0`, preserved identities and final blocked-clean proof.
 
+18. `planning/sprints/035E-custom-transactional-smtp-and-trainer-pilot-completion/` — applied four-file custom SMTP, delivered OTP and sequential trainer-pilot authority.
+19. `planning/reviews/035E-custom-transactional-smtp-authority-checkpoint.md` — exact baseline, missing prerequisite authority, protected operator checklist, zero-mutation proof and `transactional-smtp-authority-pending-clean` closeout.
+
 ## Accepted product lineage
 
 - Sprint 032 release: `planning/reviews/032-public-relaunch-and-production-deployment.md`; exact SHA `f7242ee0785ae9b87022394206c89ebdd5c9f6ad`.

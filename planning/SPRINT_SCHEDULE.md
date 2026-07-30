@@ -2,10 +2,11 @@
 
 ## Active direction
 
-Sprint 035D is closed `email-otp-validation-blocked-clean`. OTP-capable application/template compatibility, production invariants and exact-owned cleanup pass; delivered OTP authentication and A/B/C acceptance remain unaccepted. Custom transactional SMTP is required before further synthetic or participant authentication. Earlier Sprint 035 outcomes remain unchanged and product-wide Done is not claimed.
+Sprint 035E is closed `transactional-smtp-authority-pending-clean`. Its exact baseline and four-file sprint authority are established, but provider/commercial, sender/privacy, DNS/rollback, protected credential-entry and current participant-readiness authority is absent. No external mutation occurred. The existing 035E branch may resume after the sanitized checklist is confirmed; no new sprint or Pack is required. Earlier Sprint 035 outcomes remain unchanged and product-wide Done is not claimed.
 
 | Sprint | Outcome | Profile / proof |
 |---|---|---|
+| 035E | Closed `transactional-smtp-authority-pending-clean` | Strict provider/DNS/secret/participant gate; exact checklist recorded; no external or product mutation |
 | 035D | Closed `email-otp-validation-blocked-clean` | OTP application/template compatibility, production/rollback and cleanup pass; built-in SMTP delivery and participant acceptance blocked; custom transactional SMTP required |
 | 035C | Trainer Participation And Final MVP Acceptance | Strict participant privacy, exact no-alias Preview, passwordless A/B/C pilot and cleanup required |
 | 035B | Closed `trainer-pilot-participation-partial-clean` | Exact Preview and authenticated synthetic matrix passed; three-person trainer journey not started because protected provider coordination was unavailable; cleanup `0/0/0` |

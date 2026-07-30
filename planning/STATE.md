@@ -1,5 +1,13 @@
 # Project State
 
+## Sprint 035E closed `transactional-smtp-authority-pending-clean` — 2026-07-31
+
+Sprint `035E-custom-transactional-smtp-and-trainer-pilot-completion` opened in the dedicated clean worktree from exact Sprint 035D SHA `83fc1a76b20a8b01711a2a2f63e551b49ffe15be`; authenticated GitHub comparison supplied by the owner established remote equality at ahead `0`, behind `0`. The four-file Architect Pack was applied exactly.
+
+The required pre-mutation authority is not durably available: no selected transactional provider, account/plan-cost approval, approved sender identity, accepted provider privacy posture, confirmed DNS owner/rollback authority, protected SMTP credential-entry readiness or reconfirmed A/B/C availability was supplied. Under the strict 035E boundary, Builder made no provider, DNS, Supabase, Vercel, email, participant, Auth, application-data or Storage mutation and closed `transactional-smtp-authority-pending-clean` with an exact protected operator checklist in `planning/reviews/035E-custom-transactional-smtp-authority-checkpoint.md`.
+
+Sprint 035D production, rollback, five aliases, OTP template, Participant A, both ambiguous identities and prior cleanup classifications remain preserved without new remote claims. Delivered OTP authentication and A/B/C acceptance remain unproved. Product-wide Done is not claimed.
+
 ## Sprint 035D closed `email-otp-validation-blocked-clean` — 2026-07-31
 
 Sprint `035D-prefetch-resistant-email-otp-authentication` is active on branch `codex/035D-prefetch-resistant-email-otp-authentication` from exact clean local/remote Sprint 035C SHA `819f09add752a64dbf10213f3d481ad3132da9e9`. The four-file Architect Pack is applied. Backward-compatible email OTP request/code verification is implemented with `shouldCreateUser:false`, exact plus-address preservation, generic request behavior, transient browser state and the existing callback retained for rollback. Focused tests, typecheck, lint, canonical static validation and the production build pass. The last sanitized A state remains the inherited `0/1/0` boundary until protected reverification.
