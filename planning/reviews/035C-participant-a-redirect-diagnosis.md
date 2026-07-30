@@ -94,4 +94,12 @@ Protected matching/cleanup now distinguishes ownership classes. A recreated afte
 
 Exact clean archive candidate `5b55aea39abcb45db06a42312d3ff9a7f293f3f9` deployed as `dpl_CGtFBxpQakJHi3x41hzcgpvmDL3A` at `https://pnr-precision-performance-ge5io3pa3-rankin007s-projects.vercel.app`. It is Ready, Preview-classified and alias-free. The Vercel production build compiled, linted, type-checked and generated all routes. Artifact-free origin proof returned `200`; `/auth/callback?next=/portal` returned `307` to the exact same Preview `/portal`. Five stable aliases remain mapped to the unchanged accepted production source.
 
-The new exact callback is not yet substituted for the old temporary Preview callback, so authentication remains stopped. No new A identity, passwordless request or protected match has been initiated.
+Before callback replacement, authentication remained stopped and no new A identity, passwordless request or protected match was initiated.
+
+### Callback replacement passed
+
+Authoritative deployment metadata resolved the new origin directly from `dpl_CGtFBxpQakJHi3x41hzcgpvmDL3A`. Supabase target `uvskssaecdhxcgytkasc` is `Precision Performance Clean Rebuild`, region `ap-southeast-1`, status `ACTIVE_HEALTHY`; linked local/remote migrations match `0001` through `0021`.
+
+The stale Sprint-035C callback was replaced with `https://pnr-precision-performance-ge5io3pa3-rankin007s-projects.vercel.app/auth/callback`. Sanitized Auth URL verification shows exactly two entries: the unchanged production callback and that exact new Preview callback. The stale callback and wildcard entries are absent; production Site URL is unchanged. No provider, template, key, environment or unrelated Auth setting changed.
+
+Post-change verification confirms the deployment remains Ready/Preview, exact candidate `5b55aea39abcb45db06a42312d3ff9a7f293f3f9`, alias count zero, origin `200`, callback `307` same-origin to `/portal`, and all five stable aliases on the unchanged production source. Structural tests prove Preview forwarded host/proto produces the exact Preview `emailRedirectTo`, production remains production-bound, and both ownership cleanup classes remain safe. Protected ledger remains A contained-owned-deleted only; parent service-role environment is absent; owned state remains `0/0/0`; A is absent and B/C untouched.

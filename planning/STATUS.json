@@ -19,7 +19,7 @@
   "syntheticCleanup": "contained-owned-0/0/0",
   "temporaryPreviewCallbackRemoved": false,
   "temporaryPreviewCallbackPresent": true,
-  "participantAccountHandoff": "participant-a-contained-new-preview-callback-rotation-pending",
+  "participantAccountHandoff": "participant-a-contained-new-preview-ready-for-fresh-a-only-handoff",
   "participantMatchingAuthority": "administrator-controlled-app_metadata",
   "participantMatchingFieldCount": 2,
   "participantAuthorizationUsesMatchingMetadata": false,

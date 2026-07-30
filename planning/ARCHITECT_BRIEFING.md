@@ -20,6 +20,8 @@ Participant A containment subsequently passed: prior provider sign-in indicator 
 
 Fresh exact-source Preview `dpl_CGtFBxpQakJHi3x41hzcgpvmDL3A` at `5b55aea39abcb45db06a42312d3ff9a7f293f3f9` is Ready/Preview, alias-free and healthy after a passing production build. The new callback rotation remains pending; no A identity/message has been recreated and B/C remain untouched.
 
+Callback rotation now passes: exact new Preview callback plus unchanged production callback only; stale callback/wildcard absent; production Site URL unchanged. Supabase target is active/healthy in `ap-southeast-1` with migrations `0001`–`0021` aligned. Preview remains Ready/Preview, alias-free and healthy, stable aliases remain unchanged, owned state is `0/0/0`, A remains absent and B/C remain untouched. A fresh A-only protected handoff may begin; no acceptance is yet claimed.
+
 Sprint 035B is closed `trainer-pilot-participation-partial-clean`. Exact Preview deployment `dpl_HDtvZnnz9osHuyQ7zW7WX1w1mpWE` at source SHA `dedc19001acd9229d435718e51ceabbbdd208860` passed authenticated passwordless synthetic acceptance. Cleanup is application/Auth/Storage `0/0/0`, and the temporary callback is removed.
 
 ## Current status
