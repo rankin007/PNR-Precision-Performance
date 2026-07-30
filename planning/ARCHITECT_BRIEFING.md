@@ -6,6 +6,8 @@ Sprint 035C is active from exact clean Sprint 035B local/remote SHA `497c8628c2f
 
 Preview `dpl_3YuZ36Jh8h6U5CgCGw9NQzpDTDfy` is Ready/Preview at exact candidate `aa0cf5ddb598a73056677e030ec6a39141764cb9`, with zero aliases and the exact callback temporarily present. Participant-account handoff is pending; Sprint-owned creation is application/Auth/Storage `0/0/0`. The accepted protected matcher is administrator-controlled `app_metadata` using only `participant_alias` and `pilot_sprint`, with merge-preservation and cleanup; these fields never authorize application or RLS access.
 
+Participant A is a Sprint-owned confirmed identity but its Dashboard invitation redirect failed; B/C were not started. Artifact-free evidence proves the Preview origin and callback route are healthy and correctly allowlisted. The Dashboard cannot set `redirectTo`, and the Preview passwordless action used a localhost fallback because no site URL variable is approved. Builder is validating a narrow trusted-request-origin correction and a hidden one-participant-at-a-time Admin tagging helper before A authentication is retried.
+
 Sprint 035B is closed `trainer-pilot-participation-partial-clean`. Exact Preview deployment `dpl_HDtvZnnz9osHuyQ7zW7WX1w1mpWE` at source SHA `dedc19001acd9229d435718e51ceabbbdd208860` passed authenticated passwordless synthetic acceptance. Cleanup is application/Auth/Storage `0/0/0`, and the temporary callback is removed.
 
 ## Current status

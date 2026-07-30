@@ -1,7 +1,9 @@
 "use server";
 
 import { redirect } from "next/navigation";
+import { headers } from "next/headers";
 import { normalizeAppRedirectPath } from "@/lib/auth/access";
+import { resolvePasswordlessRedirectOrigin } from "@/lib/auth/redirect-origin";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { hasSupabaseEnv } from "@/lib/supabase/env";
 
@@ -23,7 +25,15 @@ export async function signInWithOtpAction(formData: FormData) {
   }
 
   const supabase = await createSupabaseServerClient();
-  const origin = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+  const requestHeaders = await headers();
+  const origin = resolvePasswordlessRedirectOrigin({
+    requestOrigin: requestHeaders.get("origin"),
+    configuredOrigin: process.env.NEXT_PUBLIC_SITE_URL ?? null,
+  });
+
+  if (!origin) {
+    redirect(`/sign-in?error=origin&next=${encodeURIComponent(next)}`);
+  }
 
   const { error } = await supabase.auth.signInWithOtp({
     email,

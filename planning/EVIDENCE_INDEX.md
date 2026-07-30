@@ -18,6 +18,7 @@
 12. `planning/sprints/035C-trainer-participation-and-final-mvp-acceptance/SPRINT.md` — active participant and final MVP acceptance authority.
 13. `planning/reviews/035C-approved-run-manifest.md` — approved targets, ceilings, privacy boundary and cleanup plan.
 14. `planning/reviews/035C-protected-participant-matching-contract.md` — accepted administrator-controlled app-metadata matching, non-authorization boundary and cleanup contract.
+15. `planning/reviews/035C-participant-a-redirect-diagnosis.md` — artifact-free redirect diagnosis, Participant A owned state, mechanism rejection and in-scope correction.
 
 ## Accepted product lineage
 
