@@ -1,0 +1,23 @@
+You are Builder for Sprint 035D — Prefetch-Resistant Email OTP Authentication.
+
+Start from branch `codex/035C-trainer-participation-and-final-mvp-acceptance` at exact clean local/remote SHA `819f09add752a64dbf10213f3d481ad3132da9e9`. Read `AGENTS.md`, `templates/method/120x-agent-identity.md`, all four Sprint 035D files, Sprint 035/035B/035C authorities and `planning/reviews/035C-participant-a-redirect-diagnosis.md`. Verify the baseline and create `codex/035D-prefetch-resistant-email-otp-authentication`. Do not rewrite earlier sprint outcomes.
+
+Deliver a production-safe email OTP journey for existing prepared trainer identities. Preserve `shouldCreateUser:false`, exact plus-address matching and generic anti-enumeration behavior. Add the minimum request, code-entry, verification, resend and safe-error experience. Keep email and OTP out of URLs, logs, durable evidence and committed fixtures. Do not change schema, migrations, RLS, roles, permissions or account-registration policy.
+
+Use Vercel project `pnr-precision-performance` and Supabase project `uvskssaecdhxcgytkasc` in Singapore at exact migration ledger `0001` through `0021`; never contact old project `tagnbgkroihagjmvehlx`. Create an exact-source, generated, alias-free Preview and prove it before external mutation.
+
+Deploy the backward-compatible OTP-capable application to production before changing the shared Magic Link template. Preserve the immediately preceding Ready deployment as rollback and verify apex, `www` and all five stable aliases. If the application release is not healthy, roll it back and do not mutate the template.
+
+Through protected tooling, capture an exactly restorable representation and sanitized fingerprint of the existing Magic Link template. Change only that template to present one provider-supported email OTP code and no direct `ConfirmationURL` verification action. Do not alter Confirm sign up, the production Site URL/callback, keys, security settings or unrelated templates. If exact target or restoration integrity is uncertain, stop before mutation.
+
+Run bounded synthetic acceptance through the deployed application and protected mailbox path: unknown-user non-creation; prepared-user delivered OTP; one-action email; successful session and exact Preview `/portal`; permission isolation; wrong-horse denial; safe incorrect/expired/reused/superseded behavior; and Auth-last cleanup to application/Auth/Storage `0/0/0`. Use equivalent or stronger safe evidence when a preferred supporting tool is unavailable, but source-string checks, locally constructed URLs or Admin-generated links alone do not prove delivery/prefetch safety.
+
+On a material failure after template cutover, immediately restore the captured template, restore the prior production deployment if needed, verify all stable aliases and clean exact-owned state. Record the failure without claiming acceptance.
+
+Only after synthetic acceptance passes, guardedly reverify Participant A. Coordinate through the product-owner/operator without receiving or retaining any inbox, OTP, link, Auth UUID, token, credential or mailbox header. A performs OTP sign-in and the five-step trainer dashboard journey. Begin B only after A passes and state is reconciled; begin C only after B passes. Use A/B/C only in durable evidence. Never delete a pre-existing identity; remove only exact Sprint-owned access/metadata. Do not coach past a product defect.
+
+Run focused OTP/auth/callback/session, plus-address, ownership/containment, dashboard, permission and wrong-horse tests; applicable canonical validations; lint; typecheck; exact-candidate production build; Preview/production smoke; diff/encoding/staged-manifest/private-data/no-secret checks. Keep in-scope harness, validator and deterministic corrections inside Sprint 035D. Stop only for a material target, authority, security, privacy, migration, production, integrity, scope or cleanup boundary; use manual intervention only after safe alternatives are exhausted and document exact steps and subsequent verification.
+
+Clean exact-owned application data first and Auth last, remove the temporary Preview callback, clear protected state and prove final owned `0/0/0` except explicitly preserved not-owned identities with zero Sprint access. Reverify the final provider template fingerprint, production deployment, Site URL/callback and five stable aliases.
+
+Refresh Sprint 035D evidence, current state, status, schedule, evidence index and Architect briefing. Commit a small intentional series and push only `codex/035D-prefetch-resistant-email-otp-authentication`. Do not merge, push `develop`, open a PR or rewrite history. Close with exactly one permitted Sprint 035D outcome and never claim product-wide Done.
