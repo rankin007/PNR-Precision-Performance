@@ -4,7 +4,7 @@ param(
     [ValidateSet('A', 'B', 'C')]
     [string]$Alias,
     [Parameter(Mandatory = $true)]
-    [ValidateSet('Apply', 'Contain')]
+    [ValidateSet('Apply', 'Contain', 'Verify')]
     [string]$Operation
 )
 
@@ -78,7 +78,7 @@ try {
     $startInfo = [Diagnostics.ProcessStartInfo]::new()
     $startInfo.FileName = 'node'
     $escapedHelperPath = $helperPath.Replace('"', '\"')
-    $helperMode = if ($Operation -eq 'Contain') { '--contain-one' } else { '--apply-one' }
+    $helperMode = if ($Operation -eq 'Contain') { '--contain-one' } elseif ($Operation -eq 'Verify') { '--verify-one' } else { '--apply-one' }
     $startInfo.Arguments = "`"$escapedHelperPath`" $helperMode $Alias"
     $startInfo.WorkingDirectory = $repoRoot
     $startInfo.UseShellExecute = $false

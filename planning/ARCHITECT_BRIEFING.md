@@ -24,6 +24,8 @@ Callback rotation now passes: exact new Preview callback plus unchanged producti
 
 Fresh A request created the expected untagged Auth identity, but Apply returned `ALIAS_ALREADY_PROCESSED_A` before hidden inbox or metadata mutation because the prior contained-owned-deleted ledger state was rejected unconditionally. The email remains unopened; no session or application state exists; current owned state is `0/1/0`; parent secret environment is absent and B/C remain untouched. Builder is correcting only that deterministic ledger transition.
 
+The corrected transition then tagged A with sanitized ownership `sprint-owned`, and the protected ledger records only A as `existing-tagged`. The exact Preview sign-in request reported sent/next `/portal`, but authentication did not succeed; later old-message landings produced sanitized production-root `otp_expired` with no visible code query. This does not prove a fresh valid message ignores the corrected redirect. Participant acceptance is not claimed. A protected read-only verification checkpoint must prove one tagged A, Sprint ownership, no sign-in indicator and zero application/access state before one controlled fresh-message retry; otherwise use bounded containment.
+
 Sprint 035B is closed `trainer-pilot-participation-partial-clean`. Exact Preview deployment `dpl_HDtvZnnz9osHuyQ7zW7WX1w1mpWE` at source SHA `dedc19001acd9229d435718e51ceabbbdd208860` passed authenticated passwordless synthetic acceptance. Cleanup is application/Auth/Storage `0/0/0`, and the temporary callback is removed.
 
 ## Current status

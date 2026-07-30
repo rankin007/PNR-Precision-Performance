@@ -41,6 +41,11 @@ assert(source.indexOf("admin.auth.admin.updateUserById(user.id") < source.indexO
 assert(source.includes('const restored = await admin.auth.admin.updateUserById(user.id, { app_metadata: original })'));
 assert(source.includes('participant: `${alias}-existing-tagged`, ownership'));
 assert(source.includes("renameSync(pending, LEDGER)"));
+assert(source.includes('if (alias !== "A") fail("VERIFICATION_ALIAS_REFUSED")'));
+assert(source.includes('if (matches.length !== 1) fail("TAG_MATCH_AMBIGUOUS_A")'));
+assert(source.includes('participant: "A-tagged-sprint-owned"'));
+assert(source.includes('decision = application === 0 && signInIndicator === "not-observed" ? "fresh-message-retry-eligible" : "containment-required"'));
+assert(source.includes('storageOwned: 0'));
 assert(!source.includes("unrelatedUserCount"));
 
 console.log("Sprint 035C participant ownership and containment tests passed.");

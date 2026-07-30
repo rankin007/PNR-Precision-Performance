@@ -166,6 +166,48 @@ async function exactCount(query, code) {
   return result.count;
 }
 
+async function verifyOne(alias) {
+  if (alias !== "A") fail("VERIFICATION_ALIAS_REFUSED");
+  const protectedConfig = config();
+  const ledger = readLedger();
+  const entry = ledger.participants.A;
+  if (!entry || entry.state !== "existing-tagged" || entry.ownership !== "sprint-owned") fail("OWNERSHIP_LEDGER_REFUSED");
+  const { createClient } = await import("@supabase/supabase-js");
+  const admin = createClient(protectedConfig.url, protectedConfig.service, { auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false } });
+  const known = await users(admin);
+  const matches = known.filter(user => user.app_metadata?.participant_alias === "A" && user.app_metadata?.pilot_sprint === "035C");
+  if (matches.length !== 1) fail("TAG_MATCH_AMBIGUOUS_A");
+  const user = matches[0];
+  const conflicting = known.filter(item => item.id !== user.id && item.app_metadata?.participant_alias === "A" && item.app_metadata?.pilot_sprint === "035C");
+  if (conflicting.length) fail("PARTICIPANT_TAG_CONFLICT");
+  const appUsers = await admin.from("users").select("id").eq("auth_user_id", user.id);
+  if (appUsers.error || !Array.isArray(appUsers.data) || appUsers.data.length > 1) fail("APPLICATION_USER_AMBIGUOUS");
+  let profiles = 0;
+  let memberships = 0;
+  let assignments = 0;
+  if (appUsers.data.length === 1) {
+    const appUserId = appUsers.data[0].id;
+    const profileRows = await admin.from("member_profiles").select("id").eq("user_id", appUserId);
+    if (profileRows.error || !Array.isArray(profileRows.data) || profileRows.data.length > 1) fail("PROFILE_AMBIGUOUS");
+    profiles = profileRows.data.length;
+    memberships = await exactCount(admin.from("user_membership_levels").select("id", { count: "exact", head: true }).eq("user_id", appUserId), "MEMBERSHIP_COUNT_FAILED");
+    if (profiles === 1) {
+      const profileId = profileRows.data[0].id;
+      assignments += await exactCount(admin.from("stable_staff_assignments").select("id", { count: "exact", head: true }).eq("member_profile_id", profileId), "STAFF_COUNT_FAILED");
+      assignments += await exactCount(admin.from("stable_role_assignments").select("id", { count: "exact", head: true }).eq("member_profile_id", profileId), "ROLE_COUNT_FAILED");
+      assignments += await exactCount(admin.from("biochemistry_horse_access_assignments").select("id", { count: "exact", head: true }).eq("member_profile_id", profileId), "ACCESS_COUNT_FAILED");
+      assignments += await exactCount(admin.from("trainers").select("id", { count: "exact", head: true }).eq("member_profile_id", profileId), "TRAINER_COUNT_FAILED");
+      assignments += await exactCount(admin.from("owners").select("id", { count: "exact", head: true }).eq("member_profile_id", profileId), "OWNER_COUNT_FAILED");
+    }
+  }
+  const application = appUsers.data.length + profiles + memberships + assignments;
+  const signInIndicator = user.last_sign_in_at ? "provider-sign-in-indicator-present" : "not-observed";
+  const decision = application === 0 && signInIndicator === "not-observed" ? "fresh-message-retry-eligible" : "containment-required";
+  process.stdout.write(`${JSON.stringify({ state: "pass", participant: "A-tagged-sprint-owned", taggedAuth: 1, ownership: "sprint-owned", signInIndicator, application, storageOwned: 0, ownedCounts: `${application}/1/0`, decision })}\n`);
+  protectedConfig.service = null;
+  delete process.env.PP035C_SERVICE_ROLE_KEY;
+}
+
 async function containOne(alias) {
   if (alias !== "A") fail("CONTAINMENT_ALIAS_REFUSED");
   const protectedConfig = config();
@@ -272,6 +314,6 @@ function selfTest() {
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   const mode = process.argv[2] || "--self-test";
   const alias = process.argv[3];
-  Promise.resolve(mode === "--self-test" ? selfTest() : mode === "--apply-one" ? applyOne(alias) : mode === "--contain-one" ? containOne(alias) : mode === "--cleanup" ? cleanup() : fail("MODE_REFUSED"))
+  Promise.resolve(mode === "--self-test" ? selfTest() : mode === "--apply-one" ? applyOne(alias) : mode === "--verify-one" ? verifyOne(alias) : mode === "--contain-one" ? containOne(alias) : mode === "--cleanup" ? cleanup() : fail("MODE_REFUSED"))
     .catch(error => { process.stdout.write(`${JSON.stringify({ state: "failed-sanitized", code: /^[A-Z0-9_]+$/.test(error.code || error.message) ? (error.code || error.message) : "UNEXPECTED" })}\n`); process.exitCode = 2; });
 }
