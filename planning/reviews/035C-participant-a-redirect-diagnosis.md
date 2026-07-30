@@ -89,3 +89,9 @@ The prior provider sign-in indicator is retained only as that classification. Th
 Read-only provider reconciliation confirms the temporary callback remains exactly `https://pnr-precision-performance-n7xbelwg8-rankin007s-projects.vercel.app/auth/callback` beside the unchanged production callback, with production Site URL unchanged. Deployment `dpl_G8StMkGqfTmUsNMpAfNUCwontC42` remains Ready/Preview and alias-free. All five stable aliases remain mapped to accepted production source `pnr-precision-performance-khx3yoqq4-rankin007s-projects.vercel.app`. B/C remain untouched.
 
 Protected matching/cleanup now distinguishes ownership classes. A recreated after containment checkpoint `c1300515cb4405afb822498c94102b2e94d6e21d` and after ledger state `contained-owned-deleted` is classified `sprint-owned`; an older or otherwise pre-existing identity is classified `not-owned`. Cleanup deletes Sprint-owned Auth identities last, but only removes the two Sprint metadata tags from not-owned identities. Ownership/containment tests and helper self-tests cover both paths. B/C default to not-owned until a future protected creation proof is established and remain unprocessed.
+
+### Fresh corrected Preview
+
+Exact clean archive candidate `5b55aea39abcb45db06a42312d3ff9a7f293f3f9` deployed as `dpl_CGtFBxpQakJHi3x41hzcgpvmDL3A` at `https://pnr-precision-performance-ge5io3pa3-rankin007s-projects.vercel.app`. It is Ready, Preview-classified and alias-free. The Vercel production build compiled, linted, type-checked and generated all routes. Artifact-free origin proof returned `200`; `/auth/callback?next=/portal` returned `307` to the exact same Preview `/portal`. Five stable aliases remain mapped to the unchanged accepted production source.
+
+The new exact callback is not yet substituted for the old temporary Preview callback, so authentication remains stopped. No new A identity, passwordless request or protected match has been initiated.

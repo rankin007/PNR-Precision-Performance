@@ -18,6 +18,8 @@ The initial containment helper returned `OWNERSHIP_AMBIGUOUS` without mutation b
 
 Participant A containment subsequently passed: prior provider sign-in indicator recorded, production callback not processed, zero application records removed, active session revoked through exact-owned Auth deletion, and owned application/Auth/Storage `0/0/0`. Protected ledger state is A `contained-owned-deleted`, Sprint-owned, with no B/C entries. Post-delete exact A absence and unrelated-identity preservation passed; parent service-role environment is absent. No participant acceptance is claimed.
 
+Fresh exact-source Preview `dpl_CGtFBxpQakJHi3x41hzcgpvmDL3A` at `5b55aea39abcb45db06a42312d3ff9a7f293f3f9` is Ready/Preview, alias-free and healthy after a passing production build. The new callback rotation remains pending; no A identity/message has been recreated and B/C remain untouched.
+
 Sprint 035B is closed `trainer-pilot-participation-partial-clean`. Exact Preview deployment `dpl_HDtvZnnz9osHuyQ7zW7WX1w1mpWE` at source SHA `dedc19001acd9229d435718e51ceabbbdd208860` passed authenticated passwordless synthetic acceptance. Cleanup is application/Auth/Storage `0/0/0`, and the temporary callback is removed.
 
 ## Current status
