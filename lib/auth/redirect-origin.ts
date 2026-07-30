@@ -12,9 +12,16 @@ function approvedHost(hostname: string) {
 
 export function resolvePasswordlessRedirectOrigin(input: {
   requestOrigin: string | null;
+  forwardedHost: string | null;
+  forwardedProto: string | null;
   configuredOrigin: string | null;
 }) {
-  for (const candidate of [input.requestOrigin, input.configuredOrigin]) {
+  const forwardedHost = input.forwardedHost?.split(",")[0]?.trim().toLowerCase() ?? null;
+  const forwardedProto = input.forwardedProto?.split(",")[0]?.trim().toLowerCase() ?? null;
+  const forwardedOrigin = forwardedHost && forwardedProto ? `${forwardedProto}://${forwardedHost}` : null;
+
+  const candidates = forwardedHost || forwardedProto ? [forwardedOrigin] : [input.requestOrigin];
+  for (const candidate of candidates) {
     if (!candidate) continue;
     try {
       const url = new URL(candidate);
@@ -26,5 +33,18 @@ export function resolvePasswordlessRedirectOrigin(input: {
       // Try the next bounded source.
     }
   }
+
+  if (process.env.NODE_ENV !== "production" && input.configuredOrigin) {
+    try {
+      const configured = new URL(input.configuredOrigin);
+      if (configured.protocol === "http:" && ["localhost", "127.0.0.1"].includes(configured.hostname)) return configured.origin;
+    } catch {
+      // Fail closed.
+    }
+  }
   return null;
+}
+
+export function buildPasswordlessCallbackUrl(origin: string, next: string) {
+  return `${origin}/auth/callback?next=${encodeURIComponent(next)}`;
 }

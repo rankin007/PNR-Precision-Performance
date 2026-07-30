@@ -3,7 +3,7 @@
 import { redirect } from "next/navigation";
 import { headers } from "next/headers";
 import { normalizeAppRedirectPath } from "@/lib/auth/access";
-import { resolvePasswordlessRedirectOrigin } from "@/lib/auth/redirect-origin";
+import { buildPasswordlessCallbackUrl, resolvePasswordlessRedirectOrigin } from "@/lib/auth/redirect-origin";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { hasSupabaseEnv } from "@/lib/supabase/env";
 
@@ -28,6 +28,8 @@ export async function signInWithOtpAction(formData: FormData) {
   const requestHeaders = await headers();
   const origin = resolvePasswordlessRedirectOrigin({
     requestOrigin: requestHeaders.get("origin"),
+    forwardedHost: requestHeaders.get("x-forwarded-host") ?? requestHeaders.get("host"),
+    forwardedProto: requestHeaders.get("x-forwarded-proto"),
     configuredOrigin: process.env.NEXT_PUBLIC_SITE_URL ?? null,
   });
 
@@ -38,7 +40,7 @@ export async function signInWithOtpAction(formData: FormData) {
   const { error } = await supabase.auth.signInWithOtp({
     email,
     options: {
-      emailRedirectTo: `${origin}/auth/callback?next=${encodeURIComponent(next)}`,
+      emailRedirectTo: buildPasswordlessCallbackUrl(origin, next),
     },
   });
 

@@ -12,6 +12,8 @@ Correction commit `07edea49153fb557a2afc2a066f96c30a102e4c7` is pushed on the sc
 
 An operator-side manual secret conversion attempt was safely terminated before the helper ran; no inbox, app-metadata or remote mutation occurred. A Sprint-owned guarded PowerShell wrapper and no-secret static self-test are now under final validation. Participant A remains owned-confirmed-untagged/session-unproven and owned application/Auth/Storage remains `0/1/0`; B/C remain not started.
 
+Participant execution is now stopped. A Preview passwordless request redirected to the production root with a code query instead of the Preview callback, and that code was disclosed outside the protected path. The value is treated as compromised and will not be inspected or exchanged. No portal acceptance is claimed. B/C remain not started while Builder performs sanitized session/application containment, exact-owned A cleanup and redirect correction.
+
 ## Sprint 035B closeout — 2026-07-30
 
 Sprint `035B-preview-configuration-and-trainer-pilot-completion` is closed `trainer-pilot-participation-partial-clean`. Exact-candidate Preview deployment `dpl_HDtvZnnz9osHuyQ7zW7WX1w1mpWE` at SHA `dedc19001acd9229d435718e51ceabbbdd208860` passed the authenticated passwordless synthetic matrix on phone, desktop and tablet. Exact-owned application/Auth/Storage cleanup is `0/0/0`, and the temporary Preview callback is removed. Trainer Participants A, B and C did not start because no protected inbox/provider-operator coordination path was available. Trainer acceptance is not claimed, production remains unchanged and product-wide Done is not met.

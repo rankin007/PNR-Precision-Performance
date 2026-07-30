@@ -2,7 +2,10 @@
 param(
     [Parameter(Mandatory = $true)]
     [ValidateSet('A', 'B', 'C')]
-    [string]$Alias
+    [string]$Alias,
+    [Parameter(Mandatory = $true)]
+    [ValidateSet('Apply', 'Contain')]
+    [string]$Operation
 )
 
 $ErrorActionPreference = 'Stop'
@@ -36,6 +39,7 @@ if (-not [Environment]::UserInteractive -or [Console]::IsInputRedirected -or [Co
     Stop-Handoff035C 'NON_INTERACTIVE_REFUSED'
 }
 if (Test-Transcription035C) { Stop-Handoff035C 'TRANSCRIPTION_REFUSED' }
+if ($Operation -eq 'Contain' -and $Alias -ne 'A') { Stop-Handoff035C 'CONTAINMENT_ALIAS_REFUSED' }
 if ([Environment]::GetEnvironmentVariable($serviceVariable, 'Process')) { Stop-Handoff035C 'PARENT_SECRET_ENV_REFUSED' }
 
 $repoRoot = (& git rev-parse --show-toplevel 2>$null)
@@ -74,7 +78,8 @@ try {
     $startInfo = [Diagnostics.ProcessStartInfo]::new()
     $startInfo.FileName = 'node'
     $escapedHelperPath = $helperPath.Replace('"', '\"')
-    $startInfo.Arguments = "`"$escapedHelperPath`" --apply-one $Alias"
+    $helperMode = if ($Operation -eq 'Contain') { '--contain-one' } else { '--apply-one' }
+    $startInfo.Arguments = "`"$escapedHelperPath`" $helperMode $Alias"
     $startInfo.WorkingDirectory = $repoRoot
     $startInfo.UseShellExecute = $false
     $startInfo.RedirectStandardInput = $false
@@ -113,6 +118,7 @@ finally {
         $child = $null
     }
     $startInfo = $null
+    $helperMode = $null
     $remoteLine = $null
     $remoteHead = $null
     $head = $null

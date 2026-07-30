@@ -12,6 +12,8 @@ Correction `07edea49153fb557a2afc2a066f96c30a102e4c7` is pushed. Exact clean-sou
 
 The operator safely terminated a manual secret-conversion attempt before helper execution; there was no inbox entry, metadata change or remote mutation. Builder added a Sprint-owned guarded PowerShell wrapper with child-only secret environment handling and a no-secret static self-test. A remains owned-confirmed-untagged with current owned creation `0/1/0`; B/C remain untouched.
 
+Participant execution is stopped after A's Preview passwordless message redirected to the production root with a code query and the code was disclosed outside the protected path. The compromised value is not retained or exchanged, no portal acceptance is claimed, and B/C remain untouched. Sanitized session/application containment, exact-owned A cleanup and redirect diagnosis are active.
+
 Sprint 035B is closed `trainer-pilot-participation-partial-clean`. Exact Preview deployment `dpl_HDtvZnnz9osHuyQ7zW7WX1w1mpWE` at source SHA `dedc19001acd9229d435718e51ceabbbdd208860` passed authenticated passwordless synthetic acceptance. Cleanup is application/Auth/Storage `0/0/0`, and the temporary callback is removed.
 
 ## Current status

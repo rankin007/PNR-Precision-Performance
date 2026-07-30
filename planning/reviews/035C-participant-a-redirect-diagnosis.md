@@ -49,3 +49,21 @@ The operator safely terminated an attempted manual handoff after an accidental d
 Sprint-owned wrapper `scripts/Invoke-SupabaseParticipantHandoff035C.ps1` replaces all manual pointer and environment handling. It accepts only A/B/C, guards the exact project, branch, remote-equal HEAD and clean worktree, refuses redirected/non-console execution and detected transcription, prompts for the service-role value as a SecureString, performs exactly one BSTR allocation, supplies the secret only in the child Node environment, inherits console streams for hidden inbox input, removes the child environment value and zeroes/disposes owned memory in `finally`, and passes through only the helper's sanitized output and exit code. It writes no secret-bearing file and leaves the parent secret environment unset.
 
 Static/self-test `scripts/test-supabase-participant-wrapper-035C.ps1` uses no service-role value and proves the alias/project/repository guards, child-only secret environment, argument exclusion, single allocation/free/disposal structure, success/failure/cancellation/exception cleanup control paths, interactive child configuration, transcription/file-write refusal and sanitized passthrough contract. The existing Node helper self-test also passes.
+
+## Participant A containment event
+
+- A passwordless request was initiated from the Preview.
+- The email redirected to the production root with a code query.
+- The Preview callback was not reached.
+- The code was disclosed outside the protected path and is treated as compromised.
+- Participant execution stopped immediately; B/C were not started; no participant portal acceptance is claimed.
+
+The compromised value is not recorded, requested, reproduced, retained, tested or exchanged. Session/application impact, exact-owned Auth cleanup and redirect diagnosis are pending sanitized proof.
+
+### Containment and redirect correction prepared
+
+Preview environment-name inspection confirms `NEXT_PUBLIC_SITE_URL` is not configured, so no such environment fallback overrides Preview. The deployed correction build includes the sign-in action and `/auth/callback`, but the action trusted the optional `Origin` header and did not bind the redirect to Vercel's forwarded host/proto boundary. The observed production redirect proves that header-based selection did not preserve the requested Preview origin; no environment fallback explains it.
+
+The narrow correction now derives HTTPS origin from the first `x-forwarded-host`/`x-forwarded-proto` values (falling back to `host` only as the forwarded host source), validates the exact approved generated-Preview or production hostname, refuses malformed/HTTP forwarded values without falling through to production, and uses `Origin` only when forwarded headers are absent. `NEXT_PUBLIC_SITE_URL` is development-local fallback only. The outbound Auth option remains explicitly `emailRedirectTo` and is built as the exact origin `/auth/callback?next=...`; Preview and production cases have focused regression coverage.
+
+The protected helper adds A-only containment. It accepts the inbox through hidden TTY input, requires the exact project, exactly one total and matching Auth identity, the Sprint start time boundary, and untagged metadata. It checks exact application user/profile/membership and assignment state, refuses access or ownership ambiguity, removes only a bootstrap-only application user/profile if present, deletes the exact Sprint-owned Auth identity last (invalidating its session state), verifies Auth/application absence, and emits sanitized exchange-indicator, production-bootstrap, session-revocation and `0/0/0` status only. No compromised authentication artifact is accepted by this path.

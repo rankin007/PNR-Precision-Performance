@@ -10,6 +10,7 @@ function Assert-035C([bool]$Condition, [string]$Code) {
 
 Assert-035C ($parseErrors.Count -eq 0) 'WRAPPER_PARSE'
 Assert-035C ($source -match "\[ValidateSet\('A', 'B', 'C'\)\]") 'ALIAS_ALLOWLIST'
+Assert-035C ($source -match "\[ValidateSet\('Apply', 'Contain'\)\]" -and $source -match 'CONTAINMENT_ALIAS_REFUSED') 'CONTAINMENT_MODE'
 Assert-035C ($source -match [regex]::Escape("`$expectedProjectUrl = 'https://uvskssaecdhxcgytkasc.supabase.co'")) 'PROJECT_GUARD'
 Assert-035C ($source -match 'BRANCH_REFUSED' -and $source -match 'HEAD_REFUSED' -and $source -match 'DIRTY_WORKTREE_REFUSED') 'REPOSITORY_GUARDS'
 Assert-035C ($source -match '\$startInfo\.EnvironmentVariables\[\$serviceVariable\] = \$servicePlain') 'CHILD_SECRET_ENV'

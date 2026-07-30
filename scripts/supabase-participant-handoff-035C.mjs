@@ -7,6 +7,7 @@ import { join } from "node:path";
 const REF = "uvskssaecdhxcgytkasc";
 const ALIASES = ["A", "B", "C"];
 const LEDGER = join(tmpdir(), "pnr-035c-participant-ownership.json");
+const SPRINT_035C_START = Date.parse("2026-07-29T23:27:14Z");
 
 function fail(code) { const error = new Error(code); error.code = code; throw error; }
 
@@ -114,6 +115,61 @@ async function applyOne(alias) {
   delete process.env.PP035C_SERVICE_ROLE_KEY;
 }
 
+async function exactCount(query, code) {
+  const result = await query;
+  if (result.error || typeof result.count !== "number") fail(code);
+  return result.count;
+}
+
+async function containOne(alias) {
+  if (alias !== "A") fail("CONTAINMENT_ALIAS_REFUSED");
+  const protectedConfig = config();
+  let inbox = await hiddenInbox(alias);
+  if (!inbox.includes("@")) fail("INBOX_INVALID");
+  const { createClient } = await import("@supabase/supabase-js");
+  const admin = createClient(protectedConfig.url, protectedConfig.service, { auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false } });
+  const known = await users(admin);
+  const matches = known.filter(user => user.email?.trim().toLowerCase() === inbox);
+  inbox = "";
+  if (known.length !== 1 || matches.length !== 1) fail("OWNERSHIP_AMBIGUOUS");
+  const user = matches[0];
+  const createdAt = Date.parse(user.created_at || "");
+  if (!Number.isFinite(createdAt) || createdAt < SPRINT_035C_START || createdAt > Date.now()) fail("OWNERSHIP_TIME_REFUSED");
+  if (user.app_metadata?.participant_alias || user.app_metadata?.pilot_sprint) fail("UNEXPECTED_METADATA_REFUSED");
+
+  const appUsers = await admin.from("users").select("id").eq("auth_user_id", user.id);
+  if (appUsers.error || !Array.isArray(appUsers.data) || appUsers.data.length > 1) fail("APPLICATION_USER_AMBIGUOUS");
+  let applicationRecordsRemoved = 0;
+  if (appUsers.data.length === 1) {
+    const appUserId = appUsers.data[0].id;
+    const profiles = await admin.from("member_profiles").select("id").eq("user_id", appUserId);
+    if (profiles.error || !Array.isArray(profiles.data) || profiles.data.length > 1) fail("PROFILE_AMBIGUOUS");
+    const membershipCount = await exactCount(admin.from("user_membership_levels").select("id", { count: "exact", head: true }).eq("user_id", appUserId), "MEMBERSHIP_COUNT_FAILED");
+    let assignmentCount = 0;
+    if (profiles.data.length === 1) {
+      const profileId = profiles.data[0].id;
+      assignmentCount += await exactCount(admin.from("stable_staff_assignments").select("id", { count: "exact", head: true }).eq("member_profile_id", profileId), "STAFF_COUNT_FAILED");
+      assignmentCount += await exactCount(admin.from("stable_role_assignments").select("id", { count: "exact", head: true }).eq("member_profile_id", profileId), "ROLE_COUNT_FAILED");
+      assignmentCount += await exactCount(admin.from("biochemistry_horse_access_assignments").select("id", { count: "exact", head: true }).eq("member_profile_id", profileId), "ACCESS_COUNT_FAILED");
+      assignmentCount += await exactCount(admin.from("trainers").select("id", { count: "exact", head: true }).eq("member_profile_id", profileId), "TRAINER_COUNT_FAILED");
+      assignmentCount += await exactCount(admin.from("owners").select("id", { count: "exact", head: true }).eq("member_profile_id", profileId), "OWNER_COUNT_FAILED");
+    }
+    if (membershipCount !== 0 || assignmentCount !== 0) fail("APPLICATION_ACCESS_REFUSED");
+    const removedApp = await admin.from("users").delete().eq("id", appUserId);
+    if (removedApp.error) fail("APPLICATION_DELETE_FAILED");
+    applicationRecordsRemoved = 1 + profiles.data.length;
+  }
+
+  const removedAuth = await admin.auth.admin.deleteUser(user.id, false);
+  if (removedAuth.error) fail("AUTH_DELETE_FAILED_A");
+  const remainingAuth = (await users(admin)).filter(item => item.id === user.id).length;
+  const remainingApp = await exactCount(admin.from("users").select("id", { count: "exact", head: true }).eq("auth_user_id", user.id), "APPLICATION_VERIFY_FAILED");
+  if (remainingAuth !== 0 || remainingApp !== 0) fail("CONTAINMENT_VERIFY_FAILED");
+  process.stdout.write(`${JSON.stringify({ state: "pass", participant: "A-contained-owned-deleted", codeExchange: user.last_sign_in_at ? "provider-sign-in-indicator-present" : "not-observed", productionCallback: applicationRecordsRemoved ? "application-bootstrap-removed" : "not-processed", activeSession: "revoked-by-owned-identity-deletion", applicationRecordsRemoved, ownedCounts: "0/0/0" })}\n`);
+  protectedConfig.service = null;
+  delete process.env.PP035C_SERVICE_ROLE_KEY;
+}
+
 async function cleanup() {
   const protectedConfig = config();
   const ledger = readLedger();
@@ -141,10 +197,11 @@ function selfTest() {
   if (merged.provider !== "email" || merged.unrelated !== "preserved" || merged.participant_alias !== "A" || merged.pilot_sprint !== "035C") fail("SELF_MERGE");
   const removed = removePilotMetadata(merged);
   if (removed.provider !== "email" || removed.unrelated !== "preserved" || "participant_alias" in removed || "pilot_sprint" in removed) fail("SELF_REMOVE");
-  process.stdout.write(`${JSON.stringify({ state: "pass", checks: ["hidden-input-required", "search-before-mutation", "existing-only", "merge-preserves", "owned-ledger", "sanitized-output"], redirect: "exact-approved-preview" })}\n`);
+  if (SPRINT_035C_START !== Date.parse("2026-07-29T23:27:14Z")) fail("SELF_TIME_BOUNDARY");
+  process.stdout.write(`${JSON.stringify({ state: "pass", checks: ["hidden-input-required", "search-before-mutation", "existing-only", "merge-preserves", "owned-ledger", "contain-a-only", "ownership-time-boundary", "app-access-refusal", "auth-last-delete", "sanitized-output"], redirect: "exact-approved-preview" })}\n`);
 }
 
 const mode = process.argv[2] || "--self-test";
 const alias = process.argv[3];
-Promise.resolve(mode === "--self-test" ? selfTest() : mode === "--apply-one" ? applyOne(alias) : mode === "--cleanup" ? cleanup() : fail("MODE_REFUSED"))
+Promise.resolve(mode === "--self-test" ? selfTest() : mode === "--apply-one" ? applyOne(alias) : mode === "--contain-one" ? containOne(alias) : mode === "--cleanup" ? cleanup() : fail("MODE_REFUSED"))
   .catch(error => { process.stdout.write(`${JSON.stringify({ state: "failed-sanitized", code: /^[A-Z0-9_]+$/.test(error.code || error.message) ? (error.code || error.message) : "UNEXPECTED" })}\n`); process.exitCode = 2; });
