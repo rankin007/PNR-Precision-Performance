@@ -10,6 +10,7 @@ const ALIASES = ["A", "B", "C"];
 const LEDGER = join(tmpdir(), "pnr-035c-participant-ownership.json");
 const A_CREATION_AFTER = Date.parse("2026-07-29T23:49:33Z");
 const A_CREATION_BEFORE = Date.parse("2026-07-30T01:34:19Z");
+const CONTAINMENT_CHECKPOINT = Date.parse("2026-07-30T03:23:31Z");
 
 function fail(code) { const error = new Error(code); error.code = code; throw error; }
 
@@ -36,6 +37,12 @@ export function classifyContainmentIdentity(records) {
   const conflict = records.some(record => record.key !== candidate.key && record.participantAlias === "A" && record.pilotSprint === "035C");
   if (conflict) fail("ALIAS_TAG_AMBIGUOUS_A");
   return candidate;
+}
+
+export function classifyMatchOwnership({ alias, createdAt, priorLedgerState }) {
+  const created = Date.parse(createdAt || "");
+  if (alias === "A" && priorLedgerState === "contained-owned-deleted" && Number.isFinite(created) && created > CONTAINMENT_CHECKPOINT) return "sprint-owned";
+  return "not-owned";
 }
 
 function config() {
@@ -115,17 +122,18 @@ async function applyOne(alias) {
   const conflicting = known.filter(item => item.id !== user.id && item.app_metadata?.pilot_sprint === "035C" && item.app_metadata?.participant_alias === alias);
   if (conflicting.length) fail(`ALIAS_TAG_AMBIGUOUS_${alias}`);
   const original = { ...(user.app_metadata || {}) };
+  const ownership = classifyMatchOwnership({ alias, createdAt: user.created_at, priorLedgerState: ledger.participants[alias]?.state });
   const updated = await admin.auth.admin.updateUserById(user.id, { app_metadata: mergePilotMetadata(original, alias) });
   if (updated.error) fail(`TAG_FAILED_${alias}`);
   try {
-    ledger.participants[alias] = { state: "existing-tagged", ownership: "sprint-owned" };
+    ledger.participants[alias] = { state: "existing-tagged", ownership };
     writeLedger(ledger);
   } catch {
     const restored = await admin.auth.admin.updateUserById(user.id, { app_metadata: original });
     if (restored.error) fail("COMPENSATION_FAILED");
     fail("LEDGER_WRITE_FAILED");
   }
-  process.stdout.write(`${JSON.stringify({ state: "pass", participant: `${alias}-existing-tagged`, ownership: "sprint-owned", fields: ["participant_alias", "pilot_sprint"], redirect: "exact-approved-preview" })}\n`);
+  process.stdout.write(`${JSON.stringify({ state: "pass", participant: `${alias}-existing-tagged`, ownership, fields: ["participant_alias", "pilot_sprint"], redirect: "exact-approved-preview" })}\n`);
   protectedConfig.service = null;
   delete process.env.PP035C_SERVICE_ROLE_KEY;
 }
@@ -212,9 +220,15 @@ async function cleanup() {
   for (const alias of aliases) {
     const matches = known.filter(user => user.app_metadata?.participant_alias === alias && user.app_metadata?.pilot_sprint === "035C");
     if (matches.length !== 1) fail(`TAG_MATCH_AMBIGUOUS_${alias}`);
-    const removed = await admin.auth.admin.deleteUser(matches[0].id, false);
-    if (removed.error) fail(`AUTH_DELETE_FAILED_${alias}`);
-    report[alias] = "owned-deleted";
+    if (ledger.participants[alias].ownership === "sprint-owned") {
+      const removed = await admin.auth.admin.deleteUser(matches[0].id, false);
+      if (removed.error) fail(`AUTH_DELETE_FAILED_${alias}`);
+      report[alias] = "owned-deleted";
+    } else if (ledger.participants[alias].ownership === "not-owned") {
+      const updated = await admin.auth.admin.updateUserById(matches[0].id, { app_metadata: removePilotMetadata(matches[0].app_metadata) });
+      if (updated.error) fail(`TAG_REMOVE_FAILED_${alias}`);
+      report[alias] = "not-owned-tags-removed";
+    } else fail(`OWNERSHIP_INVALID_${alias}`);
   }
   unlinkSync(LEDGER);
   process.stdout.write(`${JSON.stringify({ state: "pass", participants: report })}\n`);
@@ -228,7 +242,9 @@ function selfTest() {
   const removed = removePilotMetadata(merged);
   if (removed.provider !== "email" || removed.unrelated !== "preserved" || "participant_alias" in removed || "pilot_sprint" in removed) fail("SELF_REMOVE");
   if (A_CREATION_AFTER !== Date.parse("2026-07-29T23:49:33Z") || A_CREATION_BEFORE !== Date.parse("2026-07-30T01:34:19Z")) fail("SELF_TIME_BOUNDARY");
-  process.stdout.write(`${JSON.stringify({ state: "pass", checks: ["hidden-input-required", "search-before-mutation", "existing-only", "merge-preserves", "owned-ledger", "contain-a-only", "ownership-time-boundary", "app-access-refusal", "auth-last-delete", "sanitized-output"], redirect: "exact-approved-preview" })}\n`);
+  if (classifyMatchOwnership({ alias: "A", createdAt: "2026-07-30T03:24:00Z", priorLedgerState: "contained-owned-deleted" }) !== "sprint-owned") fail("SELF_NEW_OWNERSHIP");
+  if (classifyMatchOwnership({ alias: "A", createdAt: "2026-07-30T03:23:00Z", priorLedgerState: "contained-owned-deleted" }) !== "not-owned") fail("SELF_PREEXISTING_OWNERSHIP");
+  process.stdout.write(`${JSON.stringify({ state: "pass", checks: ["hidden-input-required", "search-before-mutation", "existing-only", "merge-preserves", "owned-ledger", "new-owned", "preexisting-not-owned", "contain-a-only", "ownership-time-boundary", "app-access-refusal", "auth-last-delete", "sanitized-output"], redirect: "exact-approved-preview" })}\n`);
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
