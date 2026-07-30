@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { existsSync, readFileSync, unlinkSync, writeFileSync } from "node:fs";
+import { existsSync, readFileSync, renameSync, unlinkSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { pathToFileURL } from "node:url";
@@ -43,6 +43,16 @@ export function classifyMatchOwnership({ alias, createdAt, priorLedgerState }) {
   const created = Date.parse(createdAt || "");
   if (alias === "A" && priorLedgerState === "contained-owned-deleted" && Number.isFinite(created) && created > CONTAINMENT_CHECKPOINT) return "sprint-owned";
   return "not-owned";
+}
+
+export function priorLedgerStateForApply(ledger, alias) {
+  const entry = ledger.participants?.[alias];
+  if (!entry) return null;
+  if (alias === "A" && entry.state === "contained-owned-deleted") {
+    if (entry.ownership !== "sprint-owned" || entry.window !== "recorded-a-creation-window" || !Number.isFinite(CONTAINMENT_CHECKPOINT)) fail("OWNERSHIP_LEDGER_REFUSED");
+    return entry.state;
+  }
+  fail(`ALIAS_ALREADY_PROCESSED_${alias}`);
 }
 
 function config() {
@@ -101,14 +111,21 @@ function readLedger() {
 }
 
 function writeLedger(ledger) {
-  writeFileSync(LEDGER, `${JSON.stringify(ledger)}\n`, { encoding: "utf8", flag: "w" });
+  const pending = `${LEDGER}.${process.pid}.pending`;
+  try {
+    writeFileSync(pending, `${JSON.stringify(ledger)}\n`, { encoding: "utf8", flag: "wx" });
+    renameSync(pending, LEDGER);
+  } catch (error) {
+    if (existsSync(pending)) unlinkSync(pending);
+    throw error;
+  }
 }
 
 async function applyOne(alias) {
   if (!ALIASES.includes(alias)) fail("ALIAS_REFUSED");
   const protectedConfig = config();
   const ledger = readLedger();
-  if (ledger.participants[alias]) fail(`ALIAS_ALREADY_PROCESSED_${alias}`);
+  const priorLedgerState = priorLedgerStateForApply(ledger, alias);
   let inbox = await hiddenInbox(alias);
   if (!inbox.includes("@")) fail("INBOX_INVALID");
   const { createClient } = await import("@supabase/supabase-js");
@@ -119,10 +136,15 @@ async function applyOne(alias) {
   if (matches.length > 1) fail(`DUPLICATE_IDENTITY_${alias}`);
   if (matches.length === 0) fail(`IDENTITY_MISSING_USE_PREVIEW_SIGNIN_${alias}`);
   const user = matches[0];
+  if (user.last_sign_in_at) fail("SESSION_STATE_REFUSED");
   const conflicting = known.filter(item => item.id !== user.id && item.app_metadata?.pilot_sprint === "035C" && item.app_metadata?.participant_alias === alias);
   if (conflicting.length) fail(`ALIAS_TAG_AMBIGUOUS_${alias}`);
+  if (user.app_metadata?.participant_alias || user.app_metadata?.pilot_sprint) fail("UNEXPECTED_METADATA_REFUSED");
+  const appState = await admin.from("users").select("id", { count: "exact", head: true }).eq("auth_user_id", user.id);
+  if (appState.error || appState.count !== 0) fail("APPLICATION_STATE_REFUSED");
   const original = { ...(user.app_metadata || {}) };
-  const ownership = classifyMatchOwnership({ alias, createdAt: user.created_at, priorLedgerState: ledger.participants[alias]?.state });
+  const ownership = classifyMatchOwnership({ alias, createdAt: user.created_at, priorLedgerState });
+  if (priorLedgerState === "contained-owned-deleted" && ownership !== "sprint-owned") fail("OWNERSHIP_TIME_REFUSED");
   const updated = await admin.auth.admin.updateUserById(user.id, { app_metadata: mergePilotMetadata(original, alias) });
   if (updated.error) fail(`TAG_FAILED_${alias}`);
   try {
