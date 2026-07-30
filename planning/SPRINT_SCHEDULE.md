@@ -2,10 +2,11 @@
 
 ## Active direction
 
-Sprint 035C is active from exact Sprint 035B closeout SHA `497c8628c2fe481dcf2ca1d205f379e311b3df75` to complete protected Trainer Participant A/B/C participation and final MVP acceptance. Sprint 035 and 035B remain closed at their recorded outcomes.
+Sprint 035D is active from exact Sprint 035C SHA `819f09add752a64dbf10213f3d481ad3132da9e9` to deliver prefetch-resistant email OTP authentication, safe provider cutover, synthetic proof, and sequential A/B/C acceptance. Earlier Sprint 035 outcomes remain unchanged.
 
 | Sprint | Outcome | Profile / proof |
 |---|---|---|
+| 035D | Prefetch-Resistant Email OTP Authentication | Strict auth/provider/production rollback, delivered-flow, participant and cleanup proof required |
 | 035C | Trainer Participation And Final MVP Acceptance | Strict participant privacy, exact no-alias Preview, passwordless A/B/C pilot and cleanup required |
 | 035B | Closed `trainer-pilot-participation-partial-clean` | Exact Preview and authenticated synthetic matrix passed; three-person trainer journey not started because protected provider coordination was unavailable; cleanup `0/0/0` |
 | 035 | Closed `trainer-dashboard-validation-blocked-clean` | Local implementation and validation complete; external acceptance moved to 035B |

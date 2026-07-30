@@ -1,7 +1,9 @@
 {
-  "sprint": "035C-trainer-participation-and-final-mvp-acceptance",
+  "sprint": "035D-prefetch-resistant-email-otp-authentication",
   "status": "active",
-  "branch": "codex/035C-trainer-participation-and-final-mvp-acceptance",
+  "branch": "codex/035D-prefetch-resistant-email-otp-authentication",
+  "startingSha": "819f09add752a64dbf10213f3d481ad3132da9e9",
+  "otpImplementation": "local-validation-passed-remote-proof-pending",
   "reconciliationCommit": "aeb24d2d038f9875973764b25538caaea6473d02",
   "closeoutCommit": "aa87dfe010ca1ae900f0ce633ee7b2fad2a076bf",
   "remoteBackupVerified": true,

@@ -1,5 +1,9 @@
 # Project State
 
+## Sprint 035D active — 2026-07-30
+
+Sprint `035D-prefetch-resistant-email-otp-authentication` is active on branch `codex/035D-prefetch-resistant-email-otp-authentication` from exact clean local/remote Sprint 035C SHA `819f09add752a64dbf10213f3d481ad3132da9e9`. The four-file Architect Pack is applied. Backward-compatible email OTP request/code verification is implemented locally with `shouldCreateUser:false`, exact plus-address preservation, generic request behavior, transient browser state and the existing callback retained for rollback. Focused tests, typecheck, lint, canonical static validation and the production build pass. No Preview, production or Supabase template mutation is yet claimed; the last sanitized A state remains the inherited `0/1/0` boundary until protected reverification.
+
 ## Sprint 035C active — 2026-07-30
 
 Sprint `035C-trainer-participation-and-final-mvp-acceptance` is active on branch `codex/035C-trainer-participation-and-final-mvp-acceptance` from exact clean Sprint 035B local/remote SHA `497c8628c2fe481dcf2ca1d205f379e311b3df75`. The product-owner/provider-operator confirms protected inbox readiness and availability for Trainer Participants A, B and C. Sprint 035B remains closed `trainer-pilot-participation-partial-clean`; historical outcomes are unchanged.

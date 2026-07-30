@@ -1,4 +1,8 @@
-import { signInWithOtpAction } from "@/app/auth/actions";
+"use client";
+
+import { useEffect, useState, useTransition } from "react";
+import { useRouter } from "next/navigation";
+import { requestEmailOtpAction, verifyEmailOtpAction } from "@/app/auth/actions";
 import { Notice } from "@/components/ui/notice";
 
 type SignInFormProps = {
@@ -21,16 +25,62 @@ export function SignInForm({
   error,
   envReady,
 }: SignInFormProps) {
+  const router = useRouter();
+  const [email, setEmail] = useState("");
+  const [code, setCode] = useState("");
+  const [codeRequested, setCodeRequested] = useState(sent);
+  const [message, setMessage] = useState<string | null>(null);
+  const [resendSeconds, setResendSeconds] = useState(sent ? 60 : 0);
+  const [pending, startTransition] = useTransition();
+
+  useEffect(() => {
+    if (resendSeconds <= 0) return;
+    const timer = window.setInterval(() => setResendSeconds((value) => Math.max(0, value - 1)), 1000);
+    return () => window.clearInterval(timer);
+  }, [resendSeconds]);
+
+  function requestCode() {
+    setMessage(null);
+    startTransition(async () => {
+      const result = await requestEmailOtpAction(email, nextPath);
+      if (!result.ok && result.reason === "configuration") {
+        setMessage("Secure sign-in is unavailable. Please contact the portal operator.");
+        return;
+      }
+      if (!result.ok) {
+        setMessage("Sign-in could not continue. Check the details and try again.");
+        return;
+      }
+      setCodeRequested(true);
+      setResendSeconds(60);
+      setMessage("If this address is approved, a six-digit code has been sent.");
+    });
+  }
+
+  function verifyCode() {
+    setMessage(null);
+    startTransition(async () => {
+      const result = await verifyEmailOtpAction(email, code);
+      if (!result.ok) {
+        setCode("");
+        setMessage("That code could not be verified. Request a new code and try again.");
+        return;
+      }
+      router.replace(nextPath);
+      router.refresh();
+    });
+  }
+
   return (
     <div className="rounded-[2rem] border border-ink/10 bg-white p-6 shadow-panel">
       <h2 className="font-display text-2xl text-ink">Email sign-in</h2>
       <p className="mt-3 max-w-2xl text-sm leading-7 text-steel">
-        Enter your approved account email. We will send a secure, single-use sign-in link.
+        Enter your approved account email. We will send a secure, single-use six-digit code.
       </p>
 
       {sent ? (
         <Notice className="mt-5" tone="success" title="Email requested">
-          Sign-in email requested. Check your inbox and return through the magic link.
+          If this address is approved, a six-digit code has been sent.
         </Notice>
       ) : null}
 
@@ -40,25 +90,67 @@ export function SignInForm({
         </Notice>
       ) : null}
 
-      <form action={signInWithOtpAction} className="mt-6 grid gap-4">
-        <input type="hidden" name="next" value={nextPath} />
+      {message ? (
+        <Notice className="mt-5" tone="warning" title="Sign-in status">
+          {message}
+        </Notice>
+      ) : null}
+
+      <form onSubmit={(event) => { event.preventDefault(); if (codeRequested) verifyCode(); else requestCode(); }} className="mt-6 grid gap-4">
         <label className="grid gap-2 text-sm font-medium text-ink">
           Email address
           <input
             name="email"
             type="email"
+            autoComplete="email"
+            value={email}
+            onChange={(event) => setEmail(event.target.value)}
+            readOnly={codeRequested}
+            required
             placeholder="you@example.com"
             disabled={!envReady}
             className="rounded-2xl border border-technical/20 bg-canvas px-4 py-3 text-base text-technical transition focus:border-data"
           />
         </label>
-        <button
-          type="submit"
-          disabled={!envReady}
-          className="inline-flex w-fit items-center justify-center rounded-full bg-brand px-5 py-3 text-sm font-semibold text-white transition hover:bg-technical disabled:cursor-not-allowed disabled:bg-muted"
-        >
-          Request sign-in link
-        </button>
+        {codeRequested ? (
+          <>
+            <label className="grid gap-2 text-sm font-medium text-ink">
+              Six-digit code
+              <input
+                name="code"
+                type="text"
+                inputMode="numeric"
+                autoComplete="one-time-code"
+                pattern="[0-9]{6}"
+                maxLength={6}
+                value={code}
+                onChange={(event) => setCode(event.target.value.replace(/\D/g, "").slice(0, 6))}
+                aria-describedby="otp-help"
+                required
+                autoFocus
+                className="rounded-2xl border border-technical/20 bg-canvas px-4 py-3 font-mono text-xl tracking-[0.25em] text-technical transition focus:border-data"
+              />
+            </label>
+            <p id="otp-help" className="text-sm leading-6 text-steel">
+              Use the newest code. Each code works once; requesting another code replaces the previous one.
+            </p>
+            <div className="flex flex-wrap gap-3">
+              <button type="submit" disabled={!envReady || pending || code.length !== 6} className="inline-flex min-h-12 items-center justify-center rounded-full bg-brand px-5 py-3 text-sm font-semibold text-white transition hover:bg-technical disabled:cursor-not-allowed disabled:bg-muted">
+                {pending ? "Verifying…" : "Verify code"}
+              </button>
+              <button type="button" disabled={pending || resendSeconds > 0} onClick={requestCode} className="inline-flex min-h-12 items-center justify-center rounded-full border border-ink/15 bg-white px-5 py-3 text-sm font-semibold text-ink disabled:cursor-not-allowed disabled:text-muted">
+                {resendSeconds > 0 ? `Request another code in ${resendSeconds}s` : "Request another code"}
+              </button>
+              <button type="button" disabled={pending} onClick={() => { setCodeRequested(false); setCode(""); setMessage(null); }} className="inline-flex min-h-12 items-center justify-center px-3 text-sm font-semibold text-ink underline underline-offset-4">
+                Use a different email
+              </button>
+            </div>
+          </>
+        ) : (
+          <button type="submit" disabled={!envReady || pending || !email.trim()} className="inline-flex w-fit min-h-12 items-center justify-center rounded-full bg-brand px-5 py-3 text-sm font-semibold text-white transition hover:bg-technical disabled:cursor-not-allowed disabled:bg-muted">
+            {pending ? "Requesting…" : "Send sign-in code"}
+          </button>
+        )}
       </form>
     </div>
   );

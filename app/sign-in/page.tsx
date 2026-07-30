@@ -37,7 +37,7 @@ export default async function SignInPage({ searchParams }: SignInPageProps) {
             <p className="font-semibold text-ink">Current status</p>
             <p className="mt-2">
               {envReady
-                ? "Passwordless email sign-in is available in this environment."
+                ? "Passwordless email code sign-in is available in this environment."
                 : "Secure sign-in is unavailable until the approved service configuration is complete."}
             </p>
           </div>

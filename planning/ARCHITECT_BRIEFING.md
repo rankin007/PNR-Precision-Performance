@@ -1,5 +1,11 @@
 # Architect Briefing — Sprint 035C Active
 
+## Sprint 035D opening
+
+Sprint 035D starts from exact clean local/remote 035C SHA `819f09add752a64dbf10213f3d481ad3132da9e9`. The four-file pack is applied and the scoped branch is active. Local backward-compatible OTP request and six-digit verification support is implemented with transient client state, `shouldCreateUser:false`, `verifyOtp` email type, generic anti-enumeration response and retained callback compatibility. Focused OTP/redirect/dashboard tests, typecheck, focused lint, canonical static validation and production build pass. Remote Preview, production release, protected template capture/cutover, delivered synthetic acceptance and A/B/C remain pending; no external mutation is claimed at this checkpoint.
+
+## Preserved Sprint 035C position
+
 ## Where things stand
 
 Sprint 035C is active from exact clean Sprint 035B local/remote SHA `497c8628c2fe481dcf2ca1d205f379e311b3df75`. The product-owner/provider-operator confirms protected inbox readiness and availability for Trainer Participants A, B and C. The sprint is limited to an exact no-alias Preview, bounded participant-linked synthetic access, the five-step trainer journey, validation and exact-owned cleanup.

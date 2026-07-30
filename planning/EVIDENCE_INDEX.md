@@ -20,6 +20,8 @@
 14. `planning/reviews/035C-protected-participant-matching-contract.md` — accepted administrator-controlled app-metadata matching, non-authorization boundary and cleanup contract.
 15. `planning/reviews/035C-participant-a-redirect-diagnosis.md` — artifact-free redirect diagnosis, Participant A owned state, mechanism rejection and in-scope correction.
 
+16. `planning/sprints/035D-prefetch-resistant-email-otp-authentication/` — active four-file OTP/provider/deployment authority.
+
 ## Accepted product lineage
 
 - Sprint 032 release: `planning/reviews/032-public-relaunch-and-production-deployment.md`; exact SHA `f7242ee0785ae9b87022394206c89ebdd5c9f6ad`.
