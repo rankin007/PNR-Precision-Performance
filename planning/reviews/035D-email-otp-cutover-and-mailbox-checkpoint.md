@@ -51,3 +51,11 @@ Builder will then verify only a sanitized signed-in classification, derive/use t
 ## Current cleanup boundary
 
 This checkpoint created no synthetic or participant Auth/application/Storage state and sent no authentication email. Sprint-attempt creation is `0/0/0`; inherited Participant A remains at the prior sanitized Sprint-owned `0/1/0` state pending guarded reverification. The exact Preview callback remains temporarily required for subsequent acceptance.
+
+## Protected mailbox resumption incident
+
+The operator confirmed protected mailbox readiness. During the required signed-in classification, the browser's open-tab metadata included the mailbox identity in the Gmail tab title and the browser tool emitted that metadata. Builder stopped immediately and did not repeat, use, persist or derive a synthetic address from the exposed value.
+
+No Supabase user, authentication request, delivered message, session, application record or Storage object was created. This synthetic attempt therefore remains application/Auth/Storage `0/0/0`, with Auth-last cleanup vacuous. A/B/C were not started.
+
+The incident is a material Sprint 035D privacy-boundary failure. Delivered OTP, one-action email, session, permission, wrong-horse, safe-failure and runtime cleanup acceptance remain unproved. The current OTP-only provider template and healthy 035D application release were not changed during the failed attempt. The exact prior template body was intentionally retained only in the earlier protected browser session and is no longer available after the browser session reset; therefore Builder did not attempt an uncertain reconstruction or non-exact restore. Architect review is required before any further mailbox or participant execution.
