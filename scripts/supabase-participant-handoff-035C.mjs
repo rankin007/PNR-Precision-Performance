@@ -14,6 +14,14 @@ const CONTAINMENT_CHECKPOINT = Date.parse("2026-07-30T03:23:31Z");
 
 function fail(code) { const error = new Error(code); error.code = code; throw error; }
 
+export function normalizeProtectedInbox(value) {
+  return typeof value === "string" ? value.trim().toLowerCase() : "";
+}
+
+export function matchesProtectedInbox(stored, entered) {
+  return normalizeProtectedInbox(stored) === normalizeProtectedInbox(entered);
+}
+
 export function mergePilotMetadata(existing, alias) {
   if (!ALIASES.includes(alias)) fail("ALIAS_REFUSED");
   return { ...(existing && typeof existing === "object" ? existing : {}), participant_alias: alias, pilot_sprint: "035C" };
@@ -131,7 +139,7 @@ async function applyOne(alias) {
   const { createClient } = await import("@supabase/supabase-js");
   const admin = createClient(protectedConfig.url, protectedConfig.service, { auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false } });
   const known = await users(admin);
-  const matches = known.filter(user => user.email?.trim().toLowerCase() === inbox);
+  const matches = known.filter(user => matchesProtectedInbox(user.email, inbox));
   inbox = "";
   if (matches.length > 1) fail(`DUPLICATE_IDENTITY_${alias}`);
   if (matches.length === 0) fail(`IDENTITY_MISSING_USE_PREVIEW_SIGNIN_${alias}`);
@@ -218,7 +226,7 @@ async function containOne(alias) {
   const known = await users(admin);
   const classified = known.map(user => ({
     key: user.id,
-    exactInbox: user.email?.trim().toLowerCase() === inbox,
+    exactInbox: matchesProtectedInbox(user.email, inbox),
     createdAt: user.created_at,
     participantAlias: user.app_metadata?.participant_alias,
     pilotSprint: user.app_metadata?.pilot_sprint,

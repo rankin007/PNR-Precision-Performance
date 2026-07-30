@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
-import { classifyContainmentIdentity, classifyMatchOwnership, priorLedgerStateForApply } from "./supabase-participant-handoff-035C.mjs";
+import { classifyContainmentIdentity, classifyMatchOwnership, matchesProtectedInbox, normalizeProtectedInbox, priorLedgerStateForApply } from "./supabase-participant-handoff-035C.mjs";
 
 const within = "2026-07-30T00:30:00Z";
 const candidate = { key: "candidate", exactInbox: true, createdAt: within };
@@ -21,6 +21,10 @@ assert.throws(() => priorLedgerStateForApply({ participants: { A: { ...contained
 assert.throws(() => priorLedgerStateForApply({ participants: { A: { ...contained.participants.A, state: "existing-tagged" } } }, "A"), /ALIAS_ALREADY_PROCESSED_A/);
 assert.throws(() => priorLedgerStateForApply({ participants: { B: contained.participants.A } }, "B"), /ALIAS_ALREADY_PROCESSED_B/);
 assert.equal(priorLedgerStateForApply({ participants: {} }, "A"), null);
+assert.equal(normalizeProtectedInbox("  participant+a@example.invalid  "), "participant+a@example.invalid");
+assert.equal(matchesProtectedInbox("participant+a@example.invalid", "PARTICIPANT+A@example.invalid"), true);
+assert.equal(matchesProtectedInbox("participant@example.invalid", "participant+a@example.invalid"), false);
+assert.equal(matchesProtectedInbox("participant+b@example.invalid", "participant+a@example.invalid"), false);
 
 const source = readFileSync("scripts/supabase-participant-handoff-035C.mjs", "utf8");
 assert(!source.includes("known.length !== 1"));
