@@ -1,4 +1,12 @@
-# Architect Briefing — Sprint 035C Active
+# Architect Briefing — Sprint 035D Closed
+
+## Sprint 035D final outcome
+
+Sprint 035D is closed `email-otp-validation-blocked-clean`. The OTP-capable application and OTP-only template are deployed and mutually compatible. Corrected production and forward rollback are Ready; five stable aliases, Site URL and callbacks pass. Exact-owned manual-preview and synthetic cleanup is `0/0/0`.
+
+Final guarded read-only proof preserves exactly three Auth identities. Participant A remains tagged, Sprint-owned and unchanged. Two ambiguous identities remain Auth-only with aggregate application/profile/access `0`, Storage `0`, no participant metadata, no observed Sprint-owned session indicator and no deletion authorization. Neither was deleted.
+
+Delivered OTP authentication is not accepted and Participant A/B/C acceptance is not claimed. Supabase built-in SMTP is unsuitable for production/participant delivery because recipient restrictions, low shared limits and best-effort delivery do not meet acceptance. Custom transactional SMTP is required before further synthetic or participant authentication. Product-wide Done is not claimed.
 
 ## Sprint 035D protected synthetic result
 

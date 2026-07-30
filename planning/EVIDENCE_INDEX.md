@@ -20,8 +20,8 @@
 14. `planning/reviews/035C-protected-participant-matching-contract.md` — accepted administrator-controlled app-metadata matching, non-authorization boundary and cleanup contract.
 15. `planning/reviews/035C-participant-a-redirect-diagnosis.md` — artifact-free redirect diagnosis, Participant A owned state, mechanism rejection and in-scope correction.
 
-16. `planning/sprints/035D-prefetch-resistant-email-otp-authentication/` — active four-file OTP/provider/deployment authority.
-17. `planning/reviews/035D-email-otp-cutover-and-mailbox-checkpoint.md` — OTP cutover, bounded non-delivery, privacy containment, corrected request handling, no-email preparation, exact Preview/production, and compatible forward rollback proof.
+16. `planning/sprints/035D-prefetch-resistant-email-otp-authentication/` — closed four-file OTP/provider/deployment authority; outcome `email-otp-validation-blocked-clean`.
+17. `planning/reviews/035D-email-otp-cutover-and-mailbox-checkpoint.md` — OTP cutover, bounded non-delivery, privacy containment, corrected request handling, exact Preview/production, compatible forward rollback, manual-preview `0/0/0`, preserved identities and final blocked-clean proof.
 
 ## Accepted product lineage
 
