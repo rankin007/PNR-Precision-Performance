@@ -35,3 +35,9 @@ The protected Admin helper now processes one alias at a time, requires a hidden 
 - Canonical local validation passed JSON, domain, roles, Supabase self-tests, static validation, transport isolation, encoding and the affected regressions. Its integrated lint step encountered a Windows `.next` cache unlink lock after an earlier overlapping validation run; standalone lint had already passed before the lock.
 - Local Next production build reached the Next builder but produced no compilation output within bounded 180-second and 600-second runs. The exact clean-source Vercel Preview production build is the approved stronger substitute and must pass before operator handoff.
 - `git diff --check` and maintained-text encoding validation: pass.
+
+## Exact corrected Preview
+
+Correction commit `07edea49153fb557a2afc2a066f96c30a102e4c7` was pushed only to the scoped Sprint 035C branch. Exact clean-archive Preview deployment `dpl_G8StMkGqfTmUsNMpAfNUCwontC42` is Ready, Preview-classified and alias-free at `https://pnr-precision-performance-n7xbelwg8-rankin007s-projects.vercel.app`. Its Vercel production build compiled, linted, type-checked and generated all routes successfully, providing the approved substitute for the stalled local build.
+
+Artifact-free checks returned `200` for the origin and `307` from `/auth/callback?next=/portal` to the exact same Preview origin `/portal`. The Supabase allowlist now contains exactly the unchanged production callback and `https://pnr-precision-performance-n7xbelwg8-rankin007s-projects.vercel.app/auth/callback`; the stale Preview callback was removed. The production Site URL remains unchanged.
