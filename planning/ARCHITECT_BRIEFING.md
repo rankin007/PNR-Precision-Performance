@@ -32,6 +32,10 @@ That retry failed twice with the same sanitized production-root `otp_expired` re
 
 Plus-address mailbox delivery is explicitly excluded as the presumed cause. The protected helper now preserves the full plus-tagged local part and performs only trim/lowercase exact matching; regression coverage proves it cannot silently match the base mailbox or another plus alias. Future message-recipient confirmation remains private and sanitized. No participant retry is authorized before a complete synthetic Preview journey.
 
+Architect-approved candidate `d9c020f2d09df5b59ce1a5e589bd68d8145cb1d0` is deployed as fresh Preview `dpl_kKRfUc4Sy9zL4cw32rFm8C6DD27r`: Ready, Preview-classified, exact source, zero assigned aliases, production build passed. Callback rotation replaced only old `ge5io3pa3` with exact new `c16cgcork`; production callback/Site URL/deployment/five aliases are unchanged, stale/wildcards absent, and artifact-free callback remains same-Preview `/portal`-bound.
+
+The synthetic acceptance gate is not passed. No Builder-controlled synthetic inbox or protected Admin credential is available without operator intervention, and current `ConfirmationURL` remains vulnerable to ordinary email-security prefetch. Supabase's documented safe alternatives require OTP or a two-step/interstitial email action; either changes the shared hosted Auth template and may affect production. No shared template was mutated. The last accepted A classification remains one tagged Sprint-owned Auth, no sign-in indicator, application/Storage zero, owned `0/1/0`, but no new protected query is claimed. No containment, synthetic identity/message, participant message or B/C action occurred. Architect provider-design decision is required before further execution; A retry is not safe.
+
 Sprint 035B is closed `trainer-pilot-participation-partial-clean`. Exact Preview deployment `dpl_HDtvZnnz9osHuyQ7zW7WX1w1mpWE` at source SHA `dedc19001acd9229d435718e51ceabbbdd208860` passed authenticated passwordless synthetic acceptance. Cleanup is application/Auth/Storage `0/0/0`, and the temporary callback is removed.
 
 ## Current status
