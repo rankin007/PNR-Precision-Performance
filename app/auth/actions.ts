@@ -3,13 +3,14 @@
 import { redirect } from "next/navigation";
 import { headers } from "next/headers";
 import { normalizeAppRedirectPath } from "@/lib/auth/access";
+import { classifyOtpRequestError } from "@/lib/auth/otp-request";
 import { buildPasswordlessCallbackUrl, resolvePasswordlessRedirectOrigin } from "@/lib/auth/redirect-origin";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { hasSupabaseEnv } from "@/lib/supabase/env";
 
 export type OtpActionResult =
-  | { ok: true }
-  | { ok: false; reason: "configuration" | "invalid" | "unavailable" };
+  | { ok: true; outcome?: "indeterminate" }
+  | { ok: false; reason: "configuration" | "invalid" | "retry-later" | "unavailable" };
 
 function readString(formData: FormData, key: string) {
   const value = formData.get(key);
@@ -81,9 +82,10 @@ export async function requestEmailOtpAction(emailInput: string, nextInput: strin
     },
   });
 
-  // The response is intentionally generic so account existence is not disclosed.
-  if (error) return { ok: true };
-  return { ok: true };
+  // Missing identities and accepted requests intentionally share one response.
+  // Operational rejection is also generic and never exposes provider detail.
+  if (classifyOtpRequestError(error) === "retry-later") return { ok: false, reason: "retry-later" };
+  return { ok: true, outcome: "indeterminate" };
 }
 
 export async function verifyEmailOtpAction(emailInput: string, tokenInput: string): Promise<OtpActionResult> {

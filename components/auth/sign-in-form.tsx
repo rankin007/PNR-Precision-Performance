@@ -19,6 +19,9 @@ const errorMessages: Record<string, string> = {
   "portal-access": "Your account is signed in, but portal access is not active yet.",
 };
 
+const requestMayArriveMessage = "If this email can sign in, a code may arrive shortly. Wait before requesting another code.";
+const requestRetryLaterMessage = "Sign-in is temporarily unavailable. Wait before requesting another code.";
+
 export function SignInForm({
   nextPath,
   sent,
@@ -47,13 +50,17 @@ export function SignInForm({
         setMessage("Secure sign-in is unavailable. Please contact the portal operator.");
         return;
       }
+      if (!result.ok && result.reason === "retry-later") {
+        setMessage(requestRetryLaterMessage);
+        return;
+      }
       if (!result.ok) {
         setMessage("Sign-in could not continue. Check the details and try again.");
         return;
       }
       setCodeRequested(true);
       setResendSeconds(60);
-      setMessage("If this address is approved, a six-digit code has been sent.");
+      setMessage(requestMayArriveMessage);
     });
   }
 
@@ -80,7 +87,7 @@ export function SignInForm({
 
       {sent ? (
         <Notice className="mt-5" tone="success" title="Email requested">
-          If this address is approved, a six-digit code has been sent.
+          {requestMayArriveMessage}
         </Notice>
       ) : null}
 
