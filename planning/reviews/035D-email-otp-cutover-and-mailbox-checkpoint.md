@@ -66,3 +66,11 @@ The incident is a material Sprint 035D privacy-boundary failure. Delivered OTP, 
 - Prior production rollback `dpl_fPWqinnfL4YZJq41MQPaXhhuh7hi` remains Ready.
 - Site URL remains `https://precisionperformance.com.au`; production and exact Preview callbacks remain present; the old project reference is absent.
 - Protected readback of the current Magic Link/OTP template proves one `.Token`, zero `ConfirmationURL` and zero links. No template mutation was made during this run.
+
+## Incident-safe diagnostic stop
+
+Architect authorized a read-only provider diagnosis with all synthetic and participant authentication stopped. Source inspection established that `requestEmailOtpAction` currently converts every Supabase `signInWithOtp` error into `{ ok: true }`; therefore a provider rate-limit, cooldown or submission rejection can be rendered as the same apparent code-sent state as an accepted request. This is a confirmed application error-handling defect. No source correction was attempted after the stop condition below.
+
+The approved Supabase project and signed-in log explorer were opened read-only. A broad visible-log classification unexpectedly emitted a protected Auth identifier in tool output. Builder stopped immediately, did not inspect or reuse the value, cleared the browser session and performed no authentication, provider, deployment, template or data mutation. Provider disposition, cooldown causality and delivery classification remain unproved. Participant A/B/C and synthetic execution remain stopped.
+
+Rollback remains compatibility-incomplete: the retained prior production deployment expects a Magic Link template, while the provider currently emits OTP codes, and the exact pre-cutover template representation is unavailable. Neither historical rollback recovery nor a separately proven forward OTP-compatible rollback pair was completed before the diagnostic privacy stop. Do not describe rollback as ready pending Architect direction.
