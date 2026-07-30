@@ -8,11 +8,18 @@ import { hasSupabaseEnv, supabaseEnv } from "@/lib/supabase/env";
 export async function GET(request: NextRequest) {
   const requestUrl = new URL(request.url);
   const code = requestUrl.searchParams.get("code");
+  const authError = requestUrl.searchParams.get("error") ?? requestUrl.searchParams.get("error_code");
   const next = normalizeAppRedirectPath(requestUrl.searchParams.get("next"));
 
   if (!hasSupabaseEnv()) {
     return NextResponse.redirect(
       new URL(`/sign-in?setup=supabase&next=${encodeURIComponent(next)}`, request.url),
+    );
+  }
+
+  if (authError) {
+    return NextResponse.redirect(
+      new URL(`/sign-in?error=callback&next=${encodeURIComponent(next)}`, request.url),
     );
   }
 

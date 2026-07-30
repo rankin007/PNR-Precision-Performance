@@ -40,6 +40,7 @@ export async function signInWithOtpAction(formData: FormData) {
   const { error } = await supabase.auth.signInWithOtp({
     email,
     options: {
+      shouldCreateUser: false,
       emailRedirectTo: buildPasswordlessCallbackUrl(origin, next),
     },
   });

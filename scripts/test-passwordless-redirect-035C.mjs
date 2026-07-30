@@ -19,6 +19,13 @@ assert(action.includes('requestHeaders.get("origin")'));
 assert(action.includes('requestHeaders.get("x-forwarded-host")'));
 assert(action.includes('requestHeaders.get("x-forwarded-proto")'));
 assert(action.includes("resolvePasswordlessRedirectOrigin"));
+assert(action.includes("shouldCreateUser: false"));
 assert(action.includes("emailRedirectTo: buildPasswordlessCallbackUrl(origin, next)"));
 assert(!action.includes('process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"'));
+
+const callback = readFileSync("app/auth/callback/route.ts", "utf8");
+assert(callback.includes('requestUrl.searchParams.get("error") ?? requestUrl.searchParams.get("error_code")'));
+assert(callback.includes('/sign-in?error=callback&next=${encodeURIComponent(next)}'));
+assert(callback.includes("exchangeCodeForSession(code)"));
+assert(callback.indexOf("if (authError)") < callback.indexOf("if (code)"));
 console.log("Sprint 035C passwordless redirect-origin tests passed.");
