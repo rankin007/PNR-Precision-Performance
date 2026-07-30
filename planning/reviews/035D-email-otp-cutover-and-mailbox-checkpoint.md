@@ -2,7 +2,7 @@
 
 ## Status
 
-Sprint 035D remains active. Application and provider cutover gates pass; delivered synthetic acceptance and participant execution are paused at the protected mailbox authentication boundary. No permitted closeout outcome is claimed at this checkpoint.
+Sprint 035D remains active. Application and provider cutover gates pass; the protected mailbox became available, but the bounded delivered synthetic run failed because the single participant-path OTP request did not produce an OTP message. Exact-owned cleanup is proven `0/0/0`. Participant execution remains unauthorized and unstarted. No permitted closeout outcome is claimed at this checkpoint.
 
 ## Proven baseline and application candidate
 
@@ -34,23 +34,22 @@ Sprint 035D remains active. Application and provider cutover gates pass; deliver
 - Typecheck, focused lint, canonical static validation, production build, encoding and diff checks pass.
 - Protected rendered Preview smoke shows the six-digit code journey and normalized `/portal` destination.
 
-## Manual intervention required
+## Synthetic delivered-OTP acceptance result
 
-Blocked fact: no protected synthetic mailbox session is authenticated in the only available browser. Gmail and Outlook both stop at their sign-in screens. Therefore delivered-code, one-action email, prefetch resistance, successful session, safe-failure runtime matrix and participant gates cannot yet be claimed.
+The protected Gmail session was confirmed with boolean-only evidence. No mailbox address, account identity, existing message, header, credential or MFA information was returned. A fresh exact plus-addressed recipient was derived only in protected browser memory.
 
-Evidence checked: exact Preview/application/provider/deployment gates pass; both supported mailbox origins were checked without entering or recording an address; no synthetic or participant request was sent.
+- Exactly one ownership-bounded synthetic Auth identity was prepared in approved project `uvskssaecdhxcgytkasc`; exact-match dashboard proof showed one identity without retaining its address or Auth UUID.
+- Exactly one OTP request was submitted through the participant-facing sign-in form on the exact alias-free Preview. The application advanced to its generic code-entry state and emitted no identity-specific error.
+- A bounded Gmail provider check found normal delivery of the separate identity-preparation invitation but no OTP message for the exact synthetic recipient, including after one bounded refresh.
+- Builder did not submit a second OTP request because the run authority required exactly one. Delivered one-code/no-link proof, verification, session, `/portal`, permission, wrong-horse, RLS and runtime failure-matrix acceptance therefore remain unproved.
+- No application or Storage records were created. The exact-owned Auth identity was deleted last and exact-search recheck proved application/Auth/Storage `0/0/0`.
+- Protected recipient/template values were cleared from browser memory. No OTP, recipient, token, link, header, UUID or credential entered commands, conversation, screenshots, commits or durable evidence.
 
-Required operator action:
-
-1. In the open Chrome browser, sign in to one controlled mailbox that may be used for a Sprint-owned synthetic plus-address identity.
-2. Complete any provider MFA directly in Chrome; do not send an inbox, password, OTP, recovery code, token or mailbox header through Builder conversation.
-3. Leave the authenticated inbox open and report only `protected synthetic mailbox ready`.
-
-Builder will then verify only a sanitized signed-in classification, derive/use the synthetic address in protected browser memory, create the minimum exact-owned prepared identity, run delivered OTP and failure acceptance, clean application/Auth/Storage Auth-last to `0/0/0`, and only then consider guarded Participant A coordination.
+This is a material delivered-authentication failure for the bounded synthetic run. Participant A, B and C were not started. Architect review is required before authorizing any retry or participant execution.
 
 ## Current cleanup boundary
 
-This checkpoint created no synthetic or participant Auth/application/Storage state and sent no authentication email. Sprint-attempt creation is `0/0/0`; inherited Participant A remains at the prior sanitized Sprint-owned `0/1/0` state pending guarded reverification. The exact Preview callback remains temporarily required for subsequent acceptance.
+The latest bounded run created one exact-owned Auth identity and sent one identity-preparation invitation plus exactly one participant-path OTP request. No application or Storage state was created. Auth-last cleanup removed the exact-owned identity and final owned application/Auth/Storage state is `0/0/0`; inherited Participant A remains at the prior sanitized Sprint-owned `0/1/0` state pending guarded reverification. The exact Preview callback remains temporarily required for any Architect-authorized acceptance retry.
 
 ## Protected mailbox resumption incident
 
@@ -59,3 +58,11 @@ The operator confirmed protected mailbox readiness. During the required signed-i
 No Supabase user, authentication request, delivered message, session, application record or Storage object was created. This synthetic attempt therefore remains application/Auth/Storage `0/0/0`, with Auth-last cleanup vacuous. A/B/C were not started.
 
 The incident is a material Sprint 035D privacy-boundary failure. Delivered OTP, one-action email, session, permission, wrong-horse, safe-failure and runtime cleanup acceptance remain unproved. The current OTP-only provider template and healthy 035D application release were not changed during the failed attempt. The exact prior template body was intentionally retained only in the earlier protected browser session and is no longer available after the browser session reset; therefore Builder did not attempt an uncertain reconstruction or non-exact restore. Architect review is required before any further mailbox or participant execution.
+
+## Post-failure invariant recheck
+
+- Exact Preview `dpl_2ftdehCW4dZTwb5FegppGou9W9XH` remains Ready, Preview-classified and alias-free.
+- Production `dpl_EUJyBLQp7okgbPwtBU6nmMH88L6A` remains Ready. All five stable aliases resolve to it.
+- Prior production rollback `dpl_fPWqinnfL4YZJq41MQPaXhhuh7hi` remains Ready.
+- Site URL remains `https://precisionperformance.com.au`; production and exact Preview callbacks remain present; the old project reference is absent.
+- Protected readback of the current Magic Link/OTP template proves one `.Token`, zero `ConfirmationURL` and zero links. No template mutation was made during this run.

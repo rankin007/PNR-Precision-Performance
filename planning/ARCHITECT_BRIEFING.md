@@ -1,5 +1,11 @@
 # Architect Briefing — Sprint 035C Active
 
+## Sprint 035D protected synthetic result
+
+The operator restored the protected Gmail session and authorized one bounded retry. Builder confirmed inbox visibility without returning account/message data, prepared one exact-owned plus-addressed Auth identity in project `uvskssaecdhxcgytkasc`, and submitted exactly one OTP request through the participant-facing form on alias-free Preview `dpl_2ftdehCW4dZTwb5FegppGou9W9XH`. The application reached generic code entry, but bounded provider verification found only the separate identity-preparation invitation and no delivered OTP. No second OTP request was made.
+
+Delivered-code/no-link, authenticated session, exact Preview `/portal`, permission, wrong-horse, RLS and runtime failure-matrix acceptance remain unproved. No application or Storage state was created; Auth-last deletion and exact recheck prove owned `0/0/0`. Production `dpl_EUJyBLQp7okgbPwtBU6nmMH88L6A`, all five stable aliases and rollback `dpl_fPWqinnfL4YZJq41MQPaXhhuh7hi` remain Ready. Site URL and production/exact-Preview callbacks remain present. Protected template readback remains structurally one `.Token`, zero `ConfirmationURL` and zero links; no template mutation occurred during the run. Participant A/B/C were not started. Architect review is required before any retry or participant authorization.
+
 ## Sprint 035D opening
 
 Sprint 035D starts from exact clean local/remote 035C SHA `819f09add752a64dbf10213f3d481ad3132da9e9`. The four-file pack is applied and the scoped branch is active. Local backward-compatible OTP request and six-digit verification support is implemented with transient client state, `shouldCreateUser:false`, `verifyOtp` email type, generic anti-enumeration response and retained callback compatibility. Focused OTP/redirect/dashboard tests, typecheck, focused lint, canonical static validation and production build pass. Remote Preview, production release, protected template capture/cutover, delivered synthetic acceptance and A/B/C remain pending; no external mutation is claimed at this checkpoint.
