@@ -2,7 +2,9 @@
 
 ## Sprint 035D active — 2026-07-30
 
-Sprint `035D-prefetch-resistant-email-otp-authentication` is active on branch `codex/035D-prefetch-resistant-email-otp-authentication` from exact clean local/remote Sprint 035C SHA `819f09add752a64dbf10213f3d481ad3132da9e9`. The four-file Architect Pack is applied. Backward-compatible email OTP request/code verification is implemented locally with `shouldCreateUser:false`, exact plus-address preservation, generic request behavior, transient browser state and the existing callback retained for rollback. Focused tests, typecheck, lint, canonical static validation and the production build pass. No Preview, production or Supabase template mutation is yet claimed; the last sanitized A state remains the inherited `0/1/0` boundary until protected reverification.
+Sprint `035D-prefetch-resistant-email-otp-authentication` is active on branch `codex/035D-prefetch-resistant-email-otp-authentication` from exact clean local/remote Sprint 035C SHA `819f09add752a64dbf10213f3d481ad3132da9e9`. The four-file Architect Pack is applied. Backward-compatible email OTP request/code verification is implemented with `shouldCreateUser:false`, exact plus-address preservation, generic request behavior, transient browser state and the existing callback retained for rollback. Focused tests, typecheck, lint, canonical static validation and the production build pass. The last sanitized A state remains the inherited `0/1/0` boundary until protected reverification.
+
+Exact-source alias-free Preview `dpl_2ftdehCW4dZTwb5FegppGou9W9XH` and production release `dpl_EUJyBLQp7okgbPwtBU6nmMH88L6A` are Ready. All five stable aliases are reconciled; prior production remains rollback. The OTP-only Magic Link template is saved with sanitized fingerprint `dc83e62a...`; its exact prior representation remains in protected session memory with fingerprint `3e7f17fc...`. Site URL is unchanged and callbacks are production plus exact Preview. Delivered synthetic acceptance is paused because the only available Chrome browser has no authenticated protected mailbox; no synthetic request/state was created.
 
 ## Sprint 035C active — 2026-07-30
 

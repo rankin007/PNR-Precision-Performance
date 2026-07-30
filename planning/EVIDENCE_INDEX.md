@@ -21,6 +21,7 @@
 15. `planning/reviews/035C-participant-a-redirect-diagnosis.md` — artifact-free redirect diagnosis, Participant A owned state, mechanism rejection and in-scope correction.
 
 16. `planning/sprints/035D-prefetch-resistant-email-otp-authentication/` — active four-file OTP/provider/deployment authority.
+17. `planning/reviews/035D-email-otp-cutover-and-mailbox-checkpoint.md` — exact Preview/production/template cutover proof and protected-mailbox manual intervention.
 
 ## Accepted product lineage
 
