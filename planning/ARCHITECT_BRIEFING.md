@@ -16,6 +16,8 @@ Participant execution is stopped after A's Preview passwordless message redirect
 
 The initial containment helper returned `OWNERSHIP_AMBIGUOUS` without mutation because it incorrectly required one total project Auth identity. Parent secret environment is absent and owned state remains `0/1/0`. The narrow correction allows unrelated Auth identities while requiring one exact protected match, recorded A event-window agreement, untagged/no-conflict metadata, zero access, protected ownership ledger, Auth-last deletion and unchanged unrelated identities.
 
+Participant A containment subsequently passed: prior provider sign-in indicator recorded, production callback not processed, zero application records removed, active session revoked through exact-owned Auth deletion, and owned application/Auth/Storage `0/0/0`. Protected ledger state is A `contained-owned-deleted`, Sprint-owned, with no B/C entries. Post-delete exact A absence and unrelated-identity preservation passed; parent service-role environment is absent. No participant acceptance is claimed.
+
 Sprint 035B is closed `trainer-pilot-participation-partial-clean`. Exact Preview deployment `dpl_HDtvZnnz9osHuyQ7zW7WX1w1mpWE` at source SHA `dedc19001acd9229d435718e51ceabbbdd208860` passed authenticated passwordless synthetic acceptance. Cleanup is application/Auth/Storage `0/0/0`, and the temporary callback is removed.
 
 ## Current status

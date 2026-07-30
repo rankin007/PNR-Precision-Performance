@@ -77,3 +77,13 @@ The corrected guard permits unrelated Auth identities while requiring exactly on
 Before mutation, the helper writes only sanitized A ownership classification to the protected containment ledger. It retains exact application cardinality and zero membership/assignment requirements, removes bootstrap-only application state before Auth, deletes Auth last, verifies owned Auth/application absence, and proves the unrelated Auth identity set is unchanged without emitting its count or identifiers. The twelve-case no-secret containment test covers the required accept/refuse, ordering, isolation, zero-owned and output boundaries.
 
 Validation passed: twelve-case containment regression, helper self-test, protected wrapper static self-test, passwordless redirect regression, Sprint 035 dashboard regression, TypeScript, focused ESLint, canonical JSON, maintained-text encoding and `git diff --check`. No real service-role value, inbox, Auth identifier, authentication artifact or unrelated-user count was used or emitted.
+
+### Participant A containment checkpoint
+
+The corrected protected containment returned only the accepted sanitized result: pass; A contained-owned-deleted; prior provider sign-in indicator present; production callback not processed; active session revoked by owned-identity deletion; zero application records removed; owned application/Auth/Storage `0/0/0`.
+
+Independent local proof confirms the parent service-role environment is absent and the protected ledger contains exactly the sanitized A entry `contained-owned-deleted`, `sprint-owned`, `recorded-a-creation-window`, with no B/C entry. The helper can produce the accepted result only after proving the exact A Auth identity and application user are absent and the unrelated Auth identity set is unchanged. Because no application user existed, no profile, membership, stable/staff role, trainer/owner or biochemistry access dependency could remain for A. Storage stayed zero because neither the failed flow nor containment created or mutated Storage.
+
+The prior provider sign-in indicator is retained only as that classification. The compromised code, prior message, deleted identity and old session are not retained, reconstructed or reusable. Participant acceptance remains unclaimed.
+
+Read-only provider reconciliation confirms the temporary callback remains exactly `https://pnr-precision-performance-n7xbelwg8-rankin007s-projects.vercel.app/auth/callback` beside the unchanged production callback, with production Site URL unchanged. Deployment `dpl_G8StMkGqfTmUsNMpAfNUCwontC42` remains Ready/Preview and alias-free. All five stable aliases remain mapped to accepted production source `pnr-precision-performance-khx3yoqq4-rankin007s-projects.vercel.app`. B/C remain untouched.
