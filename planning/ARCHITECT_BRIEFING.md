@@ -14,6 +14,8 @@ The operator safely terminated a manual secret-conversion attempt before helper 
 
 Participant execution is stopped after A's Preview passwordless message redirected to the production root with a code query and the code was disclosed outside the protected path. The compromised value is not retained or exchanged, no portal acceptance is claimed, and B/C remain untouched. Sanitized session/application containment, exact-owned A cleanup and redirect diagnosis are active.
 
+The initial containment helper returned `OWNERSHIP_AMBIGUOUS` without mutation because it incorrectly required one total project Auth identity. Parent secret environment is absent and owned state remains `0/1/0`. The narrow correction allows unrelated Auth identities while requiring one exact protected match, recorded A event-window agreement, untagged/no-conflict metadata, zero access, protected ownership ledger, Auth-last deletion and unchanged unrelated identities.
+
 Sprint 035B is closed `trainer-pilot-participation-partial-clean`. Exact Preview deployment `dpl_HDtvZnnz9osHuyQ7zW7WX1w1mpWE` at source SHA `dedc19001acd9229d435718e51ceabbbdd208860` passed authenticated passwordless synthetic acceptance. Cleanup is application/Auth/Storage `0/0/0`, and the temporary callback is removed.
 
 ## Current status

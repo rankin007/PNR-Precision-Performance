@@ -3,11 +3,13 @@
 import { existsSync, readFileSync, unlinkSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
+import { pathToFileURL } from "node:url";
 
 const REF = "uvskssaecdhxcgytkasc";
 const ALIASES = ["A", "B", "C"];
 const LEDGER = join(tmpdir(), "pnr-035c-participant-ownership.json");
-const SPRINT_035C_START = Date.parse("2026-07-29T23:27:14Z");
+const A_CREATION_AFTER = Date.parse("2026-07-29T23:49:33Z");
+const A_CREATION_BEFORE = Date.parse("2026-07-30T01:34:19Z");
 
 function fail(code) { const error = new Error(code); error.code = code; throw error; }
 
@@ -21,6 +23,19 @@ export function removePilotMetadata(existing) {
   delete next.participant_alias;
   delete next.pilot_sprint;
   return next;
+}
+
+export function classifyContainmentIdentity(records) {
+  const exact = records.filter(record => record.exactInbox === true);
+  if (exact.length === 0) fail("IDENTITY_MATCH_MISSING");
+  if (exact.length > 1) fail("DUPLICATE_IDENTITY_A");
+  const candidate = exact[0];
+  const createdAt = Date.parse(candidate.createdAt || "");
+  if (!Number.isFinite(createdAt) || createdAt <= A_CREATION_AFTER || createdAt >= A_CREATION_BEFORE) fail("OWNERSHIP_TIME_REFUSED");
+  if (candidate.participantAlias || candidate.pilotSprint) fail("UNEXPECTED_METADATA_REFUSED");
+  const conflict = records.some(record => record.key !== candidate.key && record.participantAlias === "A" && record.pilotSprint === "035C");
+  if (conflict) fail("ALIAS_TAG_AMBIGUOUS_A");
+  return candidate;
 }
 
 function config() {
@@ -129,13 +144,24 @@ async function containOne(alias) {
   const { createClient } = await import("@supabase/supabase-js");
   const admin = createClient(protectedConfig.url, protectedConfig.service, { auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false } });
   const known = await users(admin);
-  const matches = known.filter(user => user.email?.trim().toLowerCase() === inbox);
+  const classified = known.map(user => ({
+    key: user.id,
+    exactInbox: user.email?.trim().toLowerCase() === inbox,
+    createdAt: user.created_at,
+    participantAlias: user.app_metadata?.participant_alias,
+    pilotSprint: user.app_metadata?.pilot_sprint,
+  }));
   inbox = "";
-  if (known.length !== 1 || matches.length !== 1) fail("OWNERSHIP_AMBIGUOUS");
-  const user = matches[0];
-  const createdAt = Date.parse(user.created_at || "");
-  if (!Number.isFinite(createdAt) || createdAt < SPRINT_035C_START || createdAt > Date.now()) fail("OWNERSHIP_TIME_REFUSED");
-  if (user.app_metadata?.participant_alias || user.app_metadata?.pilot_sprint) fail("UNEXPECTED_METADATA_REFUSED");
+  const candidate = classifyContainmentIdentity(classified);
+  classified.length = 0;
+  const user = known.find(item => item.id === candidate.key);
+  if (!user) fail("OWNERSHIP_AMBIGUOUS");
+  const unrelatedBefore = known.filter(item => item.id !== user.id).map(item => item.id).sort();
+
+  const ledger = readLedger();
+  if (ledger.participants.A && (ledger.participants.A.ownership !== "sprint-owned" || !["containment-qualified", "contained-owned-deleted"].includes(ledger.participants.A.state))) fail("OWNERSHIP_LEDGER_REFUSED");
+  ledger.participants.A = { state: "containment-qualified", ownership: "sprint-owned", window: "recorded-a-creation-window" };
+  writeLedger(ledger);
 
   const appUsers = await admin.from("users").select("id").eq("auth_user_id", user.id);
   if (appUsers.error || !Array.isArray(appUsers.data) || appUsers.data.length > 1) fail("APPLICATION_USER_AMBIGUOUS");
@@ -162,9 +188,13 @@ async function containOne(alias) {
 
   const removedAuth = await admin.auth.admin.deleteUser(user.id, false);
   if (removedAuth.error) fail("AUTH_DELETE_FAILED_A");
-  const remainingAuth = (await users(admin)).filter(item => item.id === user.id).length;
+  const afterUsers = await users(admin);
+  const remainingAuth = afterUsers.filter(item => item.id === user.id).length;
+  const unrelatedAfter = afterUsers.map(item => item.id).sort();
   const remainingApp = await exactCount(admin.from("users").select("id", { count: "exact", head: true }).eq("auth_user_id", user.id), "APPLICATION_VERIFY_FAILED");
-  if (remainingAuth !== 0 || remainingApp !== 0) fail("CONTAINMENT_VERIFY_FAILED");
+  if (remainingAuth !== 0 || remainingApp !== 0 || JSON.stringify(unrelatedAfter) !== JSON.stringify(unrelatedBefore)) fail("CONTAINMENT_VERIFY_FAILED");
+  ledger.participants.A = { state: "contained-owned-deleted", ownership: "sprint-owned", window: "recorded-a-creation-window" };
+  writeLedger(ledger);
   process.stdout.write(`${JSON.stringify({ state: "pass", participant: "A-contained-owned-deleted", codeExchange: user.last_sign_in_at ? "provider-sign-in-indicator-present" : "not-observed", productionCallback: applicationRecordsRemoved ? "application-bootstrap-removed" : "not-processed", activeSession: "revoked-by-owned-identity-deletion", applicationRecordsRemoved, ownedCounts: "0/0/0" })}\n`);
   protectedConfig.service = null;
   delete process.env.PP035C_SERVICE_ROLE_KEY;
@@ -197,11 +227,13 @@ function selfTest() {
   if (merged.provider !== "email" || merged.unrelated !== "preserved" || merged.participant_alias !== "A" || merged.pilot_sprint !== "035C") fail("SELF_MERGE");
   const removed = removePilotMetadata(merged);
   if (removed.provider !== "email" || removed.unrelated !== "preserved" || "participant_alias" in removed || "pilot_sprint" in removed) fail("SELF_REMOVE");
-  if (SPRINT_035C_START !== Date.parse("2026-07-29T23:27:14Z")) fail("SELF_TIME_BOUNDARY");
+  if (A_CREATION_AFTER !== Date.parse("2026-07-29T23:49:33Z") || A_CREATION_BEFORE !== Date.parse("2026-07-30T01:34:19Z")) fail("SELF_TIME_BOUNDARY");
   process.stdout.write(`${JSON.stringify({ state: "pass", checks: ["hidden-input-required", "search-before-mutation", "existing-only", "merge-preserves", "owned-ledger", "contain-a-only", "ownership-time-boundary", "app-access-refusal", "auth-last-delete", "sanitized-output"], redirect: "exact-approved-preview" })}\n`);
 }
 
-const mode = process.argv[2] || "--self-test";
-const alias = process.argv[3];
-Promise.resolve(mode === "--self-test" ? selfTest() : mode === "--apply-one" ? applyOne(alias) : mode === "--contain-one" ? containOne(alias) : mode === "--cleanup" ? cleanup() : fail("MODE_REFUSED"))
-  .catch(error => { process.stdout.write(`${JSON.stringify({ state: "failed-sanitized", code: /^[A-Z0-9_]+$/.test(error.code || error.message) ? (error.code || error.message) : "UNEXPECTED" })}\n`); process.exitCode = 2; });
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+  const mode = process.argv[2] || "--self-test";
+  const alias = process.argv[3];
+  Promise.resolve(mode === "--self-test" ? selfTest() : mode === "--apply-one" ? applyOne(alias) : mode === "--contain-one" ? containOne(alias) : mode === "--cleanup" ? cleanup() : fail("MODE_REFUSED"))
+    .catch(error => { process.stdout.write(`${JSON.stringify({ state: "failed-sanitized", code: /^[A-Z0-9_]+$/.test(error.code || error.message) ? (error.code || error.message) : "UNEXPECTED" })}\n`); process.exitCode = 2; });
+}

@@ -14,6 +14,8 @@ An operator-side manual secret conversion attempt was safely terminated before t
 
 Participant execution is now stopped. A Preview passwordless request redirected to the production root with a code query instead of the Preview callback, and that code was disclosed outside the protected path. The value is treated as compromised and will not be inspected or exchanged. No portal acceptance is claimed. B/C remain not started while Builder performs sanitized session/application containment, exact-owned A cleanup and redirect correction.
 
+The first A-only containment attempt safely returned `OWNERSHIP_AMBIGUOUS` before mutation because its guard incorrectly required one total project Auth identity. The child secret environment ended and the parent service-role environment is absent. Owned state remains `0/1/0`. Builder corrected the guard to exact private-inbox match plus recorded event window, untagged/no-conflict metadata, zero access, protected ownership ledger, Auth-last deletion and unrelated-identity preservation; focused no-secret validation is in progress.
+
 ## Sprint 035B closeout — 2026-07-30
 
 Sprint `035B-preview-configuration-and-trainer-pilot-completion` is closed `trainer-pilot-participation-partial-clean`. Exact-candidate Preview deployment `dpl_HDtvZnnz9osHuyQ7zW7WX1w1mpWE` at SHA `dedc19001acd9229d435718e51ceabbbdd208860` passed the authenticated passwordless synthetic matrix on phone, desktop and tablet. Exact-owned application/Auth/Storage cleanup is `0/0/0`, and the temporary Preview callback is removed. Trainer Participants A, B and C did not start because no protected inbox/provider-operator coordination path was available. Trainer acceptance is not claimed, production remains unchanged and product-wide Done is not met.
