@@ -30,14 +30,16 @@ export default async function SignInPage({ searchParams }: SignInPageProps) {
       <SectionCard eyebrow="Secure portal" title="Sign in to Precision Performance" description={description}>
         <div className="grid gap-4 md:grid-cols-2">
           <div className="rounded-2xl border border-ink/10 bg-sand p-5 text-sm leading-7 text-ink">
-            <p className="font-semibold">Next destination</p>
-            <p className="mt-2 text-steel">{nextPath}</p>
+            <p className="font-semibold">After sign-in</p>
+            <p className="mt-2 text-steel">
+              {nextPath === "/portal" ? "Trainer dashboard" : "Your approved portal destination"}
+            </p>
           </div>
           <div className="rounded-2xl border border-ink/10 bg-white p-5 text-sm leading-7 text-steel">
             <p className="font-semibold text-ink">Current status</p>
             <p className="mt-2">
               {envReady
-                ? "Passwordless email code sign-in is available in this environment."
+                ? "The secure sign-in service is configured. Access and code delivery still require an approved account."
                 : "Secure sign-in is unavailable until the approved service configuration is complete."}
             </p>
           </div>
@@ -45,18 +47,12 @@ export default async function SignInPage({ searchParams }: SignInPageProps) {
         <div className="mt-8">
           <SignInForm nextPath={nextPath} sent={sent} error={error} envReady={envReady} />
         </div>
-        <div className="mt-8 flex flex-wrap gap-3">
+        <div className="mt-8">
           <Link
             href="/"
             className="rounded-full border border-ink/10 bg-white px-5 py-3 text-sm font-semibold text-ink"
           >
             Return to public site
-          </Link>
-          <Link
-            href={nextPath}
-            className="rounded-full bg-ink px-5 py-3 text-sm font-semibold text-white"
-          >
-            Continue after setup
           </Link>
         </div>
       </SectionCard>

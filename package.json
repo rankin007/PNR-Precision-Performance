@@ -13,6 +13,7 @@
     "test:voice-027": "npm exec -- node --experimental-strip-types scripts/test-biochemistry-voice-027.mjs",
     "test:workspace-028": "npm exec -- node --experimental-strip-types scripts/test-stable-workspace-028.mjs",
     "test:dashboard-035": "npm exec -- node --experimental-strip-types scripts/test-trainer-dashboard-035.mjs",
+    "test:live-trainer-035k": "npm exec -- node --experimental-strip-types scripts/test-live-trainer-access-035K.mjs",
     "test:roles": "npm exec -- node scripts/run-validation-suite.mjs roles",
     "test:supabase-self": "npm exec -- node scripts/run-validation-suite.mjs supabase-self",
     "validate:static": "npm exec -- node scripts/run-validation-suite.mjs static",

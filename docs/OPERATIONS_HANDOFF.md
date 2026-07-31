@@ -31,6 +31,16 @@ Support owner records route, time, browser/device, expected/actual behavior, rep
 
 User onboarding/offboarding and membership/horse assignment must use existing admin and role contracts. The authorized access owner verifies requester authority, applies least privilege, records the change, and confirms revoked users no longer access protected routes. No manual database bypass or RLS weakening is permitted.
 
+### Sprint 035K bounded trainer pilot procedure
+
+Sprint 035K uses one privately designated human tester and an obvious synthetic fixture. The tester's address, OTP, mailbox content, credentials, tokens, session material and private identifiers must remain outside chat, commands, logs, URLs, screenshots and durable evidence. Mailbox automation and inspection are prohibited.
+
+The governed operator entrypoint is `scripts/Invoke-LiveTrainerAccess035K.ps1` from a private interactive console with transcription disabled. It exact-matches an adopted tester through hidden email plus exact Auth-ID input and never enumerates unrelated Auth users. If no exact ID is available it may attempt one exact confirmed creation, but a duplicate response without an exact ID fails closed. It refuses the prohibited old Supabase project, uses the existing trainer membership and `horse.records.write` contracts, and maintains a temporary exact-ownership ledger. It may create only the bounded synthetic pilot graph documented in the authentication runbook.
+
+Human acceptance must pass first on an exact-source, alias-free Preview and then on the exact promoted production candidate. Record only task booleans, routes, timestamps, viewport and the approved synthetic labels. A failed first attempt is diagnosed once through sanitized classifications; only one further cooldown-safe attempt is allowed.
+
+At completion, retain the graph only when the operator privately types the exact sanitized retention sentence into the protected helper. Arguments, environment values and inference are refused. Otherwise verify every exact row against its ledger ownership fields, clean application dependencies, prove each surface independently reaches zero, and delete Auth last only when Sprint 035K created it. Preserve the ledger on any mismatch or partial deletion. Preserve adopted pre-existing Auth and all unrelated identities and data.
+
 ## Governance and unresolved duties
 
 - Privacy owner must define data-subject request, retention/deletion, breach notification and evidence-upload procedures before those capabilities are operationally accepted.

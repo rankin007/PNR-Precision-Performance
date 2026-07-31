@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This runbook defines the prerequisites for a future authenticated-proof sprint. It does not authorize a new run, remote mutation, or callback change.
+This runbook defines protected authentication proof procedures. Sprint 035K supersedes mailbox automation for trainer acceptance: the designated human tester uses their own mailbox and privately enters their own email and six-digit code.
 
 ## Test Mailbox Standard
 
@@ -47,3 +47,25 @@ Do not use `-Mode Live` until that adapter, plus-alias receipt, restricted ledge
 ## Sprint 035I Gmail enrollment containment
 
 Google Cloud is configured for External/Testing, one dedicated test user and exactly `gmail.readonly`, with Gmail API enabled. No Desktop client or OAuth grant is retained. Do not recreate a Desktop client through any browser-control path that renders client material into agent-visible output. Future enrollment must transfer the exact client configuration through an operator-only protected channel directly into the fixed current-user Credential Manager targets, prove no credential-file residue and rerun no-send readiness before any identity or email action.
+
+## Sprint 035K human trainer acceptance
+
+Sprint 035K does not use the test-mailbox, Gmail, OAuth, IMAP, POP, forwarding, scraping or mailbox-inspection procedures above. The product owner acts as, or privately coordinates, one designated tester using a mailbox they control.
+
+Before any remote mutation, run deterministic checks and record the field-minimal fixture manifest. From a private interactive Windows console with transcription disabled, the Builder uses:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File scripts/Invoke-LiveTrainerAccess035K.ps1 -Operation SelfTest
+powershell -NoProfile -ExecutionPolicy Bypass -File scripts/Invoke-LiveTrainerAccess035K.ps1 -Operation Prepare
+powershell -NoProfile -ExecutionPolicy Bypass -File scripts/Invoke-LiveTrainerAccess035K.ps1 -Operation Verify
+```
+
+The wrapper accepts only the operation name as an argument. It prompts privately for the service-role value, and the helper prompts privately for the tester email. For an adopted Auth identity, the operator must also enter its exact Auth ID privately; the helper calls the exact-ID provider contract and checks exact email agreement. It never lists or processes unrelated Auth users. When no exact ID is supplied, the helper attempts one confirmed identity creation; a provider duplicate response without an exact ID fails closed as `EXACT_IDENTITY_CONTRACT_REQUIRED`. Never put protected input, an OTP, session value or private identifier in arguments, environment files, chat, screenshots, logs or retained evidence. The helper must refuse non-interactive or transcribed consoles, the old Supabase project, ambiguous identity/application state, pre-existing fixture labels, missing trainer permission contracts and open or invalid ownership ledgers.
+
+The bounded fixture is exactly one synthetic profile, trainer membership, stable, trainer row, horse, assignment and write-access row. It contains no test result, note, upload or Storage object. Its honest initial workflow is `no-result`, with the existing capture action. The denial target is a generated nonexistent UUID and creates no second horse.
+
+After an exact-source alias-free Preview is ready and its callback is proven, the tester—not Builder—opens sign-in, enters their private email, requests one code, confirms only whether it arrived, enters it privately, completes the synthetic dashboard/workspace/action journey, signs out and signs in again. Builder may inspect only the authenticated synthetic application after the tester consents; Builder must never inspect the mailbox or receive the email/code.
+
+Repeat the same essential journey on production only after Preview acceptance and exact promotion. Allow at most two diagnosed, cooldown-safe attempts per sprint policy; never resend blindly.
+
+At disposition, retain only after the tester returns the exact sanitized sentence `Retain the Sprint 035K pilot trainer account and synthetic fixture.` Then run `-Operation Retain` and privately type that full sentence when prompted. Retention authority is never accepted through an argument, environment variable or inference. Any other input leaves the ledger and records unchanged. Otherwise run `-Operation Cleanup`; before each deletion the helper rereads the exact row and checks its identifier plus synthetic ownership fields against the ledger. It then proves each of the eight application surfaces independently reaches zero and deletes Auth last only when Sprint 035K created it. The ledger is removed only after every required absence check passes. An adopted pre-existing Auth identity is exact-ID reverified and preserved.
