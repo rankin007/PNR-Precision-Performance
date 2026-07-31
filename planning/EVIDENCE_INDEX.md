@@ -32,6 +32,9 @@
 22. `planning/sprints/035H-protected-single-run-authentication-acceptance-harness/` — applied four-file protected single-run harness authority.
 23. `planning/reviews/035H-protected-single-run-authentication-acceptance-harness.md` — deterministic safety architecture, zero-action readiness evidence and `protected-mailbox-automation-authority-pending-clean` closeout.
 
+24. `planning/sprints/035I-gmail-secure-mailbox-adapter-and-single-run-acceptance/` — applied four-file Gmail secure adapter and single-run authority.
+25. `planning/reviews/035I-gmail-secure-mailbox-adapter-and-single-run-acceptance.md` — sanitized Gmail/OAuth setup, deterministic adapter evidence, protected-output containment and `gmail-secure-adapter-readiness-blocked-clean` closeout.
+
 ## Accepted product lineage
 
 - Sprint 032 release: `planning/reviews/032-public-relaunch-and-production-deployment.md`; exact SHA `f7242ee0785ae9b87022394206c89ebdd5c9f6ad`.

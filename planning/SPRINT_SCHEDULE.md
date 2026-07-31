@@ -2,10 +2,11 @@
 
 ## Active direction
 
-Sprint 035H is closed `protected-mailbox-automation-authority-pending-clean`. The deterministic single-run safety core and no-send readiness pass, but no compliant protected mailbox automation adapter is established. No preparation, request or verification occurred; exact-owned state remains `0/0/0` with ledger absent. Product-wide Done and trainer-pilot completion are not claimed.
+Sprint 035I is closed `gmail-secure-adapter-readiness-blocked-clean`. Gmail API and exact External/Testing/sole-user/read-only scope configuration were established, but Desktop-client material entered browser-control output. The exact client was deleted and proved absent before OAuth/Gmail/send. Request/verification remains `0/0`, exact-owned state `0/0/0` and ledger absent. Product-wide Done and trainer-pilot completion are not claimed.
 
 | Sprint | Outcome | Profile / proof |
 |---|---|---|
+| 035I | Closed `gmail-secure-adapter-readiness-blocked-clean` | Gmail/OAuth deterministic contracts passed; protected-output stop contained; exact client/credential residue absent; zero live actions and `0/0/0` |
 | 035H | Closed `protected-mailbox-automation-authority-pending-clean` | Strict single-run state/privacy/readiness harness passed; mailbox secure-store adapter unavailable; zero live actions and `0/0/0` |
 | 035G | Closed `synthetic-preparation-blocked-clean` | Exact callback correction/readback passed; prepared identity cleaned Auth-last; zero OTP requests; manual workflow unsuitable |
 | 035E | Closed `transactional-smtp-authority-pending-clean` | Strict provider/DNS/secret/participant gate; exact checklist recorded; no external or product mutation |

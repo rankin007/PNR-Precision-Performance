@@ -1,41 +1,41 @@
-# Architect Briefing — Sprint 035H Closeout
+# Architect Briefing — Sprint 035I Closeout
 
 ## Where things stand
 
-The protected single-run safety core is implemented and locally validated. The dedicated mailbox is classified as Gmail only; live authentication did not begin because there is no approved Gmail adapter using least-privilege read-only access and an approved secure store.
+The Gmail API and exact External/Testing, sole-test-user and `gmail.readonly` configuration are established. Deterministic Gmail/OAuth/Credential Manager contracts pass, but the protected live path did not start.
 
 ## Current status
 
-Closed `protected-mailbox-automation-authority-pending-clean`. Exact-owned state remains `0/0/0`, request and verification counts are both zero, and no ledger exists.
+Closed `gmail-secure-adapter-readiness-blocked-clean`. Request/verification is `0/0`, exact-owned state is `0/0/0`, both fixed credential targets and the ledger are absent.
 
 ## Since last sprint
 
-Applied the four-file 035H Pack and added a pure lifecycle controller, strict ledger contract, mailbox classifier, sanitized reporter, guarded runner, operator entry and deterministic tests. No external system was contacted or mutated.
+Applied the four-file 035I Pack, implemented Gmail OAuth/MIME/request and Credential Manager contracts, enabled Gmail API and configured the test-only OAuth surface. A protected-output incident during Desktop-client creation was contained by deleting the exact client before enrollment or OAuth.
 
 ## Architecture / file map
 
-- `scripts/protected-single-run-035H-core.mjs`: pure state, mailbox and privacy contracts.
-- `scripts/protected-single-run-035H.mjs`: fail-closed top-level readiness/live/recovery entry.
-- `scripts/Invoke-ProtectedSingleRun035H.ps1`: protected-console operator command.
-- `scripts/test-protected-single-run-035H.mjs`: deterministic safety matrix.
-- `planning/reviews/035H-protected-single-run-authentication-acceptance-harness.md`: sanitized closeout evidence.
+- `scripts/gmail-oauth-035I.mjs`: PKCE/state/scope/token contracts.
+- `scripts/gmail-mailbox-035I.mjs`: bounded list/get, plus-address and MIME contracts.
+- `scripts/CredentialManager035I.ps1`: fixed current-user credential targets.
+- `scripts/test-gmail-secure-adapter-035I.mjs`: deterministic Gmail/OAuth matrix.
+- `planning/reviews/035I-gmail-secure-mailbox-adapter-and-single-run-acceptance.md`: sanitized closeout evidence.
 
 ## Decisions
 
-Manual mailbox inspection, copied codes and browser handoffs are not acceptable substitutes. Live mode remains locked until a concrete secure-store-backed provider adapter passes deterministic review and no-send readiness.
+Browser-control output is not an acceptable channel for Desktop-client material. The rendered client was not enrolled or reused and was deleted exactly.
 
 ## Risks / watch-items
 
-Do not infer mailbox authority from prior manual delivery confirmation. Do not place mailbox credentials, address, OTP, messages or tokens in arguments, environment files, repository files, output or conversation.
+Do not recreate a client through a surface that exposes its material to agent-visible output. Gmail API and test OAuth configuration remain, but there is no retained client or grant.
 
 ## Open questions for the Architect
 
-Which Gmail-specific least-privilege API/OAuth flow and Windows secure-store mechanism will govern the dedicated test mailbox adapter?
+Which operator-only enrollment mechanism can create and transfer Desktop-client material directly to Windows Credential Manager without agent-visible rendering?
 
 ## Validation / test status
 
-Focused 035H checks, inherited OTP/recovery/wrapper/bootstrap/dashboard checks, JSON, lint, typecheck, encoding and canonical static validation passed. Live delivery/session/permission proof was not attempted.
+Gmail/OAuth 35 checks, inherited 035H 32 checks and synthetic Credential Manager round trip passed. OAuth, Gmail profile/list, identity preparation, email request and verification were not run.
 
 ## Recommended next Architect action
 
-Establish the provider-specific mailbox automation authority and secure-store mechanism without exposing protected values, then authorize continuation only if the concrete adapter satisfies 035H boundaries. Trainer-pilot completion and product-wide Done remain unclaimed.
+Design a non-observable operator-only client enrollment path. Do not authorize a live retry until the protected-output boundary is demonstrably preserved. Trainer-pilot completion and product-wide Done remain unclaimed.

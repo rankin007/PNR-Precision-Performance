@@ -1,5 +1,11 @@
 # Project State
 
+## Sprint 035I closed `gmail-secure-adapter-readiness-blocked-clean` — 2026-08-01
+
+Sprint `035I-gmail-secure-mailbox-adapter-and-single-run-acceptance` opened from exact closed 035H SHA `106324dbaba1c4a5099b261f7632dbb055c32701`. The four-file Pack was applied exactly. Sanitized authority passed, Google Cloud access and two-step verification were ready, Gmail API was enabled, and OAuth configuration was created as External/Testing with one dedicated test user and exactly `gmail.readonly`.
+
+Credential-free Gmail/OAuth tests passed 35 checks, inherited 035H passed 32, and the synthetic Windows Credential Manager round trip passed. Google then rendered new Desktop-client material into browser-control output. Builder stopped before enrollment/OAuth/Gmail/send, deleted the exact newly created client and proved it absent. Fixed credential targets and credential-file residue are absent. Request/verification remains `0/0`, exact-owned state remains `0/0/0`, ledger is absent and all application/provider/participant invariants are preserved. The live run did not start; trainer-pilot completion and product-wide Done are not claimed.
+
 ## Sprint 035H closed `protected-mailbox-automation-authority-pending-clean` — 2026-08-01
 
 Sprint `035H-protected-single-run-authentication-acceptance-harness` was opened from exact closed 035G SHA `bfd4fc494d68a0f53d6c0f5f40c8fd4c8bec7059` in the dedicated worktree. Its four-file Pack was applied exactly. A fail-closed pure state controller, mailbox-content contract, sanitized reporter, guarded runner and operator entry were implemented and deterministically validated.
