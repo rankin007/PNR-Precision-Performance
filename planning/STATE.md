@@ -1,5 +1,11 @@
 # Project State
 
+## Sprint 035G closed `synthetic-preparation-blocked-clean` — 2026-07-31
+
+Sprint `035G-correction-preview-callback-and-synthetic-otp-reproof` replaced only the superseded temporary Preview callback. Final readback proves exactly the unchanged production callback plus the intended correction Preview callback, with no wildcard, stale or duplicate entry. Correction Preview `dpl_J7bSHyQ8heNrqHWw38GdFNvpaaK4` remains Ready/Preview/alias-free; production, rollback and all five stable aliases remain unchanged.
+
+Protected preparation reached exact-owned `prepared` with one Auth identity, no preparation email and no application/Storage state. The manual multi-surface workflow was stopped as operationally unsuitable before any OTP request, email delivery, verification, mailbox access or participant action. Auth-last cleanup restored application/Auth/Storage `0/0/0`, ledger absent and the three preserved identities unchanged. This is not another OTP verification failure. No commit or push occurred.
+
 ## Sprint 035E closed `transactional-smtp-authority-pending-clean` — 2026-07-31
 
 Sprint `035E-custom-transactional-smtp-and-trainer-pilot-completion` opened in the dedicated clean worktree from exact Sprint 035D SHA `83fc1a76b20a8b01711a2a2f63e551b49ffe15be`; authenticated GitHub comparison supplied by the owner established remote equality at ahead `0`, behind `0`. The four-file Architect Pack was applied exactly.

@@ -1,0 +1,25 @@
+You are Builder for Sprint 035G — Correction Preview Callback And Synthetic OTP Reproof.
+
+Apply Architect Pack `planning/architect-packs/architect-pack-035G-correction-preview-callback-and-synthetic-otp-reproof.md`, verify it generates exactly four files under `planning/sprints/035G-correction-preview-callback-and-synthetic-otp-reproof/`, and then execute only from those generated sprint files.
+
+Start from completed Sprint 035F branch `codex/035F-resend-hosted-integration-and-trainer-pilot-completion` at exact clean local/remote branch-tip SHA `7c43712edc352e5e153e7962c5105569a9bfce8f`. Create only `codex/035G-correction-preview-callback-and-synthetic-otp-reproof`. Read `AGENTS.md`, agent identity, every generated 035G file, the complete 035F review/closeout, current state/status/briefing and the existing guarded preparation, recovery, sanitizer and cleanup contracts. Do not reopen or rewrite Sprint 035 through 035F.
+
+Your approved outcome is to replace only the superseded temporary Preview callback with `https://pnr-precision-performance-dwkv3pzey-rankin007s-projects.vercel.app/auth/callback`, prove independent exact readback, run one fresh exact-owned recovered-code synthetic authentication attempt against Ready alias-free Preview `dpl_J7bSHyQ8heNrqHWw38GdFNvpaaK4`, and finish with exact-owned application/Auth/Storage `0/0/0`, Auth-last and ledger absent.
+
+First prove the exact starting SHA, remote equality, clean worktree, approved Supabase project, current callback set, correction Preview identity, production `dpl_9zVS8HSujThkFTP3hisyfBVknKWb`, rollback `dpl_EUJyBLQp7okgbPwtBU6nmMH88L6A`, five stable aliases, provider invariants, preserved identities, ledger absence and exact-owned `0/0/0`. Capture a protected restorable prior callback representation. Stop before mutation if any material baseline differs.
+
+Remove only the callback belonging to prior Preview `dpl_9HDfeHLHJgcU6TzZqAR9vGEHzEYb`, add the exact correction Preview callback, preserve production Site URL and production callback byte-for-byte, save once and independently read back. Prove exactly two callbacks remain—unchanged production plus the correction Preview—with no wildcard, stale or duplicate callback. Reprove artifact-free same-Preview callback routing and all deployment/alias invariants before identity preparation.
+
+Use the existing guarded no-email helper with one fresh run identifier and one exact plus-address entered privately. Accept only finalized sanitized `prepared` output. Never expose passwords, MFA codes, keys, service-role values, addresses, OTPs, Auth identifiers, provider message identifiers, mailbox headers or raw errors.
+
+Request exactly one OTP through the correction Preview. Protected delivery must confirm only the intended synthetic recipient, one six-digit OTP, zero links and no invitation/confirmation branch. Deliberately discard the original request client state. Reopen the exact Preview, choose `Already have a code?`, privately re-enter the complete plus-address and exact six-character OTP, and submit verification exactly once. Do not send or request another OTP under any result.
+
+On success, prove exact Preview session, `/portal`, conflict-safe bootstrap, permitted dashboard/horse access, wrong-horse denial and RLS agreement. On failure, record only one of `expired`, `invalid`, `already-used`, `email-mismatch`, `malformed`, `rate-limited`, `provider/configuration` or `unknown`. Never retain raw provider detail.
+
+On every terminal path, revoke the exact-owned session when present, delete exact-owned application state dependency-safely, verify owned Storage/dependencies zero, delete exact-owned Auth last, prove absence, then remove the ownership ledger. Independently prove final `0/0/0`, Auth-last and ledger absent. Preserve Participant A and both ambiguous identities; do not begin A, B or C.
+
+Do not deploy production, assign/change aliases, mutate DNS, Resend integration, sender, template, OTP length/expiry, rate limits, signup policy, keys, production Site URL/callback, schema, migrations, RLS, roles, permissions, dashboard/product behavior or preserved identities. Do not merge, open a PR, push `develop` or rewrite history. Do not commit or push any branch unless the user separately and explicitly asks.
+
+Run the proportional focused recovery/OTP/redirect/plus-address/diagnostic/concurrency/dashboard/permission/cleanup/no-secret regressions plus JSON, lint, typecheck, static, encoding, diff and privacy checks. Use equivalent or stronger clean hosted build proof if the local OneDrive build stalls without a product error. Keep only deterministic in-scope harness/reporting corrections in 035G; stop before any application/server source, schema, provider-contract or product-behavior change.
+
+Refresh the 035G review, state, status, schedule, evidence index and Architect briefing with the callback mutation/readback, exact request and verification counts, sanitized result, cleanup and preserved invariants. Close with exactly one permitted 035G outcome. Never claim trainer-pilot completion or product-wide Done.

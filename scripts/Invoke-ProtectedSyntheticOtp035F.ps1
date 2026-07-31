@@ -6,7 +6,8 @@ param(
 )
 
 $ErrorActionPreference = 'Stop'
-$expectedBranch = 'codex/035F-resend-hosted-integration-and-trainer-pilot-completion'
+$expectedBranch = 'codex/035G-correction-preview-callback-and-synthetic-otp-reproof'
+$expectedRemoteBaseline = 'codex/035F-resend-hosted-integration-and-trainer-pilot-completion'
 $expectedRemote = 'https://github.com/rankin007/PNR-Precision-Performance.git'
 $expectedProjectUrl = 'https://uvskssaecdhxcgytkasc.supabase.co/'
 $helperRelativePath = 'scripts/protected-synthetic-otp-035D.mjs'
@@ -101,10 +102,10 @@ if ($LASTEXITCODE -ne 0 -or [string]::IsNullOrWhiteSpace($repoRoot)) { Stop-Wrap
 $repoRoot = [IO.Path]::GetFullPath($repoRoot.Trim())
 $branch = (& git -C $repoRoot branch --show-current 2>$null).Trim()
 if ($LASTEXITCODE -ne 0 -or $branch -ne $expectedBranch) { Stop-Wrapper035F 'BRANCH_REFUSED' }
-$conflicts = @(& git -C $repoRoot diff --name-only --diff-filter=U 2>$null)
+$conflicts = @(& git -c core.safecrlf=false -C $repoRoot diff --name-only --diff-filter=U 2>$null)
 if ($LASTEXITCODE -ne 0 -or $conflicts.Count -ne 0) { Stop-Wrapper035F 'CONFLICT_REFUSED' }
 $head = (& git -C $repoRoot rev-parse HEAD 2>$null).Trim()
-$remoteLine = @(& git ls-remote $expectedRemote "refs/heads/$expectedBranch" 2>$null)
+$remoteLine = @(& git ls-remote $expectedRemote "refs/heads/$expectedRemoteBaseline" 2>$null)
 if ($LASTEXITCODE -ne 0 -or $remoteLine.Count -ne 1) { Stop-Wrapper035F 'REMOTE_HEAD_UNAVAILABLE' }
 $remoteHead = (($remoteLine[0] -split '\s+')[0]).Trim()
 if ($head -ne $remoteHead) { Stop-Wrapper035F 'REMOTE_HEAD_MISMATCH' }

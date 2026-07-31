@@ -26,6 +26,9 @@
 18. `planning/sprints/035E-custom-transactional-smtp-and-trainer-pilot-completion/` — applied four-file custom SMTP, delivered OTP and sequential trainer-pilot authority.
 19. `planning/reviews/035E-custom-transactional-smtp-authority-checkpoint.md` — exact baseline, missing prerequisite authority, protected operator checklist, zero-mutation proof and `transactional-smtp-authority-pending-clean` closeout.
 
+20. `planning/sprints/035G-correction-preview-callback-and-synthetic-otp-reproof/` — applied four-file callback-correction and bounded synthetic reproof authority.
+21. `planning/reviews/035G-correction-preview-callback-and-synthetic-otp-reproof.md` — exact callback readback, zero-send stop, Auth-last `0/0/0` cleanup and `synthetic-preparation-blocked-clean` closeout.
+
 ## Accepted product lineage
 
 - Sprint 032 release: `planning/reviews/032-public-relaunch-and-production-deployment.md`; exact SHA `f7242ee0785ae9b87022394206c89ebdd5c9f6ad`.

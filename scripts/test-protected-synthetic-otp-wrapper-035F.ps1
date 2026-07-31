@@ -11,7 +11,9 @@ function Assert-035F([bool]$Condition, [string]$Code) {
 
 Assert-035F ($wrapper.Contains("https://uvskssaecdhxcgytkasc.supabase.co/")) 'TARGET_MISSING'
 Assert-035F (-not $wrapper.Contains('tagnbgkroihagjmvehlx')) 'WRONG_TARGET_PRESENT'
-Assert-035F ($wrapper.Contains("expectedBranch = 'codex/035F-resend-hosted-integration-and-trainer-pilot-completion'")) 'BRANCH_GUARD_MISSING'
+Assert-035F ($wrapper.Contains("expectedBranch = 'codex/035G-correction-preview-callback-and-synthetic-otp-reproof'")) 'BRANCH_GUARD_MISSING'
+Assert-035F ($wrapper.Contains("expectedRemoteBaseline = 'codex/035F-resend-hosted-integration-and-trainer-pilot-completion'")) 'REMOTE_BASELINE_GUARD_MISSING'
+Assert-035F ($wrapper.Contains('git -c core.safecrlf=false -C $repoRoot diff --name-only --diff-filter=U')) 'SAFECRLF_CONFLICT_GUARD_MISSING'
 Assert-035F ($wrapper.Contains('NON_INTERACTIVE_REFUSED')) 'INTERACTIVE_GUARD_MISSING'
 Assert-035F ($wrapper.Contains("Read-Host 'Protected Supabase service-role value' -AsSecureString")) 'SECURE_PROMPT_MISSING'
 Assert-035F ($wrapper.Contains("EnvironmentVariables['PP035D_SERVICE_ROLE_KEY']")) 'CHILD_ENV_MISSING'

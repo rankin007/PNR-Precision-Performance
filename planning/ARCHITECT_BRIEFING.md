@@ -1,38 +1,39 @@
-# Architect Briefing — Sprint 035E Authority-Pending Closeout
+# Architect Briefing — Sprint 035G Closeout
 
 ## Where things stand
 
-Sprint 035E is closed `transactional-smtp-authority-pending-clean`. Its exact Sprint 035D baseline and four-file execution authority are established, but the owner/provider prerequisites for safe external mutation were not supplied. No provider, DNS, Supabase, Vercel, email, participant or data mutation occurred.
+Sprint 035G is closed `synthetic-preparation-blocked-clean`. The correction Preview callback is exact and preserved. No OTP was requested, and exact-owned cleanup is independently clean `0/0/0`, Auth-last, ledger absent.
 
 ## Current status
 
-Custom SMTP, protected delivered-OTP/session proof and A/B/C trainer acceptance remain pending. The existing 035E branch may resume after the checklist is confirmed; another sprint or Pack is unnecessary. Product-wide Done is not claimed.
+The manual multi-surface synthetic acceptance procedure is operationally unsuitable and permanently stopped. This is not another OTP verification failure. Trainer-pilot completion and product-wide Done are not claimed.
 
 ## Since last sprint
 
-Builder created the scoped 035E branch at exact SHA `83fc1a76b20a8b01711a2a2f63e551b49ffe15be`, applied and verified the four-file Pack, searched durable authority, and recorded the missing provider/commercial, sender/privacy, DNS/rollback, credential-entry and participant-readiness gates.
+Replaced only the superseded Preview callback, proved the exact two-callback set, corrected a command-scoped wrapper line-ending preflight defect, prepared one no-email exact-owned identity, then cleaned it Auth-last before any send.
 
 ## Architecture / file map
 
-- `planning/sprints/035E-custom-transactional-smtp-and-trainer-pilot-completion/`: complete Builder authority.
-- `planning/reviews/035E-custom-transactional-smtp-authority-checkpoint.md`: protected operator checklist and zero-mutation closeout evidence.
+- `planning/reviews/035G-correction-preview-callback-and-synthetic-otp-reproof.md`: sanitized closeout evidence.
+- `scripts/Invoke-ProtectedSyntheticOtp035F.ps1`: guarded 035G branch/baseline and command-scoped safecrlf preflight.
+- `scripts/test-protected-synthetic-otp-wrapper-035F.ps1`: deterministic wrapper guard coverage.
 
 ## Decisions
 
-Strict pre-mutation authority is material and cannot be inferred. Resume 035E only after sanitized confirmation; keep all secrets and participant artifacts inside protected interfaces.
+Preserve the correct production-plus-correction-Preview callback set. Do not resume the manual OTP workflow. Keep Participants A/B/C blocked.
 
 ## Risks / watch-items
 
-Do not choose or purchase a provider, alter DNS, configure Supabase SMTP, send email or begin participants without the exact authority checklist. Preserve Participant A and both ambiguous identities. Never contact the old Supabase project.
+End-to-end delivered OTP/session/permission acceptance remains unproved. Future automation must enforce one-send durability, protected mailbox handling, in-memory OTP use and mandatory cleanup without emitting protected values.
 
 ## Open questions for the Architect
 
-None requiring a new design decision. The product owner must complete the operator checklist before Builder continuation.
+Define 035H authority and protected mailbox integration for a single-run automated acceptance harness without weakening security, privacy, provider or cleanup boundaries.
 
 ## Validation / test status
 
-Baseline and four generated sprint files were verified. Repository search found no durable prerequisite-authority record. Product/runtime tests were not applicable because no product or external state changed.
+Wrapper, recovery, no-secret, sanitizer, OTP/recovery, dashboard, JSON, typecheck, static/encoding and diff checks passed. Ready correction Preview supplies hosted build evidence. Final callbacks, preserved Auth count and ledger absence were independently read back.
 
 ## Recommended next Architect action
 
-Collect only the sanitized checklist confirmation, then direct Builder to resume this existing 035E branch.
+Create, but do not apply, a 035H Architect Pack for a protected single-run end-to-end synthetic authentication acceptance harness covering preflight, preparation, exactly one send, mailbox polling, in-memory OTP consumption, exact-Preview verification, permissions and Auth-last cleanup with sanitized-only evidence.
