@@ -16,7 +16,9 @@ $allowedCodes = @(
     'REMOTE_HEAD_UNAVAILABLE', 'REMOTE_HEAD_MISMATCH', 'CONFLICT_REFUSED',
     'HELPER_MISSING', 'NODE_MISSING', 'OPEN_LEDGER_REFUSED', 'SECRET_INPUT_CANCELLED',
     'HELPER_CONTRACT_REFUSED', 'HELPER_FAILED_SANITIZED', 'OWNERSHIP_AMBIGUOUS',
-    'PROTECTED_OUTPUT_REFUSED', 'UNEXPECTED'
+    'PROTECTED_OUTPUT_REFUSED', 'PREPARATION_RESERVATION_FAILED',
+    'AUTH_CREATE_ROLLED_BACK', 'LEDGER_FINALIZE_ROLLED_BACK',
+    'PREPARATION_RECOVERY_REQUIRED', 'UNEXPECTED'
 )
 
 function Write-SanitizedResult035F {
@@ -165,9 +167,9 @@ if ($exitCode -ne 0 -or -not (Test-Path -LiteralPath $ledgerPath -PathType Leaf)
 try {
     $ledger = Get-Content -LiteralPath $ledgerPath -Raw | ConvertFrom-Json
     $keys = @($ledger.PSObject.Properties.Name | Sort-Object)
-    $expectedKeys = @('authId', 'createdWithoutEmail', 'emailHash', 'project', 'run')
+    $expectedKeys = @('authId', 'createdWithoutEmail', 'emailHash', 'project', 'run', 'state')
     if (Compare-Object $expectedKeys $keys) { Stop-Wrapper035F 'OWNERSHIP_AMBIGUOUS' 'ambiguous' }
-    if ($ledger.project -ne 'uvskssaecdhxcgytkasc' -or $ledger.run -ne $run -or $ledger.createdWithoutEmail -ne $true) {
+    if ($ledger.project -ne 'uvskssaecdhxcgytkasc' -or $ledger.run -ne $run -or $ledger.createdWithoutEmail -ne $true -or $ledger.state -ne 'prepared') {
         Stop-Wrapper035F 'OWNERSHIP_AMBIGUOUS' 'ambiguous'
     }
     if ($ledger.authId -notmatch '^[0-9a-f-]{36}$' -or $ledger.emailHash -notmatch '^[0-9a-f]{64}$') {

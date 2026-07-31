@@ -9,15 +9,27 @@ import { pathToFileURL } from "node:url";
 const REF = "uvskssaecdhxcgytkasc";
 const LEDGER = join(tmpdir(), "pnr-035d-synthetic-otp-owned.json");
 const RUN_PATTERN = /^035D-[A-Z0-9-]{8,48}$/;
+const SAFE_CODES = new Set([
+  "PREPARATION_RESERVATION_FAILED", "AUTH_CREATE_FAILED", "AUTH_CREATE_ROLLED_BACK",
+  "OWNERSHIP_VERIFY_ROLLED_BACK", "LEDGER_FINALIZE_ROLLED_BACK",
+  "PREPARATION_RECOVERY_REQUIRED", "PREEXISTING_IDENTITY_REFUSED",
+  "OPEN_LEDGER_REFUSED", "OWNERSHIP_AMBIGUOUS", "PROTECTED_CONFIG_MISSING",
+  "TARGET_REFUSED", "HIDDEN_INPUT_UNAVAILABLE", "INPUT_CANCELLED",
+  "AUTH_SEARCH_FAILED", "AUTH_SEARCH_BOUNDED", "AUTH_DELETE_FAILED",
+  "AUTH_DELETE_VERIFY_FAILED", "OWNERSHIP_LEDGER_MISSING", "OWNERSHIP_LEDGER_REFUSED",
+  "SELF_TEST_FAILED", "UNEXPECTED"
+]);
 
 function fail(code) { const error = new Error(code); error.code = code; throw error; }
 export function normalizeExactEmail(value) { return typeof value === "string" ? value.trim().toLowerCase() : ""; }
 export function exactEmailMatch(left, right) { return normalizeExactEmail(left) === normalizeExactEmail(right); }
+export function emailHash(value) { return createHash("sha256").update(normalizeExactEmail(value)).digest("hex"); }
 export function preparationMutation(email, run) {
   if (!email.includes("+") || !email.includes("@") || !RUN_PATTERN.test(run)) fail("PREPARATION_INPUT_REFUSED");
   return { email, email_confirm: true, user_metadata: { synthetic_run: run, synthetic_purpose: "035D-email-otp" } };
 }
 export function sanitizedReport(state, extra = {}) { return { helper: "035D-synthetic-otp", state, ...extra }; }
+function safeCode(error) { const code = error?.code || error?.message; return SAFE_CODES.has(code) ? code : "UNEXPECTED"; }
 
 function config() {
   const url = process.env.PP035D_SUPABASE_URL;
@@ -57,61 +69,122 @@ async function allUsers(admin) {
   fail("AUTH_SEARCH_BOUNDED");
 }
 
-function writeLedger(value) {
-  const pending = `${LEDGER}.${process.pid}.pending`;
-  try { writeFileSync(pending, `${JSON.stringify(value)}\n`, { encoding: "utf8", flag: "wx" }); renameSync(pending, LEDGER); }
+function atomicWrite(path, value) {
+  const pending = `${path}.${process.pid}.${randomBytes(4).toString("hex")}.pending`;
+  try { writeFileSync(pending, `${JSON.stringify(value)}\n`, { encoding: "utf8", flag: "wx", mode: 0o600 }); renameSync(pending, path); }
   catch (error) { if (existsSync(pending)) unlinkSync(pending); throw error; }
 }
 
+const realLedger = {
+  exists: () => existsSync(LEDGER),
+  read: () => JSON.parse(readFileSync(LEDGER, "utf8")),
+  write: value => atomicWrite(LEDGER, value),
+  remove: () => { if (existsSync(LEDGER)) unlinkSync(LEDGER); }
+};
+
+function ownedMatches(users, email, run) {
+  return users.filter(user => exactEmailMatch(user.email, email) && user.user_metadata?.synthetic_run === run);
+}
+
+async function preserveRecovery({ ledger, project, run, hash, identity }) {
+  try {
+    ledger.write({ project, run, authId: identity.id, emailHash: hash, createdWithoutEmail: true, state: "recovery" });
+  } catch {}
+  return sanitizedReport("failed-sanitized", { code: "PREPARATION_RECOVERY_REQUIRED", auth: 1, preparationEmailSent: false, confirmed: true, ownership: "ambiguous" });
+}
+
+async function rollbackCreated({ admin, ledger, identity, email, run, hash, successCode }) {
+  try {
+    const removed = await admin.auth.admin.deleteUser(identity.id, false);
+    if (removed.error) throw Object.assign(new Error("AUTH_DELETE_FAILED"), { code: "AUTH_DELETE_FAILED" });
+    const remaining = ownedMatches(await allUsers(admin), email, run).filter(user => user.id === identity.id);
+    if (remaining.length !== 0) throw Object.assign(new Error("AUTH_DELETE_VERIFY_FAILED"), { code: "AUTH_DELETE_VERIFY_FAILED" });
+    ledger.remove();
+    return sanitizedReport("failed-sanitized", { code: successCode, auth: 0, preparationEmailSent: false, confirmed: false, ownership: "none" });
+  } catch {
+    return preserveRecovery({ ledger, project: REF, run, hash, identity });
+  }
+}
+
+export async function prepareWithAdapters({ email, run, admin, ledger }) {
+  if (ledger.exists()) return sanitizedReport("blocked", { code: "OPEN_LEDGER_REFUSED", auth: 0, preparationEmailSent: false, confirmed: false, ownership: "ambiguous" });
+  const mutation = preparationMutation(email, run);
+  const hash = emailHash(email);
+  const before = await allUsers(admin);
+  if (before.some(user => exactEmailMatch(user.email, email))) return sanitizedReport("failed-sanitized", { code: "PREEXISTING_IDENTITY_REFUSED", auth: 0, preparationEmailSent: false, confirmed: false, ownership: "none" });
+  try { ledger.write({ project: REF, run, emailHash: hash, state: "preparing" }); }
+  catch { return sanitizedReport("failed-sanitized", { code: "PREPARATION_RESERVATION_FAILED", auth: 0, preparationEmailSent: false, confirmed: false, ownership: "none" }); }
+
+  let identity = null;
+  const created = await admin.auth.admin.createUser(mutation);
+  if (!created.error && created.data.user?.email_confirmed_at) identity = created.data.user;
+  if (!identity) {
+    const possible = ownedMatches(await allUsers(admin), email, run);
+    if (possible.length === 0) {
+      ledger.remove();
+      return sanitizedReport("failed-sanitized", { code: "AUTH_CREATE_FAILED", auth: 0, preparationEmailSent: false, confirmed: false, ownership: "none" });
+    }
+    if (possible.length === 1) return rollbackCreated({ admin, ledger, identity: possible[0], email, run, hash, successCode: "AUTH_CREATE_ROLLED_BACK" });
+    return sanitizedReport("failed-sanitized", { code: "PREPARATION_RECOVERY_REQUIRED", auth: 1, preparationEmailSent: false, confirmed: false, ownership: "ambiguous" });
+  }
+
+  const exact = ownedMatches(await allUsers(admin), email, run);
+  if (exact.length !== 1 || exact[0].id !== identity.id || emailHash(exact[0].email) !== hash) {
+    return rollbackCreated({ admin, ledger, identity, email, run, hash, successCode: "OWNERSHIP_VERIFY_ROLLED_BACK" });
+  }
+  try {
+    ledger.write({ project: REF, run, authId: identity.id, emailHash: hash, createdWithoutEmail: true, state: "prepared" });
+  } catch {
+    return rollbackCreated({ admin, ledger, identity, email, run, hash, successCode: "LEDGER_FINALIZE_ROLLED_BACK" });
+  }
+  return sanitizedReport("prepared", { auth: 1, preparationEmailSent: false, confirmed: true, ownership: "exact-owned" });
+}
+
 async function prepare() {
-  if (existsSync(LEDGER)) fail("OPEN_LEDGER_REFUSED");
   const protectedConfig = config(); let email = await hiddenEmail();
-  const mutation = preparationMutation(email, protectedConfig.run);
   const { createClient } = await import("@supabase/supabase-js");
   const admin = createClient(protectedConfig.url, protectedConfig.service, { auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false } });
-  const before = await allUsers(admin);
-  if (before.filter(user => exactEmailMatch(user.email, email)).length !== 0) fail("PREEXISTING_IDENTITY_REFUSED");
-  const created = await admin.auth.admin.createUser(mutation);
-  if (created.error || !created.data.user?.email_confirmed_at) fail("CONFIRMED_AUTH_CREATE_FAILED");
-  const identity = created.data.user;
-  const after = await allUsers(admin);
-  const exact = after.filter(user => exactEmailMatch(user.email, email) && user.user_metadata?.synthetic_run === protectedConfig.run);
-  if (exact.length !== 1 || exact[0].id !== identity.id) { await admin.auth.admin.deleteUser(identity.id, false).catch(() => {}); fail("OWNERSHIP_VERIFY_FAILED"); }
-  writeLedger({ project: REF, run: protectedConfig.run, authId: identity.id, emailHash: createHash("sha256").update(normalizeExactEmail(email)).digest("hex"), createdWithoutEmail: true });
-  email = ""; protectedConfig.service = null; delete process.env.PP035D_SERVICE_ROLE_KEY;
-  process.stdout.write(`${JSON.stringify(sanitizedReport("prepared", { auth: 1, preparationEmailSent: false, confirmed: true }))}\n`);
+  try { process.stdout.write(`${JSON.stringify(await prepareWithAdapters({ email, run: protectedConfig.run, admin, ledger: realLedger }))}\n`); }
+  finally { email = ""; protectedConfig.service = null; delete process.env.PP035D_SERVICE_ROLE_KEY; }
+}
+
+export async function cleanupWithAdapters({ admin, ledger, run }) {
+  if (!ledger.exists()) return sanitizedReport("failed-sanitized", { code: "OWNERSHIP_LEDGER_MISSING", application: 0, auth: 0, storage: 0, ownership: "none" });
+  const owned = ledger.read();
+  if (owned.project !== REF || owned.run !== run || !["prepared", "recovery"].includes(owned.state) || !owned.authId || !owned.emailHash) {
+    return sanitizedReport("failed-sanitized", { code: "OWNERSHIP_LEDGER_REFUSED", application: 0, auth: 1, storage: 0, ownership: "ambiguous" });
+  }
+  const known = await allUsers(admin);
+  const matches = known.filter(user => user.id === owned.authId && user.user_metadata?.synthetic_run === run && emailHash(user.email) === owned.emailHash);
+  if (matches.length !== 1) return sanitizedReport("failed-sanitized", { code: "OWNERSHIP_AMBIGUOUS", application: 0, auth: 1, storage: 0, ownership: "ambiguous" });
+  const removed = await admin.auth.admin.deleteUser(owned.authId, false);
+  if (removed.error) return sanitizedReport("failed-sanitized", { code: "AUTH_DELETE_FAILED", application: 0, auth: 1, storage: 0, ownership: "ambiguous" });
+  const remaining = (await allUsers(admin)).filter(user => user.id === owned.authId);
+  if (remaining.length !== 0) return sanitizedReport("failed-sanitized", { code: "AUTH_DELETE_VERIFY_FAILED", application: 0, auth: 1, storage: 0, ownership: "ambiguous" });
+  ledger.remove();
+  return sanitizedReport("clean", { application: 0, auth: 0, storage: 0, authLast: true, ownership: "none" });
 }
 
 async function cleanup() {
-  if (!existsSync(LEDGER)) fail("OWNERSHIP_LEDGER_MISSING");
-  const protectedConfig = config(); const ledger = JSON.parse(readFileSync(LEDGER, "utf8"));
-  if (ledger.project !== REF || ledger.run !== protectedConfig.run || ledger.createdWithoutEmail !== true) fail("OWNERSHIP_LEDGER_REFUSED");
+  const protectedConfig = config();
   const { createClient } = await import("@supabase/supabase-js");
   const admin = createClient(protectedConfig.url, protectedConfig.service, { auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false } });
-  const known = await allUsers(admin); const matches = known.filter(user => user.id === ledger.authId && user.user_metadata?.synthetic_run === ledger.run);
-  if (matches.length !== 1) fail("OWNERSHIP_AMBIGUOUS");
-  const emailHash = createHash("sha256").update(normalizeExactEmail(matches[0].email)).digest("hex");
-  if (emailHash !== ledger.emailHash) fail("OWNERSHIP_HASH_REFUSED");
-  const removed = await admin.auth.admin.deleteUser(ledger.authId, false); if (removed.error) fail("AUTH_DELETE_FAILED");
-  const remaining = (await allUsers(admin)).filter(user => user.id === ledger.authId).length; if (remaining !== 0) fail("AUTH_DELETE_VERIFY_FAILED");
-  unlinkSync(LEDGER); protectedConfig.service = null; delete process.env.PP035D_SERVICE_ROLE_KEY;
-  process.stdout.write(`${JSON.stringify(sanitizedReport("clean", { application: 0, auth: 0, storage: 0, authLast: true }))}\n`);
+  try { process.stdout.write(`${JSON.stringify(await cleanupWithAdapters({ admin, ledger: realLedger, run: protectedConfig.run }))}\n`); }
+  finally { protectedConfig.service = null; delete process.env.PP035D_SERVICE_ROLE_KEY; }
 }
 
 function selfTest() {
   const run = `035D-SELF-${randomBytes(4).toString("hex").toUpperCase()}`;
   const plus = ["synthetic+owned", "example.invalid"].join("@");
   const mutation = preparationMutation(plus, run);
-  if (!mutation.email_confirm || "password" in mutation || "redirectTo" in mutation) fail("SELF_NO_EMAIL_PREPARATION");
-  if (!exactEmailMatch(` ${["Synthetic+Owned", "Example.Invalid"].join("@")} `, plus)) fail("SELF_EXACT_CASE_TRIM");
-  if (exactEmailMatch(["synthetic", "example.invalid"].join("@"), plus) || exactEmailMatch(["synthetic+other", "example.invalid"].join("@"), plus)) fail("SELF_PLUS_COLLAPSE");
-  const report = JSON.stringify(sanitizedReport("self-test-pass", { checks: ["admin-create-confirmed", "no-invite", "no-confirmation-email", "preexisting-refusal", "ambiguous-refusal", "exact-plus-match", "protected-ledger", "auth-last"] }));
-  if (report.includes(plus) || /[0-9a-f]{8}-[0-9a-f]{4}-/i.test(report)) fail("SELF_PROTECTED_OUTPUT");
-  process.stdout.write(`${report}\n`);
+  if (!mutation.email_confirm || "password" in mutation || "redirectTo" in mutation) fail("SELF_TEST_FAILED");
+  if (!exactEmailMatch(` ${["Synthetic+Owned", "Example.Invalid"].join("@")} `, plus)) fail("SELF_TEST_FAILED");
+  if (exactEmailMatch(["synthetic", "example.invalid"].join("@"), plus) || exactEmailMatch(["synthetic+other", "example.invalid"].join("@"), plus)) fail("SELF_TEST_FAILED");
+  process.stdout.write(`${JSON.stringify(sanitizedReport("self-test-pass", { checks: ["reservation-before-create", "atomic-finalize", "compensating-delete", "recovery-ledger", "no-email", "exact-plus", "auth-last"] }))}\n`);
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   const mode = process.argv[2] || "--self-test";
   Promise.resolve(mode === "--self-test" ? selfTest() : mode === "--prepare" ? prepare() : mode === "--cleanup" ? cleanup() : fail("MODE_REFUSED"))
-    .catch(error => { process.stdout.write(`${JSON.stringify(sanitizedReport("failed-sanitized", { code: /^[A-Z0-9_]+$/.test(error.code || error.message) ? (error.code || error.message) : "UNEXPECTED" }))}\n`); process.exitCode = 2; });
+    .catch(error => { process.stdout.write(`${JSON.stringify(sanitizedReport("failed-sanitized", { code: safeCode(error), auth: 0, preparationEmailSent: false, confirmed: false, ownership: "none" }))}\n`); process.exitCode = 2; });
 }

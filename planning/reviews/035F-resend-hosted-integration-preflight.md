@@ -74,3 +74,17 @@ Independent Vercel CLI proof reconfirmed project `pnr-precision-performance`, co
 Participant A, both ambiguous identities and pre-run exact-owned application/Auth/Storage `0/0/0` are preserved by prior exact guarded evidence plus zero intervening identity/application mutation. No email or identity action occurred during preflight.
 
 Post-integration preflight passes with documented substitute proof. Exactly one synthetic request may proceed after protected preparation and mailbox-readiness confirmation. Participant A/B/C remain blocked until delivered OTP, Preview session/permissions and Auth-last cleanup pass.
+
+## Protected preparation manual intervention
+
+Builder attempted to open the existing guarded no-email preparation helper through a visible protected terminal. Execution was rejected before launch because the action would read a stored Supabase service-role credential and create a production Auth identity. No credential was accessed, no terminal opened, no identity was created and no email was sent. Builder did not retry or bypass the control.
+
+The protected operator must now run the existing `scripts/protected-synthetic-otp-035D.mjs --prepare` helper in a private interactive terminal with the approved project URL, one fresh run identifier, child-only service-role environment and the exact synthetic plus-address entered through its hidden prompt. The operator must not paste any protected value into conversation. Builder will accept only the helper's sanitized result: prepared/failed classification, Auth count, preparation-email-sent boolean and confirmed boolean. After a successful sanitized `prepared` result and private mailbox-readiness confirmation, Builder will perform exactly one Preview OTP request.
+
+## Partial-state correction
+
+Architect review correctly identified that the prior helper created and verified Auth before its first durable ownership write. Operator execution remained stopped. The helper now atomically reserves `{project, run, emailHash, state=preparing}` before remote mutation; finalizes only after exact ownership/hash verification; compensates every post-create verification/finalization failure with exact deletion and absence proof; and preserves a `recovery` ledger containing the Auth identifier and hash when compensation cannot be proven. No plain address or secret is written.
+
+Cleanup accepts only `prepared` or `recovery` ledgers with exact project/run/Auth/hash agreement, deletes Auth last and removes the ledger only after absence proof. The 035F wrapper accepts only a finalized `state=prepared` ledger and refuses preparing/recovery/ambiguous state.
+
+Executable adapter tests passed reservation-write failure, Auth-create failure, ownership-verification rollback, final-ledger rollback, failed-delete recovery preservation, success, finalized cleanup, recovery cleanup, no-email preparation, exact plus-address matching and protected-output exclusion. Existing OTP/redirect regressions, wrapper no-secret tests, JSON validation, typecheck and canonical static validation passed. No remote Auth identity, OTP, mailbox or participant action occurred during the correction.

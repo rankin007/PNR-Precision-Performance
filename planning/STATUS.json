@@ -1,6 +1,6 @@
 {
   "sprint": "035F-resend-hosted-integration-and-trainer-pilot-completion",
-  "status": "hosted-integration-post-configuration-preflight-passed-synthetic-pending",
+  "status": "post-integration-preflight-passed-corrected-protected-wrapper-ready",
   "branch": "codex/035F-resend-hosted-integration-and-trainer-pilot-completion",
   "startingSha": "628bb69c29eb169dd80fe6d9d91d55c417e130b0",
   "resendPlanAuthority035F": "accepted-bounded-pilot-no-purchase-or-upgrade",
@@ -24,6 +24,9 @@
   "identityPreflight035F": "preserved-by-exact-prior-proof-and-zero-intervening-identity-mutation",
   "emailAuthorized035F": "exactly-one-synthetic-request-after-protected-preparation",
   "participantExecutionAuthorized035F": false,
+  "protectedSyntheticPreparation035F": "guarded-one-command-wrapper-corrected-and-tested",
+  "preparationReservation035F": "pre-mutation-atomic-preparing-ledger",
+  "postCreateFailureHandling035F": "compensate-to-zero-or-preserve-recovery-ledger",
   "baselineRemoteEvidence": "authenticated-github-comparison-identical-ahead-0-behind-0",
   "providerSelectionAuthority": "pending",
   "planCostAuthority": "pending",
