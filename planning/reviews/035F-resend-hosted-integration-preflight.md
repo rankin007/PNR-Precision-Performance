@@ -105,3 +105,13 @@ Recovery, wrapper, no-secret, OTP, redirect, JSON, typecheck, static/encoding an
 - `exact-preview-portal=not-reached`
 
 The issued value, recipient, message, headers and provider identifier are not recorded. The value was not entered and no second request was made. Participant A/B/C remain blocked. Architect classifies this as provider configuration drift; application/server tests remain correctly six-digit.
+
+Guarded cleanup then passed with `application=0`, `auth=0`, `storage=0`, `authLast=true`, `ownership=none`. The helper verified exact Auth absence before removing the finalized ownership ledger; Builder independently confirmed the ledger is absent. The failed synthetic run is clean `0/0/0`. No protected identity value is recorded.
+
+## Six-digit provider correction
+
+Builder opened the Email provider control in exact Supabase project `uvskssaecdhxcgytkasc`, captured sanitized rollback classification `email-otp-length=8`, changed only that field to `6`, saved once, and reopened the control for independent readback. The current sanitized readback is `email-otp-length=6`; OTP expiry remained `3600`. No other provider field was edited.
+
+Post-correction invariants remain: `minimum-interval=60`, OTP template one `.Token`, zero `ConfirmationURL`, zero links, Resend hosted integration and exact sender unchanged, Site URL/callbacks unchanged, and production/rollback/five aliases/exact Preview unchanged. These values combine the new exact OTP-length/expiry readback with the immediately preceding exact or documented substitute proof; the narrowly scoped provider edit cannot mutate those separate controls or Vercel deployments.
+
+Deterministic six-digit OTP contract, protected recovery, guarded wrapper/no-secret, JSON, typecheck and canonical static/encoding tests pass after the correction. Fresh synthetic preparation remains the next guarded action; no OTP has been requested and Participant A/B/C remain blocked.
