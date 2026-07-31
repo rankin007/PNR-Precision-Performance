@@ -8,6 +8,7 @@ import {
   buildOtpVerificationPayload,
   classifyOtpVerification,
   classifyOtpVerificationError,
+  classifyOtpVerificationInput,
   type OtpVerificationDiagnostic,
 } from "@/lib/auth/otp-verification";
 import { buildPasswordlessCallbackUrl, resolvePasswordlessRedirectOrigin } from "@/lib/auth/redirect-origin";
@@ -97,7 +98,9 @@ export async function requestEmailOtpAction(emailInput: string, nextInput: strin
 export async function verifyEmailOtpAction(emailInput: string, tokenInput: string): Promise<OtpActionResult> {
   const { email, token } = buildOtpVerificationPayload(emailInput, tokenInput);
   if (!hasSupabaseEnv()) return { ok: false, reason: "configuration" };
-  if (classifyOtpVerification({ email, token }) === "invalid") return { ok: false, reason: "invalid", diagnostic: "malformed" };
+  if (classifyOtpVerificationInput({ email, token }) === "invalid") {
+    return { ok: false, reason: "invalid", diagnostic: "malformed" };
+  }
 
   const supabase = await createSupabaseServerClient();
   const { data, error } = await supabase.auth.verifyOtp({ email, token, type: "email" });

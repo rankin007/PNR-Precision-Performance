@@ -34,8 +34,14 @@ export function isValidOtpToken(token: string) {
   return /^\d{6}$/.test(normalizeOtpToken(token));
 }
 
+export function classifyOtpVerificationInput(
+  input: Pick<OtpVerificationFacts, "email" | "token">,
+): "valid" | "invalid" {
+  return normalizeOtpEmail(input.email) && isValidOtpToken(input.token) ? "valid" : "invalid";
+}
+
 export function classifyOtpVerification(facts: OtpVerificationFacts): "accepted" | "invalid" {
-  if (!normalizeOtpEmail(facts.email) || !isValidOtpToken(facts.token)) return "invalid";
+  if (classifyOtpVerificationInput(facts) === "invalid") return "invalid";
   return !facts.hasError && facts.hasSession && facts.hasUser ? "accepted" : "invalid";
 }
 

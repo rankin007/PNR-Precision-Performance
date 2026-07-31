@@ -9,6 +9,7 @@ import {
   buildOtpVerificationPayload,
   classifyOtpVerification,
   classifyOtpVerificationError,
+  classifyOtpVerificationInput,
   isValidOtpToken,
   normalizeOtpEmail,
   normalizeOtpToken,
@@ -31,6 +32,9 @@ assert.equal(isValidOtpToken("01 2345"), false, "internal whitespace malformed")
 assert.deepEqual(buildOtpVerificationPayload(` ${exactPlus} `, " 012345 "), {
   email: exactPlus.toLowerCase(), token: "012345", type: "email",
 });
+assert.equal(classifyOtpVerificationInput({ email: exactPlus, token: "123456" }), "valid", "valid input reaches provider verification");
+assert.equal(classifyOtpVerificationInput({ email: "", token: "123456" }), "invalid", "missing email rejected before provider verification");
+assert.equal(classifyOtpVerificationInput({ email: exactPlus, token: "12a456" }), "invalid", "malformed token rejected before provider verification");
 assert.equal(classifyOtpVerification({ email: exactPlus, token: "123456", hasSession: true, hasUser: true }), "accepted");
 for (const token of ["", "12345", "1234567", "12a456", "１２３４５６"]) {
   assert.equal(classifyOtpVerification({ email: exactPlus, token }), "invalid", `malformed ${token.length}`);
@@ -56,5 +60,5 @@ assert.equal(/url|log|analytics|storage|email|token/i.test(recoveryOutput), fals
 console.log(JSON.stringify({ state: "pass", checks: [
   "same-tab", "reopened-tab", "reload-recovery", "no-extra-send", "exact-plus",
   "leading-zero-string", "trim-only-token", "type-email", "six-digit-only",
-  "invalid-reused-superseded-expired", "sanitized-diagnostic-allowlist", "no-durable-leakage",
+  "input-only-validation", "invalid-reused-superseded-expired", "sanitized-diagnostic-allowlist", "no-durable-leakage",
 ] }));
