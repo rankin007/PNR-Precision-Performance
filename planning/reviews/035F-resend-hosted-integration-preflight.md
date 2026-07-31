@@ -88,3 +88,11 @@ Architect review correctly identified that the prior helper created and verified
 Cleanup accepts only `prepared` or `recovery` ledgers with exact project/run/Auth/hash agreement, deletes Auth last and removes the ledger only after absence proof. The 035F wrapper accepts only a finalized `state=prepared` ledger and refuses preparing/recovery/ambiguous state.
 
 Executable adapter tests passed reservation-write failure, Auth-create failure, ownership-verification rollback, final-ledger rollback, failed-delete recovery preservation, success, finalized cleanup, recovery cleanup, no-email preparation, exact plus-address matching and protected-output exclusion. Existing OTP/redirect regressions, wrapper no-secret tests, JSON validation, typecheck and canonical static validation passed. No remote Auth identity, OTP, mailbox or participant action occurred during the correction.
+
+## Input-refusal correction and zero-state proof
+
+The operator's failed attempt returned `PREPARATION_INPUT_REFUSED`. Local proof found no ownership ledger. Executable invalid-input tests prove all malformed structures fail before ledger write, Auth listing or Auth creation: zero Admin calls, zero ledger writes and Auth/application/Storage `0/0/0`. The helper has no application-table or Storage mutation path during preparation.
+
+Validation now requires exactly one address separator, a nonempty local base, a nonempty `+tag`, no whitespace, bounded local/domain lengths, permitted local characters and a valid dotted domain before reservation or remote mutation. Trim/case normalization remains comparison-only and never strips the plus tag. The helper assigns a dedicated sanitized exit classification for `PREPARATION_INPUT_REFUSED`; the wrapper maps it exactly instead of collapsing it to an unexpected/helper failure.
+
+Recovery, wrapper, no-secret, OTP, redirect, JSON, typecheck, static/encoding and diff checks pass after the correction. No Auth identity, application record, Storage object, OTP, mailbox access or participant action occurred.

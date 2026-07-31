@@ -18,7 +18,7 @@ $allowedCodes = @(
     'HELPER_CONTRACT_REFUSED', 'HELPER_FAILED_SANITIZED', 'OWNERSHIP_AMBIGUOUS',
     'PROTECTED_OUTPUT_REFUSED', 'PREPARATION_RESERVATION_FAILED',
     'AUTH_CREATE_ROLLED_BACK', 'LEDGER_FINALIZE_ROLLED_BACK',
-    'PREPARATION_RECOVERY_REQUIRED', 'UNEXPECTED'
+    'PREPARATION_RECOVERY_REQUIRED', 'PREPARATION_INPUT_REFUSED', 'UNEXPECTED'
 )
 
 function Write-SanitizedResult035F {
@@ -159,6 +159,10 @@ finally {
     $startInfo = $null
 }
 
+if ($exitCode -eq 21) {
+    Write-SanitizedResult035F -State 'failed-sanitized' -AuthCount 0 -Confirmed $false -Ownership 'none' -Code 'PREPARATION_INPUT_REFUSED'
+    exit 2
+}
 if ($exitCode -ne 0 -or -not (Test-Path -LiteralPath $ledgerPath -PathType Leaf)) {
     Write-SanitizedResult035F -State 'failed-sanitized' -AuthCount 0 -Confirmed $false -Ownership 'none' -Code 'HELPER_FAILED_SANITIZED'
     exit 2

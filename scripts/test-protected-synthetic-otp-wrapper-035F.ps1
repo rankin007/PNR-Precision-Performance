@@ -29,6 +29,7 @@ Assert-035F (-not $helper.Contains('.split("+")') -and -not $helper.Contains(".s
 $resultFields = @('state=', 'authCount=', 'preparationEmail=false', 'confirmed=', 'ownership=', 'code=')
 foreach ($field in $resultFields) { Assert-035F ($wrapper.Contains($field)) "OUTPUT_FIELD_MISSING_$field" }
 Assert-035F ($wrapper.Contains('PROTECTED_OUTPUT_REFUSED')) 'PROTECTED_REJECTION_MISSING'
+Assert-035F ($wrapper.Contains("exitCode -eq 21") -and $wrapper.Contains('PREPARATION_INPUT_REFUSED')) 'INPUT_REFUSAL_PROPAGATION_MISSING'
 Assert-035F ($wrapper.Contains('HELPER_CONTRACT_REFUSED')) 'HELPER_CONTRACT_GUARD_MISSING'
 Assert-035F ($wrapper.Contains("'Prepare'")) 'PREPARE_MODE_MISSING'
 Assert-035F (-not $wrapper.Contains("'Cleanup'")) 'UNAPPROVED_MODE_PRESENT'

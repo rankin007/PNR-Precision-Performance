@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { cleanupWithAdapters, exactEmailMatch, prepareWithAdapters } from "./protected-synthetic-otp-035D.mjs";
+import { cleanupWithAdapters, exactEmailMatch, prepareWithAdapters, validSyntheticPlusAddress } from "./protected-synthetic-otp-035D.mjs";
 
 const run = "035D-035F-RECOVERY01";
 const email = ["synthetic+recovery", "example.invalid"].join("@");
@@ -55,6 +55,18 @@ async function scenarioReservationFailure() {
   assert.equal(result.code, "PREPARATION_RESERVATION_FAILED"); assert.equal(admin.createCalls(), 0); assert.equal(admin.users().length, 0); assert.equal(ledger.exists(), false);
 }
 
+async function scenarioInvalidInputZeroState() {
+  for (const invalid of [
+    "no-plus@example.invalid", "+tag@example.invalid", "base+@example.invalid",
+    "base+tag@", "base+tag@example", "base tag+one@example.invalid",
+    "base+tag@@example.invalid", "base+tag@-example.invalid"
+  ]) {
+    const ledger = fakeLedger(); const admin = fakeAdmin();
+    await assert.rejects(() => prepareWithAdapters({ email: invalid, run, admin, ledger }), error => error.code === "PREPARATION_INPUT_REFUSED");
+    assert.equal(admin.createCalls(), 0); assert.equal(admin.users().length, 0); assert.equal(ledger.writes(), 0); assert.equal(ledger.exists(), false);
+  }
+}
+
 async function scenarioCreateFailure() {
   const ledger = fakeLedger(); const admin = fakeAdmin({ createFails: true });
   const result = await prepareWithAdapters({ email, run, admin, ledger });
@@ -96,7 +108,9 @@ async function scenarioSuccessAndCleanup() {
 assert.equal(exactEmailMatch(` ${["Synthetic+Recovery", "Example.Invalid"].join("@")} `, email), true);
 assert.equal(exactEmailMatch(["synthetic", "example.invalid"].join("@"), email), false);
 assert.equal(exactEmailMatch(["synthetic+other", "example.invalid"].join("@"), email), false);
+assert.equal(validSyntheticPlusAddress(email), true);
 
+await scenarioInvalidInputZeroState();
 await scenarioReservationFailure();
 await scenarioCreateFailure();
 await scenarioVerificationRollback();
@@ -104,6 +118,6 @@ await scenarioFinalizeRollback();
 await scenarioRecoveryPreserved();
 await scenarioSuccessAndCleanup();
 
-const safe = JSON.stringify({ state: "pass", checks: ["reservation-failure-zero", "create-failure-zero", "verification-rollback-zero", "finalize-rollback-zero", "recovery-preserved", "prepared-cleanup-zero", "no-email", "exact-plus", "protected-output"] });
+const safe = JSON.stringify({ state: "pass", checks: ["invalid-input-zero-calls", "reservation-failure-zero", "create-failure-zero", "verification-rollback-zero", "finalize-rollback-zero", "recovery-preserved", "prepared-cleanup-zero", "no-email", "exact-plus", "protected-output"] });
 assert.equal(safe.includes(email), false); assert.equal(safe.includes(id), false); assert.equal(safe.includes("service"), false);
 process.stdout.write(`${safe}\n`);

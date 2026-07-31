@@ -11,6 +11,7 @@ const LEDGER = join(tmpdir(), "pnr-035d-synthetic-otp-owned.json");
 const RUN_PATTERN = /^035D-[A-Z0-9-]{8,48}$/;
 const SAFE_CODES = new Set([
   "PREPARATION_RESERVATION_FAILED", "AUTH_CREATE_FAILED", "AUTH_CREATE_ROLLED_BACK",
+  "PREPARATION_INPUT_REFUSED",
   "OWNERSHIP_VERIFY_ROLLED_BACK", "LEDGER_FINALIZE_ROLLED_BACK",
   "PREPARATION_RECOVERY_REQUIRED", "PREEXISTING_IDENTITY_REFUSED",
   "OPEN_LEDGER_REFUSED", "OWNERSHIP_AMBIGUOUS", "PROTECTED_CONFIG_MISSING",
@@ -24,8 +25,21 @@ function fail(code) { const error = new Error(code); error.code = code; throw er
 export function normalizeExactEmail(value) { return typeof value === "string" ? value.trim().toLowerCase() : ""; }
 export function exactEmailMatch(left, right) { return normalizeExactEmail(left) === normalizeExactEmail(right); }
 export function emailHash(value) { return createHash("sha256").update(normalizeExactEmail(value)).digest("hex"); }
+export function validSyntheticPlusAddress(value) {
+  const normalized = normalizeExactEmail(value);
+  if (!normalized || normalized.length > 254 || /\s/.test(normalized)) return false;
+  const parts = normalized.split("@");
+  if (parts.length !== 2) return false;
+  const [local, domain] = parts;
+  if (!local || local.length > 64 || !domain || domain.length > 253) return false;
+  const plus = local.indexOf("+");
+  if (plus < 1 || plus === local.length - 1) return false;
+  if (!/^[a-z0-9.!#$%&'*+/=?^_`{|}~-]+$/i.test(local)) return false;
+  if (!/^(?=.{1,253}$)(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?$/i.test(domain)) return false;
+  return true;
+}
 export function preparationMutation(email, run) {
-  if (!email.includes("+") || !email.includes("@") || !RUN_PATTERN.test(run)) fail("PREPARATION_INPUT_REFUSED");
+  if (!validSyntheticPlusAddress(email) || !RUN_PATTERN.test(run)) fail("PREPARATION_INPUT_REFUSED");
   return { email, email_confirm: true, user_metadata: { synthetic_run: run, synthetic_purpose: "035D-email-otp" } };
 }
 export function sanitizedReport(state, extra = {}) { return { helper: "035D-synthetic-otp", state, ...extra }; }
@@ -186,5 +200,5 @@ function selfTest() {
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   const mode = process.argv[2] || "--self-test";
   Promise.resolve(mode === "--self-test" ? selfTest() : mode === "--prepare" ? prepare() : mode === "--cleanup" ? cleanup() : fail("MODE_REFUSED"))
-    .catch(error => { process.stdout.write(`${JSON.stringify(sanitizedReport("failed-sanitized", { code: safeCode(error), auth: 0, preparationEmailSent: false, confirmed: false, ownership: "none" }))}\n`); process.exitCode = 2; });
+    .catch(error => { const code = safeCode(error); process.stdout.write(`${JSON.stringify(sanitizedReport("failed-sanitized", { code, auth: 0, preparationEmailSent: false, confirmed: false, ownership: "none" }))}\n`); process.exitCode = code === "PREPARATION_INPUT_REFUSED" ? 21 : 2; });
 }
