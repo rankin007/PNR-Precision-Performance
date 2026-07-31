@@ -96,3 +96,12 @@ The operator's failed attempt returned `PREPARATION_INPUT_REFUSED`. Local proof 
 Validation now requires exactly one address separator, a nonempty local base, a nonempty `+tag`, no whitespace, bounded local/domain lengths, permitted local characters and a valid dotted domain before reservation or remote mutation. Trim/case normalization remains comparison-only and never strips the plus tag. The helper assigns a dedicated sanitized exit classification for `PREPARATION_INPUT_REFUSED`; the wrapper maps it exactly instead of collapsing it to an unexpected/helper failure.
 
 Recovery, wrapper, no-secret, OTP, redirect, JSON, typecheck, static/encoding and diff checks pass after the correction. No Auth identity, application record, Storage object, OTP, mailbox access or participant action occurred.
+
+## Six-digit contract drift containment
+
+- `application-expected-length=6`
+- `provider-issued-length=8`
+- `authentication-session=not-established`
+- `exact-preview-portal=not-reached`
+
+The issued value, recipient, message, headers and provider identifier are not recorded. The value was not entered and no second request was made. Participant A/B/C remain blocked. Architect classifies this as provider configuration drift; application/server tests remain correctly six-digit.

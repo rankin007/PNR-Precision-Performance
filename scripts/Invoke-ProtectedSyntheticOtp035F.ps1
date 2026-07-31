@@ -1,7 +1,7 @@
 [CmdletBinding()]
 param(
     [Parameter(Mandatory = $true)]
-    [ValidateSet('Prepare')]
+    [ValidateSet('Prepare', 'Cleanup')]
     [string]$Operation
 )
 
@@ -18,7 +18,8 @@ $allowedCodes = @(
     'HELPER_CONTRACT_REFUSED', 'HELPER_FAILED_SANITIZED', 'OWNERSHIP_AMBIGUOUS',
     'PROTECTED_OUTPUT_REFUSED', 'PREPARATION_RESERVATION_FAILED',
     'AUTH_CREATE_ROLLED_BACK', 'LEDGER_FINALIZE_ROLLED_BACK',
-    'PREPARATION_RECOVERY_REQUIRED', 'PREPARATION_INPUT_REFUSED', 'UNEXPECTED'
+    'PREPARATION_RECOVERY_REQUIRED', 'PREPARATION_INPUT_REFUSED',
+    'OWNERSHIP_LEDGER_MISSING', 'UNEXPECTED'
 )
 
 function Write-SanitizedResult035F {
@@ -35,6 +36,28 @@ function Write-SanitizedResult035F {
         "authCount=$AuthCount"
         'preparationEmail=false'
         "confirmed=$($Confirmed.ToString().ToLowerInvariant())"
+        "ownership=$Ownership"
+        "code=$Code"
+    ) | ForEach-Object { [Console]::Out.WriteLine($_) }
+}
+
+function Write-SanitizedCleanup035F {
+    param(
+        [ValidateSet('clean', 'blocked', 'failed-sanitized')][string]$State,
+        [ValidateSet(0, 1)][int]$Application,
+        [ValidateSet(0, 1)][int]$Auth,
+        [ValidateSet(0, 1)][int]$Storage,
+        [bool]$AuthLast,
+        [ValidateSet('none', 'ambiguous')][string]$Ownership,
+        [string]$Code
+    )
+    if ($allowedCodes -notcontains $Code) { $Code = 'UNEXPECTED' }
+    @(
+        "state=$State"
+        "application=$Application"
+        "auth=$Auth"
+        "storage=$Storage"
+        "authLast=$($AuthLast.ToString().ToLowerInvariant())"
         "ownership=$Ownership"
         "code=$Code"
     ) | ForEach-Object { [Console]::Out.WriteLine($_) }
@@ -61,13 +84,17 @@ function Test-Transcription035F {
     return $false
 }
 
-if ($Operation -ne 'Prepare') { Stop-Wrapper035F 'UNEXPECTED' }
+if ($Operation -notin @('Prepare', 'Cleanup')) { Stop-Wrapper035F 'UNEXPECTED' }
 if (-not [Environment]::UserInteractive -or [Console]::IsInputRedirected -or [Console]::IsOutputRedirected -or $Host.Name -ne 'ConsoleHost') {
     Stop-Wrapper035F 'NON_INTERACTIVE_REFUSED'
 }
 if (Test-Transcription035F) { Stop-Wrapper035F 'TRANSCRIPTION_REFUSED' }
 if ([Environment]::GetEnvironmentVariable('PP035D_SERVICE_ROLE_KEY', 'Process')) { Stop-Wrapper035F 'PROTECTED_OUTPUT_REFUSED' }
-if (Test-Path -LiteralPath $ledgerPath) { Stop-Wrapper035F 'OPEN_LEDGER_REFUSED' 'ambiguous' }
+if ($Operation -eq 'Prepare' -and (Test-Path -LiteralPath $ledgerPath)) { Stop-Wrapper035F 'OPEN_LEDGER_REFUSED' 'ambiguous' }
+if ($Operation -eq 'Cleanup' -and -not (Test-Path -LiteralPath $ledgerPath -PathType Leaf)) {
+    Write-SanitizedCleanup035F -State 'blocked' -Application 0 -Auth 0 -Storage 0 -AuthLast $false -Ownership 'none' -Code 'OWNERSHIP_LEDGER_MISSING'
+    exit 2
+}
 
 $repoRoot = (& git rev-parse --show-toplevel 2>$null)
 if ($LASTEXITCODE -ne 0 -or [string]::IsNullOrWhiteSpace($repoRoot)) { Stop-Wrapper035F 'BRANCH_REFUSED' }
@@ -98,7 +125,27 @@ foreach ($contract in $requiredContracts) {
 }
 $helperSource = $null
 
-$run = '035D-035F-' + ([Guid]::NewGuid().ToString('N').Substring(0, 12).ToUpperInvariant())
+$run = $null
+if ($Operation -eq 'Prepare') {
+    $run = '035D-035F-' + ([Guid]::NewGuid().ToString('N').Substring(0, 12).ToUpperInvariant())
+} else {
+    try {
+        $cleanupLedger = Get-Content -LiteralPath $ledgerPath -Raw | ConvertFrom-Json
+        $cleanupKeys = @($cleanupLedger.PSObject.Properties.Name | Sort-Object)
+        $cleanupExpectedKeys = @('authId', 'createdWithoutEmail', 'emailHash', 'project', 'run', 'state')
+        if (Compare-Object $cleanupExpectedKeys $cleanupKeys) { throw 'OWNERSHIP_AMBIGUOUS' }
+        if ($cleanupLedger.project -ne 'uvskssaecdhxcgytkasc' -or $cleanupLedger.state -notin @('prepared', 'recovery') -or
+            $cleanupLedger.createdWithoutEmail -ne $true -or $cleanupLedger.run -notmatch '^035D-[A-Z0-9-]{8,48}$' -or
+            $cleanupLedger.authId -notmatch '^[0-9a-f-]{36}$' -or $cleanupLedger.emailHash -notmatch '^[0-9a-f]{64}$') { throw 'OWNERSHIP_AMBIGUOUS' }
+        $run = $cleanupLedger.run
+    } catch {
+        Write-SanitizedCleanup035F -State 'blocked' -Application 0 -Auth 1 -Storage 0 -AuthLast $false -Ownership 'ambiguous' -Code 'OWNERSHIP_AMBIGUOUS'
+        exit 2
+    } finally {
+        $cleanupLedger = $null
+        $cleanupKeys = $null
+    }
+}
 $serviceSecure = $null
 $serviceBstr = [IntPtr]::Zero
 $servicePlain = $null
@@ -115,7 +162,8 @@ try {
 
     $startInfo = [Diagnostics.ProcessStartInfo]::new()
     $startInfo.FileName = $node.Source
-    $startInfo.Arguments = "`"$helperPath`" --prepare"
+    $helperMode = if ($Operation -eq 'Cleanup') { '--cleanup' } else { '--prepare' }
+    $startInfo.Arguments = "`"$helperPath`" $helperMode"
     $startInfo.WorkingDirectory = $repoRoot
     $startInfo.UseShellExecute = $false
     $startInfo.RedirectStandardInput = $false
@@ -159,6 +207,14 @@ finally {
     $startInfo = $null
 }
 
+if ($Operation -eq 'Cleanup') {
+    if ($exitCode -eq 0 -and -not (Test-Path -LiteralPath $ledgerPath)) {
+        Write-SanitizedCleanup035F -State 'clean' -Application 0 -Auth 0 -Storage 0 -AuthLast $true -Ownership 'none' -Code 'NONE'
+        exit 0
+    }
+    Write-SanitizedCleanup035F -State 'failed-sanitized' -Application 0 -Auth 1 -Storage 0 -AuthLast $false -Ownership 'ambiguous' -Code 'PREPARATION_RECOVERY_REQUIRED'
+    exit 2
+}
 if ($exitCode -eq 21) {
     Write-SanitizedResult035F -State 'failed-sanitized' -AuthCount 0 -Confirmed $false -Ownership 'none' -Code 'PREPARATION_INPUT_REFUSED'
     exit 2

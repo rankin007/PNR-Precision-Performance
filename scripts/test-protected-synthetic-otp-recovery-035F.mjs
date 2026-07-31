@@ -105,6 +105,16 @@ async function scenarioSuccessAndCleanup() {
   assert.equal(ledger.exists(), false);
 }
 
+async function scenarioCleanupFailurePreservesRecovery() {
+  const ledger = fakeLedger(); const admin = fakeAdmin();
+  const prepared = await prepareWithAdapters({ email, run, admin, ledger });
+  assert.equal(prepared.state, "prepared");
+  admin.auth.admin.deleteUser = async () => ({ error: new Error("DELETE") });
+  const failed = await cleanupWithAdapters({ admin, ledger, run });
+  assert.equal(failed.code, "AUTH_DELETE_FAILED"); assert.equal(failed.ownership, "ambiguous");
+  assert.equal(ledger.exists(), true); assert.equal(ledger.value().state, "prepared"); assert.equal(admin.users().length, 1);
+}
+
 assert.equal(exactEmailMatch(` ${["Synthetic+Recovery", "Example.Invalid"].join("@")} `, email), true);
 assert.equal(exactEmailMatch(["synthetic", "example.invalid"].join("@"), email), false);
 assert.equal(exactEmailMatch(["synthetic+other", "example.invalid"].join("@"), email), false);
@@ -117,7 +127,8 @@ await scenarioVerificationRollback();
 await scenarioFinalizeRollback();
 await scenarioRecoveryPreserved();
 await scenarioSuccessAndCleanup();
+await scenarioCleanupFailurePreservesRecovery();
 
-const safe = JSON.stringify({ state: "pass", checks: ["invalid-input-zero-calls", "reservation-failure-zero", "create-failure-zero", "verification-rollback-zero", "finalize-rollback-zero", "recovery-preserved", "prepared-cleanup-zero", "no-email", "exact-plus", "protected-output"] });
+const safe = JSON.stringify({ state: "pass", checks: ["invalid-input-zero-calls", "reservation-failure-zero", "create-failure-zero", "verification-rollback-zero", "finalize-rollback-zero", "recovery-preserved", "prepared-cleanup-zero", "cleanup-failure-preserves-ledger", "no-email", "exact-plus", "protected-output"] });
 assert.equal(safe.includes(email), false); assert.equal(safe.includes(id), false); assert.equal(safe.includes("service"), false);
 process.stdout.write(`${safe}\n`);

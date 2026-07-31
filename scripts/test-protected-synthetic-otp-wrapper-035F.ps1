@@ -22,7 +22,6 @@ Assert-035F ($wrapper.Contains('finally')) 'FINALLY_MISSING'
 Assert-035F ($wrapper.Contains('OPEN_LEDGER_REFUSED')) 'OVERWRITE_GUARD_MISSING'
 Assert-035F ($wrapper.Contains('OWNERSHIP_AMBIGUOUS')) 'OWNERSHIP_GUARD_MISSING'
 Assert-035F ($wrapper.Contains("ledger.state -ne 'prepared'")) 'FINALIZED_LEDGER_GUARD_MISSING'
-Assert-035F ($wrapper.Contains('protected-synthetic-otp-035D.mjs`" --prepare') -or $wrapper.Contains('$helperPath`" --prepare')) 'EXACT_HELPER_MODE_MISSING'
 Assert-035F ($helper.Contains('normalizeExactEmail') -and $helper.Contains('exactEmailMatch')) 'PLUS_MATCH_CONTRACT_MISSING'
 Assert-035F (-not $helper.Contains('.split("+")') -and -not $helper.Contains(".split('+')")) 'PLUS_STRIPPING_PRESENT'
 
@@ -31,8 +30,12 @@ foreach ($field in $resultFields) { Assert-035F ($wrapper.Contains($field)) "OUT
 Assert-035F ($wrapper.Contains('PROTECTED_OUTPUT_REFUSED')) 'PROTECTED_REJECTION_MISSING'
 Assert-035F ($wrapper.Contains("exitCode -eq 21") -and $wrapper.Contains('PREPARATION_INPUT_REFUSED')) 'INPUT_REFUSAL_PROPAGATION_MISSING'
 Assert-035F ($wrapper.Contains('HELPER_CONTRACT_REFUSED')) 'HELPER_CONTRACT_GUARD_MISSING'
-Assert-035F ($wrapper.Contains("'Prepare'")) 'PREPARE_MODE_MISSING'
-Assert-035F (-not $wrapper.Contains("'Cleanup'")) 'UNAPPROVED_MODE_PRESENT'
+Assert-035F ($wrapper.Contains("'Prepare', 'Cleanup'")) 'EXPLICIT_MODES_MISSING'
+Assert-035F ($wrapper.Contains("helperMode = if (`$Operation -eq 'Cleanup') { '--cleanup' } else { '--prepare' }")) 'EXACT_HELPER_MODES_MISSING'
+Assert-035F ($wrapper.Contains("cleanupLedger.run")) 'LEDGER_RUN_READ_MISSING'
+Assert-035F ($wrapper.Contains("state -notin @('prepared', 'recovery')")) 'CLEANUP_STATE_GUARD_MISSING'
+Assert-035F ($wrapper.Contains("Write-SanitizedCleanup035F")) 'CLEANUP_ALLOWLIST_MISSING'
+Assert-035F ($wrapper.Contains("-AuthLast `$true")) 'AUTH_LAST_RESULT_MISSING'
 
 $sensitiveOutputPatterns = @('servicePlain)', 'serviceSecure)', 'authId=', 'emailHash=', 'PP035D_SERVICE_ROLE_KEY=')
 foreach ($pattern in $sensitiveOutputPatterns) {
@@ -45,6 +48,6 @@ foreach ($pattern in $sensitiveOutputPatterns) {
     checks = @(
         'correct-target', 'wrong-target-refusal', 'interactive-only', 'child-only-environment',
         'cleanup-success-and-failure', 'plus-address-preservation', 'output-allowlist',
-        'protected-field-rejection', 'ownership-no-overwrite', 'prepare-only'
+        'protected-field-rejection', 'ownership-no-overwrite', 'prepare-and-cleanup-only'
     )
 } | ConvertTo-Json -Compress
