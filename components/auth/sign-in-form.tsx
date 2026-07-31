@@ -4,6 +4,14 @@ import { useEffect, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { requestEmailOtpAction, verifyEmailOtpAction } from "@/app/auth/actions";
 import { Notice } from "@/components/ui/notice";
+import {
+  enterExistingCodeRecovery,
+  enterRequestedCodeMode,
+  initialOtpEntryMode,
+  isOtpEmailReadOnly,
+  isOtpEntryVisible,
+  type OtpEntryMode,
+} from "@/lib/auth/otp-entry-flow";
 
 type SignInFormProps = {
   nextPath: string;
@@ -31,10 +39,11 @@ export function SignInForm({
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [code, setCode] = useState("");
-  const [codeRequested, setCodeRequested] = useState(sent);
+  const [entryMode, setEntryMode] = useState<OtpEntryMode>(() => initialOtpEntryMode(sent));
   const [message, setMessage] = useState<string | null>(null);
   const [resendSeconds, setResendSeconds] = useState(sent ? 60 : 0);
   const [pending, startTransition] = useTransition();
+  const codeRequested = isOtpEntryVisible(entryMode);
 
   useEffect(() => {
     if (resendSeconds <= 0) return;
@@ -58,7 +67,7 @@ export function SignInForm({
         setMessage("Sign-in could not continue. Check the details and try again.");
         return;
       }
-      setCodeRequested(true);
+      setEntryMode(enterRequestedCodeMode().mode);
       setResendSeconds(60);
       setMessage(requestMayArriveMessage);
     });
@@ -112,7 +121,7 @@ export function SignInForm({
             autoComplete="email"
             value={email}
             onChange={(event) => setEmail(event.target.value)}
-            readOnly={codeRequested}
+            readOnly={isOtpEmailReadOnly(entryMode)}
             required
             placeholder="you@example.com"
             disabled={!envReady}
@@ -148,15 +157,20 @@ export function SignInForm({
               <button type="button" disabled={pending || resendSeconds > 0} onClick={requestCode} className="inline-flex min-h-12 items-center justify-center rounded-full border border-ink/15 bg-white px-5 py-3 text-sm font-semibold text-ink disabled:cursor-not-allowed disabled:text-muted">
                 {resendSeconds > 0 ? `Request another code in ${resendSeconds}s` : "Request another code"}
               </button>
-              <button type="button" disabled={pending} onClick={() => { setCodeRequested(false); setCode(""); setMessage(null); }} className="inline-flex min-h-12 items-center justify-center px-3 text-sm font-semibold text-ink underline underline-offset-4">
+              <button type="button" disabled={pending} onClick={() => { setEntryMode("request"); setCode(""); setMessage(null); }} className="inline-flex min-h-12 items-center justify-center px-3 text-sm font-semibold text-ink underline underline-offset-4">
                 Use a different email
               </button>
             </div>
           </>
         ) : (
+          <div className="flex flex-wrap gap-3">
           <button type="submit" disabled={!envReady || pending || !email.trim()} className="inline-flex w-fit min-h-12 items-center justify-center rounded-full bg-brand px-5 py-3 text-sm font-semibold text-white transition hover:bg-technical disabled:cursor-not-allowed disabled:bg-muted">
             {pending ? "Requesting…" : "Send sign-in code"}
           </button>
+          <button type="button" disabled={!envReady || pending} onClick={() => { setEntryMode(enterExistingCodeRecovery().mode); setCode(""); setMessage(null); }} className="inline-flex min-h-12 items-center justify-center px-3 text-sm font-semibold text-ink underline underline-offset-4">
+            Already have a code?
+          </button>
+          </div>
         )}
       </form>
     </div>
