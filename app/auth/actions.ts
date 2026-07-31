@@ -4,14 +4,19 @@ import { redirect } from "next/navigation";
 import { headers } from "next/headers";
 import { normalizeAppRedirectPath } from "@/lib/auth/access";
 import { classifyOtpRequestError } from "@/lib/auth/otp-request";
-import { classifyOtpVerification, normalizeOtpEmail } from "@/lib/auth/otp-verification";
+import {
+  buildOtpVerificationPayload,
+  classifyOtpVerification,
+  classifyOtpVerificationError,
+  type OtpVerificationDiagnostic,
+} from "@/lib/auth/otp-verification";
 import { buildPasswordlessCallbackUrl, resolvePasswordlessRedirectOrigin } from "@/lib/auth/redirect-origin";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { hasSupabaseEnv } from "@/lib/supabase/env";
 
 export type OtpActionResult =
   | { ok: true; outcome?: "indeterminate" }
-  | { ok: false; reason: "configuration" | "invalid" | "retry-later" | "unavailable" };
+  | { ok: false; reason: "configuration" | "invalid" | "retry-later" | "unavailable"; diagnostic?: OtpVerificationDiagnostic };
 
 function readString(formData: FormData, key: string) {
   const value = formData.get(key);
@@ -90,14 +95,15 @@ export async function requestEmailOtpAction(emailInput: string, nextInput: strin
 }
 
 export async function verifyEmailOtpAction(emailInput: string, tokenInput: string): Promise<OtpActionResult> {
-  const email = normalizeOtpEmail(emailInput);
-  const token = tokenInput.trim();
+  const { email, token } = buildOtpVerificationPayload(emailInput, tokenInput);
   if (!hasSupabaseEnv()) return { ok: false, reason: "configuration" };
-  if (classifyOtpVerification({ email, token }) === "invalid") return { ok: false, reason: "invalid" };
+  if (classifyOtpVerification({ email, token }) === "invalid") return { ok: false, reason: "invalid", diagnostic: "malformed" };
 
   const supabase = await createSupabaseServerClient();
   const { data, error } = await supabase.auth.verifyOtp({ email, token, type: "email" });
-  if (error || !data.session || !data.user) return { ok: false, reason: "invalid" };
+  if (error || !data.session || !data.user) {
+    return { ok: false, reason: "invalid", diagnostic: classifyOtpVerificationError(error) };
+  }
   if (classifyOtpVerification({ email, token, hasError: Boolean(error), hasSession: Boolean(data.session), hasUser: Boolean(data.user) }) === "invalid") {
     return { ok: false, reason: "invalid" };
   }

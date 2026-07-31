@@ -12,6 +12,7 @@ import {
   isOtpEntryVisible,
   type OtpEntryMode,
 } from "@/lib/auth/otp-entry-flow";
+import { isValidOtpToken, normalizeOtpToken } from "@/lib/auth/otp-verification";
 
 type SignInFormProps = {
   nextPath: string;
@@ -138,9 +139,8 @@ export function SignInForm({
                 inputMode="numeric"
                 autoComplete="one-time-code"
                 pattern="[0-9]{6}"
-                maxLength={6}
                 value={code}
-                onChange={(event) => setCode(event.target.value.replace(/\D/g, "").slice(0, 6))}
+                onChange={(event) => setCode(normalizeOtpToken(event.target.value))}
                 aria-describedby="otp-help"
                 required
                 autoFocus
@@ -151,7 +151,7 @@ export function SignInForm({
               Use the newest code. Each code works once; requesting another code replaces the previous one.
             </p>
             <div className="flex flex-wrap gap-3">
-              <button type="submit" disabled={!envReady || pending || code.length !== 6} className="inline-flex min-h-12 items-center justify-center rounded-full bg-brand px-5 py-3 text-sm font-semibold text-white transition hover:bg-technical disabled:cursor-not-allowed disabled:bg-muted">
+              <button type="submit" disabled={!envReady || pending || !isValidOtpToken(code)} className="inline-flex min-h-12 items-center justify-center rounded-full bg-brand px-5 py-3 text-sm font-semibold text-white transition hover:bg-technical disabled:cursor-not-allowed disabled:bg-muted">
                 {pending ? "Verifying…" : "Verify code"}
               </button>
               <button type="button" disabled={pending || resendSeconds > 0} onClick={requestCode} className="inline-flex min-h-12 items-center justify-center rounded-full border border-ink/15 bg-white px-5 py-3 text-sm font-semibold text-ink disabled:cursor-not-allowed disabled:text-muted">
