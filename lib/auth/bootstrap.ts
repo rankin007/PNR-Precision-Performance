@@ -1,5 +1,6 @@
 import { createSupabaseAdminClient, hasSupabaseAdminEnv } from "@/lib/supabase/admin";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { bootstrapAuthenticatedUserWithPersistence } from "@/lib/auth/bootstrap-concurrency";
 
 type AuthUserBootstrapInput = {
   authUserId: string;
@@ -136,68 +137,37 @@ export async function verifyCanonicalAdministratorAssignment(userId: string) {
 }
 
 export async function bootstrapAuthenticatedUser(input: AuthUserBootstrapInput) {
-  if (!hasSupabaseAdminEnv()) {
-    return {
-      bootstrapped: false,
-      reason: "missing_service_role",
-    };
-  }
+  if (!hasSupabaseAdminEnv()) return { bootstrapped: false as const, reason: "missing_service_role" };
 
   const admin = createSupabaseAdminClient();
-
-  const { data: existingUser } = await admin
-    .from("users")
-    .select("id")
-    .eq("auth_user_id", input.authUserId)
-    .maybeSingle();
-
-  let appUserId = existingUser?.id ?? null;
-
-  if (!appUserId) {
-    const { data: insertedUser, error: userInsertError } = await admin
-      .from("users")
-      .insert({
-        auth_user_id: input.authUserId,
-        email: input.email ?? `${input.authUserId}@pending.local`,
+  return bootstrapAuthenticatedUserWithPersistence(input, {
+    async ensureUser(candidate) {
+      const ensured = await admin.from("users").upsert({
+        auth_user_id: candidate.authUserId,
+        email: candidate.email ?? `${candidate.authUserId}@pending.local`,
         status: "active",
-      })
-      .select("id")
-      .single();
+      }, { onConflict: "auth_user_id", ignoreDuplicates: true });
+      if (ensured.error) throw ensured.error;
 
-    if (userInsertError) {
-      throw userInsertError;
-    }
-
-    appUserId = insertedUser.id;
-  }
-
-  const { data: existingProfile } = await admin
-    .from("member_profiles")
-    .select("id")
-    .eq("user_id", appUserId)
-    .maybeSingle();
-
-  if (!existingProfile) {
-    const displayName =
-      input.displayName || [input.firstName, input.lastName].filter(Boolean).join(" ").trim() || input.email;
-
-    const { error: profileInsertError } = await admin.from("member_profiles").insert({
-      user_id: appUserId,
-      display_name: displayName || "Member",
-      first_name: input.firstName ?? null,
-      last_name: input.lastName ?? null,
-      is_active: true,
-    });
-
-    if (profileInsertError) {
-      throw profileInsertError;
-    }
-  }
-
-  return {
-    bootstrapped: true,
-    appUserId,
-  };
+      const resolved = await admin.from("users").select("id")
+        .eq("auth_user_id", candidate.authUserId).single();
+      if (resolved.error || !resolved.data?.id) throw resolved.error ?? new Error("BOOTSTRAP_USER_RESOLUTION_FAILED");
+      return resolved.data.id;
+    },
+    async ensureProfile(candidate) {
+      const displayName = candidate.displayName
+        || [candidate.firstName, candidate.lastName].filter(Boolean).join(" ").trim()
+        || candidate.email;
+      const ensured = await admin.from("member_profiles").upsert({
+        user_id: candidate.appUserId,
+        display_name: displayName || "Member",
+        first_name: candidate.firstName ?? null,
+        last_name: candidate.lastName ?? null,
+        is_active: true,
+      }, { onConflict: "user_id", ignoreDuplicates: true });
+      if (ensured.error) throw ensured.error;
+    },
+  });
 }
 
 export async function hasAnyAdminAssignment() {
