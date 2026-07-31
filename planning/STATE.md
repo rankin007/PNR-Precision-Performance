@@ -1,5 +1,11 @@
 # Project State
 
+## Sprint 035H closed `protected-mailbox-automation-authority-pending-clean` — 2026-08-01
+
+Sprint `035H-protected-single-run-authentication-acceptance-harness` was opened from exact closed 035G SHA `bfd4fc494d68a0f53d6c0f5f40c8fd4c8bec7059` in the dedicated worktree. Its four-file Pack was applied exactly. A fail-closed pure state controller, mailbox-content contract, sanitized reporter, guarded runner and operator entry were implemented and deterministically validated.
+
+The dedicated mailbox provider class is Gmail, classification only. No approved least-privilege read-only Gmail OAuth/API adapter backed by an OS/provider secure store is established. No-send readiness therefore closed before preparation or send with request/verification counts `0/0`, exact-owned state continuously `0/0/0`, ledger absent and all protected external invariants untouched. Manual mailbox inspection, copied codes and browser handoffs remain prohibited. Trainer-pilot completion and product-wide Done are not claimed.
+
 ## Sprint 035G closed `synthetic-preparation-blocked-clean` — 2026-07-31
 
 Sprint `035G-correction-preview-callback-and-synthetic-otp-reproof` replaced only the superseded temporary Preview callback. Final readback proves exactly the unchanged production callback plus the intended correction Preview callback, with no wildcard, stale or duplicate entry. Correction Preview `dpl_J7bSHyQ8heNrqHWw38GdFNvpaaK4` remains Ready/Preview/alias-free; production, rollback and all five stable aliases remain unchanged.

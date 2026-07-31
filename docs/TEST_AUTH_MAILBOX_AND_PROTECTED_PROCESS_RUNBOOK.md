@@ -38,3 +38,8 @@ For a separately authorized future sprint, Builder must:
 10. Prove final zero Auth/application/Storage state, production-only callback, unchanged ledger, healthy projects, and cleared protected processes.
 
 No authenticated attempt may begin without a separate Sprint 021G-or-later Architect Pack.
+# Sprint 035H protected single-run entry
+
+Use `powershell -NoProfile -ExecutionPolicy Bypass -File scripts/Invoke-ProtectedSingleRun035H.ps1 -Mode Readiness` only from a private interactive console. The command is no-send and currently closes `protected-mailbox-automation-authority-pending-clean` until a reviewed provider-specific read-only OAuth/API adapter is backed by Windows Credential Manager or an equivalently approved provider secure store.
+
+Do not use `-Mode Live` until that adapter, plus-alias receipt, restricted ledger ACL, deterministic provider fixtures and sanitized no-send readiness all pass. Never paste an address, credential, OAuth token, message, OTP or mailbox identifier into arguments, environment files, repository files, output or conversation. Manual mailbox opening, code copying and browser handoffs are prohibited. After any send reservation, only the protected runner may continue; a restart is cleanup-only.

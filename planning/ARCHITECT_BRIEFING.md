@@ -1,39 +1,41 @@
-# Architect Briefing — Sprint 035G Closeout
+# Architect Briefing — Sprint 035H Closeout
 
 ## Where things stand
 
-Sprint 035G is closed `synthetic-preparation-blocked-clean`. The correction Preview callback is exact and preserved. No OTP was requested, and exact-owned cleanup is independently clean `0/0/0`, Auth-last, ledger absent.
+The protected single-run safety core is implemented and locally validated. The dedicated mailbox is classified as Gmail only; live authentication did not begin because there is no approved Gmail adapter using least-privilege read-only access and an approved secure store.
 
 ## Current status
 
-The manual multi-surface synthetic acceptance procedure is operationally unsuitable and permanently stopped. This is not another OTP verification failure. Trainer-pilot completion and product-wide Done are not claimed.
+Closed `protected-mailbox-automation-authority-pending-clean`. Exact-owned state remains `0/0/0`, request and verification counts are both zero, and no ledger exists.
 
 ## Since last sprint
 
-Replaced only the superseded Preview callback, proved the exact two-callback set, corrected a command-scoped wrapper line-ending preflight defect, prepared one no-email exact-owned identity, then cleaned it Auth-last before any send.
+Applied the four-file 035H Pack and added a pure lifecycle controller, strict ledger contract, mailbox classifier, sanitized reporter, guarded runner, operator entry and deterministic tests. No external system was contacted or mutated.
 
 ## Architecture / file map
 
-- `planning/reviews/035G-correction-preview-callback-and-synthetic-otp-reproof.md`: sanitized closeout evidence.
-- `scripts/Invoke-ProtectedSyntheticOtp035F.ps1`: guarded 035G branch/baseline and command-scoped safecrlf preflight.
-- `scripts/test-protected-synthetic-otp-wrapper-035F.ps1`: deterministic wrapper guard coverage.
+- `scripts/protected-single-run-035H-core.mjs`: pure state, mailbox and privacy contracts.
+- `scripts/protected-single-run-035H.mjs`: fail-closed top-level readiness/live/recovery entry.
+- `scripts/Invoke-ProtectedSingleRun035H.ps1`: protected-console operator command.
+- `scripts/test-protected-single-run-035H.mjs`: deterministic safety matrix.
+- `planning/reviews/035H-protected-single-run-authentication-acceptance-harness.md`: sanitized closeout evidence.
 
 ## Decisions
 
-Preserve the correct production-plus-correction-Preview callback set. Do not resume the manual OTP workflow. Keep Participants A/B/C blocked.
+Manual mailbox inspection, copied codes and browser handoffs are not acceptable substitutes. Live mode remains locked until a concrete secure-store-backed provider adapter passes deterministic review and no-send readiness.
 
 ## Risks / watch-items
 
-End-to-end delivered OTP/session/permission acceptance remains unproved. Future automation must enforce one-send durability, protected mailbox handling, in-memory OTP use and mandatory cleanup without emitting protected values.
+Do not infer mailbox authority from prior manual delivery confirmation. Do not place mailbox credentials, address, OTP, messages or tokens in arguments, environment files, repository files, output or conversation.
 
 ## Open questions for the Architect
 
-Define 035H authority and protected mailbox integration for a single-run automated acceptance harness without weakening security, privacy, provider or cleanup boundaries.
+Which Gmail-specific least-privilege API/OAuth flow and Windows secure-store mechanism will govern the dedicated test mailbox adapter?
 
 ## Validation / test status
 
-Wrapper, recovery, no-secret, sanitizer, OTP/recovery, dashboard, JSON, typecheck, static/encoding and diff checks passed. Ready correction Preview supplies hosted build evidence. Final callbacks, preserved Auth count and ledger absence were independently read back.
+Focused 035H checks, inherited OTP/recovery/wrapper/bootstrap/dashboard checks, JSON, lint, typecheck, encoding and canonical static validation passed. Live delivery/session/permission proof was not attempted.
 
 ## Recommended next Architect action
 
-Create, but do not apply, a 035H Architect Pack for a protected single-run end-to-end synthetic authentication acceptance harness covering preflight, preparation, exactly one send, mailbox polling, in-memory OTP consumption, exact-Preview verification, permissions and Auth-last cleanup with sanitized-only evidence.
+Establish the provider-specific mailbox automation authority and secure-store mechanism without exposing protected values, then authorize continuation only if the concrete adapter satisfies 035H boundaries. Trainer-pilot completion and product-wide Done remain unclaimed.

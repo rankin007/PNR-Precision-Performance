@@ -2,10 +2,11 @@
 
 ## Active direction
 
-Sprint 035G is closed `synthetic-preparation-blocked-clean`. The correction Preview callback is exact and preserved, no OTP was requested, cleanup is `0/0/0` Auth-last with ledger absent, and the manual multi-surface acceptance procedure is operationally unsuitable. Product-wide Done and trainer-pilot completion are not claimed.
+Sprint 035H is closed `protected-mailbox-automation-authority-pending-clean`. The deterministic single-run safety core and no-send readiness pass, but no compliant protected mailbox automation adapter is established. No preparation, request or verification occurred; exact-owned state remains `0/0/0` with ledger absent. Product-wide Done and trainer-pilot completion are not claimed.
 
 | Sprint | Outcome | Profile / proof |
 |---|---|---|
+| 035H | Closed `protected-mailbox-automation-authority-pending-clean` | Strict single-run state/privacy/readiness harness passed; mailbox secure-store adapter unavailable; zero live actions and `0/0/0` |
 | 035G | Closed `synthetic-preparation-blocked-clean` | Exact callback correction/readback passed; prepared identity cleaned Auth-last; zero OTP requests; manual workflow unsuitable |
 | 035E | Closed `transactional-smtp-authority-pending-clean` | Strict provider/DNS/secret/participant gate; exact checklist recorded; no external or product mutation |
 | 035D | Closed `email-otp-validation-blocked-clean` | OTP application/template compatibility, production/rollback and cleanup pass; built-in SMTP delivery and participant acceptance blocked; custom transactional SMTP required |

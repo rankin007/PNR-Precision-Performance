@@ -29,6 +29,9 @@
 20. `planning/sprints/035G-correction-preview-callback-and-synthetic-otp-reproof/` — applied four-file callback-correction and bounded synthetic reproof authority.
 21. `planning/reviews/035G-correction-preview-callback-and-synthetic-otp-reproof.md` — exact callback readback, zero-send stop, Auth-last `0/0/0` cleanup and `synthetic-preparation-blocked-clean` closeout.
 
+22. `planning/sprints/035H-protected-single-run-authentication-acceptance-harness/` — applied four-file protected single-run harness authority.
+23. `planning/reviews/035H-protected-single-run-authentication-acceptance-harness.md` — deterministic safety architecture, zero-action readiness evidence and `protected-mailbox-automation-authority-pending-clean` closeout.
+
 ## Accepted product lineage
 
 - Sprint 032 release: `planning/reviews/032-public-relaunch-and-production-deployment.md`; exact SHA `f7242ee0785ae9b87022394206c89ebdd5c9f6ad`.
