@@ -6,7 +6,7 @@
 
 ## Executive summary
 
-The accepted public release remains valid, but the trainer product is not complete. Sprint 034 established the clean, remotely backed-up source baseline. The next work is one trainer-visible Sprint 035 outcome; later work must establish domain and privacy authority, evidence handling, trends, timed field acceptance, operational ownership, and a final production Done decision.
+The accepted public release remains valid, but the trainer product is not complete. Sprint 035 implemented and validated the bounded trainer journey, then stopped cleanly when human acceptance proved the isolated Auth template delivers numeric OTP while the product supports link-only completion. The next work must resolve that sign-in contract before repeating trainer acceptance.
 
 ## Readiness signals
 
@@ -22,7 +22,7 @@ The accepted public release remains valid, but the trainer product is not comple
 | Sprint | Phase | Outcome | Status | Dependency / exit signal |
 |---|---|---|---|---|
 | 034 | Restore trust | Reconciled clean product baseline and lifecycle ledger | done | Exact local/remote SHA equality and 16/16 validation groups pass |
-| 035 | Prove access | First trainer access and core assigned-horse journey | planned | New Architect Pack from the 034 baseline; trainer-visible acceptance |
+| 035 | Prove access | First trainer access and core assigned-horse journey | blocked clean | Implementation/Preview passed; numeric-OTP versus link-only contract requires new authority |
 | 036 | Authorize intelligence | Approved/versioned result formulas, thresholds, language and guidance | planned | Named domain/veterinary owner signs contract and fixtures pass |
 | 037 | Govern evidence | Private uploads/evidence and lifecycle acceptance | planned | Privacy decision plus hosted denial/deletion/cleanup proof |
 | 038 | Make history useful | Core trends and trainer review | planned | Approved rule semantics and accessible rendered acceptance |
@@ -36,8 +36,8 @@ Voice, OCR/meter interpretation, commerce, enquiry delivery, advanced saved view
 
 ## Current action
 
-**Do:** Architect one replacement Sprint 035 Pack from the validated Sprint 034 baseline.
+**Do:** Architect the smallest explicit numeric-OTP or magic-link contract correction, then plan a new bounded trainer acceptance attempt.
 
 **Owner:** Architect / product owner.
 
-**Decision:** Treat existing 035-series material as proposed historical input only; do not execute it as Sprint 034 work.
+**Decision:** Preserve closed Sprint 035 implementation and cleanup evidence; do not amend the validated implementation commit or infer a third human attempt.

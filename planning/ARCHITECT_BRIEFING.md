@@ -1,39 +1,21 @@
-# Architect Briefing — Sprint 034 Closeout
+# Architect Briefing — Sprint 035 Closeout
 
 ## Where things stand
 
-Sprint 034 established one clean product baseline on `codex/034-reconciled-product-baseline`, rooted at accepted release SHA `f7242ee`. It preserves accepted auth/application, mobile biochemistry, migrations `0001`–`0017`, public release, final acceptance and operations evidence without changing production behavior.
-
-## Current status
-
-Closed `reconciled-product-baseline-and-project-simplification-complete-clean`. The public release remains valid. Product-wide Done remains false for the reasons in the final acceptance matrix.
-
-The intentional commit series began with reconciliation commit `aeb24d2d038f9875973764b25538caaea6473d02`; planning closeout commit `aa87dfe010ca1ae900f0ce633ee7b2fad2a076bf` was pushed and verified as the exact remote branch tip before the final evidence attestation.
+Sprint 035 is closed `trainer-contract-expansion-required-clean`. The eight-file implementation at exact commit `36a87ce341c7a7c1ad7144f97cec62dec913b38d` is validated and published only on `codex/035-first-trainer-access-and-core-journey`.
 
 ## Evidence
 
-**Tests:** 16 validation groups passing, 0 failing.
+The focused suite passed 24/24 assertions using the approved 6 visibility/permission, 6 state/action, 4 navigation/session, 4 accessibility and 4 responsive/content arithmetic. Maintained 021AH and 022/022B regressions, canonical JSON, domain, roles, Supabase-self, static, TypeScript, lint, local validation, production build, diff, path, staged-manifest and private/generated-artifact checks passed.
 
-Fresh isolated-worktree validation on 2026-08-01 passed JSON, domain, roles, Supabase self-test, static, TypeScript, lint, local validation, focused 021AH, focused 022/022B, production build, diff/whitespace, encoding, maintained paths, migration integrity, and secret/private/generated-output exclusion. The unchanged 031B harness used the previously accepted temporary ignored `playwright-core` junction; the sandbox-blocked `.next` creation was rerun with worktree write permission. No source or lockfile changed.
+Exact-source Preview `dpl_F8nk4bA3V84zsP9k7Wj91V8fGy9E` was Ready, alias-free, healthy and non-production. One designated trainer made two bounded attempts. The first failed before challenge creation; the second received a numeric OTP, but the approved UI has no OTP-entry/verification action and expects a link. No code, link, email address, mailbox content, credential, cookie, token or session material is retained.
 
-## Plan corrections
+## Cleanup and unchanged production
 
-The reconciled branch lacked `planning/ROADMAP.md`; this re-attestation adds the current outcome roadmap and classifies existing 035-series material as proposed historical input only.
-
-## What changed
-
-Repository lineages and the dirty root were classified; current authority was compressed into state, schedule, evidence index and lifecycle ledger; lean-delivery controls were made durable. No uncertain history was deleted or archived.
+No synthetic application fixture was created. Cutoff and exact-prefix checks proved no Sprint Auth identity, application row or Storage object; final Auth/application/Storage is `0/0/0`, zero orphans. The sole Vercel Sharable Link was revoked and Vercel showed only people with access; Copy Link was disabled. The exact alias-free Sprint Preview was then deleted and verified absent with zero alias matches. Browser/operator state was cleared. Production Supabase `tagnbgkroihagjmvehlx`, production aliases, DNS, Site URL, providers and data were unchanged.
 
 ## Next Architect action
 
-**Do:** Plan one replacement Sprint 035 Trainer Pilot And Dashboard MVP Pack from the 034 baseline.
+Define one coherent authentication contract before any further human attempt: either add numeric OTP verification to the product or authorise a non-production email-template correction that supplies a usable magic link. Do not reinterpret the mismatch as user error, do not amend the validated Sprint 035 implementation commit, and do not authorize a third attempt under Sprint 035.
 
-**Owner:** Architect / product owner.
-
-**Decision:** Do not apply or execute an existing 035-series Pack.
-
-Make the outcome trainer-visible and keep voice, OCR, transactional commerce, sophisticated saved views and broad public enhancements deferred unless separately promoted.
-
-## Watch-items
-
-Do not merge or push `develop` by assumption. Do not claim product Done, clinical outputs, application audio, upload acceptance or timed field acceptance without the missing authority and proof.
+Core Product Done remains false.

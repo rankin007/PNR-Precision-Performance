@@ -22,3 +22,7 @@ Fresh Sprint 034 revalidation on 2026-08-01 passed 16/16 groups with zero failur
 ## Historical evidence
 
 Historical packs, sprint files and reviews remain in place and retain their original outcomes. Their presence is not evidence of application or completion; use the lifecycle ledger and accepted lineage above. Adverse security, migration, cleanup and production evidence remains preserved.
+
+## Sprint 035 evidence
+
+`planning/reviews/035-approved-path-manifest-and-state-action-matrix.md` records exact implementation, Preview, participant-attempt, authentication-contract mismatch, revocation and zero-state cleanup evidence. Exact implementation commit `36a87ce341c7a7c1ad7144f97cec62dec913b38d` passed 24 focused assertions (6/6/4/4/4), maintained 021AH and 022/022B regressions, canonical/domain/roles/Supabase-self/static/TypeScript/lint/local validation, production build, diff, approved-path, staged-manifest and private/generated-artifact checks. Human acceptance ended cleanly; no protected values are retained.

@@ -18,9 +18,15 @@ The public release remains valid at deployment `dpl_fPWqinnfL4YZJq41MQPaXhhuh7hi
 - No uncertain historical file was deleted or moved. Discoverability was improved through current indexes and lifecycle classification.
 - Fresh isolated-worktree revalidation passed 16/16 groups with zero failures. Before this re-attestation, local and freshly queried remote tips were exactly `d949069834c375ce4b485a4336eb701944b2d984`.
 
+## Sprint 035 outcome
+
+Sprint `035-first-trainer-access-and-core-journey` is closed `trainer-contract-expansion-required-clean`. Exact implementation commit `36a87ce341c7a7c1ad7144f97cec62dec913b38d` passed the approved 24-assertion arithmetic, maintained regressions, canonical validation, build and scope/privacy gates and was published only to its scoped branch. Exact-source Preview deployment `dpl_F8nk4bA3V84zsP9k7Wj91V8fGy9E` was Ready, alias-free, healthy and correctly denied anonymous portal access.
+
+One designated trainer completed two bounded sign-in initiation attempts. The second proved the non-production Auth email contract supplies a numeric OTP while the approved UI supports only link completion and exposes no OTP entry/verification action. No product contract was expanded. The revocable Preview link was revoked, the exact alias-free Sprint Preview was deleted and verified absent, no fixture graph was created, and final Sprint-owned Auth/application/Storage state is `0/0/0` with zero orphans. Production project `tagnbgkroihagjmvehlx`, aliases, DNS, Site URL, providers and data were unchanged. Core Product Done remains false.
+
 ## Next product outcome
 
-Sprint 035 is the single next recommendation: Trainer Pilot And Dashboard MVP. It should start from the clean 034 baseline, deliver a trainer-visible journey, and keep voice, OCR, transactional commerce, sophisticated saved views and broad public enhancements deferred unless explicitly promoted.
+Architect must decide and authorise one coherent private sign-in contract: add numeric OTP verification to the product or change the isolated non-production email template to deliver a usable magic link. That contract work is outside Sprint 035.
 
 ## Governing authorities
 

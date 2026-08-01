@@ -1,18 +1,17 @@
 {
   "schemaVersion": 1,
-  "phase": "building",
+  "phase": "sprint-closed",
   "sprint": "035-first-trainer-access-and-core-journey",
-  "status": "implementation-in-progress",
+  "status": "trainer-contract-expansion-required-clean",
   "branch": "codex/035-first-trainer-access-and-core-journey",
-  "reconciliationCommit": "aeb24d2d038f9875973764b25538caaea6473d02",
-  "closeoutCommit": "aa87dfe010ca1ae900f0ce633ee7b2fad2a076bf",
+  "implementationCommit": "36a87ce341c7a7c1ad7144f97cec62dec913b38d",
   "remoteBackupVerified": true,
-  "verifiedRemoteTipBeforeAttestation": "d949069834c375ce4b485a4336eb701944b2d984",
   "validationGroupsPassing": 16,
   "validationGroupsFailing": 0,
+  "focusedAssertionsPassing": 24,
   "sourceReleaseSha": "f7242ee0785ae9b87022394206c89ebdd5c9f6ad",
   "productionChanged": false,
   "productDone": false,
-  "nextSprint": null,
+  "nextSprint": "architect-decision-required-for-email-otp-contract",
   "updated": "2026-08-01"
 }

@@ -15,6 +15,6 @@ This compact ledger resolves current ambiguity without rewriting historical arti
 | 032 | Completed/accepted | Exact current public release source and deployment evidence |
 | 033 | Completed/accepted | Final handoff complete; product-wide Done explicitly false |
 | 034 | Applied, completed and revalidated | Clean reconciled baseline; 16/16 fresh validation groups passed on 2026-08-01 |
-| 035 series | Proposed/historical input only | Sprint 035 remains the next trainer-visible outcome, but no existing 035-series Pack is execution authority from Sprint 034 |
+| 035 | Applied/closed clean | Implementation validated and exact-source Preview proven; human acceptance stopped `trainer-contract-expansion-required-clean` because Auth delivered numeric OTP while the UI supports link-only completion; link revoked and `0/0/0` cleanup proven |
 
 Pack presence means proposed handoff only. Generated sprint artifacts mean applied. Completion requires closeout evidence and consistent state/status; later accepted evidence may supersede an earlier result without erasing it.
