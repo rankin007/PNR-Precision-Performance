@@ -1,5 +1,13 @@
 # Project State
 
+## Sprint 035K closed `preview-trainer-access-proven-production-not-promoted-clean` — 2026-08-01
+
+Sprint `035K-live-trainer-access-and-human-acceptance` started from exact closed 035I SHA `fe27561e7452909e588182ac1e47155882fc0c8c` in the dedicated clean branch/worktree; dirty `develop` was excluded and Sprint 035J remained unapplied. Truthful trainer sign-in copy, a bounded protected tester/fixture helper and deterministic ownership/retention/cleanup proof were implemented without schema, RLS, role, permission, Gmail/OAuth, public enquiry, commerce or unrelated product changes.
+
+The first human Preview attempt exposed an inherited pre-provider OTP validation defect: provider-outcome facts were required before `verifyOtp` could run. The narrow correction separates input-only email/six-digit validation from post-provider session/user evaluation. Final focused gates, 89 Sprint 035K assertions, TypeScript, zero-warning lint, production build, encoding, diff and private-data/secret checks pass. Exact correction commit `76f66f5f9803e5d1f85a6dd3f71adf302b8a1810` is local/remote equal on the scoped branch.
+
+Replacement Preview `dpl_9ws41xCwDk1jqSKtiKJVrwLPnVtc` is Ready/Preview, alias-free and exact-source. Health, truthful sign-in, anonymous same-Preview `/portal` denial and the private human trainer journey passed. The callback set is exactly unchanged production plus the replacement Preview, with the production Site URL preserved and no wildcard. The exact retention sentence was accepted interactively; the adopted Auth identity and bounded eight-record synthetic pilot graph remain governed and retained. Production `dpl_9zVS8HSujThkFTP3hisyfBVknKWb`, rollback `dpl_EUJyBLQp7okgbPwtBU6nmMH88L6A`, stable aliases, DNS and public boundaries remain unchanged. Production human acceptance, Participants A/B/C, broad rollout and product-wide Done are not claimed.
+
 ## Sprint 035I closed `gmail-secure-adapter-readiness-blocked-clean` — 2026-08-01
 
 Sprint `035I-gmail-secure-mailbox-adapter-and-single-run-acceptance` opened from exact closed 035H SHA `106324dbaba1c4a5099b261f7632dbb055c32701`. The four-file Pack was applied exactly. Sanitized authority passed, Google Cloud access and two-step verification were ready, Gmail API was enabled, and OAuth configuration was created as External/Testing with one dedicated test user and exactly `gmail.readonly`.

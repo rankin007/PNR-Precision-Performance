@@ -35,6 +35,9 @@
 24. `planning/sprints/035I-gmail-secure-mailbox-adapter-and-single-run-acceptance/` — applied four-file Gmail secure adapter and single-run authority.
 25. `planning/reviews/035I-gmail-secure-mailbox-adapter-and-single-run-acceptance.md` — sanitized Gmail/OAuth setup, deterministic adapter evidence, protected-output containment and `gmail-secure-adapter-readiness-blocked-clean` closeout.
 
+26. `planning/sprints/035K-live-trainer-access-and-human-acceptance/` — applied four-file human trainer acceptance, bounded fixture, Preview release and disposition authority.
+27. `planning/reviews/035K-live-trainer-access-and-human-acceptance.md` — exact source/deployment/callback evidence, OTP preflight correction, 89-assertion deterministic proof, private human Preview pass, governed pilot retention and `preview-trainer-access-proven-production-not-promoted-clean` closeout.
+
 ## Accepted product lineage
 
 - Sprint 032 release: `planning/reviews/032-public-relaunch-and-production-deployment.md`; exact SHA `f7242ee0785ae9b87022394206c89ebdd5c9f6ad`.

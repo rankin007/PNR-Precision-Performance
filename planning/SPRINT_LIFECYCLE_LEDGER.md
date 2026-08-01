@@ -15,6 +15,8 @@ This compact ledger resolves current ambiguity without rewriting historical arti
 | 032 | Completed/accepted | Exact current public release source and deployment evidence |
 | 033 | Completed/accepted | Final handoff complete; product-wide Done explicitly false |
 | 034 | Applied and completed | Clean reconciled baseline and simplified current authority |
-| 035 | Recommended, not yet planned | Trainer Pilot And Dashboard MVP; no Pack created by Sprint 034 |
+| 035 | Completed/acceptance-limited | Trainer dashboard/workspace implemented; external acceptance continued through the 035B–035K recovery chain |
+| 035B–035I | Closed historical recovery chain | Preserve Preview, OTP, SMTP and protected-mailbox evidence; later 035K human proof supersedes blocked trainer-access status without erasing incidents |
+| 035K | Closed `preview-trainer-access-proven-production-not-promoted-clean` | Exact-source alias-free Preview and private human trainer journey passed; adopted pilot identity/eight-record synthetic fixture retained; production unchanged and unclaimed |
 
 Pack presence means proposed handoff only. Generated sprint artifacts mean applied. Completion requires closeout evidence and consistent state/status; later accepted evidence may supersede an earlier result without erasing it.

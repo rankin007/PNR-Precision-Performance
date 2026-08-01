@@ -76,7 +76,7 @@ An adopted pre-existing Auth identity is preserved. Cleanup stops on missing/inv
 
 ## Human acceptance status
 
-Not started. The tester must enter their email and OTP privately. No mailbox inspection or automation is permitted. Preview deployment, callback rotation and fixture preparation remain pending the exact committed candidate.
+Passed on the exact corrected Preview. The product-owner-designated tester used their private mailbox, entered the email and OTP privately, established a session, reached `/portal`, recognised the exact synthetic stable/horse, completed the governed trainer journey, signed out and signed in again. Only the boolean pass result is retained. Builder did not inspect the mailbox or receive the email, OTP, session material or identifiers.
 
 ## Acceptance-boundary correction — 2026-08-01
 
@@ -90,8 +90,26 @@ Corrections now enforced:
 - The ledger remains present and moves to `recovery` on partial deletion, ownership mismatch or failed absence proof. It is removed only after complete proof.
 - Retention requires the exact non-sensitive sentence through hidden interactive input. Arguments, environment variables, variants and inference are not accepted; refusal leaves ledger and records unchanged.
 
-Executable deterministic evidence uses an in-memory fake adapter/store and no live provider. It passes **85 assertions**, covering approved/prohibited targets, duplicate-existing ambiguity without enumeration, exact created provisioning, exact adopted matching, fixture collision ceilings, digest mismatch, exact retention/cancellation, deletion order, eight independent zero checks, partial cleanup ledger preservation, Auth-last created cleanup, adopted Auth preservation, replaced-row refusal, private-detail sanitization and zero external mutation across all fake scenarios.
+Executable deterministic evidence uses an in-memory fake adapter/store and no live provider. The final suite passes **89 assertions**: the original 85 helper/ownership assertions plus four OTP regression guards proving input-only validation precedes `verifyOtp`, the old pre-provider provider-outcome call is absent, and provider-outcome validation remains after the provider call.
 
 The direct focused command `node --experimental-strip-types scripts/test-live-trainer-access-035K.mjs` passes. The earlier `npm exec` path remains an npm-cache `EPERM` supporting-tool limitation; direct Node execution and the established disposable physical-dependency copy provide equivalent maintained test, typecheck, lint, canonical and production-build proof. This is not a sprint blocker.
 
-External mutation remains zero: no tester provisioning, fixture, callback, provider, deployment, stage, commit or push has occurred.
+This section records the pre-release checkpoint. External mutation was still zero at that checkpoint.
+
+## Preview release and OTP correction — 2026-08-01
+
+The first exact-source Preview exposed a confirmed inherited OTP verification defect. Supabase recorded two cooldown-safe OTP request calls, but no verification request followed. `app/auth/actions.ts` called the provider-outcome `classifyOtpVerification({ email, token })` before `supabase.auth.verifyOtp`; that classifier requires provider-returned session and user facts, so every otherwise valid six-digit code was rejected locally. The tester did nothing incorrectly.
+
+The narrow in-scope correction added `classifyOtpVerificationInput` for normalized non-empty email plus exactly six numeric digits before the provider call, while retaining `classifyOtpVerification` for provider-returned session/user/error evaluation afterward. Focused OTP, redirect, recovery, bootstrap and dashboard tests passed; the 035K deterministic suite passed 89 assertions; TypeScript, zero-warning lint, production build, encoding, secret/private-data scan and `git diff --check` passed.
+
+Correction commit `76f66f5f9803e5d1f85a6dd3f71adf302b8a1810` was pushed only to `codex/035K-live-trainer-access-and-human-acceptance`, with exact local/remote equality. Replacement Preview `dpl_9ws41xCwDk1jqSKtiKJVrwLPnVtc` is Ready/Preview, alias-free and carries that exact commit/branch metadata. Health, truthful sign-in rendering and same-Preview anonymous `/portal` denial passed before the retest.
+
+Read-before-write callback rotation removed only the obsolete `qz7xyt63g` Preview callback and added the replacement `onblovpn6` Preview callback. Final readback proves the production Site URL unchanged and exactly two callbacks: production plus the replacement Preview, with no wildcard.
+
+## Retention and closeout — 2026-08-01
+
+The tester returned the exact sanitized retention sentence. The governed helper independently required the same interactive sentence and transitioned the protected ledger to `retained`; no protected value was emitted. The adopted Auth identity is preserved, and exactly the bounded eight-record synthetic application graph remains for the Sprint 035K pilot. No broader graph, real horse/stable/clinical/customer data or Storage object was introduced.
+
+Production was not promoted. Current production `dpl_9zVS8HSujThkFTP3hisyfBVknKWb` and compatible rollback `dpl_EUJyBLQp7okgbPwtBU6nmMH88L6A` remain Ready; no production alias, DNS, public enquiry, commerce, schema, RLS, role or permission mutation occurred. Resend/template/OTP configuration remains the verified inherited state because Sprint 035K did not mutate it.
+
+Sprint 035K closes `preview-trainer-access-proven-production-not-promoted-clean`. This proves the bounded human trainer journey on the exact replacement Preview and retains the approved pilot account/fixture. Production human acceptance, Participants A/B/C, broad trainer rollout, full production readiness and product-wide Done are not claimed.
