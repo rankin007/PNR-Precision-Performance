@@ -14,7 +14,7 @@ This compact ledger resolves current ambiguity without rewriting historical arti
 | 029 through 029L | Completed release history | Marketing preview and public-release evolution; 029M remains a separate follow-up lineage |
 | 032 | Completed/accepted | Exact current public release source and deployment evidence |
 | 033 | Completed/accepted | Final handoff complete; product-wide Done explicitly false |
-| 034 | Applied and completed | Clean reconciled baseline and simplified current authority |
-| 035 | Recommended, not yet planned | Trainer Pilot And Dashboard MVP; no Pack created by Sprint 034 |
+| 034 | Applied, completed and revalidated | Clean reconciled baseline; 16/16 fresh validation groups passed on 2026-08-01 |
+| 035 series | Proposed/historical input only | Sprint 035 remains the next trainer-visible outcome, but no existing 035-series Pack is execution authority from Sprint 034 |
 
 Pack presence means proposed handoff only. Generated sprint artifacts mean applied. Completion requires closeout evidence and consistent state/status; later accepted evidence may supersede an earlier result without erasing it.

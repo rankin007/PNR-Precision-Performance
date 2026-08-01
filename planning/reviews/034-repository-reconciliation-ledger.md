@@ -1,6 +1,6 @@
 # Sprint 034 Repository Reconciliation Ledger
 
-Date: 2026-07-30.
+Date: 2026-07-30. Revalidated: 2026-08-01.
 
 ## Baseline selection
 
@@ -11,6 +11,8 @@ Local `develop` at `b8961b9` is ahead 15/behind 5 relative to `origin/develop` a
 ## Dirty root classification
 
 The root contained 36 tracked modifications and 269 untracked paths before Sprint 034 application.
+
+The later 2026-08-01 read-only audit found the still-separate root on `develop` at `b8961b9`, with 38 tracked modifications and 411 untracked paths. The difference remains outside the reconciled baseline and was not copied, staged, moved, archived, deleted or inspected for protected values.
 
 | Group | Disposition | Evidence/rule |
 |---|---|---|
@@ -33,3 +35,5 @@ No referenced candidate was deleted. No archive move was made: current indexes a
 ## Sprint 035 effect
 
 Sprint 035 has one safe start point: `codex/034-reconciled-product-baseline`. Deferred authority remains explicit in the final acceptance matrix and does not block a bounded trainer-visible dashboard MVP.
+
+Existing 035-series Packs and branches are classified as proposed or historical input only. Sprint 034 did not apply, execute, merge or absorb them.

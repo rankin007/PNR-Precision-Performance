@@ -8,6 +8,9 @@
 4. `planning/reviews/034-repository-reconciliation-ledger.md` — branch, worktree and dirty-path dispositions.
 5. `planning/reviews/034-repository-reconciliation-and-project-simplification.md` — Sprint 034 validation and closeout.
 6. `planning/SPRINT_LIFECYCLE_LEDGER.md` — proposed/applied/completed/superseded/historical classification.
+7. `planning/ROADMAP.md` — current outcome sequence beginning with Sprint 035.
+
+Fresh Sprint 034 revalidation on 2026-08-01 passed 16/16 groups with zero failures. The detailed environment substitutions and integrity results are recorded in the Sprint 034 closeout review.
 
 ## Accepted product lineage
 

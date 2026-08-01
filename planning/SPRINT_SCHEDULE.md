@@ -4,6 +4,8 @@
 
 No sprint is open after Sprint 034 closeout.
 
+Sprint 034 revalidation on 2026-08-01 passed 16/16 validation groups with zero failures. `planning/ROADMAP.md` is the current outcome roadmap.
+
 | Sprint | Outcome | Profile / proof |
 |---|---|---|
 | 035 | Trainer Pilot And Dashboard MVP | Standard by default; one `SPRINT.md`; trainer-visible journey and testing required |
