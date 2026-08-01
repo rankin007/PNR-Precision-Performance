@@ -1,6 +1,13 @@
 # File Inventory
 
-This inventory is for Sprint 001 readiness orientation. Builder should update it after inspection.
+This inventory records the current canonical project topology and retained historical boundaries.
+
+## Canonical Repository
+
+- Active standalone clone: `C:\Users\rrank\OneDrive\PNR Precision Performance Canonical`.
+- Legacy preserved root: `C:\Users\rrank\OneDrive\PNR Precision Performance` - read-only unless a later exact reconciliation governs it.
+- `C:\tmp` repositories/worktrees are not implementation workspaces. Exact cleanup requires sprint-specific ownership proof.
+- Sprint 034B authority and evidence live under `planning/sprints/034B-canonical-workspace-and-mission-control-realignment/` and `planning/reviews/034B-*`.
 
 ---
 

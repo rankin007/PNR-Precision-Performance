@@ -1,5 +1,12 @@
 # Current Questions
 
+## Current forward decisions after Sprint 034B
+
+1. Sprint 036: should the exact Preview-accepted trainer candidate be promoted to production and the bounded human trainer journey repeated on the live domain, or should production remain deliberately unchanged?
+2. Sprint 029N: which approved privacy, storage, notification, retention and submission rules will govern the currently unavailable public enquiry workflow?
+
+Neither question authorizes implementation, deployment, provider mutation or production change.
+
 ## Sprint 030 commercial authority pending
 
 Who is the named Aprec8 business decision owner, and what versioned schedule do they approve for offer contents, price/currency/GST, freight, term/renewal, cancellation/refund/return, ownership/warranty/buyback, trial, fulfilment, checkout eligibility, effective date and historical-order treatment? Commerce remains disabled-safe until answered completely.

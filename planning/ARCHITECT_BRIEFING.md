@@ -1,67 +1,85 @@
-# Architect Briefing — Sprint 035K Closeout
+# Architect Briefing - Sprint 034B Closeout
 
 ## Executive summary
 
-**Business outcome:** One product-owner-designated trainer successfully signed in and completed the bounded synthetic trainer journey on the exact accepted Preview.
+**Business outcome:** Precision Performance now has one permanent canonical OneDrive clone and a locally validated method-v8 control plane without changing the product or losing uncertain repository history.
 
-**Current focus:** Decide whether to promote the exact accepted Sprint 035K candidate to production and repeat human acceptance on the live domain.
+**Current focus:** Decide whether to plan Sprint 036 production promotion and live trainer acceptance while preserving the retained governed pilot and current production boundary.
 
-**What is proven:** Preview OTP delivery and verification, authenticated session, trainer dashboard, assigned synthetic stable and horse, permitted workspace action, sign-out and second sign-in passed.
+**What is proven:** The canonical Git identity, exact seven v8 payload hashes, four-file Pack output, roadmap/status/briefing structures, 89 deterministic Sprint 035K assertions, canonical quality gates and bounded legacy disposition are proven locally.
 
-**What is not live:** The accepted candidate has not been promoted to production, production human acceptance has not run, and broader trainer rollout and public enquiry submission remain unavailable.
+**What is not live:** The 034B branch is uncommitted/unpushed, production was not promoted, production human acceptance has not run, and Sprint 036 and 029N remain unresolved plans only.
 
 ## Readiness signals
 
 | Signal | Status | Evidence |
 |---|---|---|
-| Preview trainer journey | passed | Product-owner-designated tester completed private OTP sign-in, dashboard, synthetic horse workspace action, sign-out and second sign-in on the exact replacement Preview. |
-| Exact Preview source and callback boundary | passed | Ready alias-free Preview `dpl_9ws41xCwDk1jqSKtiKJVrwLPnVtc` matches commit `76f66f5f9803e5d1f85a6dd3f71adf302b8a1810`; callback readback is production plus that Preview only. |
-| Production promotion and human acceptance | attention | Production remains on the pre-035K deployment; the accepted candidate and human journey have not been promoted or repeated on the live domain. |
+| Canonical repository authority | passed | Exact canonical root/top-level/common-dir, standalone `.git`, branch and starting SHA were verified. |
+| Official method v8 adoption | passed | Manifest v8 metadata and all seven declared payload hashes match; Pack dry-run/application and both syntax checks pass. |
+| Product regression safety | passed | Sprint 035K remains 89/0; typecheck, zero-warning lint, production build, JSON, encoding and static gates pass with zero product diff. |
+| Mission Control rendered closeout | passed | Owner Re-detect confirmed the canonical folder, Sprint 034B closed, 89 tests all passing and all four executive fields populated. |
 
 ## Where things stand
 
-One product-owner-designated human tester can now use the trainer journey on an exact-source Preview: receive and enter a six-digit code privately, reach the dashboard, use the bounded synthetic horse workspace, sign out and sign in again. A defect found on the first attempt was corrected narrowly and the retest passed. Production was deliberately not promoted.
+The repository and planning control plane are realigned around the permanent canonical clone. The official v8 method update is exact, current planning names Sprint 036 as the explicit next destination, and the dirty legacy root plus ambiguous worktrees remain preserved. The exact duplicate 035K temporary directory was removed through Git; two locked stale metadata directories remain safely deferred. Owner-operated Mission Control acceptance passed.
 
 ## Current status
 
-Closed `preview-trainer-access-proven-production-not-promoted-clean`. Replacement Preview `dpl_9ws41xCwDk1jqSKtiKJVrwLPnVtc` is Ready, alias-free and exact to commit `76f66f5f9803e5d1f85a6dd3f71adf302b8a1810`. The adopted pilot identity and bounded eight-record synthetic fixture are explicitly retained under the governed ledger.
+Sprint 034B is closed `canonical-realignment-complete-legacy-cleanup-deferred-clean`. HEAD remains the uncommitted starting SHA `47d1df447e819b8ec31aaa085a0ff6aeff6e7e8b`; no staging, commit or push has occurred.
 
 ## Since last sprint
 
-Sprint 035K replaced the unexecuted 035J direction with human mailbox participation. It added truthful trainer sign-in copy, exact-identity/ownership-safe fixture tooling and deterministic cleanup/retention proof. Human Preview testing exposed and then confirmed the correction of a pre-provider OTP validation defect.
+Sprint 035K remains closed with private human Preview trainer acceptance passed, the governed adopted pilot and eight synthetic records retained, and production unpromoted. Sprint 034B established the canonical workspace guard, adopted exact method v8, introduced the mid-flight roadmap, completed the v8 briefing contract, reconciled current planning authority, and bounded legacy disposition.
 
 ## Architecture / file map
 
-- `app/auth/actions.ts`: input validation, provider OTP request/verification and sanitized outcomes.
-- `lib/auth/otp-verification.ts`: separate input-only and provider-outcome classifiers.
-- `scripts/live-trainer-access-035K-core.mjs`: exact tester/fixture ownership, verification, retention and cleanup logic.
-- `scripts/Invoke-LiveTrainerAccess035K.ps1`: private interactive protected entrypoint.
-- `planning/reviews/035K-live-trainer-access-and-human-acceptance.md`: canonical closeout evidence.
+- `AGENTS.md` - canonical-root startup guard and legacy-workspace stop rule.
+- `.120x/method-manifest.json` and seven declared payloads - exact official v8 authority.
+- `planning/ROADMAP.md` and `planning/STATUS.json` - Mission Control current and forward-state inputs.
+- `docs/ARCHITECT_BRIEFING_SPEC.md` and `templates/method/ARCHITECT_BRIEFING.template.md` - complete v8 briefing contract.
+- `planning/reviews/034B-legacy-worktree-disposition.md` - sanitized legacy metadata and cleanup result.
+- `planning/reviews/034B-canonical-workspace-and-mission-control-realignment.md` - implementation and validation evidence.
 
 ## Decisions
 
-Human mailbox participation is the accepted path; Gmail/OAuth/mailbox automation remains unapplied. The tester explicitly retained the adopted pilot identity and exact bounded synthetic fixture. Preview acceptance is not production acceptance.
+The canonical OneDrive clone is the sole active Precision Performance workspace. The legacy root and uncertain worktrees remain preserved. Sprint 036 is the next product decision, followed by planned 029N; neither is authorized by the roadmap. Preview acceptance remains distinct from production acceptance.
 
 ## Risks / watch-items
 
-The retained pilot graph must remain synthetic, bounded and governed. Do not broaden access, add real data or treat Preview proof as full production readiness. The replacement Preview callback is temporary and must be rotated only as part of a separately authorized production or cleanup plan.
+Two already-absent legacy metadata directories remain Git-prunable but locked; do not delete them manually. The dirty legacy root and ambiguous worktrees must not be reconciled or copied without a later exact plan. Do not treat Mission Control metadata as proof of production promotion. Mission Control's Delivered and Forward Plan cards do not currently reflect the valid roadmap row count/names; treat those cards as a hosted rendering limitation and use the roadmap plus named executive fields as authority.
 
 ## Open questions for the Architect
 
-Should the next sprint promote the exact accepted candidate to production and repeat human acceptance there, or deliberately retain production unchanged while another product outcome is prioritized?
+Should Sprint 036 promote the exact Preview-accepted candidate and repeat human trainer acceptance on production, or deliberately defer production? Sprint 029N remains the named subsequent public-enquiry decision.
+
+## Evidence
+
+- `git rev-parse --show-toplevel` and `--git-common-dir` - exact standalone canonical clone.
+- SHA-256 manifest verification - seven of seven payloads exact.
+- Pack dry-run/application - exactly four generated 034B files.
+- Connected GitHub comparison - remote 035K branch identical to `47d1df447e819b8ec31aaa085a0ff6aeff6e7e8b`, ahead 0, behind 0.
+- Git metadata inventory and non-force worktree removal - exact 035K duplicate directory removed; other history preserved.
+- `node --experimental-strip-types scripts/test-live-trainer-access-035K.mjs` - 89 assertions passed.
+- JSON/static/role/Supabase-self/031C, typecheck, lint and build - passed.
+- Owner-operated Mission Control Re-detect - canonical folder up to date; Sprint 034B closed; 89 tests all passing; executive fields populated.
+- Roadmap/template diagnosis - v8 structure valid; 034B is the sole `done` row; 036 and 029N are `planned`; Delivered `0 sprints` and Forward Plan `1 sprint - Through Release` are hosted card-rendering limitations.
+
+## Plan corrections
+
+The literal pre-Pack status contained the eight official v8 paths plus the Architect Pack, STATUS and ROADMAP; the owner explicitly accepted those three control-plane artifacts. Direct `git ls-remote` was blocked by the local TLS credential boundary, so the connected GitHub comparison supplied exact identical/ahead-0/behind-0 proof. The full CI runner stopped at an unlisted `playwright-core` dependency; preceding components passed and subsequent maintained groups plus quality gates were run directly. Git removed the exact 035K directory but two stale metadata directories remained locked, selecting the cleanup-deferred outcome. Final Re-detect proved Mission Control read the latest local state, but its Delivered and Forward Plan cards did not interpret the valid roadmap rows literally; this supporting hosted rendering limitation does not justify distorting source truth or creating another sprint.
 
 ## Validation / test status
 
 **Tests:** 89 passing, 0 failing.
 
-Focused OTP/redirect/recovery/bootstrap/dashboard tests pass. Sprint 035K passes 89 deterministic assertions with no live-provider mutation. TypeScript, zero-warning lint, production build, canonical validation, encoding, diff and private-data/secret checks pass. Preview health, truthful sign-in, anonymous `/portal` denial and private human trainer acceptance pass. Production human acceptance was not run.
+Both updated Node scripts pass syntax checks. Pack output, 7/7 payload hashes, JSON, 967 maintained text files, seven static validator groups, maintained deterministic groups after the optional transport dependency, TypeScript, zero-warning lint and the 29-page production build pass. No product or external state changed.
 
 ## Recommended next Architect action
 
-**Do:** Decide whether to promote the exact accepted Sprint 035K candidate to production and repeat the trainer journey on the live domain.
+**Do:** Decide whether to prepare Sprint 036 production-promotion and live-trainer-acceptance discovery.
 
 **Owner:** Product owner and Architect
 
-**Decision:** Promote the accepted candidate to production, or deliberately defer production while preserving the retained governed pilot.
+**Decision:** Promote the exact Preview-accepted trainer candidate to production for bounded live acceptance, or deliberately defer production while preserving the governed retained pilot.
 
-Choose whether to plan the separately gated production promotion and human smoke. Preserve the adopted tester/fixture, production deployment/rollback/aliases, callback boundary and no-product-wide-Done classification until that decision is made.
+Do not start Sprint 036 or 029N from roadmap presence alone.

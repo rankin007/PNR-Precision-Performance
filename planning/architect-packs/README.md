@@ -16,29 +16,15 @@ Follow-up sprints keep the core number and start at suffix `B`. Apply the same i
 
 Run commands from the project root.
 
-Validate pack formatting only:
-
-`node scripts/apply-architect-pack.js planning/architect-packs/architect-pack-###-{sprint-name}.md --check`
-
 Dry-run a pack before applying it:
 
 `node scripts/apply-architect-pack.js planning/architect-packs/architect-pack-###-{sprint-name}.md --dry-run`
 
-Show changed content during dry-run:
-
-`node scripts/apply-architect-pack.js planning/architect-packs/architect-pack-###-{sprint-name}.md --dry-run --diff`
-
-Dry-run and apply in one command:
-
-`node scripts/apply-architect-pack.js planning/architect-packs/architect-pack-###-{sprint-name}.md --dry-run --yes`
-
-Apply and back up overwritten files:
-
-`node scripts/apply-architect-pack.js planning/architect-packs/architect-pack-###-{sprint-name}.md --backup`
-
 Apply directly:
 
 `node scripts/apply-architect-pack.js planning/architect-packs/architect-pack-###-{sprint-name}.md`
+
+The v8 script supports one Pack path and the optional `--dry-run` flag only. Dry-run parses and validates the Pack, reports the exact create/overwrite targets, and writes nothing. Unsupported flags fail with usage output.
 
 ## Pack Format
 

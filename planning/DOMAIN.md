@@ -4,6 +4,14 @@ This file captures the operating context for the current feature/fix sprint insi
 
 ---
 
+## Current Control-Plane Context - Sprint 034B
+
+Sprint 034B is a repository and Mission Control realignment, not a product feature. The permanent active clone is `C:\Users\rrank\OneDrive\PNR Precision Performance Canonical`. The accepted trainer candidate remains Preview-proven and production-unpromoted; the retained governed pilot identity and eight synthetic application records remain unchanged.
+
+The named forward road is 034B canonical realignment, Sprint 036 production-promotion decision/live trainer acceptance, then Sprint 029N public enquiry privacy/submission completion. Future roadmap rows are plans only and do not authorize implementation or external mutation.
+
+---
+
 ## Client
 
 Aprec8 Pty Ltd

@@ -6,7 +6,19 @@
 **Client:** Aprec8 Pty Ltd
 **Mode:** Existing Project / Feature or Fix
 **Planning folder:** `precision-performance/`
-**Existing project notes:** `C:\Users\rrank\OneDrive\PNR Precision Performance`
+**Existing project notes:** `C:\Users\rrank\OneDrive\PNR Precision Performance Canonical`
+
+---
+
+## Canonical Workspace Guard
+
+The permanent canonical repository is exactly:
+
+`C:\Users\rrank\OneDrive\PNR Precision Performance Canonical`
+
+At the start of every Architect and Builder session, resolve both the current working directory and `git rev-parse --show-toplevel`. Both must equal the canonical path above. If either differs, stop before editing, staging, committing, pushing, copying, moving, deleting, applying a Pack, or changing external state.
+
+`C:\Users\rrank\OneDrive\PNR Precision Performance` and every `C:\tmp` checkout or worktree are legacy/read-only. They may be inspected through sanitized Git metadata only when an approved sprint names the exact target and action. Do not use them as implementation workspaces, synchronize them with the canonical clone, or copy uncertain content between repositories.
 
 ---
 

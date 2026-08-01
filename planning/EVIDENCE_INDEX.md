@@ -2,6 +2,10 @@
 
 ## Current governing evidence
 
+- `planning/sprints/034B-canonical-workspace-and-mission-control-realignment/` - applied four-file canonical-workspace and Mission Control realignment authority.
+- `planning/reviews/034B-canonical-workspace-and-mission-control-realignment.md` - 034B implementation, validation, owner Re-detect and `canonical-realignment-complete-legacy-cleanup-deferred-clean` closeout evidence.
+- `planning/reviews/034B-legacy-worktree-disposition.md` - sanitized legacy registration/worktree classification and bounded cleanup result.
+
 1. `planning/FINAL_PRODUCT_ACCEPTANCE_MATRIX.md` — criterion-level product acceptance and Not Done truth.
 2. `planning/DEFERRED_SCOPE_AND_OWNERSHIP.md` — unresolved authority, proof and ownership.
 3. `docs/OPERATIONS_HANDOFF.md` — monitoring, incident, access, support and rollback runbook.

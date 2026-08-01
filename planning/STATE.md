@@ -1,5 +1,11 @@
 # Project State
 
+## Sprint 034B closed `canonical-realignment-complete-legacy-cleanup-deferred-clean` - 2026-08-01
+
+The permanent active repository is the standalone clone at `C:\Users\rrank\OneDrive\PNR Precision Performance Canonical`, on `codex/034B-canonical-workspace-and-mission-control-realignment` from exact Sprint 035K closeout SHA `47d1df447e819b8ec31aaa085a0ff6aeff6e7e8b`. The official method v8 payload has seven matching manifest hashes and the four-file 034B Pack is applied exactly. The canonical guard, three-row mid-flight roadmap, schema-v1 status, complete v8 briefing contract and current planning authority are aligned.
+
+Sprint 035K remains closed. Its accepted application candidate, retained adopted trainer identity, eight-record synthetic fixture, Preview proof, production-not-promoted boundary and external provider state are unchanged. Three already-absent registrations were pruned and the exact clean duplicate 035K directory was removed through Git. Two locked stale metadata directories remain safely deferred; the dirty legacy root and every other worktree remain preserved. The owner-operated Mission Control Re-detect passed against the canonical folder with Sprint 034B closed, 89 tests all passing and complete executive fields.
+
 ## Sprint 035K closed `preview-trainer-access-proven-production-not-promoted-clean` — 2026-08-01
 
 Sprint `035K-live-trainer-access-and-human-acceptance` started from exact closed 035I SHA `fe27561e7452909e588182ac1e47155882fc0c8c` in the dedicated clean branch/worktree; dirty `develop` was excluded and Sprint 035J remained unapplied. Truthful trainer sign-in copy, a bounded protected tester/fixture helper and deterministic ownership/retention/cleanup proof were implemented without schema, RLS, role, permission, Gmail/OAuth, public enquiry, commerce or unrelated product changes.

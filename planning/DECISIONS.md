@@ -6,6 +6,8 @@ Record durable decisions future sprints must respect.
 
 ## Decision Log
 
+| 2026-08-01 | Make `C:\Users\rrank\OneDrive\PNR Precision Performance Canonical` the sole active Precision Performance repository and adopt the exact manifest-governed 120x method v8 update. | Multiple dirty/divergent repositories and stale Mission Control state made workspace and forward-plan authority ambiguous. | Architect, Builder, Mission Control, commit and push work must fail closed outside the canonical clone; legacy roots and uncertain history remain preserved unless an exact governed cleanup proves safe. |
+
 | 2026-07-29 | Close Sprint 030 `commercial-authority-pending-commerce-disabled-safe`. | Commercial sources conflict and material offer obligations remain unapproved. | Keep commerce consultation-led and disabled; require a named owner-approved complete schedule before later enablement planning. |
 
 | 2026-07-29 | Sprint 027B combines the accepted Sprint 025, 026 and 027 candidates without selecting one shared planning file as a whole-file winner. | The three candidates share a baseline but independently close domain, private-evidence and voice/privacy boundaries. | Single-owner product bytes remain exact; shared executable registrations are additive; durable state preserves all outcomes and limitations. |

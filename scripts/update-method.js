@@ -21,11 +21,8 @@
 // planning/QUESTIONS.md, same posture as the cockpit's copied strings). tests/update-method.test.js
 // checks this copy against the SAME case matrix as tests/cockpit-method-heal.test.js.
 
-// eslint-disable-next-line @typescript-eslint/no-require-imports -- Preserve this intentional CommonJS shipped-tool contract.
 const fs = require("fs");
-// eslint-disable-next-line @typescript-eslint/no-require-imports -- Preserve this intentional CommonJS shipped-tool contract.
 const path = require("path");
-// eslint-disable-next-line @typescript-eslint/no-require-imports -- Preserve this intentional CommonJS shipped-tool contract.
 const crypto = require("crypto");
 
 // Mirrors src/generators.js DEFAULT_METHOD_SOURCE — the production Render deploy. Used only

@@ -1,5 +1,11 @@
 # Current Risks
 
+## Sprint 034B canonical workspace and legacy history
+
+- The legacy OneDrive root is materially dirty/divergent and must remain preserved and read-only. Copying or reconciling it without a separately governed evidence boundary risks losing uncertain history.
+- Temporary and registered worktrees may contain unique or ambiguous state. Only an exact clean duplicate may be removed through Git after every ownership, SHA, remote and untracked-content guard passes; otherwise cleanup is deferred.
+- Mission Control metadata can look complete while production remains unpromoted. Sprint 035K Preview proof must not be reported as production acceptance.
+
 ## Sprint 030 commercial authority
 
 - Price/GST, freight, term, refunds/returns, ownership/warranty/buyback, trial and fulfilment remain unapproved.
