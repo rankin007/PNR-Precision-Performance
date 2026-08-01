@@ -39,66 +39,6 @@ type HorseTimelineRow = {
   notes: string | null;
 };
 
-const fallbackHorses: HorseSummary[] = [
-  {
-    id: "sample-horse-1",
-    name: "Northern Comet",
-    status: "active",
-    stableName: "Sample Stable",
-  },
-  {
-    id: "sample-horse-2",
-    name: "Velvet Charge",
-    status: "active",
-    stableName: "Sample Stable",
-  },
-];
-
-const fallbackHorseDetails: Record<string, HorseDetail> = {
-  "sample-horse-1": {
-    id: "sample-horse-1",
-    name: "Northern Comet",
-    status: "active",
-    stableName: "Sample Stable",
-    breed: "Thoroughbred",
-    colour: "Bay",
-    dateOfBirth: "2021-09-12",
-    recentMetrics: [
-      { label: "Latest temperature", value: "37.8 C" },
-      { label: "Latest weight", value: "482.0 kg" },
-      { label: "Latest water intake", value: "26.5 L" },
-    ],
-    recentTimeline: [
-      { date: "2026-04-14", summary: "Morning monitoring completed with steady hydration and normal temperature." },
-      { date: "2026-04-13", summary: "Track session recorded with stable recovery notes." },
-      { date: "2026-04-12", summary: "Feeding and weight check completed without issue." },
-    ],
-    latestBiochemistry: null,
-    operational: deriveOperationalSummary({ horseId: "sample-horse-1", tests: [], canWrite: false }),
-  },
-  "sample-horse-2": {
-    id: "sample-horse-2",
-    name: "Velvet Charge",
-    status: "active",
-    stableName: "Sample Stable",
-    breed: "Thoroughbred",
-    colour: "Chestnut",
-    dateOfBirth: "2020-10-04",
-    recentMetrics: [
-      { label: "Latest temperature", value: "37.6 C" },
-      { label: "Latest weight", value: "468.4 kg" },
-      { label: "Latest water intake", value: "24.0 L" },
-    ],
-    recentTimeline: [
-      { date: "2026-04-14", summary: "Daily record captured with normal observations." },
-      { date: "2026-04-13", summary: "Track work logged with distance and context notes." },
-      { date: "2026-04-12", summary: "Water intake and feeding notes updated." },
-    ],
-    latestBiochemistry: null,
-    operational: deriveOperationalSummary({ horseId: "sample-horse-2", tests: [], canWrite: false }),
-  },
-};
-
 function extractStableName(stables: unknown) {
   if (Array.isArray(stables)) {
     return stables[0]?.name ?? null;
@@ -115,7 +55,8 @@ export async function getAccessibleHorseSummaries() {
   if (!hasSupabaseEnv()) {
     return {
       envReady: false,
-      horses: fallbackHorses,
+      horses: [] as HorseSummary[],
+      error: "service-unavailable" as const,
     };
   }
 
@@ -129,7 +70,7 @@ export async function getAccessibleHorseSummaries() {
     return {
       envReady: true,
       horses: [] as HorseSummary[],
-      error: error.message,
+      error: "horse-list-unavailable" as const,
     };
   }
 
@@ -153,7 +94,7 @@ export async function getStableWorkspaceOverview(canWrite: boolean) {
   const supabase = await createSupabaseServerClient();
   const horseIds = base.horses.slice(0, 100).map((horse) => horse.id);
   const { data, error } = await supabase.from("biochemistry_tests").select("id,horse_id,test_date,scoring_status,health_score,formula_version,lookup_source_version").in("horse_id", horseIds).is("deleted_at", null).order("test_date", { ascending: false }).limit(200);
-  if (error) return { ...base, horses: [], error: error.message };
+  if (error) return { ...base, horses: [], error: "workspace-unavailable" as const };
   const rows = (data ?? []) as TestSummaryRow[];
   return { ...base, horses: base.horses.slice(0, 100).map((horse) => {
     const tests = rows.filter((row) => row.horse_id === horse.id).slice(0, 2).map((row) => ({ id: row.id, horseId: row.horse_id, testDate: row.test_date, scoringStatus: row.scoring_status, healthScore: row.health_score, formulaVersion: row.formula_version, sourceVersion: row.lookup_source_version }));
@@ -165,7 +106,8 @@ export async function getAccessibleHorseDetail(horseId: string, canWrite = false
   if (!hasSupabaseEnv()) {
     return {
       envReady: false,
-      horse: fallbackHorseDetails[horseId] ?? null,
+      horse: null,
+      error: "service-unavailable" as const,
     };
   }
 
@@ -173,10 +115,11 @@ export async function getAccessibleHorseDetail(horseId: string, canWrite = false
 
   const [
     { data: horse, error: horseError },
-    { data: temperatures },
-    { data: weights },
-    { data: waters },
-    { data: dailyRecords }, { data: biochemistryRows },
+    { data: temperatures, error: temperatureError },
+    { data: weights, error: weightError },
+    { data: waters, error: waterError },
+    { data: dailyRecords, error: dailyRecordError },
+    { data: biochemistryRows, error: biochemistryError },
   ] =
     await Promise.all([
       supabase
@@ -215,7 +158,15 @@ export async function getAccessibleHorseDetail(horseId: string, canWrite = false
     return {
       envReady: true,
       horse: null,
-      error: horseError?.message ?? "Horse not found.",
+      error: "horse-unavailable" as const,
+    };
+  }
+
+  if (temperatureError || weightError || waterError || dailyRecordError || biochemistryError) {
+    return {
+      envReady: true,
+      horse: null,
+      error: "workspace-unavailable" as const,
     };
   }
 

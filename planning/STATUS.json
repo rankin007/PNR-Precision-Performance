@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
-  "phase": "sprint-closed",
-  "sprint": "034-repository-reconciliation-and-project-simplification",
-  "status": "reconciled-product-baseline-and-project-simplification-complete-clean",
-  "branch": "codex/034-reconciled-product-baseline",
+  "phase": "building",
+  "sprint": "035-first-trainer-access-and-core-journey",
+  "status": "implementation-in-progress",
+  "branch": "codex/035-first-trainer-access-and-core-journey",
   "reconciliationCommit": "aeb24d2d038f9875973764b25538caaea6473d02",
   "closeoutCommit": "aa87dfe010ca1ae900f0ce633ee7b2fad2a076bf",
   "remoteBackupVerified": true,
@@ -13,6 +13,6 @@
   "sourceReleaseSha": "f7242ee0785ae9b87022394206c89ebdd5c9f6ad",
   "productionChanged": false,
   "productDone": false,
-  "nextSprint": "035-trainer-pilot-and-dashboard-mvp",
+  "nextSprint": null,
   "updated": "2026-08-01"
 }

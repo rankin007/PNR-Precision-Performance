@@ -15,20 +15,23 @@ export default async function HorseDetailPage({ params }: HorseDetailPageProps) 
   const result = await getAccessibleHorseDetail(horseId, canWrite);
 
   if (!result.horse) {
+    const workspaceUnavailable = result.error === "workspace-unavailable" || result.error === "service-unavailable";
     return (
       <SectionCard
-        eyebrow="Horse Detail"
-        title="Horse not available"
+        eyebrow="Horse workspace"
+        title={workspaceUnavailable ? "Workspace unavailable" : "Horse not available"}
         description={
-          "This horse could not be resolved for the current account or the record does not exist yet."
+          workspaceUnavailable
+            ? "The assigned-horse workspace could not be loaded safely. No missing information has been treated as complete or normal."
+            : "This horse is not available to the current account. No horse, stable, assignment, or workflow details can be shown."
         }
       >
         <div className="mt-2">
           <Link
-            href="/portal/horses"
-            className="rounded-full border border-ink/10 bg-sand px-4 py-2 text-sm font-semibold text-ink"
+            href="/portal"
+            className="inline-flex min-h-12 items-center rounded-full border border-ink/10 bg-sand px-4 py-2 text-sm font-semibold text-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-data"
           >
-            Back to horses
+            Return to dashboard
           </Link>
         </div>
       </SectionCard>
@@ -37,15 +40,18 @@ export default async function HorseDetailPage({ params }: HorseDetailPageProps) 
 
   return (
     <SectionCard
-      eyebrow="Horse Detail"
+      eyebrow={result.horse.stableName ?? "Stable unavailable"}
       title={result.horse.name}
-      description="Permission-aware horse profile view with recent physiological snapshots and core horse identity details."
+      description="Assigned horse workspace. Workflow information supports trainer review and does not indicate clinical urgency, diagnosis, treatment, supplementation, or race readiness."
     >
-      {!result.envReady ? (
-        <div className="rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
-          Supabase is not configured yet, so sample horse detail data is being shown.
-        </div>
-      ) : null}
+      <div className="mb-6">
+        <Link
+          href="/portal"
+          className="inline-flex min-h-12 items-center rounded-full border border-ink/10 bg-white px-4 py-2 text-sm font-semibold text-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-data"
+        >
+          Return to dashboard
+        </Link>
+      </div>
       <div className="mt-8 grid gap-6 lg:grid-cols-[0.95fr_1.05fr]">
         <div className="rounded-[1.75rem] border border-ink/10 bg-sand p-6">
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-ember">Profile</p>
@@ -85,7 +91,7 @@ export default async function HorseDetailPage({ params }: HorseDetailPageProps) 
         <p className="mt-2 text-sm text-steel">Informational workflow context only; it does not indicate clinical urgency.</p>
         <dl className="mt-5 grid gap-3 md:grid-cols-3"><div className="rounded-2xl bg-sand p-4"><dt className="font-semibold">Attention</dt><dd className="mt-1 text-sm text-steel">{result.horse.operational.attention.status}: {result.horse.operational.attention.reason}</dd></div><div className="rounded-2xl bg-sand p-4"><dt className="font-semibold">Incomplete</dt><dd className="mt-1 text-sm text-steel">{result.horse.operational.incomplete.status}: {result.horse.operational.incomplete.reason}</dd></div><div className="rounded-2xl bg-sand p-4"><dt className="font-semibold">Changed</dt><dd className="mt-1 text-sm text-steel">{result.horse.operational.changed.status}: {result.horse.operational.changed.reason}</dd></div></dl>
         {result.horse.latestBiochemistry ? <p className="mt-4 text-sm text-steel">Latest result: {result.horse.latestBiochemistry.scoringStatus}; test date {result.horse.latestBiochemistry.testDate}; formula {result.horse.latestBiochemistry.formulaVersion}; source {result.horse.latestBiochemistry.sourceVersion}.</p> : <p className="mt-4 text-sm text-steel">Latest result unavailable. No missing value is treated as normal or complete.</p>}
-        <div className="mt-5"><Link href={result.horse.operational.nextAction.href} className="rounded-full bg-ink px-4 py-2 text-sm font-semibold text-white">{result.horse.operational.nextAction.label}</Link></div>
+        <div className="mt-5"><Link href={result.horse.operational.nextAction.href} className="inline-flex min-h-12 items-center rounded-full bg-ink px-4 py-2 text-sm font-semibold text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-data">{result.horse.operational.nextAction.label}</Link></div>
       </section>
       <div className="mt-8 rounded-[1.75rem] border border-ink/10 bg-white p-6 shadow-panel">
         <p className="text-xs font-semibold uppercase tracking-[0.18em] text-ember">Recent History</p>
