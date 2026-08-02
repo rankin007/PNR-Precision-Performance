@@ -2,12 +2,13 @@
 
 ## Active direction
 
-No sprint is open after Sprint 035M closed `trainer-access-validation-blocked-clean` on 2026-08-02.
+No sprint is open after Sprint 035N closed `preview-callback-mutation-blocked-clean` on 2026-08-02.
 
 | Sprint | Outcome | Status / dependency |
 |---|---|---|
+| 035N | Exact Preview callback and trainer acceptance | Closed blocked-clean before mutation; one unknown pre-existing alternate Preview callback requires owner/lifecycle reconciliation |
 | 035M | First trainer Preview access and core journey | Closed blocked-clean; candidate Ready, but existing Supabase callback policy does not accept the exact Preview origin |
-| 035 follow-up | Complete private trainer acceptance | Requires explicit callback-policy mutation authority or an approved equivalent authentication route |
+| 035 follow-up | Complete private trainer acceptance | Requires sanitized disposition of the unknown callback, exact provider reread and bounded callback authority |
 | 036 | Next product outcome chosen from accepted trainer evidence | Must not infer Sprint 035 acceptance from candidate readiness |
 
 ## Deferred until explicitly promoted

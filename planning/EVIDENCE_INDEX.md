@@ -1,5 +1,9 @@
 # Evidence Index
 
+## Sprint 035N closeout evidence
+
+`planning/reviews/035N-exact-preview-callback-and-trainer-acceptance.md` is the governing 035N record. It fixes the automated target at `58 + 18 + 14 = 90`, records 76 passing local checks and 14 unrun authenticated rendered checks, a sanitized two-entry provider read, the unknown alternate-callback blocker, zero mutation, zero fixtures, zero human attempts and manual reconciliation instructions.
+
 ## Current governing evidence
 
 1. `planning/FINAL_PRODUCT_ACCEPTANCE_MATRIX.md` — criterion-level product acceptance and Not Done truth.

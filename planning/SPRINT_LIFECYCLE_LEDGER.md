@@ -16,6 +16,7 @@ This compact ledger resolves current ambiguity without rewriting historical arti
 | 033 | Completed/accepted | Final handoff complete; product-wide Done explicitly false |
 | 034 | Applied, completed and revalidated | Clean reconciled baseline; 16/16 fresh validation groups passed on 2026-08-01 |
 | 035M | Applied and closed blocked-clean | Candidate and exact Preview reached Ready; existing production-only Supabase callback policy blocked human acceptance without authorised provider mutation |
-| Other 035 series | Proposed/historical input only | Preserve as historical input; a new follow-up needs explicit authority for the callback-policy boundary |
+| 035N | Applied and closed blocked-clean | Read-only provider inspection found one unknown pre-existing alternate Preview callback; zero mutation, fixtures or human attempts; ownership reconciliation is required before exact 035M callback work |
+| Other 035 series | Proposed/historical input only | Preserve as historical input; later work needs reconciled callback ownership and exact bounded authority |
 
 Pack presence means proposed handoff only. Generated sprint artifacts mean applied. Completion requires closeout evidence and consistent state/status; later accepted evidence may supersede an earlier result without erasing it.

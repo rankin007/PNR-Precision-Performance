@@ -2,6 +2,12 @@
 
 Revalidated: 2026-08-02.
 
+## Sprint 035N closeout
+
+Sprint `035N-exact-preview-callback-and-trainer-acceptance` is closed `preview-callback-mutation-blocked-clean`. It ran from exact 035M closeout SHA `143f03344561c622a074ab40052c2dbb132a6fb3` and preserved candidate `b1bf770dc6ab3839cfc24c53563f6ed6310e08ba` plus alias-free Preview `dpl_6NBk2VKPZZUS4QqdstqDHtGk8EVV`.
+
+Read-only provider inspection proved the production Site URL but found a two-entry allowlist containing the production callback and one unknown pre-existing alternate Preview callback. Repository evidence established no owner or lifecycle authority for that entry. The Sprint stopped before mutation: zero callback delta, zero fixtures, zero sessions, zero human attempts and zero Sprint-owned external state. The 18 focused lifecycle checks and maintained 58 local checks passed; 14 authenticated rendered checks and the eight-step human journey remain unrun. Production and `develop` were unchanged. Core Product Done is false.
+
 ## Current candidate
 
 Sprint `035M-first-trainer-preview-access-and-core-journey` is closed `trainer-access-validation-blocked-clean` on `codex/035M-first-trainer-preview-access-and-core-journey`. Candidate SHA `b1bf770dc6ab3839cfc24c53563f6ed6310e08ba` exactly matched the remote branch and produced Ready non-production Preview `dpl_6NBk2VKPZZUS4QqdstqDHtGk8EVV`.

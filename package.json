@@ -14,6 +14,8 @@
     "test:workspace-028": "npm exec -- node --experimental-strip-types scripts/test-stable-workspace-028.mjs",
     "test:trainer-035m": "npm exec -- node --experimental-strip-types scripts/test-trainer-journey-035M.mjs",
     "test:preview-035m": "npm exec -- node scripts/protected-preview-035M.mjs",
+    "test:preview-035n": "npm exec -- node scripts/test-protected-preview-035N.mjs",
+    "provider:preview-035n": "npm exec -- node scripts/protected-preview-035N.mjs",
     "test:roles": "npm exec -- node scripts/run-validation-suite.mjs roles",
     "test:supabase-self": "npm exec -- node scripts/run-validation-suite.mjs supabase-self",
     "validate:static": "npm exec -- node scripts/run-validation-suite.mjs static",
