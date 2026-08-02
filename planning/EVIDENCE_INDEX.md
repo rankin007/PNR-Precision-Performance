@@ -1,5 +1,9 @@
 # Evidence Index
 
+## Sprint 035P closeout evidence
+
+`planning/reviews/035P-authorised-callback-disposition-and-trainer-acceptance.md` is the governing 035P record. It records the sanitized authorised obsolete disposition, exact provider removal/addition/restoration lifecycle, `98/98` local checks, two hosted attempts stopping at `6/14`, zero human attempts, final Auth/application/Storage `0/0/0`, exact provider rollback, and unchanged production.
+
 ## Sprint 035O closeout evidence
 
 `planning/reviews/035O-callback-ownership-reconciliation-and-trainer-acceptance.md` is the governing 035O record. It records 86 passing local target checks, 14 unrun rendered checks, zero human attempts, zero external mutation and the unresolved owner-disposition gate.

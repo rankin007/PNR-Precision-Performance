@@ -18,6 +18,8 @@
     "provider:preview-035n": "npm exec -- node scripts/protected-preview-035N.mjs",
     "test:preview-035o": "npm exec -- node scripts/test-protected-preview-035O.mjs",
     "provider:preview-035o": "npm exec -- node scripts/protected-preview-035O.mjs",
+    "test:preview-035p": "npm exec -- node scripts/test-protected-preview-035P.mjs",
+    "provider:preview-035p": "npm exec -- node scripts/protected-preview-035P.mjs hosted",
     "test:roles": "npm exec -- node scripts/run-validation-suite.mjs roles",
     "test:supabase-self": "npm exec -- node scripts/run-validation-suite.mjs supabase-self",
     "validate:static": "npm exec -- node scripts/run-validation-suite.mjs static",

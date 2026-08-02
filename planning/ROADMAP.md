@@ -1,6 +1,6 @@
 # Precision Performance Roadmap
 
-**Last reviewed:** 2026-08-02 after Sprint 035O
+**Last reviewed:** 2026-08-02 after Sprint 035P
 
 **Estimate:** about eight outcome sprints to Core Product Done.
 
@@ -22,7 +22,7 @@ The accepted public release remains valid, but the trainer product is not comple
 | Sprint | Phase | Outcome | Status | Dependency / exit signal |
 |---|---|---|---|---|
 | 034 | Restore trust | Reconciled clean product baseline and lifecycle ledger | done | Exact local/remote SHA equality and 16/16 validation groups pass |
-| 035 | Prove access | First trainer access and core assigned-horse journey | attention | 035O deterministic ownership controls pass, but no authorised callback disposition was supplied; rendered and human acceptance remain unrun |
+| 035 | Prove access | First trainer access and core assigned-horse journey | attention | 035P completed the authorised callback lifecycle and exact rollback, but two hosted attempts stopped at 6/14 before human acceptance |
 | 036 | Authorize intelligence | Approved/versioned result formulas, thresholds, language and guidance | planned | Named domain/veterinary owner signs contract and fixtures pass |
 | 037 | Govern evidence | Private uploads/evidence and lifecycle acceptance | planned | Privacy decision plus hosted denial/deletion/cleanup proof |
 | 038 | Make history useful | Core trends and trainer review | planned | Approved rule semantics and accessible rendered acceptance |
@@ -36,8 +36,8 @@ Voice, OCR/meter interpretation, commerce, enquiry delivery, advanced saved view
 
 ## Current action
 
-**Do:** Reconcile ownership and lifecycle of the unknown pre-existing Preview callback, then authorize a clean exact-callback attempt and complete rendered/private trainer acceptance.
+**Do:** Define the smallest valid future proof around the specific form error-summary alert, actionable guidance and intended focus behavior before another bounded trainer-acceptance attempt.
 
-**Owner:** Architect / product owner.
+**Owner:** Architect / product owner, with accessibility contract review.
 
-**Decision:** Retain the existing alternate callback with a named owner or remove it as obsolete under explicit authority; do not infer cleanup or new mutation authority.
+**Decision:** Keep Sprint 035 open and Core Product Done false; do not repeat a third unchanged hosted attempt.

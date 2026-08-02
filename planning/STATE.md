@@ -2,6 +2,12 @@
 
 Revalidated: 2026-08-02.
 
+## Sprint 035P closeout
+
+Sprint `035P-authorised-callback-disposition-and-trainer-acceptance` is closed `trainer-access-validation-blocked-clean` from exact 035O closeout SHA `63d72c4ab5352ae4dd4bbd623e34e56dfb9e450b`. The authorised obsolete non-production callback was removed exactly; the production Site URL and production callback remained unchanged. The resulting production-only configuration became rollback authority, the exact governing Preview callback was added temporarily, and final cleanup restored the rollback state exactly.
+
+Maintained and focused local validation passed `98/98`. Two hosted synthetic attempts each passed 6 of 14 rendered checks and stopped because the harness asserted an unsupported page-wide alert count instead of targeting the specific form error summary. The second failure exhausted the two-attempt ceiling, so no trainer participated. Both runs restored Auth/application/Storage to `0/0/0`; the final provider reread proves no Sprint-owned callback remains. Sprint 035 and Core Product Done remain incomplete.
+
 ## Sprint 035O closeout
 
 Sprint `035O-callback-ownership-reconciliation-and-trainer-acceptance` is closed `callback-ownership-unresolved-clean` from exact 035N closeout SHA `edff01c957f2ec56821c6a786447ebdfbe369ba6`. The approved deterministic harness and ten focused disposition/lifecycle assertions pass; maintained 035M and 035N checks also pass for 86/86 local target checks.
