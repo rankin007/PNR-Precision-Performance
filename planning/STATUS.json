@@ -1,10 +1,14 @@
 {
   "schemaVersion": 1,
-  "phase": "building",
+  "phase": "sprint-closed",
   "sprint": "035M-first-trainer-preview-access-and-core-journey",
-  "status": "approved-plan-building",
+  "status": "trainer-access-validation-blocked-clean",
   "branch": "codex/035M-first-trainer-preview-access-and-core-journey",
   "baselineSha": "ea8417d3c7450f25c90644f23d8558c9f5938552",
+  "candidateSha": "b1bf770dc6ab3839cfc24c53563f6ed6310e08ba",
+  "previewDeployment": "dpl_6NBk2VKPZZUS4QqdstqDHtGk8EVV",
+  "humanAttemptStarted": false,
+  "sprintOwnedExternalState": 0,
   "productionChanged": false,
   "productDone": false,
   "updated": "2026-08-02"

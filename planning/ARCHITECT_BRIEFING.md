@@ -1,39 +1,57 @@
-# Architect Briefing — Sprint 034 Closeout
+# Architect Briefing — Sprint 035M Closeout
 
 ## Where things stand
 
-Sprint 034 established one clean product baseline on `codex/034-reconciled-product-baseline`, rooted at accepted release SHA `f7242ee`. It preserves accepted auth/application, mobile biochemistry, migrations `0001`–`0017`, public release, final acceptance and operations evidence without changing production behavior.
+Sprint 035M produced a validated, exact-source, Ready non-production trainer Preview candidate. Human acceptance could not safely begin because the governing Supabase callback policy accepts only the production callback, while this sprint explicitly prohibited provider mutation.
+
+## Executive summary
+
+**Business outcome:** The bounded trainer journey candidate is implemented and machine-validated.
+
+**Current focus:** Resolve exact-Preview authentication authority before private trainer participation.
+
+**What is proven:** 58 local executable/static checks, maintained regressions, canonical validation, production build, candidate/remote equality, Ready Preview identity, and exact callback-origin construction.
+
+**What is not live:** No production change occurred. No fixture or human acceptance attempt occurred. Fourteen authenticated rendered checks and the eight-step trainer journey remain incomplete.
+
+## Readiness signals
+
+| Signal | Status | Meaning |
+|---|---|---|
+| Candidate implementation | passed | Approved files and fail-closed boundaries validated |
+| Exact-source Preview | passed | `dpl_6NBk2VKPZZUS4QqdstqDHtGk8EVV` is Ready and non-production |
+| Callback construction | passed | Exact HTTPS Preview origin is derived only from deployment-provided Vercel state |
+| Callback acceptance | attention | Existing Supabase policy is production-only |
+| Human trainer journey | attention | Not started; no protected values handled |
 
 ## Current status
 
-Closed `reconciled-product-baseline-and-project-simplification-complete-clean`. The public release remains valid. Product-wide Done remains false for the reasons in the final acceptance matrix.
+Closed `trainer-access-validation-blocked-clean`. Candidate SHA: `b1bf770dc6ab3839cfc24c53563f6ed6310e08ba`. Core Product Done: false.
 
-The intentional commit series began with reconciliation commit `aeb24d2d038f9875973764b25538caaea6473d02`; planning closeout commit `aa87dfe010ca1ae900f0ce633ee7b2fad2a076bf` was pushed and verified as the exact remote branch tip before the final evidence attestation.
+## Validation
 
-## Evidence
+**Tests:** 58 passing, 0 failing. Fourteen rendered authenticated Preview checks and the separate human acceptance journey were not completed because authentication callback acceptance failed before participation.
 
-**Tests:** 16 validation groups passing, 0 failing.
+Maintained Sprint 021AH and 022/022B regressions, JSON, domain, roles, Supabase self-test, static validation, TypeScript, lint, local validation, production build, exact approved-path verification, diff checks, and secret/private-data scans passed. Local and remote candidate SHAs matched.
 
-Fresh isolated-worktree validation on 2026-08-01 passed JSON, domain, roles, Supabase self-test, static, TypeScript, lint, local validation, focused 021AH, focused 022/022B, production build, diff/whitespace, encoding, maintained paths, migration integrity, and secret/private/generated-output exclusion. The unchanged 031B harness used the previously accepted temporary ignored `playwright-core` junction; the sandbox-blocked `.next` creation was rerun with worktree write permission. No source or lockfile changed.
+## Plan correction
 
-## Plan corrections
+The applied plan assumed the existing callback policy could accept an exact Preview callback without provider mutation. Repository authority proves the sole accepted callback is production. The Builder stopped at that material boundary and created no fixture or human session state.
 
-The reconciled branch lacked `planning/ROADMAP.md`; this re-attestation adds the current outcome roadmap and classifies existing 035-series material as proposed historical input only.
+## File and behavior map
 
-## What changed
+The approved candidate changes the trainer portal presentation, shared horse-access domain behavior, portal-only AppShell composition, bounded callback-origin construction, focused 035M tests, and sprint evidence. Shared AppShell defaults, production origin behavior, permissions, schema, RLS, providers, and production data remain unchanged.
 
-Repository lineages and the dirty root were classified; current authority was compressed into state, schedule, evidence index and lifecycle ledger; lean-delivery controls were made durable. No uncertain history was deleted or archived.
+## Risks and decisions
 
-## Next Architect action
+- Adding a Preview callback allowlist entry is a provider mutation and requires explicit authority.
+- Any future temporary callback entry must be exact, non-production, dependency-tracked, and removed after acceptance unless retention is explicitly authorized.
+- Trainer identity and authentication material must remain privately controlled by the trainer.
 
-**Do:** Plan one replacement Sprint 035 Trainer Pilot And Dashboard MVP Pack from the 034 baseline.
+## Recommended Architect action
+
+**Do:** Define one narrow 035 follow-up that authorizes either the exact temporary Preview callback policy mutation and cleanup or an equivalent approved authentication route, then resumes the 14 rendered checks and private eight-step journey.
 
 **Owner:** Architect / product owner.
 
-**Decision:** Do not apply or execute an existing 035-series Pack.
-
-Make the outcome trainer-visible and keep voice, OCR, transactional commerce, sophisticated saved views and broad public enhancements deferred unless separately promoted.
-
-## Watch-items
-
-Do not merge or push `develop` by assumption. Do not claim product Done, clinical outputs, application audio, upload acceptance or timed field acceptance without the missing authority and proof.
+**Decision:** Choose the authentication authority; do not infer it from Sprint 035M candidate approval.

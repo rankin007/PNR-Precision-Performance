@@ -15,6 +15,7 @@ This compact ledger resolves current ambiguity without rewriting historical arti
 | 032 | Completed/accepted | Exact current public release source and deployment evidence |
 | 033 | Completed/accepted | Final handoff complete; product-wide Done explicitly false |
 | 034 | Applied, completed and revalidated | Clean reconciled baseline; 16/16 fresh validation groups passed on 2026-08-01 |
-| 035 series | Proposed/historical input only | Sprint 035 remains the next trainer-visible outcome, but no existing 035-series Pack is execution authority from Sprint 034 |
+| 035M | Applied and closed blocked-clean | Candidate and exact Preview reached Ready; existing production-only Supabase callback policy blocked human acceptance without authorised provider mutation |
+| Other 035 series | Proposed/historical input only | Preserve as historical input; a new follow-up needs explicit authority for the callback-policy boundary |
 
 Pack presence means proposed handoff only. Generated sprint artifacts mean applied. Completion requires closeout evidence and consistent state/status; later accepted evidence may supersede an earlier result without erasing it.
