@@ -1,6 +1,6 @@
 # Precision Performance Roadmap
 
-**Last reviewed:** 2026-08-02 after Sprint 035P
+**Last reviewed:** 2026-08-02 after Sprint 035Q
 
 **Estimate:** about eight outcome sprints to Core Product Done.
 
@@ -22,7 +22,7 @@ The accepted public release remains valid, but the trainer product is not comple
 | Sprint | Phase | Outcome | Status | Dependency / exit signal |
 |---|---|---|---|---|
 | 034 | Restore trust | Reconciled clean product baseline and lifecycle ledger | done | Exact local/remote SHA equality and 16/16 validation groups pass |
-| 035 | Prove access | First trainer access and core assigned-horse journey | attention | 035P completed the authorised callback lifecycle and exact rollback, but two hosted attempts stopped at 6/14 before human acceptance |
+| 035 | Prove access | First trainer access and core assigned-horse journey | attention | 035Q corrected the specific-summary proof, but two hosted attempts stopped at 6/14 because intended focus was not established; human acceptance remains unrun |
 | 036 | Authorize intelligence | Approved/versioned result formulas, thresholds, language and guidance | planned | Named domain/veterinary owner signs contract and fixtures pass |
 | 037 | Govern evidence | Private uploads/evidence and lifecycle acceptance | planned | Privacy decision plus hosted denial/deletion/cleanup proof |
 | 038 | Make history useful | Core trends and trainer review | planned | Approved rule semantics and accessible rendered acceptance |
@@ -40,4 +40,4 @@ Voice, OCR/meter interpretation, commerce, enquiry delivery, advanced saved view
 
 **Owner:** Architect / product owner, with accessibility contract review.
 
-**Decision:** Keep Sprint 035 open and Core Product Done false; do not repeat a third unchanged hosted attempt.
+**Decision:** Keep Sprint 035 open and Core Product Done false; obtain product/accessibility authority for intended summary focus before another hosted attempt.

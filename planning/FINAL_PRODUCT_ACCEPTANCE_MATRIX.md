@@ -4,6 +4,8 @@ Date: 2026-07-30
 Decision: **Not Done — operational handoff complete**
 Public release: Sprint 032 remains valid and Ready with accepted limitations.
 
+Sprint 035Q update — 2026-08-02: the specific error-summary harness contract and `108/108` local checks pass, but two hosted attempts each stopped at `6/14` because intended focus on the summary was not established. Both attempts cleaned Auth/application/Storage to `0/0/0`, provider rollback is exact, no trainer participated, and no product source or production state changed. Existing not-proven dispositions remain unchanged; Core Product Done is false.
+
 Sprint 035P update — 2026-08-02: authorised obsolete callback removal and the exact temporary Preview callback lifecycle completed with production configuration preserved and final rollback exact. Local evidence is `98/98`; two hosted synthetic attempts each stopped at `6/14` because the harness used an unsupported page-wide alert-count assertion and cleaned Auth/application/Storage to `0/0/0`. No trainer participated. P01/L05 limitations and P02/L06 not-proven dispositions remain unchanged; Core Product Done is false.
 
 Sprint 035O update — 2026-08-02: ten focused sanitized callback-disposition/lifecycle assertions pass, bringing the local 035 target to 86/86. No authorised callback-owner disposition was supplied, so no provider mutation, fixture or human attempt occurred; 14 rendered checks remain unrun. Product acceptance dispositions remain unchanged and Core Product Done is false.

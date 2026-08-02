@@ -2,6 +2,12 @@
 
 Revalidated: 2026-08-02.
 
+## Sprint 035Q closeout
+
+Sprint `035Q-specific-error-summary-contract-and-trainer-acceptance` is closed `accessibility-contract-expansion-required-clean` from exact 035P closeout SHA `1f03578a4e53d9edd17614376dc5c4b7ffa21eee`. The corrected harness targets the specific error summary and no longer assumes page-wide alert cardinality; all `108/108` local checks pass.
+
+Two hosted attempts each passed `6/14` and then proved the specific summary did not receive intended focus, including after one bounded renderer-timing correction. Both attempts cleaned Auth/application/Storage to `0/0/0`; final provider state is production-only and exact. No trainer participated, no product source changed, Sprint 035 remains incomplete, and Core Product Done is false.
+
 ## Sprint 035P closeout
 
 Sprint `035P-authorised-callback-disposition-and-trainer-acceptance` is closed `trainer-access-validation-blocked-clean` from exact 035O closeout SHA `63d72c4ab5352ae4dd4bbd623e34e56dfb9e450b`. The authorised obsolete non-production callback was removed exactly; the production Site URL and production callback remained unchanged. The resulting production-only configuration became rollback authority, the exact governing Preview callback was added temporarily, and final cleanup restored the rollback state exactly.

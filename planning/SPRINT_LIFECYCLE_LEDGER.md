@@ -19,6 +19,7 @@ This compact ledger resolves current ambiguity without rewriting historical arti
 | 035N | Applied and closed blocked-clean | Read-only provider inspection found one unknown pre-existing alternate Preview callback; zero mutation, fixtures or human attempts; ownership reconciliation is required before exact 035M callback work |
 | 035O | Applied and closed blocked-clean | Ten deterministic disposition/lifecycle checks passed, but no authorised callback disposition was supplied; zero external mutation, fixtures or human attempts |
 | 035P | Applied and closed validation-blocked-clean | Authorised obsolete callback removal and exact temporary callback lifecycle completed with rollback restored; 98/98 local checks passed, two hosted attempts stopped at 6/14, human attempts remained zero, and Auth/application/Storage ended 0/0/0 |
+| 035Q | Applied and closed accessibility-contract-expansion-required-clean | Specific-summary harness contract and 108/108 local checks passed; two hosted attempts stopped at 6/14 because intended summary focus was not established; zero human attempts, exact provider rollback and Auth/application/Storage 0/0/0 |
 | Other 035 series | Proposed/historical input only | Preserve as historical input; later work needs reconciled callback ownership and exact bounded authority |
 
 Pack presence means proposed handoff only. Generated sprint artifacts mean applied. Completion requires closeout evidence and consistent state/status; later accepted evidence may supersede an earlier result without erasing it.

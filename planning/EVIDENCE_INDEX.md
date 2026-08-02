@@ -1,5 +1,9 @@
 # Evidence Index
 
+## Sprint 035Q closeout evidence
+
+`planning/reviews/035Q-specific-error-summary-contract-and-trainer-acceptance.md` is the governing 035Q record. It records the corrected specific-summary contract, `108/108` local checks, two hosted attempts stopping at `6/14` on intended focus, zero human attempts, final Auth/application/Storage `0/0/0`, exact provider rollback, and unchanged production.
+
 ## Sprint 035P closeout evidence
 
 `planning/reviews/035P-authorised-callback-disposition-and-trainer-acceptance.md` is the governing 035P record. It records the sanitized authorised obsolete disposition, exact provider removal/addition/restoration lifecycle, `98/98` local checks, two hosted attempts stopping at `6/14`, zero human attempts, final Auth/application/Storage `0/0/0`, exact provider rollback, and unchanged production.
