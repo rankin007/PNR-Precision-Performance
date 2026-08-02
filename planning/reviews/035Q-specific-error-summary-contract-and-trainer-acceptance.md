@@ -56,3 +56,11 @@ Both hosted attempts ended with Auth/application/Storage `0/0/0`. No participant
 ## Next planning boundary
 
 Sprint 035 and Core Product Done remain false. A separate product/accessibility authority must decide and implement the intended validation-summary focus behavior before another hosted or human attempt. Do not repeat a third unchanged hosted attempt.
+
+## Manual intervention — remote backup
+
+- **Blocked:** Push of the scoped 035Q branch to `origin`.
+- **Evidence checked:** The SSH remote rejected the available key, and both configured GitHub CLI accounts reported invalid tokens. The local closeout commit succeeded and the worktree is clean.
+- **Exact private action:** The repository owner must authenticate GitHub locally without sharing credentials, then push only `codex/035Q-specific-error-summary-contract-and-trainer-acceptance`.
+- **Steps:** Run `gh auth login -h github.com`; complete the private browser/device flow; run `gh auth setup-git`; then run `git push -u origin codex/035Q-specific-error-summary-contract-and-trainer-acceptance` from `C:\tmp\precision-performance-035Q`.
+- **Builder verification after action:** Confirm the remote branch resolves to the local closeout HEAD and that no other branch, PR, merge, or deployment changed.

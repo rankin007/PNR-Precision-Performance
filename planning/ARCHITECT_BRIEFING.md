@@ -50,6 +50,8 @@ Closed `accessibility-contract-expansion-required-clean` on branch `codex/035Q-s
 
 The remaining failure requires explicit product/accessibility authority because resolving focus behavior would change product source. Do not repeat a third unchanged hosted attempt or infer human acceptance from local validation.
 
+Remote backup is pending because the SSH remote rejected the available key and configured GitHub CLI tokens are invalid. The repository owner must authenticate privately and push only the scoped 035Q branch; no credential should be shared with Builder.
+
 ## Evidence
 
 - Focused 035Q: `10/10`.
