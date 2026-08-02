@@ -2,6 +2,12 @@
 
 Revalidated: 2026-08-02.
 
+## Sprint 035O closeout
+
+Sprint `035O-callback-ownership-reconciliation-and-trainer-acceptance` is closed `callback-ownership-unresolved-clean` from exact 035N closeout SHA `edff01c957f2ec56821c6a786447ebdfbe369ba6`. The approved deterministic harness and ten focused disposition/lifecycle assertions pass; maintained 035M and 035N checks also pass for 86/86 local target checks.
+
+No authorised platform-owner disposition was supplied for the pre-existing alternate Preview callback. No provider read or write, callback delta, fixture, session or human attempt occurred. Fourteen rendered checks and the eight-step trainer journey remain unrun. Production, `develop` and unrelated external state remain unchanged. Core Product Done is false.
+
 ## Sprint 035N closeout
 
 Sprint `035N-exact-preview-callback-and-trainer-acceptance` is closed `preview-callback-mutation-blocked-clean`. It ran from exact 035M closeout SHA `143f03344561c622a074ab40052c2dbb132a6fb3` and preserved candidate `b1bf770dc6ab3839cfc24c53563f6ed6310e08ba` plus alias-free Preview `dpl_6NBk2VKPZZUS4QqdstqDHtGk8EVV`.

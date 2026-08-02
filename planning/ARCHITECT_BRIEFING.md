@@ -1,57 +1,56 @@
-# Architect Briefing — Sprint 035N Closeout
+# Architect Briefing — Sprint 035O Closeout
 
 ## Where things stand
 
-Sprint 035N stopped safely before changing Supabase. The exact trainer candidate remains Ready and locally validated, but a read-only provider check found one unexplained alternate Preview callback already present. Until an authorised owner identifies whether that entry must be retained or removed, adding another temporary callback and beginning trainer acceptance would make cleanup unsafe.
+Sprint 035O added and proved the safe local rules for resolving callback ownership, but it still could not begin trainer acceptance because no authorised owner disposition was supplied. Nothing external changed, no trainer was involved, and the existing candidate remains the governing Ready Preview. Sprint 035 remains incomplete.
 
 ## Executive summary
 
-**Business outcome:** The callback lifecycle harness is implemented and machine-validated; external state remains unchanged.
+**Business outcome:** Sanitized callback ownership and exact-entry lifecycle controls are implemented and locally proven.
 
-**Current focus:** Resolve ownership and lifecycle of the unknown pre-existing Preview callback before private trainer participation.
+**Current focus:** Obtain the private authorised callback disposition before any provider or trainer activity.
 
-**What is proven:** 58 maintained local checks, 18 focused lifecycle checks, canonical local validation, TypeScript, lint, production build, sanitized provider read and zero Sprint mutation.
+**What is proven:** 86 local target checks pass, including 10 new 035O assertions; canonical validation and production build pass with documented environment substitutions.
 
-**What is not live:** No callback change, fixture or human attempt occurred. Fourteen authenticated rendered checks and the eight-step trainer journey remain incomplete. Core Product Done is false.
+**What is not live:** No callback change, fixture, rendered authenticated run or human trainer attempt occurred. Core Product Done is false.
 
 ## Readiness signals
 
 | Signal | Status | Meaning |
 |---|---|---|
-| Candidate implementation | passed | Approved files and fail-closed boundaries validated |
-| Exact-source Preview | passed | `dpl_6NBk2VKPZZUS4QqdstqDHtGk8EVV` is Ready and non-production |
-| Callback construction | passed | Exact HTTPS Preview origin is derived only from deployment-provided Vercel state |
-| Provider lifecycle | attention | One pre-existing alternate Preview callback has unknown ownership |
-| Human trainer journey | attention | Not started; no protected values handled |
+| Deterministic ownership controls | passed | Only the two approved dispositions and sanitized evidence fields are accepted |
+| Candidate and Preview identity | passed | Candidate and alias-free Ready Preview remain reconciled |
+| Provider ownership | attention | No authorised disposition was supplied |
+| Rendered and human acceptance | attention | 14 rendered checks and eight human steps remain unrun |
 
 ## Current status
 
-Closed `preview-callback-mutation-blocked-clean`. Candidate SHA: `b1bf770dc6ab3839cfc24c53563f6ed6310e08ba`. Preview: `dpl_6NBk2VKPZZUS4QqdstqDHtGk8EVV`. Core Product Done: false.
+Closed `callback-ownership-unresolved-clean`. Branch `codex/035O-callback-ownership-reconciliation-and-trainer-acceptance`; baseline `edff01c957f2ec56821c6a786447ebdfbe369ba6`. Zero Sprint-owned external state. Core Product Done: false.
 
-## Validation
+## Validation / test status
 
-**Tests:** 76 passing, 0 failing. Fourteen authenticated rendered checks were unrun. The separate eight-step human journey had zero attempts.
+**Tests:** 86 passing, 0 failing. Fourteen authenticated rendered checks were unrun.
 
-The 58 maintained 035M and 18 focused 035N checks passed. JSON, domain including maintained 022/022B, roles/Supabase self-tests covering maintained 021AH contracts, static validation, TypeScript, lint, local validation and production build passed after an exact-lockfile dependency install supplied the missing clean-worktree modules.
+The target is `58 maintained 035M + 18 maintained 035N + 10 focused 035O + 14 rendered = 100`; local evidence is 86/86. Maintained 021AH and 022/022B regressions, JSON, domain, roles, Supabase self-tests, static validation, TypeScript, lint and production build passed. Optional Playwright Core was supplied transiently without manifest changes. `validate:local` passed every pre-build group; sandbox-denied `.next` creation was superseded by the identical standalone build passing with approved filesystem access.
 
-## Plan correction
+## Plan corrections
 
-The applied plan expected the provider before-state to be safely attributable. The exact read instead found one alternate Preview callback absent from repository ownership evidence. The Builder stopped before any write and created no fixture or human session state.
+None — the plan held. Its explicit unresolved-ownership outcome applied because the required private disposition was not supplied.
 
-## File and behavior map
+## Architecture / file map
 
-The approved candidate changes the trainer portal presentation, shared horse-access domain behavior, portal-only AppShell composition, bounded callback-origin construction, focused 035M tests, and sprint evidence. Shared AppShell defaults, production origin behavior, permissions, schema, RLS, providers, and production data remain unchanged.
+- `scripts/protected-preview-035O.mjs`: deterministic sanitized disposition and lifecycle contract.
+- `scripts/test-protected-preview-035O.mjs`: fixed ten-assertion proof.
+- `planning/reviews/035O-callback-ownership-reconciliation-and-trainer-acceptance.md`: governing closeout evidence.
 
-## Risks and decisions
+## Risks / watch-items
 
-- Unknown pre-existing callback state cannot be adopted, removed or used as cleanup authority.
-- Any future temporary callback entry must be exact, non-production, dependency-tracked and removed after acceptance.
-- Trainer identity and authentication material must remain privately controlled by the trainer.
+Do not infer callback ownership, expose protected configuration, or begin provider mutation from local test success. The rendered and human acceptance boundaries remain open.
 
-## Recommended Architect action
+## Recommended next Architect action
 
-**Do:** Have an authorised Supabase owner privately classify the existing alternate callback as `retained with owner` or `removed as obsolete`, then plan the smallest continuation that rereads configuration before exact callback work.
+**Do:** Obtain an authorised Supabase platform-owner disposition of exactly `retained with owner` or `removed as obsolete` before planning any further callback or trainer action.
 
 **Owner:** Supabase platform owner, then Architect / product owner.
 
-**Decision:** Do not infer ownership, delete the unknown callback, add the governing callback, or begin human acceptance until the sanitized provider disposition is durable.
+**Decision:** Keep Sprint 035 and Core Product Done open; do not repeat another execution Pack without the missing private authority.

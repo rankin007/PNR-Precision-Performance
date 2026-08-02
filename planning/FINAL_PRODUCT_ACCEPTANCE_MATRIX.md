@@ -4,6 +4,8 @@ Date: 2026-07-30
 Decision: **Not Done — operational handoff complete**
 Public release: Sprint 032 remains valid and Ready with accepted limitations.
 
+Sprint 035O update — 2026-08-02: ten focused sanitized callback-disposition/lifecycle assertions pass, bringing the local 035 target to 86/86. No authorised callback-owner disposition was supplied, so no provider mutation, fixture or human attempt occurred; 14 rendered checks remain unrun. Product acceptance dispositions remain unchanged and Core Product Done is false.
+
 Sprint 035N update — 2026-08-02: the 035M candidate remains machine-validated, but trainer access acceptance remains not proven. A read-only provider gate found an unknown pre-existing alternate Preview callback and stopped before mutation. Zero rendered authenticated checks, human attempts, fixtures or external Sprint-owned state were created in 035N. P01/L05 limitations and P02/L06 not-proven dispositions remain unchanged.
 
 Evidence classes: `production` current live/read-only proof; `hosted` authenticated/provider proof; `executable` maintained automated proof; `static` source/contract proof; `historical` dated qualified evidence; `authority` unresolved owner decision.

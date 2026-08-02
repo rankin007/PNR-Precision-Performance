@@ -1,6 +1,6 @@
 # Precision Performance Roadmap
 
-**Last reviewed:** 2026-08-02 after Sprint 035N
+**Last reviewed:** 2026-08-02 after Sprint 035O
 
 **Estimate:** about eight outcome sprints to Core Product Done.
 
@@ -22,7 +22,7 @@ The accepted public release remains valid, but the trainer product is not comple
 | Sprint | Phase | Outcome | Status | Dependency / exit signal |
 |---|---|---|---|---|
 | 034 | Restore trust | Reconciled clean product baseline and lifecycle ledger | done | Exact local/remote SHA equality and 16/16 validation groups pass |
-| 035 | Prove access | First trainer access and core assigned-horse journey | attention | 035M candidate Ready; 035N found an unknown pre-existing alternate Preview callback and stopped clean before mutation or human acceptance |
+| 035 | Prove access | First trainer access and core assigned-horse journey | attention | 035O deterministic ownership controls pass, but no authorised callback disposition was supplied; rendered and human acceptance remain unrun |
 | 036 | Authorize intelligence | Approved/versioned result formulas, thresholds, language and guidance | planned | Named domain/veterinary owner signs contract and fixtures pass |
 | 037 | Govern evidence | Private uploads/evidence and lifecycle acceptance | planned | Privacy decision plus hosted denial/deletion/cleanup proof |
 | 038 | Make history useful | Core trends and trainer review | planned | Approved rule semantics and accessible rendered acceptance |

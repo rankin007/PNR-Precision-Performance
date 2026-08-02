@@ -1,5 +1,9 @@
 # Evidence Index
 
+## Sprint 035O closeout evidence
+
+`planning/reviews/035O-callback-ownership-reconciliation-and-trainer-acceptance.md` is the governing 035O record. It records 86 passing local target checks, 14 unrun rendered checks, zero human attempts, zero external mutation and the unresolved owner-disposition gate.
+
 ## Sprint 035N closeout evidence
 
 `planning/reviews/035N-exact-preview-callback-and-trainer-acceptance.md` is the governing 035N record. It fixes the automated target at `58 + 18 + 14 = 90`, records 76 passing local checks and 14 unrun authenticated rendered checks, a sanitized two-entry provider read, the unknown alternate-callback blocker, zero mutation, zero fixtures, zero human attempts and manual reconciliation instructions.
