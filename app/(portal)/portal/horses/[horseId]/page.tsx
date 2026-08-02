@@ -3,6 +3,7 @@ import { SectionCard } from "@/components/layout/section-card";
 import { getAccessibleHorseDetail } from "@/lib/domain/horses";
 import { getAppAuthContext } from "@/lib/auth/session";
 import { hasAppPermission } from "@/lib/auth/app-context";
+import { composeHorseWorkspacePresentation } from "@/lib/domain/trainer-journey";
 
 type HorseDetailPageProps = {
   params: Promise<{ horseId: string }>;
@@ -25,21 +26,29 @@ export default async function HorseDetailPage({ params }: HorseDetailPageProps) 
       >
         <div className="mt-2">
           <Link
-            href="/portal/horses"
+            href="/portal"
             className="rounded-full border border-ink/10 bg-sand px-4 py-2 text-sm font-semibold text-ink"
           >
-            Back to horses
+            Return to dashboard
           </Link>
         </div>
       </SectionCard>
     );
   }
 
+  const workspace = composeHorseWorkspacePresentation({
+    horseAvailable: true,
+    canWrite,
+    horseId: result.horse.id,
+    workflowStatus: result.horse.latestBiochemistry?.scoringStatus ?? null,
+    latestTestId: result.horse.latestBiochemistry?.id ?? null,
+  });
+
   return (
     <SectionCard
       eyebrow="Horse Detail"
       title={result.horse.name}
-      description="Permission-aware horse profile view with recent physiological snapshots and core horse identity details."
+      description={`Assigned horse workspace for ${result.horse.stableName ?? "stable unavailable"}. Operational information only.`}
     >
       {!result.envReady ? (
         <div className="rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
@@ -85,7 +94,10 @@ export default async function HorseDetailPage({ params }: HorseDetailPageProps) 
         <p className="mt-2 text-sm text-steel">Informational workflow context only; it does not indicate clinical urgency.</p>
         <dl className="mt-5 grid gap-3 md:grid-cols-3"><div className="rounded-2xl bg-sand p-4"><dt className="font-semibold">Attention</dt><dd className="mt-1 text-sm text-steel">{result.horse.operational.attention.status}: {result.horse.operational.attention.reason}</dd></div><div className="rounded-2xl bg-sand p-4"><dt className="font-semibold">Incomplete</dt><dd className="mt-1 text-sm text-steel">{result.horse.operational.incomplete.status}: {result.horse.operational.incomplete.reason}</dd></div><div className="rounded-2xl bg-sand p-4"><dt className="font-semibold">Changed</dt><dd className="mt-1 text-sm text-steel">{result.horse.operational.changed.status}: {result.horse.operational.changed.reason}</dd></div></dl>
         {result.horse.latestBiochemistry ? <p className="mt-4 text-sm text-steel">Latest result: {result.horse.latestBiochemistry.scoringStatus}; test date {result.horse.latestBiochemistry.testDate}; formula {result.horse.latestBiochemistry.formulaVersion}; source {result.horse.latestBiochemistry.sourceVersion}.</p> : <p className="mt-4 text-sm text-steel">Latest result unavailable. No missing value is treated as normal or complete.</p>}
-        <div className="mt-5"><Link href={result.horse.operational.nextAction.href} className="rounded-full bg-ink px-4 py-2 text-sm font-semibold text-white">{result.horse.operational.nextAction.label}</Link></div>
+        <div className="mt-5 flex flex-wrap gap-3">
+          <Link href={workspace.action?.href ?? "/portal"} className="rounded-full bg-ink px-4 py-2 text-sm font-semibold text-white">{workspace.action?.label ?? "Return to dashboard"}</Link>
+          <Link href="/portal" className="rounded-full border border-ink/10 bg-white px-4 py-2 text-sm font-semibold text-ink">Return to dashboard</Link>
+        </div>
       </section>
       <div className="mt-8 rounded-[1.75rem] border border-ink/10 bg-white p-6 shadow-panel">
         <p className="text-xs font-semibold uppercase tracking-[0.18em] text-ember">Recent History</p>

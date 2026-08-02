@@ -1,18 +1,11 @@
 {
   "schemaVersion": 1,
-  "phase": "sprint-closed",
-  "sprint": "034-repository-reconciliation-and-project-simplification",
-  "status": "reconciled-product-baseline-and-project-simplification-complete-clean",
-  "branch": "codex/034-reconciled-product-baseline",
-  "reconciliationCommit": "aeb24d2d038f9875973764b25538caaea6473d02",
-  "closeoutCommit": "aa87dfe010ca1ae900f0ce633ee7b2fad2a076bf",
-  "remoteBackupVerified": true,
-  "verifiedRemoteTipBeforeAttestation": "d949069834c375ce4b485a4336eb701944b2d984",
-  "validationGroupsPassing": 16,
-  "validationGroupsFailing": 0,
-  "sourceReleaseSha": "f7242ee0785ae9b87022394206c89ebdd5c9f6ad",
+  "phase": "building",
+  "sprint": "035M-first-trainer-preview-access-and-core-journey",
+  "status": "approved-plan-building",
+  "branch": "codex/035M-first-trainer-preview-access-and-core-journey",
+  "baselineSha": "ea8417d3c7450f25c90644f23d8558c9f5938552",
   "productionChanged": false,
   "productDone": false,
-  "nextSprint": "035-trainer-pilot-and-dashboard-mvp",
-  "updated": "2026-08-01"
+  "updated": "2026-08-02"
 }

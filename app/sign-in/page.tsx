@@ -23,15 +23,15 @@ export default async function SignInPage({ searchParams }: SignInPageProps) {
   const description =
     setup === "supabase"
       ? "Secure sign-in is not configured in this environment. An operator must complete the approved service setup before access can continue."
-      : "Sign in to the Precision Performance Portal for approved equine biochemistry and operations access.";
+      : "Use your approved account to access assigned horse and operational workflows.";
 
   return (
     <main className="section-wrap px-4 py-16 md:px-8">
       <SectionCard eyebrow="Secure portal" title="Sign in to Precision Performance" description={description}>
         <div className="grid gap-4 md:grid-cols-2">
           <div className="rounded-2xl border border-ink/10 bg-sand p-5 text-sm leading-7 text-ink">
-            <p className="font-semibold">Next destination</p>
-            <p className="mt-2 text-steel">{nextPath}</p>
+            <p className="font-semibold">Private sign-in</p>
+            <p className="mt-2 text-steel">Open the sign-in email only in the mailbox you privately control. Do not share the link or code.</p>
           </div>
           <div className="rounded-2xl border border-ink/10 bg-white p-5 text-sm leading-7 text-steel">
             <p className="font-semibold text-ink">Current status</p>
@@ -51,12 +51,6 @@ export default async function SignInPage({ searchParams }: SignInPageProps) {
             className="rounded-full border border-ink/10 bg-white px-5 py-3 text-sm font-semibold text-ink"
           >
             Return to public site
-          </Link>
-          <Link
-            href={nextPath}
-            className="rounded-full bg-ink px-5 py-3 text-sm font-semibold text-white"
-          >
-            Continue after setup
           </Link>
         </div>
       </SectionCard>

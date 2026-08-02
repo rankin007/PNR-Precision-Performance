@@ -10,7 +10,7 @@ type SignInFormProps = {
 
 const errorMessages: Record<string, string> = {
   email: "Enter an email address before continuing.",
-  otp: "We could not start sign-in. Check the new Supabase project settings and try again.",
+  otp: "We could not start sign-in. Wait before trying again or contact the authorised access owner.",
   callback: "The sign-in link could not be verified. Request a new link and try again.",
   "portal-access": "Your account is signed in, but portal access is not active yet.",
 };
@@ -30,7 +30,7 @@ export function SignInForm({
 
       {sent ? (
         <Notice className="mt-5" tone="success" title="Email requested">
-          Sign-in email requested. Check your inbox and return through the magic link.
+          Check the mailbox you privately control and use the newest single-use sign-in link. Do not share it.
         </Notice>
       ) : null}
 
@@ -46,16 +46,19 @@ export function SignInForm({
           Email address
           <input
             name="email"
+            id="approved-account-email"
             type="email"
             placeholder="you@example.com"
+            autoComplete="email"
+            required
             disabled={!envReady}
-            className="rounded-2xl border border-technical/20 bg-canvas px-4 py-3 text-base text-technical transition focus:border-data"
+            className="rounded-2xl border border-technical/20 bg-canvas px-4 py-3 text-base text-technical transition focus:border-data focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-data"
           />
         </label>
         <button
           type="submit"
           disabled={!envReady}
-          className="inline-flex w-fit items-center justify-center rounded-full bg-brand px-5 py-3 text-sm font-semibold text-white transition hover:bg-technical disabled:cursor-not-allowed disabled:bg-muted"
+          className="inline-flex min-h-11 w-fit items-center justify-center rounded-full bg-brand px-5 py-3 text-sm font-semibold text-white transition hover:bg-technical focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-data disabled:cursor-not-allowed disabled:bg-muted"
         >
           Request sign-in link
         </button>

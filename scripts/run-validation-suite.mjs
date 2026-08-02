@@ -64,6 +64,7 @@ export function commandPlan(mode, commands = platformCommands()) {
       ["test-evidence-026", node, ["--experimental-strip-types", "scripts/test-test-evidence-026.mjs"]],
       ["biochemistry-voice-027", node, ["--experimental-strip-types", "scripts/test-biochemistry-voice-027.mjs"]],
       ["stable-workspace-028", node, ["--experimental-strip-types", "scripts/test-stable-workspace-028.mjs"]],
+      ["trainer-journey-035m", node, ["--experimental-strip-types", "scripts/test-trainer-journey-035M.mjs"]],
       ["commerce-disabled-030", node, ["scripts/test-commerce-disabled-030.mjs"]],
       ["field-trial-controls-031", node, ["scripts/test-field-trial-controls-031.mjs"]],
       ["protected-preview-transport-031b", node, ["scripts/test-protected-preview-transport-031B.mjs"]],

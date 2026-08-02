@@ -28,6 +28,7 @@ type BiochemistryCaptureWorkflowProps = {
   horses: HorseOption[];
   envReady: boolean;
   serverError?: string;
+  initialHorseId?: string;
   action: typeof submitBiochemistryTestAction;
 };
 
@@ -43,10 +44,16 @@ export function BiochemistryCaptureWorkflow({
   horses,
   envReady,
   serverError,
+  initialHorseId,
   action,
 }: BiochemistryCaptureWorkflowProps) {
   const [stage, setStage] = useState<BiochemistryWorkflowStage>("capture");
-  const [values, setValues] = useState<BiochemistryCaptureValues>(EMPTY_BIOCHEMISTRY_CAPTURE_VALUES);
+  const initialHorse = horses.find((horse) => horse.id === initialHorseId);
+  const [values, setValues] = useState<BiochemistryCaptureValues>({
+    ...EMPTY_BIOCHEMISTRY_CAPTURE_VALUES,
+    horseId: initialHorse?.id ?? "",
+    horseName: initialHorse?.name ?? "",
+  });
   const [errors, setErrors] = useState<BiochemistryFieldError[]>([]);
   const [submitLocked, setSubmitLocked] = useState(false);
   const [noteReviewConfirmed, setNoteReviewConfirmed] = useState(false);

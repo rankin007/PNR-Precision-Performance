@@ -16,7 +16,11 @@ export default async function BiochemistryEntryPage({ searchParams }: Biochemist
   await requireOperationalWriteAppContext("/data-entry/biochemistry");
   const params = searchParams ? await searchParams : {};
   const error = pickValue(params.error);
+  const requestedHorseId = pickValue(params.horse);
   const horsesResult = await getAccessibleHorseSummaries();
+  const initialHorseId = horsesResult.horses.some((horse) => horse.id === requestedHorseId)
+    ? requestedHorseId
+    : undefined;
 
   return (
     <SectionCard
@@ -28,6 +32,7 @@ export default async function BiochemistryEntryPage({ searchParams }: Biochemist
         horses={horsesResult.horses}
         envReady={horsesResult.envReady}
         serverError={error}
+        initialHorseId={initialHorseId}
         action={submitBiochemistryTestAction}
       />
     </SectionCard>

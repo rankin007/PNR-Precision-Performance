@@ -14,8 +14,8 @@ export default async function PortalLayout({
       area="Member Portal"
       description="Permission-aware owner and trainer workspace for horses, records, and reporting."
       navigation={portalNavigation}
-      userEmail={context.sessionUser?.email ?? null}
-      memberDisplayName={context.memberDisplayName}
+      userEmail={null}
+      memberDisplayName={context.memberDisplayName ?? "Approved account"}
       membershipLevelCodes={context.membershipLevelCodes}
     >
       {children}
