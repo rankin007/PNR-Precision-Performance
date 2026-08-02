@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { normalizeAppRedirectPath } from "@/lib/auth/access";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { hasSupabaseEnv } from "@/lib/supabase/env";
+import { buildPasswordlessCallbackUrl } from "@/lib/domain/trainer-journey";
 
 function readString(formData: FormData, key: string) {
   const value = formData.get(key);
@@ -23,12 +24,19 @@ export async function signInWithOtpAction(formData: FormData) {
   }
 
   const supabase = await createSupabaseServerClient();
-  const origin = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+  const emailRedirectTo = buildPasswordlessCallbackUrl(
+    {
+      VERCEL_ENV: process.env.VERCEL_ENV,
+      VERCEL_URL: process.env.VERCEL_URL,
+      NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL,
+    },
+    next,
+  );
 
   const { error } = await supabase.auth.signInWithOtp({
     email,
     options: {
-      emailRedirectTo: `${origin}/auth/callback?next=${encodeURIComponent(next)}`,
+      emailRedirectTo,
     },
   });
 

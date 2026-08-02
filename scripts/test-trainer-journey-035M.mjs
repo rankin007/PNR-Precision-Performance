@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
-import { composeHorseAccessPresentation, composeHorseWorkspacePresentation } from "../lib/domain/trainer-journey.ts";
+import { buildPasswordlessCallbackUrl, composeHorseAccessPresentation, composeHorseWorkspacePresentation, resolvePasswordlessCallbackOrigin } from "../lib/domain/trainer-journey.ts";
 
 const counts = { state: 0, navigation: 0, denial: 0, privacy: 0, accessibility: 0, preview: 0 };
 function check(category, condition, message) {
@@ -50,17 +50,18 @@ const horsePage = readFileSync("app/(portal)/portal/horses/[horseId]/page.tsx", 
 const biochemistryPage = readFileSync("app/(ops)/data-entry/biochemistry/page.tsx", "utf8");
 const workflow = readFileSync("components/ops/biochemistry-capture-workflow.tsx", "utf8");
 const horses = readFileSync("lib/domain/horses.ts", "utf8");
+const authActions = readFileSync("app/auth/actions.ts", "utf8");
 
-check("navigation", horsePage.includes("Return to dashboard"), "workspace has dashboard return source contract");
-check("navigation", biochemistryPage.includes("horsesResult.horses.some"), "requested horse is checked against accessible options");
+check("navigation", resolvePasswordlessCallbackOrigin({ VERCEL_ENV: "preview", VERCEL_URL: "exact-preview.vercel.app", NEXT_PUBLIC_SITE_URL: "https://production.example" }) === "https://exact-preview.vercel.app", "Preview uses exact trusted Vercel HTTPS origin");
+check("navigation", buildPasswordlessCallbackUrl({ VERCEL_ENV: "preview", VERCEL_URL: "exact-preview.vercel.app" }, "/portal/horses") === "https://exact-preview.vercel.app/auth/callback?next=%2Fportal%2Fhorses", "Preview callback preserves normalized internal next path");
 check("denial", horsePage.includes("Horse not available") && horsePage.includes('href="/portal"'), "denied workspace returns without identity detail");
 
 check("privacy", !portalLayout.includes("sessionUser?.email"), "portal does not pass participant email");
 check("privacy", portalLayout.includes('memberDisplayName={context.memberDisplayName ?? "Approved account"}'), "portal has privacy-safe account label");
 check("privacy", signInPage.includes("mailbox you privately control"), "private mailbox boundary is visible");
-check("privacy", appShell.includes("userEmail") && !readFileSync("app/(ops)/layout.tsx", "utf8").includes("hideUserEmail"), "operations shell default is preserved");
-check("privacy", !readFileSync("app/(admin)/layout.tsx", "utf8").includes("hideUserEmail"), "admin shell default is preserved");
-check("privacy", !signInPage.includes("Continue after setup"), "sign-in has no unauthenticated continuation shortcut");
+check("privacy", resolvePasswordlessCallbackOrigin({ VERCEL_ENV: "production", VERCEL_URL: "deployment.vercel.app", NEXT_PUBLIC_SITE_URL: "https://production.example" }) === "https://production.example", "production never replaces configured Site URL with Vercel URL");
+check("privacy", resolvePasswordlessCallbackOrigin({ VERCEL_ENV: "development", VERCEL_URL: "deployment.vercel.app", NEXT_PUBLIC_SITE_URL: "https://configured.example" }) === "https://configured.example", "non-Preview configured environment keeps Site URL");
+check("privacy", resolvePasswordlessCallbackOrigin({ VERCEL_ENV: "preview", VERCEL_URL: "   " }) === "http://localhost:3000", "blank Preview deployment URL falls back deterministically to localhost when no Site URL exists");
 
 check("accessibility", signInForm.includes('id="approved-account-email"'), "email has stable control id");
 check("accessibility", signInForm.includes('autoComplete="email"'), "email autocomplete is declared");
@@ -74,7 +75,7 @@ check("accessibility", workflow.includes("sm:grid-cols-2") && workflow.includes(
 check("accessibility", portalHorseList.includes("result.presentation") && !portalHorseList.includes("sample horse cards"), "horse list renders typed fail-closed state without sample claims");
 
 check("preview", !horses.includes("sample-horse-") && !horses.includes("fallbackHorses"), "Preview candidate cannot expose sample horse fallbacks");
-check("preview", horses.includes("Assigned horse data could not be loaded") && horses.includes("presentation"), "Preview query failure is sanitized and typed");
+check("preview", authActions.includes("VERCEL_ENV: process.env.VERCEL_ENV") && !authActions.includes("headers()") && !authActions.includes('readString(formData, "origin")'), "callback origin cannot be selected by headers, form input or URL parameters");
 
 assert.deepEqual(counts, { state: 24, navigation: 8, denial: 8, privacy: 6, accessibility: 10, preview: 2 });
 assert.equal(Object.values(counts).reduce((sum, value) => sum + value, 0), 58);

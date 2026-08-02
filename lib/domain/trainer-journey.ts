@@ -7,6 +7,26 @@ export type TrainerJourneyPresentation = {
   action: { label: string; href: string } | null;
 };
 
+export type CallbackOriginEnvironment = {
+  VERCEL_ENV?: string;
+  VERCEL_URL?: string;
+  NEXT_PUBLIC_SITE_URL?: string;
+};
+
+export function resolvePasswordlessCallbackOrigin(environment: CallbackOriginEnvironment) {
+  const deploymentHost = environment.VERCEL_URL?.trim() ?? "";
+  const validDeploymentHost = /^[a-z0-9.-]+(?::\d+)?$/i.test(deploymentHost);
+  if (environment.VERCEL_ENV === "preview" && validDeploymentHost) {
+    return `https://${deploymentHost}`;
+  }
+
+  return environment.NEXT_PUBLIC_SITE_URL?.trim() || "http://localhost:3000";
+}
+
+export function buildPasswordlessCallbackUrl(environment: CallbackOriginEnvironment, nextPath: string) {
+  return `${resolvePasswordlessCallbackOrigin(environment)}/auth/callback?next=${encodeURIComponent(nextPath)}`;
+}
+
 export function composeHorseAccessPresentation(input: { envReady: boolean; queryFailed?: boolean; horseCount: number }): TrainerJourneyPresentation {
   if (!input.envReady) return { state: "unavailable", title: "Assigned horses unavailable", message: "The secure horse service is not configured in this environment.", action: null };
   if (input.queryFailed) return { state: "failed", title: "Assigned horses could not be loaded", message: "The assigned-horse list is unavailable. No missing record is treated as ready or complete.", action: null };
