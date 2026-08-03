@@ -1,12 +1,12 @@
 # Current Risks
 
-## Sprint 034D Stage 1 retirement dependencies
+## Sprint 034D preservation and retirement dependencies
 
 - Separate legacy Git metadata still owns 28 registrations and 29 worktree-administration directories; the canonical clone owns exactly one registration, itself. Confusing the two control planes could target the canonical repository or leave stale legacy state behind.
 - The legacy root and `pnr-023l` contain ignored environment-file path classes. Three browser-profile directories are protected classes. Their content must not be inspected or copied into ordinary evidence; private containment is required before retirement.
 - The two 012d local-only commits and one local 029F commit failed the safe archival boundary. They remain only local and must not be pushed, removed or made unreachable without a separately accepted protected/disposable disposition.
-- Nine dirty worktrees contain 64 verified safe unique files. The proposed external archive copy was rejected before execution; all files remain preserved in place and those worktrees must not be retired.
-- Several unregistered source/extract/validation candidates remain disposition-ambiguous. Empty render/deploy directories and generated caches are clearer retirement candidates, but Stage 2 is not approved and no target may yet be removed.
+- The 64 verified safe unique files are preserved outside active workspaces with 64/64 SHA-256 equality, and every source remains unchanged. The safe archive must not receive protected material and must remain non-Git.
+- Every unregistered source/extract/validation candidate now has a conservative private-containment disposition. Containment is still unexecuted because the operator and encrypted-vault root supplied were placeholders. No target may be removed.
 
 ## Sprint 034B canonical workspace and legacy history
 

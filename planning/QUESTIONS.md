@@ -2,12 +2,11 @@
 
 ## Sprint 034D Stage 2 decisions
 
-1. Will the owner authorize the exact target-by-target retirement manifest in `planning/reviews/034D-legacy-worktree-retirement-and-canonical-authority-finalisation.md` after reviewing the recovery proof?
-2. What private containment path will govern the legacy root, `pnr-023l`, the three browser-profile directories, and the unsafe local-only 012d/029F histories without exposing protected material?
-3. Will a separately approved preservation mechanism copy the 64 verified safe unique files with source/destination SHA-256 equality, or should the nine source worktrees remain retained?
-4. What evidence will resolve the still-ambiguous unregistered source/extract/validation copies before any deletion decision?
+1. Who is the actual authorized protected-material operator, and what is the exact absolute mounted root of the operator-controlled encrypted vault?
+2. After private containment and restore proof, will the owner separately approve the final target-by-target Stage 2 retirement manifest in `planning/reviews/034D-stage-2-containment-preservation-and-disposition-plan.md`?
+3. What approved retention period and recovery owner govern the safe 64-file non-Git archive?
 
-Stage 1 answers none of these by inference. No retirement, prune, branch deletion or protected-content handling is authorized.
+Safe preservation is complete and all ambiguous dispositions are resolved. No retirement, prune, branch deletion, metadata mutation or protected containment is authorized by inference.
 
 ## Current forward decisions after Sprint 034B
 

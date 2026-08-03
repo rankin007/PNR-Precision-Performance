@@ -2,7 +2,7 @@
 
 ## Current checkpoint — Sprint 034D Stage 1
 
-Sprint 034D Stage 1 completed sanitized read-only reconciliation without retiring any legacy object. The permanent canonical clone has one registration; separate legacy Git metadata owns 28 registrations, and 17 additional legacy directories are unregistered. Sprint 035Q is classified as safe, remote-backed, non-authoritative alternate history. Stage 2 remains unapproved while protected-material containment and approved preservation of 64 unique safe files are unresolved.
+Sprint 034D Stage 1 is remotely backed and the exact 64-file safe non-Git archive passes 64/64 SHA-256 equality without changing any source. The permanent canonical clone has one registration; separate legacy Git metadata still owns 28 registrations, and 17 additional legacy directories remain unregistered. Every target now has a decided disposition, while private containment and every retirement action remain unexecuted and unapproved.
 
 ## Sprint 030 — Commercial Schedule And Commerce Decision
 

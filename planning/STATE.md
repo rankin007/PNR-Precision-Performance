@@ -1,5 +1,11 @@
 # Project State
 
+## Sprint 034D preservation complete; private containment and retirement withheld - 2026-08-03
+
+The exact Stage 1 checkpoint `0a7070ecf073f3f83b657b143a4d20db6e4e40e8` is remotely backed on the scoped Sprint 034D branch with local, direct remote-tracking and fresh live remote equality. The approved non-Git archive at `C:\Users\rrank\OneDrive\PNR Precision Performance 034D Archive\safe-uncommitted` now contains exactly 64 allowlisted safe files plus one sanitized CSV manifest. Source/destination and source pre/post SHA-256 equality passed 64/64; the manifest SHA-256 is `50d74ab296d973941cf1cd2d6fdaf887973a083e736d3e7da653b5e7489fe0fe`; zero Git entries exist. OneDrive later applied 104 targetless Microsoft cloud reparse tags, but every source and destination hash remains readable and exact.
+
+Every formerly ambiguous unregistered directory now has a conservative evidence-backed disposition in `planning/reviews/034D-stage-2-containment-preservation-and-disposition-plan.md`. Protected containment did not execute because `[operator name and role]` and `[exact mounted root]` are placeholders rather than a real operator identity and absolute encrypted-vault root. All legacy sources, 28 registrations, 29 worktree-administration records, 17 unregistered targets and local-only branches remain retained. Stage 2 retirement is unapproved.
+
 ## Sprint 034D Stage 1 complete `reconciliation-complete-retirement-withheld-protected-and-archive-dependencies-visible` - 2026-08-03
 
 Sprint `034D-legacy-worktree-retirement-and-canonical-authority-finalisation` is active on the permanent canonical repository and scoped branch from exact accepted Sprint 034C SHA `8e923c66909ea47f96e8276e2e54aa5a38d9989c`. The Pack generated exactly four sprint files. Stage 1 completed sanitized read-only reconciliation and created the exact retirement manifest without removing, pruning, recycling, moving or deleting any legacy worktree, directory, metadata entry, lock or branch.

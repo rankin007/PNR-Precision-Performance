@@ -2,11 +2,11 @@
 
 ## Active direction
 
-Sprint 034D Stage 1 is complete `reconciliation-complete-retirement-withheld-protected-and-archive-dependencies-visible`. No legacy worktree, directory, Git metadata entry, lock or branch was retired. Stage 2 remains unapproved pending protected-material containment and an approved preservation mechanism for 64 unique safe files. Sprint 035K remains closed `preview-trainer-access-proven-production-not-promoted-clean`; its retained pilot and production-not-promoted boundary are unchanged. Sprint 036 and 029N remain planned, not authorized.
+Sprint 034D Stage 1 is remotely backed and the approved 64-file safe preservation copy passes 64/64 SHA-256 equality. Every ambiguous directory has a conservative disposition. No legacy worktree, directory, Git metadata entry, lock or branch was retired; private containment and Stage 2 remain unapproved. Sprint 035K remains closed `preview-trainer-access-proven-production-not-promoted-clean`; its retained pilot and production-not-promoted boundary are unchanged. Sprint 036 and 029N remain planned, not authorized.
 
 | Sprint | Outcome | Profile / proof |
 |---|---|---|
-| 034D | Stage 1 complete; Stage 2 withheld | Strict sanitized reconciliation; one canonical registration distinguished from 28 legacy-metadata registrations and 17 unregistered directories; 035Q retained as safe remote-backed alternate history; no retirement or archival push |
+| 034D | Stage 1 and safe preservation complete; Stage 2 withheld | Exact checkpoint remote equality; 64-file non-Git archive passes 64/64 equality; all dispositions decided; protected containment and retirement remain pending |
 | 034C | Closed `delivery-access-cleanup-complete-ambiguous-items-retained-clean` | Strict read-only access inventory and non-secret register; no external operational mutation justified; retained ambiguity recorded; proportional validation and scoped remote backup passed |
 | 034B | Closed `canonical-realignment-complete-legacy-cleanup-deferred-clean` | Canonical clone and method v8 exact; 89/0 and owner Re-detect passed; duplicate 035K directory removed; two stale locked metadata records deferred |
 | 035K | Closed `preview-trainer-access-proven-production-not-promoted-clean` | Strict human Preview acceptance passed on exact correction SHA; callback exact; retained adopted pilot/eight-record synthetic graph; production not promoted |
