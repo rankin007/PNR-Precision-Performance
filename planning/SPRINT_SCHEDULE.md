@@ -2,10 +2,11 @@
 
 ## Active direction
 
-Sprint 034B is closed `canonical-realignment-complete-legacy-cleanup-deferred-clean`. The permanent canonical workspace and truthful method-v8 Mission Control control plane are established. Sprint 035K remains closed `preview-trainer-access-proven-production-not-promoted-clean`; its retained pilot and production-not-promoted boundary are unchanged. Sprint 036 is the explicit next destination and 029N remains planned after it.
+Sprint 034C is in progress from exact remote-backed Sprint 034B authority. Its approved first stage completed a sanitized delivery/operator access inventory and created the non-secret register without external mutation. Proportional validation passes; the staged-manifest reread and scoped commit/remote-backup decision remain. Sprint 035K remains closed `preview-trainer-access-proven-production-not-promoted-clean`; its retained pilot and production-not-promoted boundary are unchanged. Sprint 036 and 029N remain planned, not authorized.
 
 | Sprint | Outcome | Profile / proof |
 |---|---|---|
+| 034C | In progress; candidate `delivery-access-cleanup-complete-ambiguous-items-retained-clean` | Strict read-only access inventory and non-secret register; no external mutation justified; retained ambiguity recorded; proportional validation passed; scoped backup decision pending |
 | 034B | Closed `canonical-realignment-complete-legacy-cleanup-deferred-clean` | Canonical clone and method v8 exact; 89/0 and owner Re-detect passed; duplicate 035K directory removed; two stale locked metadata records deferred |
 | 035K | Closed `preview-trainer-access-proven-production-not-promoted-clean` | Strict human Preview acceptance passed on exact correction SHA; callback exact; retained adopted pilot/eight-record synthetic graph; production not promoted |
 | 035I | Closed `gmail-secure-adapter-readiness-blocked-clean` | Gmail/OAuth deterministic contracts passed; protected-output stop contained; exact client/credential residue absent; zero live actions and `0/0/0` |

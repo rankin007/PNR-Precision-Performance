@@ -275,3 +275,15 @@ Reviewed baseline:
 - Deployment status: not deployed
 
 Deployment recommendation: the Sprint 012D branch/commit is the durable reviewed deployment candidate. Deploy only after explicit user authorization, then re-smoke production public/setup routes, protected redirects, /admin/commerce, checkout missing/malformed POST redirects, and unsigned webhook behavior. Keep Supabase remote checks, authenticated workflow/RLS smoke, and Stripe test checkout/webhook replay as separate live acceptance gates.
+
+---
+
+# Sprint 034C Read-Only Delivery Access Inventory
+
+Sprint 034C made no deployment, promotion, rollback, alias, domain, DNS, environment-value, callback, project-setting, provider-account or application-authentication change.
+
+Sanitized read-only checks on 2026-08-03 confirmed that the documented Vercel project remains readable through one accessible team and has zero explicit project members returned by the supported project-member command. The inherited team role, MFA and recovery path were not exposed by the safe CLI checks and remain `not verified`. This is not evidence that access is absent or obsolete.
+
+The Supabase CLI is authenticated to one organization/project, but the documented production target is not visible to that profile. The visible target must not be inferred to be a replacement or cleanup candidate. Production Supabase operator ownership, role, MFA and recovery remain `ambiguous-retain`; Auth, trainer identities, application data and provider settings are unchanged.
+
+Public auDA RDAP identifies GoDaddy as registrar and public DNS resolution continues for the apex and `www` hostnames. Registrar-account access, MFA and recovery were not inspected. DNS routing remains unchanged. See `docs/change password.md` and `planning/reviews/034C-delivery-access-and-credential-cleanup.md` for the sanitized inventory and intervention boundary.

@@ -51,3 +51,11 @@ At completion, retain the graph only when the operator privately types the exact
 ## Prohibited assumptions
 
 Do not assume commerce, enquiry transmission, clinical scores/recommendations, audio/transcription, full upload lifecycle, real-device timing, trends/favorites or product-wide Done. The public release is valid but narrower than the canonical product target. See `planning/DEFERRED_SCOPE_AND_OWNERSHIP.md`.
+
+## Sprint 034C delivery/operator access boundary
+
+The non-secret register at `docs/change password.md` governs delivery/operator authentication classes, ownership gaps, rotation triggers and recovery verification. It must never contain reusable authentication material or protected personal data.
+
+Read-only inventory on 2026-08-03 established current repository administrator access, Vercel project read access through one team, public registrar/DNS continuity and an authenticated Supabase CLI profile. It did not prove GitHub MFA/recovery, Vercel inherited role/MFA/recovery, registrar-account ownership/recovery, or access to the documented production Supabase target. Those surfaces remain unchanged as `ambiguous-retain` where applicable.
+
+Before any delivery/operator rotation or revocation, the platform owner must privately confirm the exact target, dependent workflows, retained/replacement operator and recovery path. Verify replacement access before revocation, reread the provider afterward and record only sanitized evidence. A shared control that governs trainer sign-in or application authentication is out of scope and must remain unchanged unless a later sprint proves isolation and separately authorizes the change.

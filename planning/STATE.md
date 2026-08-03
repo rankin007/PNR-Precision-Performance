@@ -1,5 +1,11 @@
 # Project State
 
+## Sprint 034C first stage — 2026-08-03
+
+Sprint `034C-delivery-access-and-credential-cleanup` is building on scoped branch `codex/034C-delivery-access-and-credential-cleanup` from exact remote-backed Sprint 034B SHA `9605ec02459bc998ccf911045406230091fb05ba`. The Pack generated exactly four sprint files. The approved first stage created a non-secret delivery/operator rotation register and performed sanitized read-only inventory only.
+
+No external mutation is justified by current evidence. Repository access is required-current; Vercel inherited access/recovery, production Supabase operator access, registrar ownership/recovery and other provider ownership facts remain `ambiguous-retain`; Resend/custom SMTP is `trainer/application-auth-out-of-scope`. Trainer sign-in, retained trainer identity/fixture, application Auth, production, provider settings, DNS and product behavior remain unchanged. Ten maintained validation groups, 101 focused deterministic assertions/controls, five live public/anonymous checks, 52 path references and exact changed-set safety scans pass. The scoped staged-manifest reread and commit/remote-backup decision remain before sprint close.
+
 ## Sprint 034B closed `canonical-realignment-complete-legacy-cleanup-deferred-clean` - 2026-08-01
 
 The permanent active repository is the standalone clone at `C:\Users\rrank\OneDrive\PNR Precision Performance Canonical`, on `codex/034B-canonical-workspace-and-mission-control-realignment` from exact Sprint 035K closeout SHA `47d1df447e819b8ec31aaa085a0ff6aeff6e7e8b`. The official method v8 payload has seven matching manifest hashes and the four-file 034B Pack is applied exactly. The canonical guard, three-row mid-flight roadmap, schema-v1 status, complete v8 briefing contract and current planning authority are aligned.

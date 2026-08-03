@@ -2,6 +2,9 @@
 
 ## Current governing evidence
 
+- `planning/sprints/034C-delivery-access-and-credential-cleanup/` - applied four-file delivery/operator access and credential-cleanup authority.
+- `docs/change password.md` - non-secret delivery/operator rotation, ownership, recovery and disposition register.
+- `planning/reviews/034C-delivery-access-and-credential-cleanup.md` - sanitized read-only inventory, retained ambiguities, empty mutation manifest and first-stage validation evidence.
 - `planning/sprints/034B-canonical-workspace-and-mission-control-realignment/` - applied four-file canonical-workspace and Mission Control realignment authority.
 - `planning/reviews/034B-canonical-workspace-and-mission-control-realignment.md` - 034B implementation, validation, owner Re-detect and `canonical-realignment-complete-legacy-cleanup-deferred-clean` closeout evidence.
 - `planning/reviews/034B-legacy-worktree-disposition.md` - sanitized legacy registration/worktree classification and bounded cleanup result.

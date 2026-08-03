@@ -1,11 +1,11 @@
 {
   "schemaVersion": 1,
-  "sprint": "034B-canonical-workspace-and-mission-control-realignment",
-  "phase": "sprint-closed",
-  "status": "canonical-realignment-complete-legacy-cleanup-deferred-clean",
-  "branch": "codex/034B-canonical-workspace-and-mission-control-realignment",
-  "startingSha": "47d1df447e819b8ec31aaa085a0ff6aeff6e7e8b",
-  "canonicalWorkspace": "C:\\Users\\rrank\\OneDrive\\PNR Precision Performance Canonical",
+  "sprint": "034C-delivery-access-and-credential-cleanup",
+  "phase": "awaiting-approval",
+  "status": "first-stage-validated-no-external-mutation-justified",
+  "branch": "codex/034C-delivery-access-and-credential-cleanup",
+  "startingSha": "9605ec02459bc998ccf911045406230091fb05ba",
+  "canonicalWorkspace": "C:\\tmp\\precision-performance-034c",
   "methodVersion": 8,
-  "updated": "2026-08-01"
+  "updated": "2026-08-03"
 }

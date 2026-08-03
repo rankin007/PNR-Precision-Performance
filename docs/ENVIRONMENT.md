@@ -96,3 +96,13 @@ The user confirmed all of these are valid launch domains:
 - `https://pnr-precision-performance.vercel.app`
 
 Choose one canonical production URL for `NEXT_PUBLIC_SITE_URL` in each environment. Use exactly one `https://` URL with no trailing slash.
+
+---
+
+# Sprint 034C Credential Ownership Boundary
+
+Sprint 034C did not open protected environment files, inspect values, compare credential fragments, list private identifiers, or change `.env.example`, `.gitignore`, Vercel environment values or any provider secret.
+
+Environment-backed runtime credentials remain separate from human delivery/operator authentication. Supabase service-role, Stripe secret/webhook, custom SMTP and other application credential classes stay in provider-managed secret storage and are not copied into the non-secret register. Custom SMTP directly supports trainer authentication and is explicitly `trainer/application-auth-out-of-scope` for Sprint 034C.
+
+The optional Railway status-token class remains `ambiguous-retain`: no Railway deployment configuration is documented, and presence, ownership and value were not inspected. Vercel OIDC remains a provider-issued ephemeral deployment credential class; it must not be copied, manually persisted or treated as a human password. See `docs/change password.md` for sanitized ownership, rotation and recovery status.
