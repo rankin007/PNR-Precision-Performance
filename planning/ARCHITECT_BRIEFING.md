@@ -1,89 +1,89 @@
-# Architect Briefing - Sprint 036B Preflight Blocked Clean
+# Architect Briefing - Sprint 036C Access Unavailable Clean
 
 ## Executive summary
 
-**Business outcome:** Sprint 036B proved the unchanged application and exact five-alias rollback baseline but stopped safely before release because signed-in provider preflight emitted protected identity fields.
+**Business outcome:** Sprint 036C delivered the approved identity-blind protected-preflight tooling and stopped cleanly before release because no existing authorized Supabase Management API credential was available.
 
-**Current focus:** Decide deliberate non-promotion or plan a corrective Sprint 036C with a provider/pilot readback mechanism that cannot enumerate or render protected identities.
+**Current focus:** Retain deliberate non-promotion unless a later separately approved sprint starts with an existing approved Management API access path.
 
-**What is proven:** Canonical/remote authority, zero application-source difference, 101 counted assertions plus focused regressions, canonical validation, TypeScript, zero-warning lint, Production build, exact Vercel project/affected set and five/five Ready rollback.
+**What is proven:** Exact three-file non-runtime scope, fixed one-GET Auth-config target, hidden child-only credential handling, 135 deterministic assertions, four wrapper checks, unchanged Sprint 035K helper, 101 inherited counted assertions, focused validation, TypeScript, zero-warning lint and a 29-page Production build.
 
-**What is not live:** No fresh candidate was staged, no alias moved, provider compatibility and retained-pilot readback did not complete, and neither private Production trainer journey began.
+**What is not live:** No provider request or projection, retained-pilot Verify, Vercel baseline, fresh candidate, alias transition, OTP request or human Production acceptance occurred.
 
 ## Readiness signals
 
 | Signal | Status | Evidence |
 |---|---|---|
-| Unchanged application candidate | passed | Accepted 035K ancestry; zero application/source diff against 035K and Sprint 036; 101 counted assertions plus focused and canonical gates |
-| Five-alias rollback authority | passed | Exactly five accepted aliases and exactly five rollback aliases; five independent timestamped rows resolve to Ready `dpl_EUJyBLQp7okgbPwtBU6nmMH88L6A` |
-| Provider and retained-pilot preflight | attention | Exact Supabase project was healthy, but protected identity fields appeared before configuration and pilot checks completed |
-| Human Production acceptance | attention | No OTP request, session, dashboard journey, sign-out or second fresh sign-in occurred |
+| Identity-blind preflight tooling | passed | Fixed approved GET only; no user-list/enumeration path; 135 assertions and four wrapper checks passed |
+| Unchanged application behavior | passed | Existing 035K core hash exact; 89 Sprint 035K plus 12 Sprint 032 assertions and retained validation/build gates passed |
+| Fresh protected provider/pilot proof | attention | No existing authorized Management credential was available; no request or pilot Verify ran |
+| Production live trainer acceptance | attention | No deployment, alias mutation, OTP, session or human journey began |
 
 ## Where things stand
 
-Production never moved. All five public aliases remain on the known-safe Ready rollback, and the application itself passed the complete unchanged-source validation set. The release stopped during provider preflight, before any candidate, alias, account, fixture, data or authentication action.
+The repository now contains a deterministic, identity-blind provider preflight that can safely project only the required Auth configuration facts. It was not used live because the required existing Management API access path was unavailable and credential creation/rotation was outside scope. Product, provider and Production state did not change.
 
 ## Current status
 
-Sprint 036B is closed `production-alias-transition-preflight-blocked-clean`. The repository and Production state are clean, but stable live trainer access remains incomplete. Sprint 029N remains gated.
+Sprint 036C is closed `production-protected-preflight-access-unavailable-clean`. The implementation is complete within scope, but the live trainer-access business outcome is incomplete. Sprint 029N remains gated.
 
 ## Since last sprint
 
-Builder applied the four-file 036B Pack, created the scoped branch, proved direct remote starting authority, validated unchanged application behavior, reconciled current Vercel CLI/docs/project/domain/alias state and produced the first authoritative five-row rollback snapshot. Supabase project health passed, then the signed-in Authentication surface rendered protected identity fields. Builder stopped and finalized the browser before configuration, pilot, staging or human acceptance.
+Builder applied the four-file 036C Pack, created the scoped branch and implemented only the three approved operations files. Deterministic safety and unchanged-application validation passed. The protected console exited without receiving a credential, so Builder took the defined stop before provider, pilot, Vercel or Production actions.
 
 ## Architecture / file map
 
-- `planning/sprints/036B-authoritative-production-alias-transition-and-live-trainer-acceptance/` - strict applied authority and acceptance disposition.
-- `planning/reviews/036B-authoritative-production-alias-transition-and-live-trainer-acceptance.md` - exact validation, Vercel affected-set, baseline ledger, protected-output stop and mutation record.
-- `docs/OPERATIONS_HANDOFF.md` - retained rollback plus future protected provider-readback boundary.
-- `planning/STATUS.json`, state, roadmap, lifecycle, schedule and evidence index - consistent blocked-clean closeout.
+- `scripts/protected-production-preflight-036C-core.mjs` - fixed Management API GET, in-memory truth evaluation and allowlisted sanitized reporting.
+- `scripts/Invoke-ProtectedProductionPreflight036C.ps1` - branch/root-bound private operator entry with separate protected child environments.
+- `scripts/test-protected-production-preflight-036C.mjs` - deterministic projection, drift, transport, schema and protected-canary coverage.
+- `planning/sprints/036C-protected-production-preflight-and-live-trainer-acceptance/` - applied strict execution authority and acceptance disposition.
+- `planning/reviews/036C-protected-production-preflight-and-live-trainer-acceptance.md` - exact implementation, validation, protected stop and zero-mutation record.
 
 ## Decisions
 
-- Keep independent per-alias inspection as routing authority.
-- Keep explicit one-alias assignment as the bounded future mutation mechanism.
-- Treat protected identity rendering as a material preflight stop; do not navigate through Auth user-list surfaces for configuration proof.
-- Retain Production five/five on rollback and do not stage from incomplete provider/pilot evidence.
+- Close the sprint at the exact access-unavailable state rather than create or rotate a Supabase token.
+- Preserve the identity-blind three-file tooling for later use only under separate approved authority.
+- Do not stage a candidate or move aliases without fresh provider and retained-pilot proof.
+- Keep Sprint 029N gated because live trainer access was not accepted.
 
 ## Risks / watch-items
 
-- Fresh callback, SMTP, template, OTP expiry/cooldown and retained-pilot evidence remains incomplete.
-- Historical provider/pilot proof cannot substitute for execution-time evidence in a later release.
-- A future provider readback must be output-allowlisted and identity-blind before any candidate staging.
-- Sprint 029N and product-wide Done remain gated.
+- Provider callback, SMTP, sender, template and OTP facts remain unproven at current execution time.
+- Retained-pilot state was not freshly verified.
+- A Supabase project anon/service-role key is not a Management API credential and must not be substituted.
+- Historical five-alias rollback proof remains historical; any later release requires a fresh baseline.
 
 ## Open questions for the Architect
 
-- Retain deliberate non-promotion, or create corrective Sprint 036C?
-- What protected configuration/pilot readback can prove the required booleans and counts without opening or enumerating an Authentication user surface?
+- Retain deliberate non-promotion, or later authorize another bounded attempt only after an existing approved Management API access path is available?
+- If the live-access gate is later completed or explicitly bypassed by a separate owner decision, what exact authority governs Sprint 029N?
 
 ## Evidence
 
-- Canonical root and Git top-level exact; one worktree; start `6edc4dab04248c36ca57f9722849fcf16b7acb2f`.
-- Pack dry-run/application/post-dry-run: exactly four 036B sprint files.
-- Application diff against accepted 035K and validated Sprint 036 paths: empty.
-- Tests: 89 Sprint 035K plus 12 Sprint 032 = 101 counted passing; dashboard/OTP/redirect/bootstrap/recovery suites passed.
+- Canonical root and Git top-level exact; one worktree; starting SHA `c7d2a298218d6dc36871732054886145c449f7db`.
+- Pack dry-run/application/post-dry-run: exactly four Sprint 036C files.
+- New deterministic suite: 135 assertions passed; wrapper self-test: four checks passed.
+- Existing Sprint 035K core SHA-256: `603FF16B9F6EB30D2B5E26A39218E8307731D66008D4D384FB9696095CD3AB5A`.
+- Tests: 89 Sprint 035K plus 12 Sprint 032 = 101 inherited counted passing; focused dashboard/OTP/redirect/bootstrap/recovery suites passed.
 - JSON, roles, Supabase-self, static, TypeScript, zero-warning lint and 29-page Production build passed.
-- Vercel CLI `50.42.0`; project `prj_6To7czLpCEGL6fInkQwE4egePPpq`; accepted-alias count 5; rollback-alias count 5; independent baseline 5/5 Ready rollback.
-- Supabase project `uvskssaecdhxcgytkasc`: `ACTIVE_HEALTHY`, `ap-southeast-1`.
-- Mutation boundary: ignored local Vercel link plus repository planning/closeout only; zero candidate, alias, provider, Auth, identity, fixture, data, Storage, OTP or session mutation.
+- Application/runtime diffs against accepted authority were empty; no runtime import of the new tooling exists.
+- Protected result: no existing Management credential; private console exited; zero provider request and zero protected output.
+- Mutation result: repository-only scoped changes; zero candidate, alias, provider, Auth, identity, fixture, data, Storage, DNS, OTP or session mutation.
 
 ## Plan corrections
 
-The Vercel CLI update worker could not write its cache log/lock under the sandbox, but installed help and authenticated commands completed. This was recorded as a supporting limitation.
+The first deterministic run exposed that the exact endpoint literal was composed from two constants while the test required one auditable literal. The core was narrowed to the exact full endpoint and all 135 assertions then passed.
 
-The aggregate domain runner again stopped at optional local `playwright-core` resolution for Sprint 031B. Unchanged source bytes, accepted 035K evidence, all preceding current domain components and direct 031C proof supplied the approved substitute evidence.
-
-The planned signed-in provider readback was not output-safe because the Authentication landing surface rendered identity rows. That is a material privacy correction for any future Sprint 036C design.
+The aggregate domain runner reached the accepted optional Sprint 031B `playwright-core` availability boundary. Unchanged application bytes plus direct Sprint 031C proof supplied the Pack-approved equivalent evidence without dependency or product change.
 
 ## Validation / test status
 
-**Tests:** 101 passing, 0 failing in the counted Sprint 035K and Sprint 032 suites. Additional dashboard, OTP, redirect, bootstrap, recovery, JSON, roles, Supabase-self, static, TypeScript, zero-warning lint and Production build gates passed. The optional 031B dependency limitation used the recorded equivalent proof; direct 031C passed.
+**Tests:** 236 passing, 0 failing in the counted Sprint 036C, Sprint 035K and Sprint 032 suites. The wrapper added four passing self-test checks. Additional focused auth, recovery, JSON, domain substitute, roles, Supabase-self, static, TypeScript, zero-warning lint and Production build gates passed.
 
 ## Recommended next Architect action
 
-**Do:** Choose deliberate non-promotion or issue a corrective Sprint 036C Pack whose first gate is an allowlisted identity-blind provider/pilot readback, followed by fresh five-alias/Vercel evidence before any staging.
+**Do:** Preserve deliberate non-promotion. Consider another bounded live-access attempt only if an existing approved Supabase Management API access path is supplied under separate sprint authority.
 
-**Owner:** Product owner and Architect for the promotion decision; platform/application-auth owner for the protected provider mechanism; designated tester only after a later candidate is five/five live and route-safe.
+**Owner:** Product owner and Architect for any future attempt; authorized Supabase account operator for access availability; designated tester only after later provider/pilot/Vercel gates pass.
 
-**Decision:** Sprint 036B is safely closed but the live trainer-access business outcome remains incomplete. Do not begin Sprint 029N.
+**Decision:** Sprint 036C is safely closed without external mutation, but live trainer access remains incomplete. Do not begin Sprint 029N.

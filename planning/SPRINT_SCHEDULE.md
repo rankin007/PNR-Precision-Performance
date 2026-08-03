@@ -2,10 +2,11 @@
 
 ## Active direction
 
-Sprint 036B is closed `production-alias-transition-preflight-blocked-clean`. Unchanged-source validation and the authoritative five/five rollback baseline passed, but signed-in provider preflight rendered protected identity fields into browser-control output. Builder stopped before candidate staging, alias mutation, OTP or human Production acceptance. Production remains five/five on the Ready rollback; Architect must choose deliberate non-promotion or a corrective 036C Pack with a protected provider/pilot readback path. Sprint 029N remains behind the live-access gate.
+Sprint 036C is closed `production-protected-preflight-access-unavailable-clean`. Identity-blind protected-preflight tooling and unchanged-application validation passed, but no existing authorized Supabase Management API credential was available and token creation/rotation was outside scope. Builder stopped before any provider request, retained-pilot Verify, Vercel baseline, candidate staging, alias mutation, OTP or human Production acceptance. Deliberate non-promotion remains current and Sprint 029N remains behind the live-access gate.
 
 | Sprint | Outcome | Profile / proof |
 |---|---|---|
+| 036C | Closed `production-protected-preflight-access-unavailable-clean` | Strict identity-blind fixed-GET tooling; 135 new assertions plus four wrapper checks and unchanged-application gates passed; no existing Management API credential, provider request, deployment, alias/provider/data mutation or human sign-in |
 | 036B | Closed `production-alias-transition-preflight-blocked-clean` | Strict zero-product-change preflight; 101 counted assertions plus focused/canonical/build gates passed; exact five-alias rollback baseline passed; protected-output stop before deployment/provider/data mutation or human sign-in |
 | 036 | Closed `production-promotion-rolled-back-clean` | Strict zero-source candidate Ready; unexpected alias reporting triggered all-five rollback; five/five aliases independently resolve to Ready rollback; canonical public/protected smoke passed; no human Production sign-in attempted |
 | 034D | Closed `legacy-worktrees-retired-canonical-authority-final-clean` | 49/49 retirement rows passed; zero legacy targets/registrations/stale administration; one canonical registration; safe archive 64/64 and private copy/restore 29,897/29,897 retained |

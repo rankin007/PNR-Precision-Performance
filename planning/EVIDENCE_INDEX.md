@@ -2,6 +2,8 @@
 
 ## Current governing evidence
 
+- `planning/sprints/036C-protected-production-preflight-and-live-trainer-acceptance/` - applied strict identity-blind provider/pilot preflight, unchanged-product validation, five-alias transaction, rollback and private Production acceptance authority.
+- `planning/reviews/036C-protected-production-preflight-and-live-trainer-acceptance.md` - exact three-file tooling proof, 135 deterministic assertions, protected access-unavailable stop, zero provider/release/data mutation and `production-protected-preflight-access-unavailable-clean` closeout.
 - `planning/sprints/036B-authoritative-production-alias-transition-and-live-trainer-acceptance/` - applied strict corrective authority for independent five-alias routing, zero-product-change staging, rollback and two private Production journeys.
 - `planning/reviews/036B-authoritative-production-alias-transition-and-live-trainer-acceptance.md` - unchanged-source validation, exact Vercel affected-set proof, five/five Ready rollback baseline, protected-output preflight stop, zero release/provider/data mutation and `production-alias-transition-preflight-blocked-clean` closeout.
 - `planning/sprints/036-production-trainer-access-stabilisation-and-live-acceptance/` - applied strict Production promotion, rollback and private live-acceptance authority.
@@ -56,6 +58,8 @@
 29. `planning/reviews/036-production-trainer-access-stabilisation-and-live-acceptance.md` - Ready exact candidate, conservative alias-control failure classification, immediate five-alias rollback, restored route safety and non-accepted Production outcome.
 30. `planning/sprints/036B-authoritative-production-alias-transition-and-live-trainer-acceptance/` - applied four-file corrective alias-transition and live trainer acceptance authority.
 31. `planning/reviews/036B-authoritative-production-alias-transition-and-live-trainer-acceptance.md` - exact five/five rollback preflight, protected-output stop, zero deployment/provider/data mutation and blocked-clean outcome.
+32. `planning/sprints/036C-protected-production-preflight-and-live-trainer-acceptance/` - applied four-file protected provider/pilot readback and release transaction authority.
+33. `planning/reviews/036C-protected-production-preflight-and-live-trainer-acceptance.md` - identity-blind tooling proof, Management credential access-unavailable stop, zero external mutation and incomplete live-access gate.
 
 ## Accepted product lineage
 

@@ -7,14 +7,14 @@
 
 Sprint 034D retirement is complete and does not answer either question. The safe archive, accepted vault set, private manifest and unaccepted attempt remain retained; no cleanup or deletion is authorized by inference.
 
-## Current forward decisions after Sprint 036B
+## Current forward decisions after Sprint 036C
 
-Sprint 036B is closed `production-alias-transition-preflight-blocked-clean`; live trainer acceptance remains incomplete. Production is unchanged on the five-alias Ready rollback.
+Sprint 036C is closed `production-protected-preflight-access-unavailable-clean`; live trainer acceptance remains incomplete. No provider request, deployment or alias mutation occurred.
 
-1. Should Production remain deliberately on the compatible rollback, or should the Architect create a corrective Sprint 036C Pack with a protected provider/pilot readback mechanism that cannot emit identity rows or protected values before reusing the authoritative five-alias transition design?
+1. Should Production remain deliberately on the compatible rollback, or should a later separately authorized sprint proceed only after an existing approved Supabase Management API access path is available for the identity-blind provider preflight?
 2. Sprint 029N remains behind the live trainer-access gate. If the owner later opens that gate explicitly, which approved privacy, storage, notification, retention and submission rules will govern the currently unavailable public enquiry workflow?
 
-Neither question authorizes Sprint 036C work, Pack creation/application, implementation, deployment, alias mutation, provider mutation or any other Production change.
+Neither question authorizes credential creation/rotation, another sprint, implementation, deployment, alias mutation, provider mutation or any other Production change.
 
 ## Sprint 030 commercial authority pending
 

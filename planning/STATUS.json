@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
-  "sprint": "036B-authoritative-production-alias-transition-and-live-trainer-acceptance",
+  "sprint": "036C-protected-production-preflight-and-live-trainer-acceptance",
   "phase": "sprint-closed",
-  "status": "production-alias-transition-preflight-blocked-clean",
-  "branch": "codex/036B-authoritative-production-alias-transition-and-live-trainer-acceptance",
-  "startingSha": "6edc4dab04248c36ca57f9722849fcf16b7acb2f",
+  "status": "production-protected-preflight-access-unavailable-clean",
+  "branch": "codex/036C-protected-production-preflight-and-live-trainer-acceptance",
+  "startingSha": "c7d2a298218d6dc36871732054886145c449f7db",
   "canonicalWorkspace": "C:\\Users\\rrank\\OneDrive\\PNR Precision Performance Canonical",
   "methodVersion": 8,
   "updated": "2026-08-04"

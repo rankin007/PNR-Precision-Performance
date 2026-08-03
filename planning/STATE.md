@@ -1,5 +1,13 @@
 # Project State
 
+## Sprint 036C closed `production-protected-preflight-access-unavailable-clean` - 2026-08-04
+
+Sprint 036C applied the exact four-file protected-preflight Pack in the permanent canonical repository and implemented only the three approved non-runtime operations files. The provider core is identity-blind and hard-bound to one HTTPS GET of approved project `uvskssaecdhxcgytkasc` Auth configuration; the wrapper requires hidden private-console input and separates Management and service-role children. Deterministic proof passed 135 assertions and four wrapper checks. Existing Sprint 035K helper SHA-256 remained exact, 89 Sprint 035K plus 12 Sprint 032 assertions passed, and the retained focused/canonical/TypeScript/zero-warning lint/29-page Production build evidence remained green with the accepted direct-031C substitute.
+
+No existing authorized Supabase Management API credential was available, and Sprint 036C did not authorize creating or rotating one. The private console exited without receiving a credential, no Management API request ran and no protected value or provider response was emitted or retained. Builder took the defined stop before retained-pilot Verify, Vercel baseline, release checkpoint, candidate staging, alias mutation, OTP request or human Production acceptance.
+
+No provider, Auth, callback, SMTP, template, schema, RLS, role, permission, identity, fixture, data, Storage, application, deployment, alias, DNS, mailbox or session mutation occurred. Stable live trainer access remains incomplete and Sprint 029N remains gated. Any later attempt requires separate authority plus an existing approved Management API access path; it must not infer token creation or rotation authority from this sprint.
+
 ## Sprint 036B closed `production-alias-transition-preflight-blocked-clean` - 2026-08-04
 
 Sprint 036B applied the exact four-file corrective Pack in the permanent canonical repository and scoped branch from exact closed Sprint 036 SHA `6edc4dab04248c36ca57f9722849fcf16b7acb2f`. Canonical and direct-remote authority, one worktree, accepted Sprint 035K ancestry and zero application/source difference all passed. Focused regression supplied 101 counted passing assertions plus the retained dashboard, OTP, redirect, bootstrap and recovery suites; JSON, roles, Supabase-self, static, TypeScript, zero-warning lint and the 29-page Production build passed. The unchanged-source/direct-031C substitute retained the accepted optional Sprint 031B transport boundary without installing or changing dependencies.
