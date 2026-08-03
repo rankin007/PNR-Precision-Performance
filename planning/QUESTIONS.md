@@ -1,12 +1,10 @@
 # Current Questions
 
-## Sprint 034D Stage 2 decisions
+## Sprint 034D Stage 2 decision
 
-1. Who is the actual authorized protected-material operator, and what is the exact absolute mounted root of the operator-controlled encrypted vault?
-2. After private containment and restore proof, will the owner separately approve the final target-by-target Stage 2 retirement manifest in `planning/reviews/034D-stage-2-containment-preservation-and-disposition-plan.md`?
-3. What approved retention period and recovery owner govern the safe 64-file non-Git archive?
+1. Now that safe preservation, private containment and in-vault restore proof pass, will the owner separately approve the final target-by-target Stage 2 retirement manifest in `planning/reviews/034D-stage-2-containment-preservation-and-disposition-plan.md`?
 
-Safe preservation is complete and all ambiguous dispositions are resolved. No retirement, prune, branch deletion, metadata mutation or protected containment is authorized by inference.
+The authorized security operator, exact encrypted-vault root, Platform recovery owner and retention rule are supplied and recorded privately. Safe preservation and protected containment are complete; all ambiguous dispositions are resolved. No retirement, prune, branch deletion, metadata mutation, vault cleanup or source removal is authorized by inference.
 
 ## Current forward decisions after Sprint 034B
 

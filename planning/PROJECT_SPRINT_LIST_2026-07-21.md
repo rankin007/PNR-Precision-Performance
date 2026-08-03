@@ -1,8 +1,8 @@
 # Precision Performance Sprint List
 
-## Current checkpoint — Sprint 034D Stage 1
+## Current checkpoint — Sprint 034D preservation and private containment
 
-Sprint 034D Stage 1 is remotely backed and the exact 64-file safe non-Git archive passes 64/64 SHA-256 equality without changing any source. The permanent canonical clone has one registration; separate legacy Git metadata still owns 28 registrations, and 17 additional legacy directories remain unregistered. Every target now has a decided disposition, while private containment and every retirement action remain unexecuted and unapproved.
+Sprint 034D Stage 1 and the exact 64-file safe non-Git archive are remotely backed and pass 64/64 SHA-256 equality without changing any source. The separate encrypted-vault set and in-vault restore proof pass 29,897/29,897 byte equality, preserve both protected local histories privately and leave every source/ref unchanged. The permanent canonical clone has one registration; separate legacy Git metadata still owns 28 registrations, and 17 additional legacy directories remain unregistered. Every target has a decided disposition and satisfied preservation dependency, while every retirement action remains unexecuted and unapproved.
 
 ## Sprint 030 — Commercial Schedule And Commerce Decision
 

@@ -3,10 +3,13 @@
 ## Sprint 034D preservation and retirement dependencies
 
 - Separate legacy Git metadata still owns 28 registrations and 29 worktree-administration directories; the canonical clone owns exactly one registration, itself. Confusing the two control planes could target the canonical repository or leave stale legacy state behind.
-- The legacy root and `pnr-023l` contain ignored environment-file path classes. Three browser-profile directories are protected classes. Their content must not be inspected or copied into ordinary evidence; private containment is required before retirement.
-- The two 012d local-only commits and one local 029F commit failed the safe archival boundary. They remain only local and must not be pushed, removed or made unreachable without a separately accepted protected/disposable disposition.
+- The legacy root and `pnr-023l` ignored environment-file classes, three dormant browser profiles and all uncertain source copies now have accepted private copy/restore proof. They must remain outside ordinary evidence and the safe archive, and no source may be retired without the separate Stage 2 approval.
+- The two 012d local-only commits and one local 029F commit failed the safe archival boundary. Both refs are now preserved in a verified private recovery bundle and restore copy, but remain local and must not be pushed, removed or made unreachable before separately approved retirement.
 - The 64 verified safe unique files are preserved outside active workspaces with 64/64 SHA-256 equality, and every source remains unchanged. The safe archive must not receive protected material and must remain non-Git.
-- Every unregistered source/extract/validation candidate now has a conservative private-containment disposition. Containment is still unexecuted because the operator and encrypted-vault root supplied were placeholders. No target may be removed.
+- Every unregistered source/extract/validation candidate now has accepted private containment and restore proof. Four non-browser directory reparse nodes were deliberately not followed and remain governed by their retained source references; browser-profile reparse skips are zero.
+- Windows BitLocker telemetry for the mounted vault was unavailable with `0x80041003`; the named operator's explicit separately encrypted secure-store attestation is the governing encryption evidence. The operator must keep the volume encrypted, non-shared, non-OneDrive and under private control.
+- The first path-length-limited vault copy is unaccepted and retained alongside the accepted short-path set because deletion was not authorized. It must not be mistaken for recovery authority or cleaned up without separate approval.
+- No target may be removed. Private containment satisfies the preservation dependency only; final Stage 2 retirement remains separately withheld.
 
 ## Sprint 034B canonical workspace and legacy history
 

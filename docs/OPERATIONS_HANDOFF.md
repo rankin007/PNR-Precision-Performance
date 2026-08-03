@@ -60,10 +60,14 @@ Read-only inventory on 2026-08-03 established current repository administrator a
 
 Before any delivery/operator rotation or revocation, the platform owner must privately confirm the exact target, dependent workflows, retained/replacement operator and recovery path. Verify replacement access before revocation, reread the provider afterward and record only sanitized evidence. A shared control that governs trainer sign-in or application authentication is out of scope and must remain unchanged unless a later sprint proves isolation and separately authorizes the change.
 
-## Sprint 034D Stage 1 legacy-workspace boundary
+## Sprint 034D containment and legacy-workspace boundary
 
 The permanent canonical repository is `C:\Users\rrank\OneDrive\PNR Precision Performance Canonical`. Its standalone Git metadata registers exactly that one worktree. Separate Git metadata under the legacy OneDrive repository owns the legacy root and 27 linked `C:\tmp` worktrees; those 28 registrations do not confer canonical authority. Seventeen additional inventoried legacy directories are unregistered.
 
-Do not remove, force-remove, prune, recycle, move or delete a legacy worktree, directory, metadata record, lock or branch. Two local-only histories failed the archive safety gate and must remain privately contained. The 64 verified-safe files are now preserved at the approved non-Git destination with 64/64 SHA-256 equality; this safe archive must never receive protected material. Exact containment actions and the final non-destructive retirement manifest are in `planning/reviews/034D-stage-2-containment-preservation-and-disposition-plan.md`.
+Do not remove, force-remove, prune, recycle, move or delete a legacy worktree, directory, metadata record, lock or branch. The 64 verified-safe files are preserved at the approved non-Git destination with 64/64 SHA-256 equality; this safe archive must never receive protected material.
 
-Sprint 035Q is a safe, live-remote-backed alternate lineage, not accepted canonical product history. Do not merge, cherry-pick, rebase, replay or adopt it without a later Architect decision. Stage 2 requires separate approval after private containment and restore proof. Placeholder operator/vault values are not executable authority.
+Protected material is separately preserved under the operator-attested encrypted vault root `E:\05_Software\Aprec8PP-034D-Containment`. The accepted `C`/`R`/`H` set passes 29,897/29,897 source-copy and copy-restore byte equality plus two-ref private-history recovery; no protected hash or value is recorded in canonical evidence. Browser profiles remained dormant and were never launched. Four non-browser directory reparse nodes were not followed; zero browser reparse nodes were skipped. Retain the accepted set, its private manifest and the unaccepted path-length-limited first attempt until successful post-retirement verification. Do not initialise a Git repository, share/sync the vault, or delete vault material without separate approval.
+
+Exact containment results and the final non-destructive retirement manifest are in `planning/reviews/034D-stage-2-containment-preservation-and-disposition-plan.md`.
+
+Sprint 035Q is a safe, live-remote-backed alternate lineage, not accepted canonical product history. Do not merge, cherry-pick, rebase, replay or adopt it without a later Architect decision. Private containment and restore proof are complete; Stage 2 still requires separate approval of the exact target-by-target manifest.
