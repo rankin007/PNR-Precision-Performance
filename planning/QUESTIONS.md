@@ -1,10 +1,11 @@
 # Current Questions
 
-## Sprint 034D Stage 2 decision
+## Sprint 034D post-retirement retention decisions
 
-1. Now that safe preservation, private containment and in-vault restore proof pass, will the owner separately approve the final target-by-target Stage 2 retirement manifest in `planning/reviews/034D-stage-2-containment-preservation-and-disposition-plan.md`?
+1. When, if ever, should the unaccepted path-length-limited private-containment attempt be cleaned up inside the encrypted volume?
+2. After an explicit future retention review, should the safe 64-file archive and accepted encrypted-vault recovery set continue to be retained or receive a separately approved deletion procedure?
 
-The authorized security operator, exact encrypted-vault root, Platform recovery owner and retention rule are supplied and recorded privately. Safe preservation and protected containment are complete; all ambiguous dispositions are resolved. No retirement, prune, branch deletion, metadata mutation, vault cleanup or source removal is authorized by inference.
+Sprint 034D retirement is complete and does not answer either question. The safe archive, accepted vault set, private manifest and unaccepted attempt remain retained; no cleanup or deletion is authorized by inference.
 
 ## Current forward decisions after Sprint 034B
 

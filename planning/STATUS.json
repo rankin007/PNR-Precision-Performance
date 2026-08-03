@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "sprint": "034D-legacy-worktree-retirement-and-canonical-authority-finalisation",
-  "phase": "awaiting-approval",
-  "status": "safe-preservation-and-private-containment-complete-stage-2-retirement-withheld",
+  "phase": "sprint-closed",
+  "status": "legacy-worktrees-retired-canonical-authority-final-clean",
   "branch": "codex/034D-legacy-worktree-retirement-and-canonical-authority-finalisation",
   "startingSha": "8e923c66909ea47f96e8276e2e54aa5a38d9989c",
   "canonicalWorkspace": "C:\\Users\\rrank\\OneDrive\\PNR Precision Performance Canonical",

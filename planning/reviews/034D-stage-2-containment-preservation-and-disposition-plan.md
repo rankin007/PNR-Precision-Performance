@@ -2,9 +2,9 @@
 
 Date: 2026-08-03.
 
-Status: `safe-preservation-and-private-containment-complete-stage-2-retirement-withheld`.
+Status: `legacy-worktrees-retired-canonical-authority-final-clean`.
 
-This record is a sanitized preparation and execution-proof document. It authorizes no removal, prune, recycle, move, deletion, branch deletion, legacy metadata change, vault cleanup or protected-content disclosure. Safe preservation and private containment are complete; retirement still requires the owner's separate approval of the exact manifest below.
+This record is the sanitized preparation, approved-manifest and execution-proof document. The owner separately approved the exact 49-row Stage 2 manifest. That authority covered only the recorded retirement transactions; it did not authorize vault cleanup, safe-archive deletion, unaccepted-attempt cleanup, protected-content disclosure or any product/external mutation.
 
 ## Stage 1 checkpoint backup proof
 
@@ -106,7 +106,7 @@ The safe archive, accepted vault set, private manifest and unaccepted attempt mu
 | `dir-029m-chrome` | `C:\tmp\pnr-029m-chrome-profile` | Contain the entire browser profile without traversal or ordinary evidence; operator privately verifies restore capability |
 | `dir-029m-live-cdp` | `C:\tmp\pnr-029m-live-cdp-profile` | Contain the entire browser profile without traversal or ordinary evidence; operator privately verifies restore capability |
 
-No source was moved into containment. Containment was copy-only; separate Stage 2 retirement approval remains required.
+No source was moved into containment. Containment was copy-only. The later exact Stage 2 approval and execution are recorded below.
 
 The approved safe destination is inside OneDrive. After initial proof, OneDrive applied Microsoft cloud reparse tags even though no symbolic-link or junction target exists. This deterministic storage-layer transition does not weaken the copy proof: every preserved file remained directly readable, 64/64 destination hashes still match the manifest, 64/64 source hashes remain unchanged, and the archive still has zero Git entries. Stage 2 must recheck readability/equality rather than treat a targetless OneDrive cloud tag as a source-path redirection.
 
@@ -114,7 +114,7 @@ The approved safe destination is inside OneDrive. After initial proof, OneDrive 
 
 Read-only preparation used bounded traversal that did not follow reparse points. It queried 26 unique live remote tips; 25 trees were available in legacy object storage and the missing tree was the newly created canonical 034D checkpoint, which cannot represent older unregistered content. No protected values or matching lines were emitted.
 
-Every previously ambiguous unregistered directory now has one conservative disposition and accepted private copy/restore proof. `Resolved` means the disposition and preservation dependency are complete, not that retirement has executed.
+Every previously ambiguous unregistered directory received one conservative disposition and accepted private copy/restore proof before retirement. These rows preserve the pre-execution classification evidence.
 
 | ID | Exact target | Sanitized evidence | Resolved disposition |
 |---|---|---|---|
@@ -130,86 +130,103 @@ Every previously ambiguous unregistered directory now has one conservative dispo
 
 The two empty render directories, one empty deployment directory and two npm-cache directories remain `generated-or-disposable-proven-retire`, subject to exact Stage 2 target guards. Their disposition was already resolved in Stage 1.
 
-## No-retirement gate
+## Pre-retirement gate and approval result
 
 No removal may begin until all of the following are true:
 
 1. the exact safe 64-file destination and mechanism are explicitly approved and 64/64 SHA-256 equality is proven — **satisfied**;
 2. an exact encrypted private-vault root, operator and restore procedure are approved — **satisfied**;
 3. every protected target and every directory classified above has completed private containment or an explicitly accepted retain-in-place disposition — **satisfied**;
-4. the stale 035K and 012d metadata/pointer dependencies are mapped to exact ordered retirement transactions without broad prune — **satisfied for disposition; no prune executed**;
+4. the stale 035K and 012d metadata/pointer dependencies are mapped to exact ordered retirement transactions without broad prune — **satisfied; exact dependent records retired without broad prune**;
 5. the final target-by-target manifest contains no `ambiguous`, `pending-disposition`, `unknown`, failed-copy or failed-restore entry — **satisfied**;
 6. canonical/legacy registrations, branches, remote reachability and filesystem paths are reread immediately before any exact retirement operation; and
-7. the owner separately approves the final Stage 2 retirement manifest.
+7. the owner separately approves the final Stage 2 retirement manifest — **satisfied by explicit approval in this task**.
 
-Until then, every legacy target remains retained exactly where it is.
+All seven gates passed immediately before execution. Historical preparation text above remains evidence of the prior non-retirement boundary, not current state.
 
 ## Final Stage 2 retirement manifest
 
-Every target now has a decided disposition class and a satisfied preservation dependency. There are zero `ambiguous`, `unknown`, `pending-disposition`, failed-copy or failed-restore entries. Private containment is proof of recoverability, not authority to retire any target.
+Every target had a decided disposition class and satisfied preservation dependency before execution. There were zero `ambiguous`, `unknown`, `pending-disposition`, failed-copy or failed-restore entries. The owner then explicitly approved this exact manifest.
 
 ### Legacy-metadata-owned registered targets
 
-| ID | Exact target | Final disposition | Current gate |
+| ID | Exact target | Final disposition | Execution result |
 |---|---|---|---|
-| `legacy-root` | `C:\Users\rrank\OneDrive\PNR Precision Performance` | `protected-material-contained-outside-git-then-retire`; retire root last | Six-file private containment satisfied; final Stage 2 approval required |
-| `wt-023` | `C:\tmp\pnr-023-test-evidence-uploads` | `non-secret-uncommitted-material-preserved-outside-active-workspace-then-retire` | 6-file preservation satisfied; final Stage 2 approval required |
-| `wt-023b` | `C:\tmp\pnr-023b-source-reconciliation` | `safe-history-already-represented-retire` | Final Stage 2 approval required |
-| `wt-023c` | `C:\tmp\pnr-023c-privacy-storage-lifecycle` | `safe-history-already-represented-retire` | Final Stage 2 approval required |
-| `wt-023d` | `C:\tmp\pnr-023d-upload-storage-design` | `safe-history-already-represented-retire` | Final Stage 2 approval required |
-| `wt-023e` | `C:\tmp\pnr-023e-local-upload-storage` | `safe-history-already-represented-retire` | Final Stage 2 approval required |
-| `wt-023j` | `C:\tmp\pnr-023j-provider-remote-storage-and-hosted-proof` | `safe-history-already-represented-retire` | Final Stage 2 approval required |
-| `wt-023l` | `C:\tmp\pnr-023l-remote-application-and-hosted-proof` | `protected-material-contained-outside-git-then-retire` | Two-file private containment satisfied; final Stage 2 approval required |
-| `wt-023m` | `C:\tmp\pnr-023m-committed-candidate-state-reconciliation` | `safe-history-already-represented-retire` | Final Stage 2 approval required |
-| `wt-023q` | `C:\tmp\pnr-023q-evidence-safety-provider-integration-and-production-readiness` | `non-secret-uncommitted-material-preserved-outside-active-workspace-then-retire` | 5-file preservation satisfied; final Stage 2 approval required |
-| `wt-025` | `C:\tmp\pnr-025-four-reading-biochemistry-authority` | `non-secret-uncommitted-material-preserved-outside-active-workspace-then-retire` | 12-file preservation satisfied; final Stage 2 approval required |
-| `wt-026` | `C:\tmp\pnr-026-uploads-and-evidence-management` | `non-secret-uncommitted-material-preserved-outside-active-workspace-then-retire` | 9-file preservation satisfied; final Stage 2 approval required |
-| `wt-027` | `C:\tmp\pnr-027-voice-assisted-capture` | `non-secret-uncommitted-material-preserved-outside-active-workspace-then-retire` | 9-file preservation satisfied; final Stage 2 approval required |
-| `wt-027b` | `C:\tmp\pnr-027b-completed-product-lineage-reconciliation` | `safe-history-already-represented-retire` | Final Stage 2 approval required |
-| `wt-029m` | `C:\tmp\pnr-029m-public-website` | `safe-history-already-represented-retire` | Final Stage 2 approval required |
-| `wt-034` | `C:\tmp\pnr-034-reconciled-product-baseline` | `safe-history-already-represented-retire` | Final Stage 2 approval required |
-| `wt-035` | `C:\tmp\pnr-035-first-trainer-access-and-core-journey` | `non-secret-uncommitted-material-preserved-outside-active-workspace-then-retire` | 2-file preservation satisfied; final Stage 2 approval required |
-| `wt-035-preview` | `C:\tmp\pnr-035-preview-source` | `safe-history-already-represented-retire` | Final Stage 2 approval required |
-| `wt-035d` | `C:\tmp\pnr-035d-builder` | `non-secret-uncommitted-material-preserved-outside-active-workspace-then-retire` | 7-file preservation satisfied; final Stage 2 approval required |
-| `wt-035l` | `C:\tmp\pnr-035l-magic-link-template-correction` | `non-secret-uncommitted-material-preserved-outside-active-workspace-then-retire` | 13-file preservation satisfied; final Stage 2 approval required |
-| `wt-035m` | `C:\tmp\pnr-035m-first-trainer-preview-access-and-core-journey` | `safe-history-already-represented-retire` | Final Stage 2 approval required |
-| `wt-012a` | `C:\tmp\pp-012a-clean-20260714-165007` | `non-secret-uncommitted-material-preserved-outside-active-workspace-then-retire` | 1-file preservation satisfied; final Stage 2 approval required |
-| `wt-012d` | `C:\tmp\pp-012d-production-baseline` | `protected-material-contained-outside-git-then-retire` | Private directory/history containment satisfied; non-followed reparse recorded; source branch retained; final Stage 2 approval required |
-| `wt-034c` | `C:\tmp\precision-performance-034c` | `safe-history-already-represented-retire` | Final Stage 2 approval required |
-| `wt-035n` | `C:\tmp\precision-performance-035N` | `safe-history-already-represented-retire` | Final Stage 2 approval required |
-| `wt-035o` | `C:\tmp\precision-performance-035O` | `safe-history-already-represented-retire` | Final Stage 2 approval required |
-| `wt-035p` | `C:\tmp\precision-performance-035P` | `safe-history-already-represented-retire` | Final Stage 2 approval required |
-| `wt-035q` | `C:\tmp\precision-performance-035Q` | `safe-history-already-represented-retire`; retain live remote branch as alternate non-authoritative history | Final Stage 2 approval required |
+| `legacy-root` | `C:\Users\rrank\OneDrive\PNR Precision Performance` | `protected-material-contained-outside-git-then-retire`; retire root last | Retired last; post-transaction reread passed |
+| `wt-023` | `C:\tmp\pnr-023-test-evidence-uploads` | `non-secret-uncommitted-material-preserved-outside-active-workspace-then-retire` | Retired after 6-file preservation recheck; reread passed |
+| `wt-023b` | `C:\tmp\pnr-023b-source-reconciliation` | `safe-history-already-represented-retire` | Retired; reread passed |
+| `wt-023c` | `C:\tmp\pnr-023c-privacy-storage-lifecycle` | `safe-history-already-represented-retire` | Retired; reread passed |
+| `wt-023d` | `C:\tmp\pnr-023d-upload-storage-design` | `safe-history-already-represented-retire` | Retired; reread passed |
+| `wt-023e` | `C:\tmp\pnr-023e-local-upload-storage` | `safe-history-already-represented-retire` | Retired; reread passed |
+| `wt-023j` | `C:\tmp\pnr-023j-provider-remote-storage-and-hosted-proof` | `safe-history-already-represented-retire` | Retired; reread passed |
+| `wt-023l` | `C:\tmp\pnr-023l-remote-application-and-hosted-proof` | `protected-material-contained-outside-git-then-retire` | Retired after private containment recheck; reread passed |
+| `wt-023m` | `C:\tmp\pnr-023m-committed-candidate-state-reconciliation` | `safe-history-already-represented-retire` | Retired; reread passed |
+| `wt-023q` | `C:\tmp\pnr-023q-evidence-safety-provider-integration-and-production-readiness` | `non-secret-uncommitted-material-preserved-outside-active-workspace-then-retire` | Retired after 5-file preservation recheck; reread passed |
+| `wt-025` | `C:\tmp\pnr-025-four-reading-biochemistry-authority` | `non-secret-uncommitted-material-preserved-outside-active-workspace-then-retire` | Retired after 12-file preservation recheck; reread passed |
+| `wt-026` | `C:\tmp\pnr-026-uploads-and-evidence-management` | `non-secret-uncommitted-material-preserved-outside-active-workspace-then-retire` | Retired after 9-file preservation recheck; reread passed |
+| `wt-027` | `C:\tmp\pnr-027-voice-assisted-capture` | `non-secret-uncommitted-material-preserved-outside-active-workspace-then-retire` | Retired after 9-file preservation recheck; reread passed |
+| `wt-027b` | `C:\tmp\pnr-027b-completed-product-lineage-reconciliation` | `safe-history-already-represented-retire` | Retired; reread passed |
+| `wt-029m` | `C:\tmp\pnr-029m-public-website` | `safe-history-already-represented-retire` | Retired; reread passed |
+| `wt-034` | `C:\tmp\pnr-034-reconciled-product-baseline` | `safe-history-already-represented-retire` | Retired; reread passed |
+| `wt-035` | `C:\tmp\pnr-035-first-trainer-access-and-core-journey` | `non-secret-uncommitted-material-preserved-outside-active-workspace-then-retire` | Retired after 2-file preservation recheck; reread passed |
+| `wt-035-preview` | `C:\tmp\pnr-035-preview-source` | `safe-history-already-represented-retire` | Retired; reread passed |
+| `wt-035d` | `C:\tmp\pnr-035d-builder` | `non-secret-uncommitted-material-preserved-outside-active-workspace-then-retire` | Retired after 7-file preservation recheck; reread passed |
+| `wt-035l` | `C:\tmp\pnr-035l-magic-link-template-correction` | `non-secret-uncommitted-material-preserved-outside-active-workspace-then-retire` | Retired after 13-file preservation recheck; reread passed |
+| `wt-035m` | `C:\tmp\pnr-035m-first-trainer-preview-access-and-core-journey` | `safe-history-already-represented-retire` | Retired; reread passed |
+| `wt-012a` | `C:\tmp\pp-012a-clean-20260714-165007` | `non-secret-uncommitted-material-preserved-outside-active-workspace-then-retire` | Retired after 1-file preservation recheck; reread passed |
+| `wt-012d` | `C:\tmp\pp-012d-production-baseline` | `protected-material-contained-outside-git-then-retire` | Retired after private directory/history recheck; no-follow reread passed |
+| `wt-034c` | `C:\tmp\precision-performance-034c` | `safe-history-already-represented-retire` | Retired; reread passed |
+| `wt-035n` | `C:\tmp\precision-performance-035N` | `safe-history-already-represented-retire` | Retired; reread passed |
+| `wt-035o` | `C:\tmp\precision-performance-035O` | `safe-history-already-represented-retire` | Retired; reread passed |
+| `wt-035p` | `C:\tmp\precision-performance-035P` | `safe-history-already-represented-retire` | Retired; reread passed |
+| `wt-035q` | `C:\tmp\precision-performance-035Q` | `safe-history-already-represented-retire`; retain live remote branch as alternate non-authoritative history | Retired; exact live remote branch retained |
 
 ### Unregistered targets
 
-| ID | Exact target | Final disposition | Current gate |
+| ID | Exact target | Final disposition | Execution result |
 |---|---|---|---|
-| `dir-029m-cdp` | `C:\tmp\pnr-029m-cdp-profile` | `protected-material-contained-outside-git-then-retire` | Full private copy/restore satisfied; remained dormant; final Stage 2 approval required |
-| `dir-029m-chrome` | `C:\tmp\pnr-029m-chrome-profile` | `protected-material-contained-outside-git-then-retire` | Full private copy/restore satisfied; remained dormant; final Stage 2 approval required |
-| `dir-029m-docx-extract` | `C:\tmp\pnr-029m-docx-extract` | `protected-material-contained-outside-git-then-retire` | Private copy/restore satisfied; final Stage 2 approval required |
-| `dir-029m-live-cdp` | `C:\tmp\pnr-029m-live-cdp-profile` | `protected-material-contained-outside-git-then-retire` | Full private copy/restore satisfied; remained dormant; final Stage 2 approval required |
-| `dir-029m-docx-render` | `C:\tmp\pnr-029m-source-docx-render` | `generated-or-disposable-proven-retire` | Final Stage 2 approval required |
-| `dir-029m-pdf-render` | `C:\tmp\pnr-029m-source-pdf-render` | `generated-or-disposable-proven-retire` | Final Stage 2 approval required |
-| `dir-034-npm-cache` | `C:\tmp\pnr-034-npm-cache` | `generated-or-disposable-proven-retire` | Final Stage 2 approval required |
-| `dir-035d-candidate` | `C:\tmp\pnr-035d-candidate-7d12e0d` | `protected-material-contained-outside-git-then-retire` | Private copy/restore satisfied; non-followed reparse recorded; final Stage 2 approval required |
-| `dir-035d-manual` | `C:\tmp\pnr-035d-manual-candidate-494d0db` | `protected-material-contained-outside-git-then-retire` | Private copy/restore satisfied; final Stage 2 approval required |
-| `dir-035k-validation` | `C:\tmp\pnr-035k-validation` | `protected-material-contained-outside-git-then-retire` | Private copy/restore satisfied; shared stale-pointer retirement order mapped; final Stage 2 approval required |
-| `dir-035k-validation-corrected` | `C:\tmp\pnr-035k-validation-corrected` | `protected-material-contained-outside-git-then-retire` | Private copy/restore satisfied; shared stale-pointer retirement order mapped; final Stage 2 approval required |
-| `dir-035m-npm-cache` | `C:\tmp\pnr-035m-npm-cache` | `generated-or-disposable-proven-retire` | Final Stage 2 approval required |
-| `dir-012c-baseline` | `C:\tmp\pp-012c-baseline-20260714-172850` | `protected-material-contained-outside-git-then-retire` | Private copy/restore satisfied; final Stage 2 approval required |
-| `dir-012c-lean` | `C:\tmp\pp-012c-baseline-lean-20260714-173135` | `protected-material-contained-outside-git-then-retire` | Private copy/restore satisfied; non-followed reparse recorded; final Stage 2 approval required |
-| `dir-012d-clean` | `C:\tmp\pp-012d-production-baseline-clean` | `protected-material-contained-outside-git-then-retire` | Private copy/restore satisfied; stale-admin retirement order mapped; final Stage 2 approval required |
-| `dir-012f-source` | `C:\tmp\pp-012f-prod-source-20260716-1328` | `protected-material-contained-outside-git-then-retire` | Private copy/restore satisfied; final Stage 2 approval required |
-| `dir-012f-deploy` | `C:\tmp\pp-012f-production-deploy-20260716-1240` | `generated-or-disposable-proven-retire` | Final Stage 2 approval required |
+| `dir-029m-cdp` | `C:\tmp\pnr-029m-cdp-profile` | `protected-material-contained-outside-git-then-retire` | Retired after full private restore and dormant-profile recheck |
+| `dir-029m-chrome` | `C:\tmp\pnr-029m-chrome-profile` | `protected-material-contained-outside-git-then-retire` | Retired after full private restore and dormant-profile recheck |
+| `dir-029m-docx-extract` | `C:\tmp\pnr-029m-docx-extract` | `protected-material-contained-outside-git-then-retire` | Retired after private restore recheck |
+| `dir-029m-live-cdp` | `C:\tmp\pnr-029m-live-cdp-profile` | `protected-material-contained-outside-git-then-retire` | Retired after full private restore and dormant-profile recheck |
+| `dir-029m-docx-render` | `C:\tmp\pnr-029m-source-docx-render` | `generated-or-disposable-proven-retire` | Retired; reread passed |
+| `dir-029m-pdf-render` | `C:\tmp\pnr-029m-source-pdf-render` | `generated-or-disposable-proven-retire` | Retired; reread passed |
+| `dir-034-npm-cache` | `C:\tmp\pnr-034-npm-cache` | `generated-or-disposable-proven-retire` | Retired; reread passed |
+| `dir-035d-candidate` | `C:\tmp\pnr-035d-candidate-7d12e0d` | `protected-material-contained-outside-git-then-retire` | Retired after private restore recheck; reparse not followed |
+| `dir-035d-manual` | `C:\tmp\pnr-035d-manual-candidate-494d0db` | `protected-material-contained-outside-git-then-retire` | Retired after private restore recheck |
+| `dir-035k-validation` | `C:\tmp\pnr-035k-validation` | `protected-material-contained-outside-git-then-retire` | Retired before dependent stale metadata; reread passed |
+| `dir-035k-validation-corrected` | `C:\tmp\pnr-035k-validation-corrected` | `protected-material-contained-outside-git-then-retire` | Retired before dependent stale metadata; reread passed |
+| `dir-035m-npm-cache` | `C:\tmp\pnr-035m-npm-cache` | `generated-or-disposable-proven-retire` | Retired; reread passed |
+| `dir-012c-baseline` | `C:\tmp\pp-012c-baseline-20260714-172850` | `protected-material-contained-outside-git-then-retire` | Retired after private restore recheck |
+| `dir-012c-lean` | `C:\tmp\pp-012c-baseline-lean-20260714-173135` | `protected-material-contained-outside-git-then-retire` | Retired after private restore recheck; reparse not followed |
+| `dir-012d-clean` | `C:\tmp\pp-012d-production-baseline-clean` | `protected-material-contained-outside-git-then-retire` | Retired before dependent stale metadata; reread passed |
+| `dir-012f-source` | `C:\tmp\pp-012f-prod-source-20260716-1328` | `protected-material-contained-outside-git-then-retire` | Retired after private restore recheck |
+| `dir-012f-deploy` | `C:\tmp\pp-012f-production-deploy-20260716-1240` | `generated-or-disposable-proven-retire` | Retired; reread passed |
 
 ### Stale administration and local-only branches
 
-| ID | Exact target | Final disposition | Current gate |
+| ID | Exact target | Final disposition | Execution result |
 |---|---|---|---|
-| `admin-035k` | legacy Git administration `worktrees/pnr-035k-live-trainer-access` | Prune only after both 035K validation copies complete containment/retirement | Containment satisfied; no prune approved; final Stage 2 approval required |
-| `admin-012d` | legacy Git administration `worktrees/pp-012d-production-baseline-clean` | Prune only after `wt-012d` and `dir-012d-clean` complete containment/retirement | Containment satisfied; no prune approved; final Stage 2 approval required |
-| `branch-012d` | `codex/012d-production-baseline` | Preserve in private containment; never push unsafe history | Private bundle/restore satisfied; source branch retained; final Stage 2 approval required |
-| `branch-029f` | `codex/029F-browser-proof-release-and-live-deployment` | Preserve in private containment; never push protected identity metadata | Private bundle/restore satisfied; source branch retained; final Stage 2 approval required |
+| `admin-035k` | legacy Git administration `worktrees/pnr-035k-live-trainer-access` | Prune only after both 035K validation copies complete containment/retirement | Exact stale record retired after dependencies; no broad prune |
+| `admin-012d` | legacy Git administration `worktrees/pp-012d-production-baseline-clean` | Prune only after `wt-012d` and `dir-012d-clean` complete containment/retirement | Exact stale record retired after dependencies; no broad prune |
+| `branch-012d` | `codex/012d-production-baseline` | Preserve in private containment; never push unsafe history | Bundle/restore reverified; exact local ref retired by compare-and-swap; not pushed |
+| `branch-029f` | `codex/029F-browser-proof-release-and-live-deployment` | Preserve in private containment; never push protected identity metadata | Bundle/restore reverified; exact local ref retired by compare-and-swap; divergent remote unchanged |
 
-No manifest row authorizes removal. Safe preservation and private containment/restore proof are complete. The next required input is separate owner approval of this exact final Stage 2 retirement manifest; immediately before any approved transaction, Builder must reread every registration, ref, dependency and resolved path.
+## Stage 2 execution result
+
+| Dependency-ordered group | Rows | Result |
+|---|---:|---|
+| Linked legacy worktrees excluding the root | 27 | Retired individually; registration, filesystem and metadata reread after each |
+| Unregistered legacy directories | 17 | Retired individually with no-follow handling and private-recovery reread where required |
+| Dependent stale administration records | 2 | Exact records retired after their directory dependencies; no broad prune executed |
+| Protected local-only branches | 2 | Private bundle/restore reverified, then exact refs deleted by expected-old-tip compare-and-swap; neither protected tip was pushed |
+| Legacy OneDrive root | 1 | Retired last after every other dependency, branch and recovery proof passed |
+| **Total** | **49** | **49/49 complete** |
+
+Final reconciliation proves all 45 filesystem paths absent, zero legacy registrations, zero legacy worktree-administration directories, both protected local refs absent, and exactly one canonical registration. Before the legacy root became unreachable, all 37 remaining legacy local branch tips were re-proven reachable from fresh live remote tips; the only two non-remote protected histories were recoverable from both accepted private bundles.
+
+The safe archive remains 64/64 SHA-256 exact with 65 files, zero Git entries and zero linked reparse targets. The accepted vault `C` and `R` sets remain 15/15 target sets and 29,897/29,897 files with exact recorded bytes; both history bundles are byte-equal, Git-verified and contain exactly the expected two heads. Browser profiles remained dormant. The private manifest and unaccepted partial attempt remain untouched.
+
+Sprint 035Q remains exact on its live remote branch as alternate non-authoritative history. The pre-existing divergent remote 029F branch remains present and differs from the protected local 029F history preserved in the private bundle. The canonical scoped checkpoint was exact on the remote before closeout; final commit/push equality is recorded by the scoped branch closeout.
+
+No broad prune, blanket deletion, history rewrite, force-push, safe-archive mutation, vault mutation, unaccepted-attempt cleanup, product change or external production mutation occurred.

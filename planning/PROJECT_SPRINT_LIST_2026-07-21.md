@@ -1,8 +1,8 @@
 # Precision Performance Sprint List
 
-## Current checkpoint — Sprint 034D preservation and private containment
+## Current checkpoint — Sprint 034D canonical authority finalised
 
-Sprint 034D Stage 1 and the exact 64-file safe non-Git archive are remotely backed and pass 64/64 SHA-256 equality without changing any source. The separate encrypted-vault set and in-vault restore proof pass 29,897/29,897 byte equality, preserve both protected local histories privately and leave every source/ref unchanged. The permanent canonical clone has one registration; separate legacy Git metadata still owns 28 registrations, and 17 additional legacy directories remain unregistered. Every target has a decided disposition and satisfied preservation dependency, while every retirement action remains unexecuted and unapproved.
+Sprint 034D closed `legacy-worktrees-retired-canonical-authority-final-clean` after completing its approved 49-row retirement manifest in dependency order. All 45 legacy filesystem targets, two stale administration records and two protected local refs are retired. The permanent canonical clone has exactly one registration and no stale worktree metadata. The exact 64-file safe non-Git archive still passes 64/64 SHA-256 equality; the accepted encrypted-vault set and in-vault restore proof still pass 29,897/29,897 byte equality and preserve both protected histories privately. The unaccepted partial attempt remains retained pending separate cleanup authority.
 
 ## Sprint 030 — Commercial Schedule And Commerce Decision
 

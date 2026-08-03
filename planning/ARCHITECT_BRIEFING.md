@@ -1,90 +1,86 @@
-# Architect Briefing - Sprint 034D Private Containment Checkpoint
+# Architect Briefing - Sprint 034D Final Closeout
 
 ## Executive summary
 
-**Business outcome:** Every verified-safe unique file and every protected/uncertain target is now preserved outside active workspaces with exact recovery proof, without retiring anything.
+**Business outcome:** The permanent canonical repository is now the sole registered worktree. The exact approved 49-row legacy-retirement manifest completed without losing verified-safe or protected recovery material.
 
-**Current focus:** Review the final target-by-target Stage 2 retirement manifest and decide whether to authorize those exact ordered transactions.
+**Current focus:** Sprint 034D is closed. The next roadmap decision is Sprint 036 production promotion; Sprint 029N remains planned behind its privacy/data authority gate.
 
-**What is proven:** Preservation checkpoint `16d5c97660ca7dbf6683d847354a21930aa2b946` is locally and remotely exact; the non-Git archive passes 64/64 SHA-256 equality; the encrypted-vault set and in-vault restore proof pass 29,897/29,897 byte equality plus two-ref private history recovery; every formerly ambiguous directory has a disposition; and all legacy targets remain present.
+**What is proven:** All 45 legacy filesystem targets, two stale worktree-administration records and two protected local refs are retired; zero legacy registrations or stale metadata remain; one exact canonical registration remains; the safe archive passes 64/64 SHA-256 equality; and accepted private copy/restore passes 29,897/29,897 with both protected histories recoverable from two verified byte-equal bundles.
 
-**What is not live:** No worktree, directory, metadata record, lock, branch or source file was removed, moved, pruned, recycled or deleted. Stage 2 retirement is unapproved. No product, provider, deployment or production state changed.
+**What is not live:** No product, provider, Auth, deployment, DNS, data, billing or production state changed. Sprint 035K remains Preview-accepted and production-not-promoted.
 
 ## Readiness signals
 
 | Signal | Status | Evidence |
 |---|---|---|
-| Canonical and preservation backup | passed | Preservation checkpoint local/direct-remote/live SHAs exact |
-| Safe-file preservation | passed | 64/64 SHA-256 equality; 64 source hashes unchanged; zero Git entries; targetless OneDrive cloud tags do not redirect paths |
-| Private containment / recovery | passed | 15 target sets pass 29,897/29,897 copy and restore equality; two refs pass private bundle/restore verification; sources unchanged |
-| Retirement | attention | Exact final manifest is ready, but no removal, prune, branch deletion or metadata mutation is approved |
+| Manifest retirement | passed | 49/49 rows executed individually in recorded dependency order; legacy root retired last |
+| Canonical authority | passed | One registration exactly at the permanent canonical path; zero legacy registrations and zero worktree-admin directories |
+| Safe-file preservation | passed | 64/64 SHA-256 equality; 65 files including sanitized manifest; zero Git entries and zero linked reparse targets |
+| Private containment / recovery | passed | 15/15 `C` and `R` target sets; 29,897/29,897 files and exact bytes; both bundles verify and contain the expected two heads |
+| Remote preservation | passed | Scoped 034D checkpoint exact before closeout; Sprint 035Q exact and retained; divergent remote 029F present and unchanged by retirement |
 
 ## Where things stand
 
-Safe preservation and private containment are finished cleanly. The final Stage 2 manifest contains no ambiguous, unknown, pending-disposition, failed-copy or failed-restore entry. Every legacy target remains exactly where it was because retirement still requires separate approval.
-
-## Current status
-
-Sprint 034D is `safe-preservation-and-private-containment-complete-stage-2-retirement-withheld` on the scoped branch. The sprint is not closed and retirement remains unapproved.
+Sprint 034D is `legacy-worktrees-retired-canonical-authority-final-clean`. The legacy OneDrive root and all recorded `C:\tmp` targets are absent. The legacy metadata control plane is gone; the canonical repository has one clean registration and no stale worktree metadata.
 
 ## Since last sprint
 
-Builder retained the exact Stage 1 and preservation checkpoints, then copied the approved protected targets only to the exact encrypted vault. The accepted private set covers 13 directory roots, eight environment files and two unsafe local refs, with full copy/restore proof, dormant browser profiles and unchanged sources. A path-length-limited first attempt remains privately retained and explicitly unaccepted because cleanup was not authorized.
+Builder revalidated preservation and recovery, then processed 27 linked worktrees, 17 unregistered directories, two dependent stale administration records, two protected local refs and the legacy root. Registration, filesystem, branch, metadata and recovery state were reread after each transaction. The root was processed only after all other rows and reachability dependencies passed.
 
 ## Architecture / file map
 
-- `planning/reviews/034D-legacy-worktree-retirement-and-canonical-authority-finalisation.md` - Stage 1 registration/history and source-blob authority.
-- `planning/reviews/034D-stage-2-containment-preservation-and-disposition-plan.md` - safe preservation, private containment/recovery proof and final Stage 2 retirement manifest.
-- `planning/STATUS.json` - preservation and containment complete, retirement withheld.
-- `planning/STATE.md`, roadmap, lifecycle ledger, schedule, risks, questions and evidence index - current checkpoint agreement.
-- `docs/OPERATIONS_HANDOFF.md` - operator prohibition against protected material entering the safe archive or premature retirement.
+- `planning/reviews/034D-legacy-worktree-retirement-and-canonical-authority-finalisation.md` - Stage 1 historical ledger plus final Stage 2 addendum.
+- `planning/reviews/034D-stage-2-containment-preservation-and-disposition-plan.md` - preservation, private recovery, exact 49-row manifest and post-retirement reconciliation.
+- `planning/STATUS.json` and `planning/STATE.md` - closed canonical authority.
+- `docs/OPERATIONS_HANDOFF.md` - post-retirement retention and non-recreation boundary.
 
 ## Decisions
 
-- Keep the safe non-Git archive separate from the encrypted private vault.
-- Accept the operator-attested encrypted secure store after path, capacity, share, OneDrive, reparse and Git-directory checks; record unavailable BitLocker telemetry without weakening the boundary.
-- Treat the short-path `C`/`R`/`H` set as recovery authority and retain the unaccepted first attempt without cleanup.
-- Require a separate final Stage 2 approval before any removal.
+- Preserve the canonical registration and never recreate or adopt a retired legacy path without new authority.
+- Retain the non-Git safe archive, accepted encrypted-vault `C`/`R`/`H` set, private manifest and unaccepted partial attempt until a separate retention or cleanup decision.
+- Keep Sprint 035Q as remote-backed alternate non-authoritative history.
+- Treat the pre-existing divergent remote 029F branch as distinct from the protected retired local 029F history preserved privately.
 
 ## Risks / watch-items
 
-- Protected environment/provider/history findings, browser profiles and uncertain source copies remain in their original locations and in the operator-controlled encrypted recovery set; neither ordinary evidence nor the safe archive may receive them.
-- Unsafe 012d and local 029F history remains local plus privately bundled and must not be pushed.
-- The two stale administration records share dependencies with retained unregistered directories and must not be broadly pruned.
-- The safe archive is normal OneDrive material and is not an encrypted private vault.
-- The vault's encryption proof is the named operator attestation because Windows BitLocker telemetry returned `0x80041003`; keep the volume private and encrypted.
-- Four non-browser directory reparse nodes were deliberately not followed, and the unaccepted first attempt remains retained until separate cleanup approval.
+- The unaccepted path-length-limited private-containment attempt remains retained and is not recovery authority; cleanup still requires separate approval.
+- The accepted encrypted recovery set must remain operator-controlled, encrypted, non-Git, non-shared and non-OneDrive.
+- The safe archive is ordinary OneDrive material, not the encrypted private vault, and must never receive protected material.
+- Preview acceptance must not be restated as production promotion.
 
 ## Open questions for the Architect
 
-- Should the owner approve the exact final Stage 2 retirement manifest now that every preservation dependency and restore proof passes?
+- Decide Sprint 036 production promotion or deliberate non-promotion.
+- Separately decide eventual retention/cleanup for the unaccepted private attempt, safe archive and accepted vault set; Sprint 034D does not authorize deletion.
 
 ## Evidence
 
-- Stage 1 commit: `0a7070ecf073f3f83b657b143a4d20db6e4e40e8`; preservation checkpoint: `16d5c97660ca7dbf6683d847354a21930aa2b946`; local, direct remote-tracking and live remote exact before this checkpoint.
-- Allowlist reconstruction: 64 committed blobs, 64 unique source paths, zero missing/duplicate mappings and expected nine-source distribution.
-- Safe archive: `C:\Users\rrank\OneDrive\PNR Precision Performance 034D Archive\safe-uncommitted`.
-- Preservation: 64/64 source/destination equality and 64/64 source pre/post equality; 65 files including manifest; zero Git entries. OneDrive later applied 104 Microsoft cloud tags with zero link types/targets; hashes remained exact.
-- Manifest SHA-256: `50d74ab296d973941cf1cd2d6fdaf887973a083e736d3e7da653b5e7489fe0fe`.
-- Ambiguous-directory reconciliation: 26 live tips queried, 25 historical trees available; safety-pattern entries stopped without values; all nine prior ambiguities now have private-containment dispositions.
-- Private vault: exact operator-approved root, sufficient local NTFS capacity, outside OneDrive/shares/Git, zero destination reparses and zero Git directories.
-- Private content proof: 15 target sets; 29,897/29,897 source-contained byte equality; 29,897/29,897 contained-restore equality; source metadata unchanged; protected content not hashed.
-- Private history proof: exact two retained local refs in the accepted bundle and restore copy; both Git-verified and byte-equal; source refs unchanged; no push.
-- Browser proof: three profiles dormant before/after, never launched, full equality, zero reparse skips.
-- Non-mutation reread: one canonical registration, 28 legacy registrations, 29 administration records and all unregistered targets retained.
+- Filesystem retirement: 45/45 exact manifest paths absent.
+- Metadata retirement: zero legacy registrations and zero worktree-administration directories; one canonical registration exactly.
+- Protected refs: both local refs absent after accepted-bundle re-verification and compare-and-swap deletion.
+- Safe archive: 64/64 recorded SHA-256 equality; manifest SHA-256 `50d74ab296d973941cf1cd2d6fdaf887973a083e736d3e7da653b5e7489fe0fe`.
+- Private recovery: 15 target sets; 29,897/29,897 contained and restore files; exact recorded bytes; zero accepted destination reparses; bundle and restore copy byte-equal and Git-verified.
+- Browser proof: all three profiles remained dormant and were never launched.
+- Remote proof: Sprint 035Q remains exactly `954438dd34d3d91ec3e0cd62868e912acc568e44`; the scoped 034D checkpoint was exact before closeout; remote 029F remains divergent from the protected bundled tip.
+- Retention proof: safe archive, accepted vault roots, private manifest and unaccepted attempt all remain present.
 
 ## Plan corrections
 
-Raw-byte Git hashes matched only 28 of 64 allowlisted blobs because worktree text filters affect the committed identifiers. The authoritative read-only worktree index/attribute route then matched all 64 exactly. The approved OneDrive destination changed from zero reparse entries immediately after copy to 104 targetless Microsoft cloud-tagged entries; repeat hash proof and zero link targets provide the stronger storage-independent evidence. For private containment, strict PowerShell first misclassified successful Git bundle progress on stderr, then the initial restore layout exceeded the Windows path limit. Independent bundle verification and the accepted short-path layout supplied stronger proof. A 600-second supporting-tool timeout stopped between file pairs with no mismatch; the resumed run reverified all existing pairs without overwrite and completed the missing pairs.
+Git worktree removal succeeded for registrations but OneDrive-backed targetless administration directories sometimes returned permission errors. After proving each registration absent, Builder removed only the exact corresponding unlocked metadata directory; no broad prune ran. Reparse-bearing filesystem rows used no-follow deletion and never traversed junction/symbolic-link targets.
+
+The legacy-root first no-follow pass timed out after 30 minutes and left an expected partial residual with `.git` already absent. Builder did not repeat it blindly. A disposable test proved a compiled reparse-tag-aware walker preserves junction targets while traversing targetless OneDrive cloud-tagged directories; the exact residual then completed, and the entire manifest/preservation state was reread.
+
+The legacy-root ignored-entry count used a stronger reconciliation substitute because OneDrive and Git ignored-enumeration modes returned different aggregate forms. Tracked `38` and untracked `422` matched exactly; all six protected environment paths matched accepted private recovery, and the bounded ignored difference was generated/ignored-only.
 
 ## Validation / test status
 
-**Tests:** 101 passing, 0 failing. Stage 1 passed 89 Sprint 035K assertions and 12 Sprint 032 controls plus JSON/static/encoding, TypeScript, ESLint and production build. Safe preservation passes 64/64 SHA-256 equality. Private containment passes 29,897/29,897 copy and restore byte equality, exact source metadata, two-ref bundle recovery, dormant browser proof, no-follow reparse handling and zero source/retirement mutation.
+**Tests:** 101 passing, 0 failing from the unchanged product baseline: 89 Sprint 035K assertions and 12 Sprint 032 public controls. Sprint 034D changed planning/operations evidence only. Closeout passed the JSON self-test (8 cases), all 7 JSON files, 8 maintained static groups, encoding across 981 maintained text files, four-target Pack dry-run, Git integrity and diff checks. Exact scope/safety, final physical reconciliation and post-push equality complete the closeout authority.
 
 ## Recommended next Architect action
 
-**Do:** Review and either approve or withhold the exact final target-by-target Stage 2 retirement manifest.
+**Do:** Select Sprint 036 promotion or deliberate non-promotion without reopening retired legacy paths.
 
-**Owner:** Product owner and Architect, with the designated security/privacy operator and Platform recovery owner retaining the vault.
+**Owner:** Product owner and Architect. The designated security operator and Platform recovery owner retain the recovery set under the recorded boundary.
 
-**Decision:** Keep all legacy targets retained unless the owner separately approves the exact Stage 2 removals. Containment proof alone is not retirement authority.
+**Decision:** Sprint 034D is closed. Recovery-set deletion and cleanup of the unaccepted attempt remain separate, explicit decisions.

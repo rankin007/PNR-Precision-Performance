@@ -157,3 +157,25 @@ The proposed destination was `C:\Users\rrank\OneDrive\PNR Precision Performance 
 - Both unsafe local-only histories remain reachable from their original local branches and worktrees; neither was rewritten or deleted.
 - All 64 verified safe unique files remain byte-preserved at their original paths and have Git blob identifiers above.
 - Every retirement target, stale metadata entry and branch remains present because Stage 2 is withheld.
+
+## Stage 2 execution addendum - 2026-08-03
+
+The Stage 1 sections above remain the historical pre-retirement ledger. After safe preservation and private containment/restore proof completed, the owner explicitly approved the exact final 49-row manifest in `planning/reviews/034D-stage-2-containment-preservation-and-disposition-plan.md`.
+
+Builder executed 27 linked worktrees, 17 unregistered directories, two dependent stale administration records, two protected local refs and the legacy OneDrive root individually in recorded dependency order. The root was last. Every transaction re-resolved its exact absolute target and reread registration, filesystem, branch, metadata and recovery state. No broad prune, blanket deletion, history rewrite or force-push ran.
+
+Final sanitized proof:
+
+- 45/45 recorded filesystem targets are absent;
+- zero legacy registrations and zero legacy worktree-administration directories remain;
+- the two protected local refs are absent after private-bundle re-verification and expected-old-tip compare-and-swap deletion;
+- all 37 retained non-protected legacy local branch tips were live-remote-reachable immediately before legacy-root retirement;
+- exactly one canonical registration remains and its metadata was not mutated;
+- the safe archive remains 64/64 SHA-256 exact, with 65 files, zero Git entries and zero linked reparse targets;
+- the accepted encrypted-vault `C` and `R` sets remain 15/15 target sets and 29,897/29,897 files with exact recorded bytes;
+- both private bundles remain byte-equal, Git-verified and contain exactly the two expected heads;
+- Sprint 035Q remains exact on its live remote branch; the pre-existing divergent remote 029F branch remains distinct from the protected local history and was not changed;
+- the accepted vault set, private manifest and unaccepted partial attempt remain retained and untouched; and
+- no product, provider, Auth, deployment, DNS, data, billing or production mutation occurred.
+
+Git worktree removal sometimes left targetless OneDrive-tagged administration directories after the registration was already gone. Builder proved the exact registration absent before removing only that exact unlocked metadata directory. Reparse-bearing rows used no-follow handling. The first legacy-root residual pass timed out after `.git` had already gone; a tested compiled reparse-tag-aware walker then completed only the exact remaining root without traversing junction or symbolic-link targets, followed by full physical and recovery reconciliation.
