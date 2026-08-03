@@ -2,11 +2,15 @@
 
 Date: 2026-08-03.
 
+Final outcome: `delivery-access-cleanup-complete-ambiguous-items-retained-clean`.
+
 ## Starting authority and scope
 
 The scoped worktree `C:\tmp\precision-performance-034c` was created on `codex/034C-delivery-access-and-credential-cleanup` from exact remote-backed Sprint 034B closeout SHA `9605ec02459bc998ccf911045406230091fb05ba`. Sprint 034B carries the accepted Sprint 035K candidate and later closeout while preserving Sprint 034 reconciliation authority. The dirty legacy `develop` root remains untouched.
 
 The Sprint 034C Pack was dry-run and then applied. It generated exactly four files under `planning/sprints/034C-delivery-access-and-credential-cleanup/`. Mojibake was corrected only in the affected generated files and matching Pack text. No application source, test, script, schema, migration, dependency, `.env.example` or `.gitignore` file changed.
+
+The validated 15-file first stage was committed intentionally as `4d01649fa5f2d4447400d5548610c959c65e149b` (`docs: inventory Sprint 034C delivery access`). Only `codex/034C-delivery-access-and-credential-cleanup` was pushed. A fresh remote reference query returned that exact SHA; no merge, PR, `develop` push, force-update or deployment occurred.
 
 ## Sanitized read-only inventory
 
@@ -72,6 +76,8 @@ The prior 89-assertion record is not the Sprint 034C acceptance contract. The cu
 - Exact staged manifest: 15 approved files, 0 unstaged files and 0 untracked files. Nine staged secret/protected-data/private-identifier scan classes returned 0 matches; excluded/generated-path and product/source/test/script/dependency counts were 0; staged `git diff --check` passed after removing one Pack-only blank line at EOF.
 - External effects: read-only queries only; no provider, account, credential, MFA, recovery, membership, DNS, deployment, Auth or product mutation occurred.
 
-## Candidate outcome
+Final closeout rerun after canonical closeout-file updates passed: 2/2 JSON groups + 8/8 static groups = 10/10 maintained groups; the current executable trainer suite reported 89 assertions and the public suite reported 12 controls, for 89 + 12 = 101/101 deterministic checks; 5/5 live public/anonymous checks passed; 41/41 closeout path references resolved; encoding passed across 974 maintained text files; the exact seven-file closeout diff had zero secret/protected/private-identifier, excluded/generated-path or product/source/test/script/dependency findings; and `git diff --check` passed.
 
-The first-stage evidence supports candidate outcome `delivery-access-cleanup-complete-ambiguous-items-retained-clean`: the inventory/register is complete to safely available evidence, no mutation is justified, trainer/application authentication is unchanged, and every unresolved ownership/recovery fact remains visible rather than inferred. The scoped staged manifest and safety reread must pass before any separately approved commit/remote backup and sprint close.
+## Final outcome
+
+Sprint 034C closes `delivery-access-cleanup-complete-ambiguous-items-retained-clean`: the inventory/register is complete to safely available evidence, no external operational mutation is justified, trainer/application authentication is unchanged, and every unresolved ownership/recovery fact remains visible rather than inferred. The only external write was the expressly authorized scoped Git branch backup. GitHub MFA/recovery, Vercel inherited access/recovery, production Supabase ownership, registrar ownership/recovery, Stripe, Google and Railway verification remain future operator checks, not blockers manufactured into cleanup work.

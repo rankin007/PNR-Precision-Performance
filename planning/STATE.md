@@ -1,10 +1,12 @@
 # Project State
 
-## Sprint 034C first stage — 2026-08-03
+## Sprint 034C closed `delivery-access-cleanup-complete-ambiguous-items-retained-clean` — 2026-08-03
 
-Sprint `034C-delivery-access-and-credential-cleanup` is building on scoped branch `codex/034C-delivery-access-and-credential-cleanup` from exact remote-backed Sprint 034B SHA `9605ec02459bc998ccf911045406230091fb05ba`. The Pack generated exactly four sprint files. The approved first stage created a non-secret delivery/operator rotation register and performed sanitized read-only inventory only.
+Sprint `034C-delivery-access-and-credential-cleanup` started on scoped branch `codex/034C-delivery-access-and-credential-cleanup` from exact remote-backed Sprint 034B SHA `9605ec02459bc998ccf911045406230091fb05ba`. The Pack generated exactly four sprint files. The approved first stage created a non-secret delivery/operator rotation register and performed sanitized read-only inventory only. Its exact 15-file commit `4d01649fa5f2d4447400d5548610c959c65e149b` was pushed only to the scoped branch and verified locally/remotely equal.
 
-No external mutation is justified by current evidence. Repository access is required-current; Vercel inherited access/recovery, production Supabase operator access, registrar ownership/recovery and other provider ownership facts remain `ambiguous-retain`; Resend/custom SMTP is `trainer/application-auth-out-of-scope`. Trainer sign-in, retained trainer identity/fixture, application Auth, production, provider settings, DNS and product behavior remain unchanged. Ten maintained validation groups, 101 focused deterministic assertions/controls, five live public/anonymous checks, 52 path references and exact changed-set safety scans pass. The scoped staged-manifest reread and commit/remote-backup decision remain before sprint close.
+No external operational mutation is justified. Repository access is required-current; Vercel inherited access/recovery, production Supabase operator access, registrar ownership/recovery and other provider ownership facts remain `ambiguous-retain`; Resend/custom SMTP is `trainer/application-auth-out-of-scope`. Trainer sign-in, retained trainer identity/fixture, participant access, application Auth, production, provider settings, DNS and product behavior remain unchanged. Proportional maintained validation, deterministic authenticated/public non-regression, live anonymous/public checks, path/encoding proof and exact safety scans pass. The only external write is the authorized scoped Git branch backup.
+
+Sprint 036 and 029N remain planned but unauthorized. Core Product Done remains false under existing acceptance authority.
 
 ## Sprint 034B closed `canonical-realignment-complete-legacy-cleanup-deferred-clean` - 2026-08-01
 
