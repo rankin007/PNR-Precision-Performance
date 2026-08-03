@@ -6,7 +6,7 @@
 
 **Current focus:** Decide whether to plan Sprint 036 production promotion and live trainer acceptance or deliberately keep production unchanged; operational ownership checks remain future private operator work.
 
-**What is proven:** The exact Sprint 034B lineage, four-file Pack agreement, 15-file first-stage manifest, repository and provider read-only inventory, empty external-mutation manifest, trainer/public non-regression and scoped branch backup are proven.
+**What is proven:** The permanent canonical clone established by Sprint 034B, exact Sprint 034C lineage, four-file Pack agreement, 15-file first-stage manifest, repository and provider read-only inventory, empty external-mutation manifest, trainer/public non-regression and scoped branch backup are proven.
 
 **What is not live:** No provider account, credential, MFA, recovery, membership, DNS, deployment, Auth, trainer, participant, data or product setting changed. Sprint 036 and 029N remain unauthorized, and Core Product Done remains false.
 
@@ -21,7 +21,7 @@
 
 ## Where things stand
 
-Sprint 034C closed cleanly without deleting uncertain access or touching trainer authentication. The repository now says exactly which delivery paths are current, ambiguous or out of scope, and it gives the operator safe private verification steps without storing credentials. No external operational cleanup was justified; only the approved scoped Git branch was backed up.
+Sprint 034C closed cleanly without deleting uncertain access or touching trainer authentication. The permanent canonical workspace remains `C:\Users\rrank\OneDrive\PNR Precision Performance Canonical`; `C:\tmp\precision-performance-034c` was only the scoped Sprint 034C execution worktree. The repository now says exactly which delivery paths are current, ambiguous or out of scope, and it gives the operator safe private verification steps without storing credentials. No external operational cleanup was justified; only the approved scoped Git branch was backed up.
 
 ## Current status
 
@@ -37,7 +37,9 @@ Sprint 034C added the non-secret rotation register, reconciled delivery/operator
 - `docs/OPERATIONS_HANDOFF.md`, `docs/DEPLOYMENT.md`, `docs/ENVIRONMENT.md` - narrow operational boundary updates.
 - `planning/sprints/034C-delivery-access-and-credential-cleanup/` - exact applied sprint authority.
 - `planning/reviews/034C-delivery-access-and-credential-cleanup.md` - sanitized inventory, validation and closeout evidence.
-- `planning/STATE.md`, lifecycle, schedule, status and evidence index - canonical closed-state agreement.
+- `planning/STATUS.json` - closed Sprint 034C status with the permanent Sprint 034B canonical-workspace authority.
+- `planning/ROADMAP.md` - 034B and 034C done; Sprint 036 next and 029N planned after it, both unauthorized.
+- `planning/STATE.md`, lifecycle, schedule and evidence index - canonical closed-state agreement.
 
 ## Decisions
 
@@ -60,11 +62,14 @@ Should the next planned work be Sprint 036 production promotion and bounded live
 - Deterministic non-regression: current Sprint 035K runtime suite 89 assertions plus Sprint 032 public suite 12 controls = 101 passing, 0 failing.
 - Live read-only smoke: 5/5 public/anonymous checks passed with expected public success and protected-route redirects.
 - Documentation/safety: 52 first-stage and 41 closeout path references resolved; encoding covered 974 maintained text files; exact changed/staged scans and `git diff --check` passed.
+- Deterministic closeout correction: 10/10 JSON/static groups, 17/17 planning assertions and 10/10 correction path references passed; the exact four-file diff had zero safety, excluded-path or product/source findings.
 - External mutation manifest: empty; no external operational mutation occurred.
 
 ## Plan corrections
 
 The Pack allowed bounded credential cleanup, but no outstanding access was both exact and obsolete-proven with verified dependencies and recovery, so the permitted ambiguity-retained outcome was selected. The delivered Pack contained mojibake and one final blank-line defect; both were corrected deterministically without changing scope. The prior 89-assertion record was not treated as a fixed Sprint 034C contract; the current executable suite supplied its runtime count.
+
+Post-closeout review found that `planning/STATUS.json` incorrectly labelled the temporary execution worktree as canonical and `planning/ROADMAP.md` omitted completed Sprint 034C. The deterministic correction restores the permanent Sprint 034B canonical clone, adds 034C as `done`, updates the named-sprint/delivered counts, and preserves Sprint 036 then 029N as planned but unauthorized.
 
 ## Validation / test status
 

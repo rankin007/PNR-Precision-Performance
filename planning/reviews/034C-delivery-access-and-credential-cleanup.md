@@ -12,6 +12,14 @@ The Sprint 034C Pack was dry-run and then applied. It generated exactly four fil
 
 The validated 15-file first stage was committed intentionally as `4d01649fa5f2d4447400d5548610c959c65e149b` (`docs: inventory Sprint 034C delivery access`). Only `codex/034C-delivery-access-and-credential-cleanup` was pushed. A fresh remote reference query returned that exact SHA; no merge, PR, `develop` push, force-update or deployment occurred.
 
+## Deterministic closeout consistency correction
+
+After the accepted closeout, a durable planning inconsistency was identified and corrected inside closed Sprint 034C without changing its outcome or validation history. `planning/STATUS.json` now preserves the permanent canonical clone established by Sprint 034B, `C:\Users\rrank\OneDrive\PNR Precision Performance Canonical`; `C:\tmp\precision-performance-034c` remains only the scoped Sprint 034C execution worktree. `planning/ROADMAP.md` now records both 034B and 034C as `done`, retains Sprint 036 as the next planned destination and retains 029N planned after it. Roadmap presence continues not to authorize implementation, external mutation, deployment, staging, commit or push.
+
+The correction is limited to `planning/STATUS.json`, `planning/ROADMAP.md`, this review and `planning/ARCHITECT_BRIEFING.md`. No product, test, script, dependency, provider, account, credential, authentication, production, DNS, data or external configuration changed. Correction validation results are recorded below after execution.
+
+Correction validation passed: 2/2 JSON groups + 8/8 maintained static groups = 10/10 groups; 17/17 targeted planning assertions; 10/10 maintained path references; encoding across 974 maintained text files; zero secret/protected/private-identifier findings; zero excluded/generated paths; zero product/source/test/script/dependency changes; and `git diff --check` passed.
+
 ## Sanitized read-only inventory
 
 No protected environment file, credential value, private provider URL, secret identifier, personal account identifier, mailbox content, trainer identity or application Auth record was read or retained.
