@@ -1,11 +1,11 @@
 {
   "schemaVersion": 1,
-  "sprint": "034D-legacy-worktree-retirement-and-canonical-authority-finalisation",
-  "phase": "sprint-closed",
-  "status": "legacy-worktrees-retired-canonical-authority-final-clean",
-  "branch": "codex/034D-legacy-worktree-retirement-and-canonical-authority-finalisation",
-  "startingSha": "8e923c66909ea47f96e8276e2e54aa5a38d9989c",
+  "sprint": "036-production-trainer-access-stabilisation-and-live-acceptance",
+  "phase": "building",
+  "status": "production-trainer-access-stabilisation-in-progress",
+  "branch": "codex/036-production-trainer-access-stabilisation-and-live-acceptance",
+  "startingSha": "7d1210ddef836867bfdb3cf4932a0dbafb701028",
   "canonicalWorkspace": "C:\\Users\\rrank\\OneDrive\\PNR Precision Performance Canonical",
   "methodVersion": 8,
-  "updated": "2026-08-03"
+  "updated": "2026-08-04"
 }
