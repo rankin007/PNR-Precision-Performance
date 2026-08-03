@@ -1,5 +1,14 @@
 # Current Questions
 
+## Sprint 034D Stage 2 decisions
+
+1. Will the owner authorize the exact target-by-target retirement manifest in `planning/reviews/034D-legacy-worktree-retirement-and-canonical-authority-finalisation.md` after reviewing the recovery proof?
+2. What private containment path will govern the legacy root, `pnr-023l`, the three browser-profile directories, and the unsafe local-only 012d/029F histories without exposing protected material?
+3. Will a separately approved preservation mechanism copy the 64 verified safe unique files with source/destination SHA-256 equality, or should the nine source worktrees remain retained?
+4. What evidence will resolve the still-ambiguous unregistered source/extract/validation copies before any deletion decision?
+
+Stage 1 answers none of these by inference. No retirement, prune, branch deletion or protected-content handling is authorized.
+
 ## Current forward decisions after Sprint 034B
 
 1. Sprint 036: should the exact Preview-accepted trainer candidate be promoted to production and the bounded human trainer journey repeated on the live domain, or should production remain deliberately unchanged?

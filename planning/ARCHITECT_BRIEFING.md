@@ -1,86 +1,91 @@
-# Architect Briefing - Sprint 034C Closeout
+# Architect Briefing - Sprint 034D Stage 1 Checkpoint
 
 ## Executive summary
 
-**Business outcome:** Precision Performance now has a sanitized, non-secret delivery/operator access register and a verified rule that uncertain access is retained rather than deleted.
+**Business outcome:** The legacy workspace estate is reconciled into a sanitized, target-specific retirement manifest without deleting or changing any legacy object.
 
-**Current focus:** Decide whether to plan Sprint 036 production promotion and live trainer acceptance or deliberately keep production unchanged; operational ownership checks remain future private operator work.
+**Current focus:** Decide how to contain protected legacy material and preserve 64 safe unique files before considering separately approved Stage 2 retirement.
 
-**What is proven:** The permanent canonical clone established by Sprint 034B, exact Sprint 034C lineage, four-file Pack agreement, 15-file first-stage manifest, repository and provider read-only inventory, empty external-mutation manifest, trainer/public non-regression and scoped branch backup are proven.
+**What is proven:** The permanent canonical clone has one registration; separate legacy Git metadata owns 28 registrations; 17 additional directories are unregistered; 27 of 28 registered HEADs are live-remote recoverable; Sprint 035Q is safe remote-backed alternate history; and the two non-remote histories and all uncommitted preservation dependencies are classified.
 
-**What is not live:** No provider account, credential, MFA, recovery, membership, DNS, deployment, Auth, trainer, participant, data or product setting changed. Sprint 036 and 029N remain unauthorized, and Core Product Done remains false.
+**What is not live:** No legacy worktree, directory, metadata record, lock, branch or file was retired. No archival branch was pushed, no external archive was created, no 035Q change was adopted, and no product or production state changed.
 
 ## Readiness signals
 
 | Signal | Status | Evidence |
 |---|---|---|
-| Non-secret register and inventory | passed | Required fields, explicit prohibited-content warning, sanitized classifications and an empty mutation manifest are recorded. |
-| Repository and product safety | passed | Exact staged scans, Pack agreement, maintained validation, deterministic public/trainer checks and live anonymous/public checks pass with zero product-source change. |
-| Delivery-account ownership and recovery | attention | GitHub MFA/recovery, Vercel inherited access/recovery, production Supabase ownership, registrar recovery, Stripe, Google and Railway checks remain deliberately unverified and unchanged. |
-| Trainer/application authentication isolation | passed | Custom SMTP/Resend is classified out of scope; trainer sign-in, identities, participant access and application Auth remain unchanged. |
+| Canonical authority | passed | Canonical CWD/top-level exact; standalone metadata registers one canonical worktree |
+| Legacy reconciliation | passed | 28 legacy-metadata registrations and 17 unregistered directories have exact Stage 2 dispositions |
+| Remote recovery | attention | 27 registered HEADs are remote-recoverable; 012d and one other local-only history failed safety gates and remain local |
+| Stage 2 retirement | attention | Protected-material containment and approved preservation of 64 safe unique files are unresolved |
 
 ## Where things stand
 
-Sprint 034C closed cleanly without deleting uncertain access or touching trainer authentication. The permanent canonical workspace remains `C:\Users\rrank\OneDrive\PNR Precision Performance Canonical`; `C:\tmp\precision-performance-034c` was only the scoped Sprint 034C execution worktree. The repository now says exactly which delivery paths are current, ambiguous or out of scope, and it gives the operator safe private verification steps without storing credentials. No external operational cleanup was justified; only the approved scoped Git branch was backed up.
+Stage 1 is complete and Stage 2 is deliberately withheld. The reconciliation distinguishes canonical authority from registrations owned by separate legacy Git metadata and from unregistered directories. Every legacy target remains in place, including two stale administrative records found only by dry-run inspection.
 
 ## Current status
 
-Closed `delivery-access-cleanup-complete-ambiguous-items-retained-clean` on `codex/034C-delivery-access-and-credential-cleanup`. The first-stage commit is `4d01649fa5f2d4447400d5548610c959c65e149b`; its remote equality was verified before closeout.
+Sprint 034D is `stage-1-complete-stage-2-withheld` on `codex/034D-legacy-worktree-retirement-and-canonical-authority-finalisation`. The sprint is not closed because no retirement has been authorized or performed.
 
 ## Since last sprint
 
-Sprint 034C added the non-secret rotation register, reconciled delivery/operator ownership evidence across repository, hosting, database/provider, registrar/DNS and documented secondary control planes, and recorded every ambiguity. No product, application Auth, provider configuration or production behavior changed.
+The four-file 034D Pack was applied. Builder completed read-only Git, filesystem and live-remote reconciliation; classified Sprint 035Q; scanned every local branch for non-remote commits; classified dirty material; and wrote the exact retirement manifest. No product source was changed.
 
 ## Architecture / file map
 
-- `docs/change password.md` - non-secret access, rotation, recovery and disposition register.
-- `docs/OPERATIONS_HANDOFF.md`, `docs/DEPLOYMENT.md`, `docs/ENVIRONMENT.md` - narrow operational boundary updates.
-- `planning/sprints/034C-delivery-access-and-credential-cleanup/` - exact applied sprint authority.
-- `planning/reviews/034C-delivery-access-and-credential-cleanup.md` - sanitized inventory, validation and closeout evidence.
-- `planning/STATUS.json` - closed Sprint 034C status with the permanent Sprint 034B canonical-workspace authority.
-- `planning/ROADMAP.md` - 034B and 034C done; Sprint 036 next and 029N planned after it, both unauthorized.
-- `planning/STATE.md`, lifecycle, schedule and evidence index - canonical closed-state agreement.
+- `planning/sprints/034D-legacy-worktree-retirement-and-canonical-authority-finalisation/` - applied Builder authority and acceptance boundary.
+- `planning/reviews/034D-legacy-worktree-retirement-and-canonical-authority-finalisation.md` - exact sanitized target ledger, safety gates, recovery evidence and ordered Stage 2 manifest.
+- `planning/STATUS.json` - Stage 1 checkpoint awaiting a separate Stage 2 decision.
+- `planning/STATE.md`, roadmap, lifecycle ledger, schedule and evidence index - canonical authority and current status.
+- `docs/OPERATIONS_HANDOFF.md` - operator prohibition against premature legacy retirement or 035Q adoption.
 
 ## Decisions
 
-Only exact obsolete-proven delivery/operator access may be removed after replacement/recovery proof and a separate mutation checkpoint. No outstanding item met that boundary. Ambiguous access remains unchanged. Trainer sign-in, custom SMTP/Resend delivery and application Auth are separate protected non-targets.
+- Treat the canonical registration, legacy-metadata-owned registrations and unregistered directories as three distinct sets.
+- Retain Sprint 035Q remotely as safe non-authoritative alternate history without adopting it.
+- Refuse remote backup for the two local-only histories because their safety gates did not fully pass.
+- Preserve all source worktrees containing unique files until an approved external-preservation mechanism proves copy equality.
 
 ## Risks / watch-items
 
-GitHub MFA/recovery, Vercel inherited access/recovery, production Supabase ownership, registrar ownership/recovery, Stripe, Google and Railway remain private operator verification items. The currently authenticated Supabase CLI profile does not expose the documented production target; do not infer that another visible target is a replacement. Do not turn missing metadata into speculative rotation or deletion.
+- The 012d history and two registered worktrees contain protected-path or provider-material findings and require private containment.
+- One other local-only commit retains non-placeholder identity metadata.
+- Three browser-profile directories were classified without content traversal and require private handling.
+- Two stale legacy administrative records and two unregistered directories sharing one stale pointer must not be pruned independently.
+- The proposed sibling-folder archive is absent; heuristic safety scans were not accepted as sufficient disclosure authority.
 
 ## Open questions for the Architect
 
-Should the next planned work be Sprint 036 production promotion and bounded live trainer acceptance, or should production remain deliberately unchanged? Operational ownership checks may be scheduled separately if the product owner wants them, but their ambiguity does not authorize mutation.
+- What approved private containment method should handle the protected legacy entries?
+- Should the product owner explicitly authorize the 64-file external archive after reviewing the residual disclosure risk, or select another preservation mechanism?
+- Which ambiguous source/deployment-copy directories require deeper private reconciliation before retirement?
+- Once dependencies are resolved, should Stage 2 authorize the exact ordered removals in the ledger?
 
 ## Evidence
 
-- Exact baseline: Sprint 034B remote-backed SHA `9605ec02459bc998ccf911045406230091fb05ba`.
-- Pack/import: exactly four generated files; post-normalization generated contents agree with the Pack.
-- First-stage commit/backup: `4d01649fa5f2d4447400d5548610c959c65e149b`; local and remote branch SHA matched exactly.
-- Maintained validation: 2 JSON + 8 static = 10 passing groups.
-- Deterministic non-regression: current Sprint 035K runtime suite 89 assertions plus Sprint 032 public suite 12 controls = 101 passing, 0 failing.
-- Live read-only smoke: 5/5 public/anonymous checks passed with expected public success and protected-route redirects.
-- Documentation/safety: 52 first-stage and 41 closeout path references resolved; encoding covered 974 maintained text files; exact changed/staged scans and `git diff --check` passed.
-- Deterministic closeout correction: 10/10 JSON/static groups, 17/17 planning assertions and 10/10 correction path references passed; the exact four-file diff had zero safety, excluded-path or product/source findings.
-- External mutation manifest: empty; no external operational mutation occurred.
+- Canonical `git worktree list --porcelain`: one canonical registration.
+- Legacy `git worktree list --porcelain`: 28 registrations; administrative inventory: 29 entries.
+- Legacy `git worktree prune --dry-run --verbose`: only two absent records reported; no prune executed.
+- Fresh `git ls-remote --heads origin`: exact live tips captured; 27/28 registered HEADs reachable.
+- All 39 legacy local branches compared with every live remote tip: only 012d and local 029F contain non-remote commits; neither passed all safety conditions.
+- Sprint 035Q exact local/tracking/live tip `954438dd34d3d91ec3e0cd62868e912acc568e44`; nine commits ahead and 62 behind accepted 034C.
+- Dirty-content reconciliation: 47 paths already represented remotely; 64 unique safe files remain in nine source worktrees.
+- External archive destination absent; no remote archival branch created; all legacy targets retained.
+- Final non-mutation reread: 1 canonical registration, 28/28 legacy registrations present, 29 legacy administration records, 17/17 unregistered targets present and 39 legacy local branches present.
+- Canonical and legacy `git fsck --full --no-progress`: exit zero; Pack agreement: 4/4 exact generated sections.
 
 ## Plan corrections
 
-The Pack allowed bounded credential cleanup, but no outstanding access was both exact and obsolete-proven with verified dependencies and recovery, so the permitted ambiguity-retained outcome was selected. The delivered Pack contained mojibake and one final blank-line defect; both were corrected deterministically without changing scope. The prior 89-assertion record was not treated as a fixed Sprint 034C contract; the current executable suite supplied its runtime count.
-
-Post-closeout review found that `planning/STATUS.json` incorrectly labelled the temporary execution worktree as canonical and `planning/ROADMAP.md` omitted completed Sprint 034C. The deterministic correction restores the permanent Sprint 034B canonical clone, adds 034C as `done`, updates the named-sprint/delivered counts, and preserves Sprint 036 then 029N as planned but unauthorized.
+The approved Stage 1 allowed remote backup only for genuinely unique commits that passed sanitized safety checks. No unique commit passed every condition, so no archival push was made. Copying the 64 safe unique files to the proposed sibling archive was rejected at execution review because heuristic scans did not establish sufficient disclosure authority; the source worktrees were retained and the dependency was recorded instead. The Pack's nonexistent `planning/evidence/INDEX.md` path was corrected deterministically to `planning/EVIDENCE_INDEX.md` in both Pack and generated requirements. A sandboxed final-audit Git call hit the legacy repository's ownership guard; command-local `safe.directory` supplied equivalent read-only proof without changing configuration. The first checkpoint commit attempt stopped before commit creation because Git identity was not configured in the sandbox; the retry inherits the accepted base commit's identity through command-local environment values without displaying or persisting it.
 
 ## Validation / test status
 
-**Tests:** 101 passing, 0 failing.
-
-Ten maintained validation groups and five live public/anonymous checks also pass. The final closeout rerun took 89 from the current executable trainer suite and 12 from the public suite rather than assuming a fixed assertion count.
+**Tests:** 101 passing, 0 failing. The Sprint 035K deterministic suite passed 89 assertions and the Sprint 032 public-relaunch suite passed 12/12. JSON, maintained-text encoding across 980 files, static safety, TypeScript and ESLint validation passed; the production build passed. The 18-file changed/untracked safety scan, 17 actionable added-path checks, `git diff --check`, Pack agreement and both Git integrity checks passed.
 
 ## Recommended next Architect action
 
-**Do:** Decide whether to plan Sprint 036 production promotion and live trainer acceptance or deliberately defer production.
+**Do:** Review the exact Stage 2 manifest, choose approved private containment and preservation mechanisms, and issue Stage 2 authority only after those dependencies are proven.
 
-**Owner:** Product owner and Architect.
+**Owner:** Product owner, Architect and designated security/privacy owner.
 
-**Decision:** Authorize a narrow Sprint 036 only if production promotion is wanted; otherwise preserve the current Preview-accepted, production-unpromoted boundary. Keep 029N planned and keep all retained 034C provider ambiguities non-mutating unless separately requested.
+**Decision:** Either authorize a defined preservation/containment path and then a bounded target-by-target Stage 2 retirement, or retain the current non-mutating estate. Do not authorize broad cleanup or 035Q adoption by implication.

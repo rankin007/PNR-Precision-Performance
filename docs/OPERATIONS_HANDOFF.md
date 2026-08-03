@@ -59,3 +59,11 @@ The non-secret register at `docs/change password.md` governs delivery/operator a
 Read-only inventory on 2026-08-03 established current repository administrator access, Vercel project read access through one team, public registrar/DNS continuity and an authenticated Supabase CLI profile. It did not prove GitHub MFA/recovery, Vercel inherited role/MFA/recovery, registrar-account ownership/recovery, or access to the documented production Supabase target. Those surfaces remain unchanged as `ambiguous-retain` where applicable.
 
 Before any delivery/operator rotation or revocation, the platform owner must privately confirm the exact target, dependent workflows, retained/replacement operator and recovery path. Verify replacement access before revocation, reread the provider afterward and record only sanitized evidence. A shared control that governs trainer sign-in or application authentication is out of scope and must remain unchanged unless a later sprint proves isolation and separately authorizes the change.
+
+## Sprint 034D Stage 1 legacy-workspace boundary
+
+The permanent canonical repository is `C:\Users\rrank\OneDrive\PNR Precision Performance Canonical`. Its standalone Git metadata registers exactly that one worktree. Separate Git metadata under the legacy OneDrive repository owns the legacy root and 27 linked `C:\tmp` worktrees; those 28 registrations do not confer canonical authority. Seventeen additional inventoried legacy directories are unregistered.
+
+Do not remove, force-remove, prune, recycle, move or delete a legacy worktree, directory, metadata record, lock or branch from the Stage 1 checkpoint. Two local-only histories failed the archive safety gate and must remain privately contained. Nine dirty worktrees contain 64 verified safe files not represented in live remote trees, but the proposed external copy was not approved and does not exist. The exact target-by-target dependencies and recovery evidence are in `planning/reviews/034D-legacy-worktree-retirement-and-canonical-authority-finalisation.md`.
+
+Sprint 035Q is a safe, live-remote-backed alternate lineage, not accepted canonical product history. Do not merge, cherry-pick, rebase, replay or adopt it without a later Architect decision. Stage 2 requires separate approval after protected-material containment and preservation dependencies are resolved.

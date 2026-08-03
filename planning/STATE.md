@@ -1,5 +1,13 @@
 # Project State
 
+## Sprint 034D Stage 1 complete `reconciliation-complete-retirement-withheld-protected-and-archive-dependencies-visible` - 2026-08-03
+
+Sprint `034D-legacy-worktree-retirement-and-canonical-authority-finalisation` is active on the permanent canonical repository and scoped branch from exact accepted Sprint 034C SHA `8e923c66909ea47f96e8276e2e54aa5a38d9989c`. The Pack generated exactly four sprint files. Stage 1 completed sanitized read-only reconciliation and created the exact retirement manifest without removing, pruning, recycling, moving or deleting any legacy worktree, directory, metadata entry, lock or branch.
+
+The canonical clone owns exactly one registration: itself. Separate legacy Git metadata owns the legacy root plus 27 `C:\tmp` registrations, with two additional stale/prunable administrative records and 17 unregistered candidate directories. Twenty-seven registered HEADs are reachable from fresh live remote tips. Sprint 035Q is exact-live-remote-backed alternate history, 62 commits behind and 9 ahead of accepted 034C, and is not current authority.
+
+The only two local branches with commits absent from every live remote tip failed the safe-archive boundary: 012d contains protected environment/provider/identity findings and local 029F contains non-placeholder commit identity metadata. Neither was pushed. Nine dirty worktrees contain 64 verified safe non-secret unique files, but the proposed external copy was rejected before execution; the archive is absent and every file remains preserved in place. Protected entries require private containment, ambiguous unregistered copies require disposition, and Stage 2 retirement remains unapproved. Sprint 036 and 029N remain planned but unauthorized; Preview acceptance remains distinct from Production promotion.
+
 ## Sprint 034C closed `delivery-access-cleanup-complete-ambiguous-items-retained-clean` — 2026-08-03
 
 Sprint `034C-delivery-access-and-credential-cleanup` started on scoped branch `codex/034C-delivery-access-and-credential-cleanup` from exact remote-backed Sprint 034B SHA `9605ec02459bc998ccf911045406230091fb05ba`. The Pack generated exactly four sprint files. The approved first stage created a non-secret delivery/operator rotation register and performed sanitized read-only inventory only. Its exact 15-file commit `4d01649fa5f2d4447400d5548610c959c65e149b` was pushed only to the scoped branch and verified locally/remotely equal.

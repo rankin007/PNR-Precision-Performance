@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
-  "sprint": "034C-delivery-access-and-credential-cleanup",
-  "phase": "sprint-closed",
-  "status": "delivery-access-cleanup-complete-ambiguous-items-retained-clean",
-  "branch": "codex/034C-delivery-access-and-credential-cleanup",
-  "startingSha": "9605ec02459bc998ccf911045406230091fb05ba",
+  "sprint": "034D-legacy-worktree-retirement-and-canonical-authority-finalisation",
+  "phase": "awaiting-approval",
+  "status": "stage-1-complete-stage-2-withheld",
+  "branch": "codex/034D-legacy-worktree-retirement-and-canonical-authority-finalisation",
+  "startingSha": "8e923c66909ea47f96e8276e2e54aa5a38d9989c",
   "canonicalWorkspace": "C:\\Users\\rrank\\OneDrive\\PNR Precision Performance Canonical",
   "methodVersion": 8,
   "updated": "2026-08-03"

@@ -2,6 +2,8 @@
 
 ## Current governing evidence
 
+- `planning/sprints/034D-legacy-worktree-retirement-and-canonical-authority-finalisation/` - applied four-file authority for bounded legacy reconciliation and retirement.
+- `planning/reviews/034D-legacy-worktree-retirement-and-canonical-authority-finalisation.md` - Stage 1 sanitized registration/directory ledger, exact target-by-target Stage 2 retirement manifest, 035Q classification, remote-recovery proof and protected/preservation stops; no retirement occurred.
 - `planning/sprints/034C-delivery-access-and-credential-cleanup/` - applied four-file delivery/operator access and credential-cleanup authority.
 - `docs/change password.md` - non-secret delivery/operator rotation, ownership, recovery and disposition register.
 - `planning/reviews/034C-delivery-access-and-credential-cleanup.md` - sanitized read-only inventory, retained ambiguities, empty external-mutation manifest, exact first-stage commit/remote equality, final validation evidence and `delivery-access-cleanup-complete-ambiguous-items-retained-clean` closeout.

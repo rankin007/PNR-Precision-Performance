@@ -1,5 +1,9 @@
 # Precision Performance Sprint List
 
+## Current checkpoint — Sprint 034D Stage 1
+
+Sprint 034D Stage 1 completed sanitized read-only reconciliation without retiring any legacy object. The permanent canonical clone has one registration; separate legacy Git metadata owns 28 registrations, and 17 additional legacy directories are unregistered. Sprint 035Q is classified as safe, remote-backed, non-authoritative alternate history. Stage 2 remains unapproved while protected-material containment and approved preservation of 64 unique safe files are unresolved.
+
 ## Sprint 030 — Commercial Schedule And Commerce Decision
 
 Outcome: `commercial-authority-pending-commerce-disabled-safe`. Safe reconciliation complete; online purchasing remains disabled pending a complete named-owner schedule.
