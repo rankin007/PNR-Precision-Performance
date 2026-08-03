@@ -1,86 +1,86 @@
-# Architect Briefing - Sprint 034D Final Closeout
+# Architect Briefing - Sprint 036 Rolled-Back Closeout
 
 ## Executive summary
 
-**Business outcome:** The permanent canonical repository is now the sole registered worktree. The exact approved 49-row legacy-retirement manifest completed without losing verified-safe or protected recovery material.
+**Business outcome:** Sprint 036 safely exercised the exact zero-source Production path but did not establish stable live trainer access. An unexpected Vercel alias post-state triggered the approved immediate all-five rollback before human Production authentication.
 
-**Current focus:** Sprint 034D is closed. The next roadmap decision is Sprint 036 production promotion; Sprint 029N remains planned behind its privacy/data authority gate.
+**Current focus:** Sprint 036 is closed `production-promotion-rolled-back-clean`. Decide deliberate non-promotion or create a corrective Sprint 036B Pack focused on authoritative alias-transition proof. Sprint 029N remains behind this gate.
 
-**What is proven:** All 45 legacy filesystem targets, two stale worktree-administration records and two protected local refs are retired; zero legacy registrations or stale metadata remain; one exact canonical registration remains; the safe archive passes 64/64 SHA-256 equality; and accepted private copy/restore passes 29,897/29,897 with both protected histories recoverable from two verified byte-equal bundles.
+**What is proven:** The exact remote-backed candidate was Ready and source-matched; retained pilot ownership remained exact; all five stable aliases now independently resolve to Ready rollback `dpl_EUJyBLQp7okgbPwtBU6nmMH88L6A`; canonical public/health/sign-in and anonymous portal safety passed after rollback.
 
-**What is not live:** No product, provider, Auth, deployment, DNS, data, billing or production state changed. Sprint 035K remains Preview-accepted and production-not-promoted.
+**What is not live:** Candidate `dpl_EmfhgcYxjNHk4W9LwH6ruTfASZmf` is not accepted on stable aliases. No Production OTP or human trainer journey was attempted. Stable live access, broad rollout, Sprint 029N and product-wide Done are not claimed.
 
 ## Readiness signals
 
 | Signal | Status | Evidence |
 |---|---|---|
-| Manifest retirement | passed | 49/49 rows executed individually in recorded dependency order; legacy root retired last |
-| Canonical authority | passed | One registration exactly at the permanent canonical path; zero legacy registrations and zero worktree-admin directories |
-| Safe-file preservation | passed | 64/64 SHA-256 equality; 65 files including sanitized manifest; zero Git entries and zero linked reparse targets |
-| Private containment / recovery | passed | 15/15 `C` and `R` target sets; 29,897/29,897 files and exact bytes; both bundles verify and contain the expected two heads |
-| Remote preservation | passed | Scoped 034D checkpoint exact before closeout; Sprint 035Q exact and retained; divergent remote 029F present and unchanged by retirement |
+| Canonical / source authority | passed | Permanent canonical root, one registration, accepted 035K ancestry, zero application/source diff |
+| Candidate validation | passed | 101 counted core assertions plus focused auth suites; canonical groups; TypeScript; zero-warning lint; Production build |
+| Retained pilot | passed | Protected Verify exit 0; no protected input captured; adopted identity/eight-record synthetic graph retained |
+| Candidate deployment | passed | `dpl_EmfhgcYxjNHk4W9LwH6ruTfASZmf` Ready/production with exact `38ab1acc...` metadata |
+| Automatic alias control | unresolved / rolled back | Deployment alias inventory unexpectedly listed a stable alias and remained stale after authoritative rerouting |
+| Final Production routing | passed safe | Five/five aliases independently resolve to Ready `dpl_EUJyBLQp7okgbPwtBU6nmMH88L6A` |
+| Human Production acceptance | not started | Rollback occurred before OTP request or sign-in; business gate remains closed |
 
 ## Where things stand
 
-Sprint 034D is `legacy-worktrees-retired-canonical-authority-final-clean`. The legacy OneDrive root and all recorded `C:\tmp` targets are absent. The legacy metadata control plane is gone; the canonical repository has one clean registration and no stale worktree metadata.
+Production is on the exact compatible rollback, not the Sprint 036 candidate. `/`, `/sign-in` and `/api/health` return 200; anonymous `/portal` returns 307 to the truthful sign-in boundary. Provider/Auth/template/DNS/data state was not mutated. The retained governed trainer pilot remains available for a later separately authorized acceptance attempt.
 
 ## Since last sprint
 
-Builder revalidated preservation and recovery, then processed 27 linked worktrees, 17 unregistered directories, two dependent stale administration records, two protected local refs and the legacy root. Registration, filesystem, branch, metadata and recovery state were reread after each transaction. The root was processed only after all other rows and reachability dependencies passed.
+Builder applied the four-file Sprint 036 Pack, reconciled exact source/provider/pilot baselines, ran the unchanged candidate validation, committed and pushed planning-only checkpoint `38ab1acc2776124ba8b54fd33eb346bf7f28f99a`, and deployed it with `--prod --skip-domain`. Candidate inspection reported an unexpected stable alias. Builder stopped before intentional alias promotion or authentication, restored all five aliases to rollback, and independently re-proved route safety.
 
 ## Architecture / file map
 
-- `planning/reviews/034D-legacy-worktree-retirement-and-canonical-authority-finalisation.md` - Stage 1 historical ledger plus final Stage 2 addendum.
-- `planning/reviews/034D-stage-2-containment-preservation-and-disposition-plan.md` - preservation, private recovery, exact 49-row manifest and post-retirement reconciliation.
-- `planning/STATUS.json` and `planning/STATE.md` - closed canonical authority.
-- `docs/OPERATIONS_HANDOFF.md` - post-retirement retention and non-recreation boundary.
+- `planning/sprints/036-production-trainer-access-stabilisation-and-live-acceptance/` - strict applied authority.
+- `planning/reviews/036-production-trainer-access-stabilisation-and-live-acceptance.md` - exact execution, failure diagnosis, rollback and acceptance disposition.
+- `docs/OPERATIONS_HANDOFF.md` - current rollback identity, five-alias procedure and Vercel alias-reporting caution.
+- `planning/STATUS.json`, `planning/STATE.md`, roadmap, lifecycle, schedule and evidence index - consistent rolled-back closeout.
 
 ## Decisions
 
-- Preserve the canonical registration and never recreate or adopt a retired legacy path without new authority.
-- Retain the non-Git safe archive, accepted encrypted-vault `C`/`R`/`H` set, private manifest and unaccepted partial attempt until a separate retention or cleanup decision.
-- Keep Sprint 035Q as remote-backed alternate non-authoritative history.
-- Treat the pre-existing divergent remote 029F branch as distinct from the protected retired local 029F history preserved privately.
+- Treat the unexpected alias report as a material post-state because the approved plan required automatic alias promotion to be disabled.
+- Prefer immediate recovery over reconstructive Production experimentation; no blind redeployment occurred.
+- Use independent per-alias resolution as routing authority because deployment-level alias inventory proved stale after rerouting.
+- Keep all source/provider/data boundaries unchanged and retain the Sprint 035K pilot under its existing governance.
 
 ## Risks / watch-items
 
-- The unaccepted path-length-limited private-containment attempt remains retained and is not recovery authority; cleanup still requires separate approval.
-- The accepted encrypted recovery set must remain operator-controlled, encrypted, non-Git, non-shared and non-OneDrive.
-- The safe archive is ordinary OneDrive material, not the encrypted private vault, and must never receive protected material.
-- Preview acceptance must not be restated as production promotion.
+- The pre-rollback route of the project-level alias is not reconstructable from the stale deployment alias list.
+- A future attempt that relies only on `--skip-domain` plus deployment inspection can repeat the same control ambiguity.
+- The Ready Sprint 036 candidate is unaccepted and must not receive stable aliases by inference.
+- Preview human acceptance remains valid historical evidence but is not Production acceptance.
 
 ## Open questions for the Architect
 
-- Decide Sprint 036 production promotion or deliberate non-promotion.
-- Separately decide eventual retention/cleanup for the unaccepted private attempt, safe archive and accepted vault set; Sprint 034D does not authorize deletion.
+- Deliberately retain the rollback, or create corrective Sprint 036B under the suffix rule?
+- Which Vercel read-only audit or per-alias transition evidence will authoritatively prove no automatic movement of all five aliases, including the project-level alias?
+- Is a zero-source/no-provider-change promotion mechanism available, or would any change require a newly scoped exact plan?
 
 ## Evidence
 
-- Filesystem retirement: 45/45 exact manifest paths absent.
-- Metadata retirement: zero legacy registrations and zero worktree-administration directories; one canonical registration exactly.
-- Protected refs: both local refs absent after accepted-bundle re-verification and compare-and-swap deletion.
-- Safe archive: 64/64 recorded SHA-256 equality; manifest SHA-256 `50d74ab296d973941cf1cd2d6fdaf887973a083e736d3e7da653b5e7489fe0fe`.
-- Private recovery: 15 target sets; 29,897/29,897 contained and restore files; exact recorded bytes; zero accepted destination reparses; bundle and restore copy byte-equal and Git-verified.
-- Browser proof: all three profiles remained dormant and were never launched.
-- Remote proof: Sprint 035Q remains exactly `954438dd34d3d91ec3e0cd62868e912acc568e44`; the scoped 034D checkpoint was exact before closeout; remote 029F remains divergent from the protected bundled tip.
-- Retention proof: safe archive, accepted vault roots, private manifest and unaccepted attempt all remain present.
+- Candidate: `dpl_EmfhgcYxjNHk4W9LwH6ruTfASZmf`, Ready/production, exact checkpoint metadata.
+- Final routing: five/five named aliases resolve to `dpl_EUJyBLQp7okgbPwtBU6nmMH88L6A`, Ready.
+- Final HTTP: `/` 200; `/sign-in` 200; `/api/health` 200; anonymous `/portal` 307 to sign-in.
+- Protected pilot: private Verify exit 0 with no protected-value capture.
+- Mutation boundary: Vercel candidate deployment plus five-alias rollback only; no source, Auth/provider, template, DNS, schema, permission, identity, fixture or data mutation.
 
 ## Plan corrections
 
-Git worktree removal succeeded for registrations but OneDrive-backed targetless administration directories sometimes returned permission errors. After proving each registration absent, Builder removed only the exact corresponding unlocked metadata directory; no broad prune ran. Reparse-bearing filesystem rows used no-follow deletion and never traversed junction/symbolic-link targets.
+The first private Verify launch failed closed because the retained wrapper correctly requires its original 035K branch. Builder committed/pushed the clean 036 checkpoint, briefly switched the canonical clone to the exact guarded branch for read-only Verify, then returned immediately to 036. No wrapper, source or data changed.
 
-The legacy-root first no-follow pass timed out after 30 minutes and left an expected partial residual with `.git` already absent. Builder did not repeat it blindly. A disposable test proved a compiled reparse-tag-aware walker preserves junction targets while traversing targetless OneDrive cloud-tagged directories; the exact residual then completed, and the entire manifest/preservation state was reread.
+The canonical domain aggregate stopped at Sprint 031B because optional `playwright-core` was absent. Accepted unchanged-byte evidence from Sprint 035K, all other current domain components and fresh live route boundaries supplied the documented substitute proof; no dependency install or follow-up was created for that supporting limitation.
 
-The legacy-root ignored-entry count used a stronger reconciliation substitute because OneDrive and Git ignored-enumeration modes returned different aggregate forms. Tracked `38` and untracked `422` matched exactly; all six protected environment paths matched accepted private recovery, and the bounded ignored difference was generated/ignored-only.
+Vercel deployment inspection was not treated as authoritative after it continued to list an alias that independently resolved to rollback. The release remained rolled back because the pre-rollback routing transition could not be reconstructed safely.
 
 ## Validation / test status
 
-**Tests:** 101 passing, 0 failing from the unchanged product baseline: 89 Sprint 035K assertions and 12 Sprint 032 public controls. Sprint 034D changed planning/operations evidence only. Closeout passed the JSON self-test (8 cases), all 7 JSON files, 8 maintained static groups, encoding across 981 maintained text files, four-target Pack dry-run, Git integrity and diff checks. Exact scope/safety, final physical reconciliation and post-push equality complete the closeout authority.
+**Tests:** 89 Sprint 035K assertions and 12 Sprint 032 public controls passed, plus focused 035D/035C/035F/035 auth, OTP, redirect, bootstrap, recovery, dashboard and permission tests. JSON, roles, Supabase-self, static, TypeScript, zero-warning lint and Production build passed. Domain components passed except the optional-dependency 031B runner; 031C passed directly and substitute proof is recorded. Pack dry-run, JSON parsing, diff/scope and secret/private-identity scans passed.
 
 ## Recommended next Architect action
 
-**Do:** Select Sprint 036 promotion or deliberate non-promotion without reopening retired legacy paths.
+**Do:** Choose deliberate non-promotion or issue a corrective Sprint 036B Pack that first proves authoritative five-alias transition behavior, then permits one fresh zero-source candidate, bounded five-alias promotion, public/protected smoke and the two private Production sign-ins.
 
-**Owner:** Product owner and Architect. The designated security operator and Platform recovery owner retain the recovery set under the recorded boundary.
+**Owner:** Product owner and Architect for the promotion decision; release/platform owner for Vercel evidence; designated trainer tester for private mailbox participation only after a new exact run is authorized.
 
-**Decision:** Sprint 034D is closed. Recovery-set deletion and cleanup of the unaccepted attempt remain separate, explicit decisions.
+**Decision:** Sprint 036 is safely closed but the business outcome is not complete. No 036B implementation or Production action is authorized by this briefing.

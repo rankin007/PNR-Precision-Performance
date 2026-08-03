@@ -2,10 +2,11 @@
 
 ## Active direction
 
-Sprint 034D is closed `legacy-worktrees-retired-canonical-authority-final-clean`. Its exact 49-row retirement manifest completed in dependency order with zero legacy targets, registrations or stale administration remaining, while the 64-file safe archive and accepted 29,897/29,897 private recovery set remain intact. Sprint 035K remains closed `preview-trainer-access-proven-production-not-promoted-clean`; its retained pilot and production-not-promoted boundary are unchanged. Sprint 036 and 029N remain planned, not authorized.
+Sprint 036 is closed `production-promotion-rolled-back-clean`. Its unchanged exact candidate deployed Ready, but the automatic-alias post-state was ambiguous, so all five aliases returned immediately to the Ready compatible rollback before human Production acceptance. The retained pilot remains governed and verified; no source/provider/data change occurred. Architect must choose deliberate non-promotion or a corrective 036B Pack. Sprint 029N remains behind the live-access gate.
 
 | Sprint | Outcome | Profile / proof |
 |---|---|---|
+| 036 | Closed `production-promotion-rolled-back-clean` | Strict zero-source candidate Ready; unexpected alias reporting triggered all-five rollback; five/five aliases independently resolve to Ready rollback; canonical public/protected smoke passed; no human Production sign-in attempted |
 | 034D | Closed `legacy-worktrees-retired-canonical-authority-final-clean` | 49/49 retirement rows passed; zero legacy targets/registrations/stale administration; one canonical registration; safe archive 64/64 and private copy/restore 29,897/29,897 retained |
 | 034C | Closed `delivery-access-cleanup-complete-ambiguous-items-retained-clean` | Strict read-only access inventory and non-secret register; no external operational mutation justified; retained ambiguity recorded; proportional validation and scoped remote backup passed |
 | 034B | Closed `canonical-realignment-complete-legacy-cleanup-deferred-clean` | Canonical clone and method v8 exact; 89/0 and owner Re-detect passed; duplicate 035K directory removed; two stale locked metadata records deferred |
@@ -18,7 +19,6 @@ Sprint 034D is closed `legacy-worktrees-retired-canonical-authority-final-clean`
 | 035C | Trainer Participation And Final MVP Acceptance | Strict participant privacy, exact no-alias Preview, passwordless A/B/C pilot and cleanup required |
 | 035B | Closed `trainer-pilot-participation-partial-clean` | Exact Preview and authenticated synthetic matrix passed; three-person trainer journey not started because protected provider coordination was unavailable; cleanup `0/0/0` |
 | 035 | Closed `trainer-dashboard-validation-blocked-clean` | Local implementation and validation complete; external acceptance moved to 035B |
-| 036 | Planned production promotion decision and live trainer acceptance | Architect/product owner decision required; Preview proof alone is not production readiness |
 | 029N | Planned public enquiry privacy and submission completion | Privacy/data authority required before enabling submission |
 
 ## Deferred until explicitly promoted

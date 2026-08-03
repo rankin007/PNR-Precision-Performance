@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "sprint": "036-production-trainer-access-stabilisation-and-live-acceptance",
-  "phase": "building",
-  "status": "production-trainer-access-stabilisation-in-progress",
+  "phase": "closed",
+  "status": "production-promotion-rolled-back-clean",
   "branch": "codex/036-production-trainer-access-stabilisation-and-live-acceptance",
   "startingSha": "7d1210ddef836867bfdb3cf4932a0dbafb701028",
   "canonicalWorkspace": "C:\\Users\\rrank\\OneDrive\\PNR Precision Performance Canonical",

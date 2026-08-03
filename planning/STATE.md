@@ -1,5 +1,15 @@
 # Project State
 
+## Sprint 036 closed `production-promotion-rolled-back-clean` - 2026-08-04
+
+Sprint 036 executed from the permanent canonical repository on scoped branch `codex/036-production-trainer-access-stabilisation-and-live-acceptance`. The Pack generated exactly four sprint files. Current application/source bytes were unchanged from accepted Sprint 035K behavior; the planning-only checkpoint `38ab1acc2776124ba8b54fd33eb346bf7f28f99a` passed focused/canonical validation, TypeScript, zero-warning lint, Production build and safety scans, then was pushed before deployment. The retained governed pilot Verify passed privately. No source, schema, RLS, role, permission, Supabase/Auth configuration, template, DNS, identity, fixture or data change occurred.
+
+Exact candidate `dpl_EmfhgcYxjNHk4W9LwH6ruTfASZmf` deployed Ready to the intended Production project from exact checkpoint metadata using `--prod --skip-domain`. Its deployment inspection unexpectedly listed one stable alias, making the required automatic-promotion post-state materially ambiguous. Builder stopped before intentional candidate alias mapping or human Production authentication and immediately assigned all five stable aliases to compatible rollback `dpl_EUJyBLQp7okgbPwtBU6nmMH88L6A`.
+
+Every stable alias independently resolves to the Ready rollback. Canonical `/`, `/sign-in` and `/api/health` return 200; anonymous `/portal` returns the expected 307 to sign-in. Candidate inspection continued to list the project alias even after the alias itself resolved to rollback, proving that deployment alias inventory is not current routing authority and leaving the pre-rollback transition unreconstructable. No blind retry occurred.
+
+Production trainer acceptance was not attempted and stable live trainer access is not claimed. The retained adopted identity and bounded eight-record synthetic graph remain governed. Sprint 029N remains behind this gate. Architect should decide deliberate non-promotion or a corrective Sprint 036B Pack that first establishes authoritative per-alias transition proof without source/provider changes.
+
 ## Sprint 034D closed `legacy-worktrees-retired-canonical-authority-final-clean` - 2026-08-03
 
 The owner approved the exact final Stage 2 manifest and Builder executed its 49 rows individually in dependency order: 27 linked worktrees, 17 unregistered directories, two stale administration records, two protected local-only branches and the legacy OneDrive root last. Post-transaction rereads prove all 45 filesystem targets absent, zero legacy registrations, zero legacy worktree-administration directories, both protected local refs absent, exactly one canonical registration and no canonical metadata mutation.

@@ -1,16 +1,16 @@
 # Operations Handoff
 
-Date: 2026-07-30. Owner names are intentionally left as roles until durably assigned.
+Date: 2026-08-04. Owner names are intentionally left as roles until durably assigned.
 
 ## Production identity
 
-- URLs: `https://precisionperformance.com.au`, `https://www.precisionperformance.com.au`, `https://pnr-precision-performance.vercel.app`.
-- Vercel project `pnr-precision-performance`; deployment `dpl_fPWqinnfL4YZJq41MQPaXhhuh7hi`; release branch `codex/032-public-relaunch-production`; SHA `f7242ee0785ae9b87022394206c89ebdd5c9f6ad`.
-- Ready rollback target: `dpl_6F1TMjNRECmTCyMbyWXA6ohG8Q2R`. Database rollback is not part of this procedure.
+- Five stable aliases: `https://precisionperformance.com.au`, `https://www.precisionperformance.com.au`, `https://pnr-precision-performance.vercel.app`, `https://pnr-precision-performance-rankin007s-projects.vercel.app`, `https://pnr-precision-performance-rankin007-rankin007s-projects.vercel.app`.
+- Vercel project `pnr-precision-performance`; current known-safe deployment `dpl_EUJyBLQp7okgbPwtBU6nmMH88L6A`; exact source `3be6b6c3622150a3c2009ed8564795b14e3e6c2b`. All five aliases independently resolved to it after Sprint 036 rollback.
+- Unaccepted Sprint 036 candidate `dpl_EmfhgcYxjNHk4W9LwH6ruTfASZmf` is Ready but must not receive a stable alias without new exact release authority. Database rollback is not part of this procedure.
 
 ## Monitoring
 
-Operations owner daily checks `/`, `/pricing`, `/disclaimer`, one hero asset, `/api/health`, and anonymous `/admin`/`/portal` redirection. Weekly checks compare canonical URL, robots exclusions, sitemap public-only routes, all three aliases, Vercel Ready state and recent error signals. After releases, provider incidents or support reports, repeat the full set with a cache-busting query and capture timestamp, URL, status, deployment ID and privacy-safe screenshot/log excerpt.
+Operations owner daily checks `/`, `/pricing`, `/disclaimer`, one hero asset, `/api/health`, and anonymous `/admin`/`/portal` redirection. Weekly checks compare canonical URL, robots exclusions, sitemap public-only routes, all five aliases, Vercel Ready state and recent error signals. After releases, provider incidents or support reports, repeat the full set with a cache-busting query and capture timestamp, URL, status, deployment ID and privacy-safe screenshot/log excerpt.
 
 ## Severity and triage
 
@@ -23,7 +23,7 @@ Evidence must use synthetic identifiers or redaction. Never place credentials, t
 
 ## Rollback
 
-Rollback is appropriate for a release-caused P0/P1 regression when the prior deployment is known safe and the incident is not caused by shared provider/database state. An authorized release/platform owner selects the existing project and promotes/rolls back to `dpl_6F1TMjNRECmTCyMbyWXA6ohG8Q2R` through Vercel. Do not alter DNS, environment values, Supabase or Stripe as part of this outline. Afterwards verify the three aliases, public routes/assets, canonical/robots/sitemap, health, anonymous protected redirects, disabled checkout/webhook posture and Ready status; record the resulting deployment identity. Escalate separately if database/security state is implicated.
+Rollback is appropriate for a release-caused P0/P1 regression when the prior deployment is known safe and the incident is not caused by shared provider/database state. Until a later accepted release supersedes it, the known-safe exact target is `dpl_EUJyBLQp7okgbPwtBU6nmMH88L6A`. An authorized release/platform owner assigns all five recorded aliases to that deployment through Vercel as one bounded transaction. Do not alter DNS, environment values, Supabase or Stripe as part of this outline. Afterwards independently resolve all five aliases, then verify public routes/assets, canonical/robots/sitemap, health, anonymous protected redirects, disabled checkout/webhook posture and Ready status; record the resulting deployment identity. Escalate separately if database/security state is implicated.
 
 ## Support and access
 
@@ -40,6 +40,12 @@ The governed operator entrypoint is `scripts/Invoke-LiveTrainerAccess035K.ps1` f
 Human acceptance must pass first on an exact-source, alias-free Preview and then on the exact promoted production candidate. Record only task booleans, routes, timestamps, viewport and the approved synthetic labels. A failed first attempt is diagnosed once through sanitized classifications; only one further cooldown-safe attempt is allowed.
 
 At completion, retain the graph only when the operator privately types the exact sanitized retention sentence into the protected helper. Arguments, environment values and inference are refused. Otherwise verify every exact row against its ledger ownership fields, clean application dependencies, prove each surface independently reaches zero, and delete Auth last only when Sprint 035K created it. Preserve the ledger on any mismatch or partial deletion. Preserve adopted pre-existing Auth and all unrelated identities and data.
+
+### Sprint 036 release-control boundary
+
+Sprint 036 closed `production-promotion-rolled-back-clean`. The exact candidate was Ready, but its deployment inspection unexpectedly listed one stable alias despite an explicit no-auto-promotion deployment. Builder immediately restored all five aliases to the compatible rollback before any Production OTP or human trainer journey.
+
+Vercel's deployment-level alias inventory continued to list the project alias after independent inspection proved the alias routed to rollback. Treat per-alias resolution as current routing authority; do not infer current routing from a deployment's alias list alone. Any new promotion requires a fresh exact Architect/Builder plan, independent five-alias pre/post resolution, immediate all-five rollback on discrepancy, and full human Production acceptance. No source, Supabase/Auth configuration, template, DNS, schema, permission, identity, fixture or data change is authorized by this handoff.
 
 ## Governance and unresolved duties
 

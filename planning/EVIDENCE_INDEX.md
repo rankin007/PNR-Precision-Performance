@@ -2,6 +2,8 @@
 
 ## Current governing evidence
 
+- `planning/sprints/036-production-trainer-access-stabilisation-and-live-acceptance/` - applied strict Production promotion, rollback and private live-acceptance authority.
+- `planning/reviews/036-production-trainer-access-stabilisation-and-live-acceptance.md` - exact unchanged candidate, validation, protected pilot Verify, ambiguous alias post-state, all-five rollback, final route safety and `production-promotion-rolled-back-clean` closeout.
 - `planning/sprints/034D-legacy-worktree-retirement-and-canonical-authority-finalisation/` - applied four-file authority for bounded legacy reconciliation and retirement.
 - `planning/reviews/034D-legacy-worktree-retirement-and-canonical-authority-finalisation.md` - historical Stage 1 sanitized registration/directory ledger, 035Q classification, recovery proof and appended Stage 2 execution/closeout result.
 - `planning/reviews/034D-stage-2-containment-preservation-and-disposition-plan.md` - completed 64-file SHA-256 preservation proof, encrypted-vault containment/restore proof, exact approved 49-row retirement manifest and post-retirement reconciliation; no protected content is reproduced.
@@ -47,6 +49,9 @@
 
 26. `planning/sprints/035K-live-trainer-access-and-human-acceptance/` — applied four-file human trainer acceptance, bounded fixture, Preview release and disposition authority.
 27. `planning/reviews/035K-live-trainer-access-and-human-acceptance.md` — exact source/deployment/callback evidence, OTP preflight correction, 89-assertion deterministic proof, private human Preview pass, governed pilot retention and `preview-trainer-access-proven-production-not-promoted-clean` closeout.
+
+28. `planning/sprints/036-production-trainer-access-stabilisation-and-live-acceptance/` - applied four-file zero-source Production promotion, rollback and live trainer acceptance authority.
+29. `planning/reviews/036-production-trainer-access-stabilisation-and-live-acceptance.md` - Ready exact candidate, conservative alias-control failure classification, immediate five-alias rollback, restored route safety and non-accepted Production outcome.
 
 ## Accepted product lineage
 

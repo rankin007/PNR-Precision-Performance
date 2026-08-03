@@ -21,5 +21,6 @@ This compact ledger resolves current ambiguity without rewriting historical arti
 | 035 | Completed/acceptance-limited | Trainer dashboard/workspace implemented; external acceptance continued through the 035B–035K recovery chain |
 | 035B–035I | Closed historical recovery chain | Preserve Preview, OTP, SMTP and protected-mailbox evidence; later 035K human proof supersedes blocked trainer-access status without erasing incidents |
 | 035K | Closed `preview-trainer-access-proven-production-not-promoted-clean` | Exact-source alias-free Preview and private human trainer journey passed; adopted pilot identity/eight-record synthetic fixture retained; production unchanged and unclaimed |
+| 036 | Closed `production-promotion-rolled-back-clean` | Zero-source exact candidate deployed Ready, but automatic-alias post-state was materially ambiguous; human Production acceptance did not start; all five stable aliases independently resolve to Ready rollback and public/protected smoke passed |
 
 Pack presence means proposed handoff only. Generated sprint artifacts mean applied. Completion requires closeout evidence and consistent state/status; later accepted evidence may supersede an earlier result without erasing it.
