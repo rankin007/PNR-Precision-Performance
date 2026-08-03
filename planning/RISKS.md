@@ -1,5 +1,12 @@
 # Current Risks
 
+## Sprint 036B protected provider-readback risk
+
+- Signed-in Supabase Authentication user surfaces can render protected identity rows into browser-control output before configuration navigation completes. Do not use that surface for future sanitized preflight.
+- Sprint 036B did not complete fresh callback, SMTP, template, OTP expiry/cooldown or retained-pilot readback. Historical evidence remains historical and cannot be promoted to fresh execution-time proof.
+- No candidate was staged and no alias moved. All five stable aliases remain on exact Ready rollback `dpl_EUJyBLQp7okgbPwtBU6nmMH88L6A`.
+- Any corrective 036C requires a protected, allowlisted provider/pilot mechanism that emits configuration booleans/counts only and cannot enumerate or render identity fields.
+
 ## Sprint 036 release-control risks
 
 - Sprint 036 is closed `production-promotion-rolled-back-clean`; the safe rollback outcome does not establish stable live trainer access.

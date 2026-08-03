@@ -2,6 +2,8 @@
 
 ## Current governing evidence
 
+- `planning/sprints/036B-authoritative-production-alias-transition-and-live-trainer-acceptance/` - applied strict corrective authority for independent five-alias routing, zero-product-change staging, rollback and two private Production journeys.
+- `planning/reviews/036B-authoritative-production-alias-transition-and-live-trainer-acceptance.md` - unchanged-source validation, exact Vercel affected-set proof, five/five Ready rollback baseline, protected-output preflight stop, zero release/provider/data mutation and `production-alias-transition-preflight-blocked-clean` closeout.
 - `planning/sprints/036-production-trainer-access-stabilisation-and-live-acceptance/` - applied strict Production promotion, rollback and private live-acceptance authority.
 - `planning/reviews/036-production-trainer-access-stabilisation-and-live-acceptance.md` - exact unchanged candidate, validation, protected pilot Verify, ambiguous alias post-state, all-five rollback, final route safety and `production-promotion-rolled-back-clean` closeout.
 - `planning/sprints/034D-legacy-worktree-retirement-and-canonical-authority-finalisation/` - applied four-file authority for bounded legacy reconciliation and retirement.
@@ -52,6 +54,8 @@
 
 28. `planning/sprints/036-production-trainer-access-stabilisation-and-live-acceptance/` - applied four-file zero-source Production promotion, rollback and live trainer acceptance authority.
 29. `planning/reviews/036-production-trainer-access-stabilisation-and-live-acceptance.md` - Ready exact candidate, conservative alias-control failure classification, immediate five-alias rollback, restored route safety and non-accepted Production outcome.
+30. `planning/sprints/036B-authoritative-production-alias-transition-and-live-trainer-acceptance/` - applied four-file corrective alias-transition and live trainer acceptance authority.
+31. `planning/reviews/036B-authoritative-production-alias-transition-and-live-trainer-acceptance.md` - exact five/five rollback preflight, protected-output stop, zero deployment/provider/data mutation and blocked-clean outcome.
 
 ## Accepted product lineage
 

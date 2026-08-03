@@ -1,5 +1,15 @@
 # Project State
 
+## Sprint 036B closed `production-alias-transition-preflight-blocked-clean` - 2026-08-04
+
+Sprint 036B applied the exact four-file corrective Pack in the permanent canonical repository and scoped branch from exact closed Sprint 036 SHA `6edc4dab04248c36ca57f9722849fcf16b7acb2f`. Canonical and direct-remote authority, one worktree, accepted Sprint 035K ancestry and zero application/source difference all passed. Focused regression supplied 101 counted passing assertions plus the retained dashboard, OTP, redirect, bootstrap and recovery suites; JSON, roles, Supabase-self, static, TypeScript, zero-warning lint and the 29-page Production build passed. The unchanged-source/direct-031C substitute retained the accepted optional Sprint 031B transport boundary without installing or changing dependencies.
+
+Vercel CLI `50.42.0`, current official mechanism authority, exact project `prj_6To7czLpCEGL6fInkQwE4egePPpq`, three project domains and the five-alias affected set reconciled. Alias inventory contained exactly the five accepted aliases on Ready rollback `dpl_EUJyBLQp7okgbPwtBU6nmMH88L6A`, and five independent timestamped inspections proved five/five rollback. Approved Supabase project `uvskssaecdhxcgytkasc` was `ACTIVE_HEALTHY` in `ap-southeast-1`.
+
+During sanitized signed-in provider preflight, the Supabase Authentication dashboard rendered protected identity fields into browser-control output before callback, SMTP, template, OTP and retained-pilot readback completed. Builder stopped at the defined protected-data-output boundary, finalized the browser surface and made no deployment, alias, Auth/provider setting, identity, fixture, data, Storage, OTP or session mutation. No candidate was staged and no human Production acceptance began.
+
+Production remains continuously five/five on the exact Ready rollback. Sprint 036B is clean but does not establish stable live trainer access. Sprint 029N remains gated. Architect should retain deliberate non-promotion unless a corrective Sprint 036C defines a protected provider/pilot readback path that cannot emit identity rows or other protected fields.
+
 ## Sprint 036 closed `production-promotion-rolled-back-clean` - 2026-08-04
 
 Sprint 036 executed from the permanent canonical repository on scoped branch `codex/036-production-trainer-access-stabilisation-and-live-acceptance`. The Pack generated exactly four sprint files. Current application/source bytes were unchanged from accepted Sprint 035K behavior; the planning-only checkpoint `38ab1acc2776124ba8b54fd33eb346bf7f28f99a` passed focused/canonical validation, TypeScript, zero-warning lint, Production build and safety scans, then was pushed before deployment. The retained governed pilot Verify passed privately. No source, schema, RLS, role, permission, Supabase/Auth configuration, template, DNS, identity, fixture or data change occurred.

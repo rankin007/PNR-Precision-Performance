@@ -7,14 +7,14 @@
 
 Sprint 034D retirement is complete and does not answer either question. The safe archive, accepted vault set, private manifest and unaccepted attempt remain retained; no cleanup or deletion is authorized by inference.
 
-## Current forward decisions after Sprint 036
+## Current forward decisions after Sprint 036B
 
-Sprint 036 is closed `production-promotion-rolled-back-clean`; live trainer acceptance remains incomplete.
+Sprint 036B is closed `production-alias-transition-preflight-blocked-clean`; live trainer acceptance remains incomplete. Production is unchanged on the five-alias Ready rollback.
 
-1. Should Production remain deliberately on the compatible rollback, or should the Architect create a corrective Sprint 036B Pack that first establishes authoritative five-alias pre/post transition evidence before any new promotion attempt?
+1. Should Production remain deliberately on the compatible rollback, or should the Architect create a corrective Sprint 036C Pack with a protected provider/pilot readback mechanism that cannot emit identity rows or protected values before reusing the authoritative five-alias transition design?
 2. Sprint 029N remains behind the live trainer-access gate. If the owner later opens that gate explicitly, which approved privacy, storage, notification, retention and submission rules will govern the currently unavailable public enquiry workflow?
 
-Neither question authorizes Sprint 036B work, Pack creation/application, implementation, deployment, alias mutation, provider mutation or any other Production change.
+Neither question authorizes Sprint 036C work, Pack creation/application, implementation, deployment, alias mutation, provider mutation or any other Production change.
 
 ## Sprint 030 commercial authority pending
 

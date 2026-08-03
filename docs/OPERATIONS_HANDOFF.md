@@ -47,6 +47,12 @@ Sprint 036 closed `production-promotion-rolled-back-clean`. The exact candidate 
 
 Vercel's deployment-level alias inventory continued to list the project alias after independent inspection proved the alias routed to rollback. Treat per-alias resolution as current routing authority; do not infer current routing from a deployment's alias list alone. Any new promotion requires a fresh exact Architect/Builder plan, independent five-alias pre/post resolution, immediate all-five rollback on discrepancy, and full human Production acceptance. No source, Supabase/Auth configuration, template, DNS, schema, permission, identity, fixture or data change is authorized by this handoff.
 
+### Sprint 036B protected preflight boundary
+
+Sprint 036B independently re-proved all five accepted aliases on Ready rollback and confirmed the explicit one-alias assignment mechanism can bound a future transition to exactly those five names. It stopped before candidate staging when the signed-in Supabase Authentication dashboard rendered protected identity fields into browser-control output during provider preflight.
+
+Do not use an Authentication user-list surface for sanitized provider compatibility checks. A future corrective run requires an allowlisted protected mechanism that returns configuration booleans/counts only for the exact Site URL/callback, SMTP/template, six-digit OTP, expiry/cooldown and retained-pilot invariants. It must not enumerate or render Auth identities. Until such a run is separately planned and applied, retain the five-alias rollback and do not infer live trainer acceptance.
+
 ## Governance and unresolved duties
 
 - Privacy owner must define data-subject request, retention/deletion, breach notification and evidence-upload procedures before those capabilities are operationally accepted.

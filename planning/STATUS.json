@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
-  "sprint": "036-production-trainer-access-stabilisation-and-live-acceptance",
+  "sprint": "036B-authoritative-production-alias-transition-and-live-trainer-acceptance",
   "phase": "sprint-closed",
-  "status": "production-promotion-rolled-back-clean",
-  "branch": "codex/036-production-trainer-access-stabilisation-and-live-acceptance",
-  "startingSha": "7d1210ddef836867bfdb3cf4932a0dbafb701028",
+  "status": "production-alias-transition-preflight-blocked-clean",
+  "branch": "codex/036B-authoritative-production-alias-transition-and-live-trainer-acceptance",
+  "startingSha": "6edc4dab04248c36ca57f9722849fcf16b7acb2f",
   "canonicalWorkspace": "C:\\Users\\rrank\\OneDrive\\PNR Precision Performance Canonical",
   "methodVersion": 8,
   "updated": "2026-08-04"
