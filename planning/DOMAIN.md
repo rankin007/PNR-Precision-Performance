@@ -4,11 +4,13 @@ This file captures the operating context for the current feature/fix sprint insi
 
 ---
 
-## Current Control-Plane Context - Sprint 034B
+## Current Control-Plane Context - Sprint 036
 
-Sprint 034B is a repository and Mission Control realignment, not a product feature. The permanent active clone is `C:\Users\rrank\OneDrive\PNR Precision Performance Canonical`. The accepted trainer candidate remains Preview-proven and production-unpromoted; the retained governed pilot identity and eight synthetic application records remain unchanged.
+Sprint 036 is sprint-closed `production-promotion-rolled-back-clean` in the permanent canonical repository at `C:\Users\rrank\OneDrive\PNR Precision Performance Canonical`. Production's five stable aliases independently resolve to compatible Ready rollback `dpl_EUJyBLQp7okgbPwtBU6nmMH88L6A`. Ready candidate `dpl_EmfhgcYxjNHk4W9LwH6ruTfASZmf` remains unaccepted after deployment-level alias metadata made the no-auto-promotion transition ambiguous.
 
-The named forward road is 034B canonical realignment, Sprint 036 production-promotion decision/live trainer acceptance, then Sprint 029N public enquiry privacy/submission completion. Future roadmap rows are plans only and do not authorize implementation or external mutation.
+The retained Sprint 035K adopted trainer identity and bounded eight-record synthetic pilot graph remain governed and unchanged. Live trainer acceptance is incomplete: no Production OTP, sign-in, dashboard, workspace/action, wrong-horse denial, sign-out or repeat sign-in was attempted in Sprint 036.
+
+The next decision is deliberate non-promotion or an Architect-created corrective Sprint 036B Pack that first establishes authoritative per-alias pre/post transition evidence. Sprint 029N remains behind the live trainer-access gate. Planning records do not authorize Sprint 036B implementation or external mutation.
 
 ---
 

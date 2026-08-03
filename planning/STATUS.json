@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "sprint": "036-production-trainer-access-stabilisation-and-live-acceptance",
-  "phase": "closed",
+  "phase": "sprint-closed",
   "status": "production-promotion-rolled-back-clean",
   "branch": "codex/036-production-trainer-access-stabilisation-and-live-acceptance",
   "startingSha": "7d1210ddef836867bfdb3cf4932a0dbafb701028",

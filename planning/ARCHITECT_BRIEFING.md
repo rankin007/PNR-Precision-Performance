@@ -14,17 +14,18 @@
 
 | Signal | Status | Evidence |
 |---|---|---|
-| Canonical / source authority | passed | Permanent canonical root, one registration, accepted 035K ancestry, zero application/source diff |
-| Candidate validation | passed | 101 counted core assertions plus focused auth suites; canonical groups; TypeScript; zero-warning lint; Production build |
-| Retained pilot | passed | Protected Verify exit 0; no protected input captured; adopted identity/eight-record synthetic graph retained |
-| Candidate deployment | passed | `dpl_EmfhgcYxjNHk4W9LwH6ruTfASZmf` Ready/production with exact `38ab1acc...` metadata |
-| Automatic alias control | unresolved / rolled back | Deployment alias inventory unexpectedly listed a stable alias and remained stale after authoritative rerouting |
-| Final Production routing | passed safe | Five/five aliases independently resolve to Ready `dpl_EUJyBLQp7okgbPwtBU6nmMH88L6A` |
-| Human Production acceptance | not started | Rollback occurred before OTP request or sign-in; business gate remains closed |
+| Candidate / source validation | passed | Permanent canonical authority, accepted 035K ancestry, zero application/source diff, 101 counted assertions, focused auth suites, TypeScript, zero-warning lint and Production build |
+| Final five-alias rollback routing | passed | Five/five aliases independently resolve to Ready `dpl_EUJyBLQp7okgbPwtBU6nmMH88L6A`; final public/protected smoke passed |
+| Alias-transition evidence | attention | Deployment alias metadata contradicted authoritative per-alias routing and cannot reconstruct the pre-rollback transition |
+| Human Production acceptance | attention | Rollback occurred before any OTP request or sign-in; both required Production journeys remain unmet |
 
 ## Where things stand
 
 Production is on the exact compatible rollback, not the Sprint 036 candidate. `/`, `/sign-in` and `/api/health` return 200; anonymous `/portal` returns 307 to the truthful sign-in boundary. Provider/Auth/template/DNS/data state was not mutated. The retained governed trainer pilot remains available for a later separately authorized acceptance attempt.
+
+## Current status
+
+Sprint 036 is sprint-closed with outcome `production-promotion-rolled-back-clean`. The rollback and closeout are complete, but the live trainer-access business outcome is incomplete. No Sprint 036B Pack or external action is authorized by this status.
 
 ## Since last sprint
 
@@ -75,7 +76,7 @@ Vercel deployment inspection was not treated as authoritative after it continued
 
 ## Validation / test status
 
-**Tests:** 89 Sprint 035K assertions and 12 Sprint 032 public controls passed, plus focused 035D/035C/035F/035 auth, OTP, redirect, bootstrap, recovery, dashboard and permission tests. JSON, roles, Supabase-self, static, TypeScript, zero-warning lint and Production build passed. Domain components passed except the optional-dependency 031B runner; 031C passed directly and substitute proof is recorded. Pack dry-run, JSON parsing, diff/scope and secret/private-identity scans passed.
+**Tests:** 101 passing, 0 failing in the counted Sprint 035K and Sprint 032 suites. Additional focused 035D/035C/035F/035 auth, OTP, redirect, bootstrap, recovery, dashboard and permission tests passed. JSON, roles, Supabase-self, static, TypeScript, zero-warning lint and Production build passed. Domain components passed except the optional-dependency 031B runner; 031C passed directly and substitute proof is recorded. Pack dry-run, JSON parsing, diff/scope and secret/private-identity scans passed.
 
 ## Recommended next Architect action
 

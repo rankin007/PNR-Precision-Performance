@@ -1,5 +1,13 @@
 # Current Risks
 
+## Sprint 036 release-control risks
+
+- Sprint 036 is closed `production-promotion-rolled-back-clean`; the safe rollback outcome does not establish stable live trainer access.
+- Deployment-level Vercel alias metadata can remain stale or contradict independent alias resolution. It cannot be used alone to establish current routing or reconstruct a promotion transition.
+- Ready Sprint 036 candidate `dpl_EmfhgcYxjNHk4W9LwH6ruTfASZmf` is unaccepted. It must not receive a stable alias or be described as live trainer acceptance by inference.
+- Any future promotion requires authoritative timestamped per-alias pre/post evidence for all five stable aliases, including the project-level alias, plus the exact all-five rollback transaction on any discrepancy.
+- Current routing authority is independent per-alias resolution to Ready rollback `dpl_EUJyBLQp7okgbPwtBU6nmMH88L6A`. Sprint 029N and product-wide Done remain gated because human Production trainer acceptance is incomplete.
+
 ## Sprint 034D post-retirement retention boundary
 
 - Legacy retirement is complete: zero legacy registrations, zero stale worktree-administration directories, zero retained legacy filesystem targets and one exact canonical registration. Recreating or adopting a legacy root would require new explicit authority.

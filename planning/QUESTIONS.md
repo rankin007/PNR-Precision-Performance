@@ -7,12 +7,14 @@
 
 Sprint 034D retirement is complete and does not answer either question. The safe archive, accepted vault set, private manifest and unaccepted attempt remain retained; no cleanup or deletion is authorized by inference.
 
-## Current forward decisions after Sprint 034B
+## Current forward decisions after Sprint 036
 
-1. Sprint 036: should the exact Preview-accepted trainer candidate be promoted to production and the bounded human trainer journey repeated on the live domain, or should production remain deliberately unchanged?
-2. Sprint 029N: which approved privacy, storage, notification, retention and submission rules will govern the currently unavailable public enquiry workflow?
+Sprint 036 is closed `production-promotion-rolled-back-clean`; live trainer acceptance remains incomplete.
 
-Neither question authorizes implementation, deployment, provider mutation or production change.
+1. Should Production remain deliberately on the compatible rollback, or should the Architect create a corrective Sprint 036B Pack that first establishes authoritative five-alias pre/post transition evidence before any new promotion attempt?
+2. Sprint 029N remains behind the live trainer-access gate. If the owner later opens that gate explicitly, which approved privacy, storage, notification, retention and submission rules will govern the currently unavailable public enquiry workflow?
+
+Neither question authorizes Sprint 036B work, Pack creation/application, implementation, deployment, alias mutation, provider mutation or any other Production change.
 
 ## Sprint 030 commercial authority pending
 
