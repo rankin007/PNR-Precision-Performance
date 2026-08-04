@@ -6,7 +6,10 @@ param(
 )
 
 $ErrorActionPreference = 'Stop'
-$expectedBranch = 'codex/035K-live-trainer-access-and-human-acceptance'
+$allowedBranches = @(
+    'codex/035K-live-trainer-access-and-human-acceptance',
+    'codex/036G-immediate-trainer-access-recovery-and-minimal-production-cutover'
+)
 $expectedProjectUrl = 'https://uvskssaecdhxcgytkasc.supabase.co/'
 $helperRelativePath = 'scripts/live-trainer-access-035K-core.mjs'
 $protectedOperations = @('Prepare', 'Verify', 'Cleanup')
@@ -49,7 +52,7 @@ $repoRoot = (& git rev-parse --show-toplevel 2>$null)
 if ($LASTEXITCODE -ne 0 -or [string]::IsNullOrWhiteSpace($repoRoot)) { Write-SanitizedStop035K 'BRANCH_REFUSED' }
 $repoRoot = [IO.Path]::GetFullPath($repoRoot.Trim())
 $branch = (& git -C $repoRoot branch --show-current 2>$null).Trim()
-if ($LASTEXITCODE -ne 0 -or $branch -ne $expectedBranch) { Write-SanitizedStop035K 'BRANCH_REFUSED' }
+if ($LASTEXITCODE -ne 0 -or $allowedBranches -notcontains $branch) { Write-SanitizedStop035K 'BRANCH_REFUSED' }
 $conflicts = @(& git -c core.safecrlf=false -C $repoRoot diff --name-only --diff-filter=U 2>$null)
 if ($LASTEXITCODE -ne 0 -or $conflicts.Count -ne 0) { Write-SanitizedStop035K 'CONFLICT_REFUSED' }
 

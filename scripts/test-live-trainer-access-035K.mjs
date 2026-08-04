@@ -122,6 +122,18 @@ check(helper.includes("EXACT_IDENTITY_CONTRACT_REQUIRED"));
 check(wrapper.includes("Read-Host 'Protected Supabase service-role value' -AsSecureString"));
 check(!wrapper.includes("TesterEmail"));
 check(!wrapper.includes("OtpCode"));
+const allowedBranchBlock = wrapper.match(/\$allowedBranches\s*=\s*@\(\s*'([^']+)'\s*,\s*'([^']+)'\s*\)/);
+check(allowedBranchBlock !== null, "wrapper must define one exact closed branch allowlist");
+const modeledAllowedBranches = allowedBranchBlock?.slice(1) ?? [];
+equal(modeledAllowedBranches.length, 2, "branch allowlist must contain exactly two entries");
+equal(modeledAllowedBranches[0], "codex/035K-live-trainer-access-and-human-acceptance", "historical 035K branch must remain allowed");
+equal(modeledAllowedBranches[1], "codex/036G-immediate-trainer-access-recovery-and-minimal-production-cutover", "current 036G branch must be allowed");
+check(wrapper.includes("$allowedBranches -notcontains $branch"), "wrapper must refuse every branch outside the closed allowlist");
+check(!wrapper.includes("$expectedBranch"), "obsolete single-branch binding must be absent");
+check(modeledAllowedBranches.includes("codex/035K-live-trainer-access-and-human-acceptance"), "modeled guard must accept historical 035K");
+check(modeledAllowedBranches.includes("codex/036G-immediate-trainer-access-recovery-and-minimal-production-cutover"), "modeled guard must accept current 036G");
+check(!modeledAllowedBranches.includes("codex/036F-corrected-wrapper-live-lifecycle-retry"), "modeled guard must refuse closed 036F");
+check(!modeledAllowedBranches.includes("develop") && !modeledAllowedBranches.includes(""), "modeled guard must refuse develop and detached HEAD");
 
 // Created identity: exact provisioning, ceilings, verification, deletion order and Auth-last zero.
 const createdStore = new MemoryStore();

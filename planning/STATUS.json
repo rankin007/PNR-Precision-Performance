@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
-  "sprint": "036F-corrected-wrapper-live-lifecycle-retry",
-  "phase": "sprint-closed",
-  "status": "production-management-access-revocation-blocked",
-  "branch": "codex/036F-corrected-wrapper-live-lifecycle-retry",
-  "startingSha": "6c632262438d84ef64931a1c360cc453621762ec",
+  "sprint": "036G-immediate-trainer-access-recovery-and-minimal-production-cutover",
+  "phase": "building",
+  "status": "architect-pack-created",
+  "branch": "codex/036G-immediate-trainer-access-recovery-and-minimal-production-cutover",
+  "startingSha": "b88d68d98fe374df7f32f3be4d0f0a73dd02c5e7",
   "canonicalWorkspace": "C:\\Users\\rrank\\OneDrive\\PNR Precision Performance Canonical",
   "methodVersion": 8,
   "updated": "2026-08-04"
