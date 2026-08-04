@@ -42,6 +42,18 @@ No token value or fragment, token ID, token list, account identity, organization
 - Retained pilot, Vercel baseline, candidate staging, deployment, alias mutation, OTP/mailbox/session and Production journey: zero begun.
 - Product, Auth configuration, callback, SMTP, template, schema, RLS, role, permission, identity, fixture, data, Storage and DNS mutation: zero.
 
+## Acceptance reconciliation
+
+The Sprint 036F checklist now classifies every criterion individually: 47 are proven, 13 failed and 33 were unstarted after the mandatory revocation/invalidation stop. A criterion is checked only when its complete statement is proven. Partial facts such as exact-row absence, zero local environment/temp residue or a clean local commit are not used to overstate the unproven provider, invalidation, clipboard/memory or direct-remote sub-claims.
+
+## Git delivery and manual approval
+
+The exact 20-file closeout was committed locally as `57167a7757e9a5df98560c910fd3b0f8b62fb2fb`. The working tree was clean and the branch had no upstream. The attempted `git push -u origin codex/036F-corrected-wrapper-live-lifecycle-retry` was rejected by the private-repository egress safeguard before any remote branch or upstream was created. No alternate push mechanism or workaround was attempted.
+
+What remains blocked is scoped Git delivery only; Sprint outcome and credential cleanup are unchanged. After this planning-only reconciliation is committed separately without amending history, the Builder must report the new local branch tip and clean worktree. The owner must then explicitly approve pushing that exact reported tip on `codex/036F-corrected-wrapper-live-lifecycle-retry` to `origin`.
+
+After explicit approval, Builder will run only the scoped branch push, then verify the local tip equals the direct remote branch tip, the upstream is configured to that branch and the canonical worktree remains clean. Until then, do not push, merge, open a PR, push `develop`, force-push or begin downstream work.
+
 ## Plan correction
 
 The local implementation and deterministic plan held, and private exact-token cleanup completed. The live lifecycle did not complete its required revocation/same-token invalidation boundary, so Sprint 036F closes at the exact permitted blocked outcome. Architect should decide deliberate non-promotion; this closeout grants no retry, replacement credential, provider, release or Production authority.
