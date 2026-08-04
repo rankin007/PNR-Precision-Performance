@@ -12,6 +12,7 @@ import {
   isOtpEntryVisible,
   type OtpEntryMode,
 } from "@/lib/auth/otp-entry-flow";
+import type { OtpRequestDiagnostic } from "@/lib/auth/otp-request";
 import { isValidOtpToken, normalizeOtpToken } from "@/lib/auth/otp-verification";
 
 type SignInFormProps = {
@@ -42,6 +43,7 @@ export function SignInForm({
   const [code, setCode] = useState("");
   const [entryMode, setEntryMode] = useState<OtpEntryMode>(() => initialOtpEntryMode(sent));
   const [message, setMessage] = useState<string | null>(null);
+  const [requestDiagnostic, setRequestDiagnostic] = useState<OtpRequestDiagnostic | null>(null);
   const [resendSeconds, setResendSeconds] = useState(sent ? 60 : 0);
   const [pending, startTransition] = useTransition();
   const codeRequested = isOtpEntryVisible(entryMode);
@@ -54,6 +56,7 @@ export function SignInForm({
 
   function requestCode() {
     setMessage(null);
+    setRequestDiagnostic(null);
     startTransition(async () => {
       const result = await requestEmailOtpAction(email, nextPath);
       if (!result.ok && result.reason === "configuration") {
@@ -61,6 +64,7 @@ export function SignInForm({
         return;
       }
       if (!result.ok && result.reason === "retry-later") {
+        setRequestDiagnostic(result.requestDiagnostic ?? null);
         setMessage(requestRetryLaterMessage);
         return;
       }
@@ -76,6 +80,7 @@ export function SignInForm({
 
   function verifyCode() {
     setMessage(null);
+    setRequestDiagnostic(null);
     startTransition(async () => {
       const result = await verifyEmailOtpAction(email, code);
       if (!result.ok) {
@@ -110,6 +115,9 @@ export function SignInForm({
       {message ? (
         <Notice className="mt-5" tone="warning" title="Sign-in status">
           {message}
+          {message === requestRetryLaterMessage && requestDiagnostic ? (
+            <span hidden data-auth-request-diagnostic={requestDiagnostic} />
+          ) : null}
         </Notice>
       ) : null}
 
@@ -121,7 +129,7 @@ export function SignInForm({
             type="email"
             autoComplete="email"
             value={email}
-            onChange={(event) => setEmail(event.target.value)}
+            onChange={(event) => { setEmail(event.target.value); setRequestDiagnostic(null); }}
             readOnly={isOtpEmailReadOnly(entryMode)}
             required
             placeholder="you@example.com"
@@ -157,7 +165,7 @@ export function SignInForm({
               <button type="button" disabled={pending || resendSeconds > 0} onClick={requestCode} className="inline-flex min-h-12 items-center justify-center rounded-full border border-ink/15 bg-white px-5 py-3 text-sm font-semibold text-ink disabled:cursor-not-allowed disabled:text-muted">
                 {resendSeconds > 0 ? `Request another code in ${resendSeconds}s` : "Request another code"}
               </button>
-              <button type="button" disabled={pending} onClick={() => { setEntryMode("request"); setCode(""); setMessage(null); }} className="inline-flex min-h-12 items-center justify-center px-3 text-sm font-semibold text-ink underline underline-offset-4">
+              <button type="button" disabled={pending} onClick={() => { setEntryMode("request"); setCode(""); setMessage(null); setRequestDiagnostic(null); }} className="inline-flex min-h-12 items-center justify-center px-3 text-sm font-semibold text-ink underline underline-offset-4">
                 Use a different email
               </button>
             </div>
@@ -167,7 +175,7 @@ export function SignInForm({
           <button type="submit" disabled={!envReady || pending || !email.trim()} className="inline-flex w-fit min-h-12 items-center justify-center rounded-full bg-brand px-5 py-3 text-sm font-semibold text-white transition hover:bg-technical disabled:cursor-not-allowed disabled:bg-muted">
             {pending ? "Requesting…" : "Send sign-in code"}
           </button>
-          <button type="button" disabled={!envReady || pending} onClick={() => { setEntryMode(enterExistingCodeRecovery().mode); setCode(""); setMessage(null); }} className="inline-flex min-h-12 items-center justify-center px-3 text-sm font-semibold text-ink underline underline-offset-4">
+          <button type="button" disabled={!envReady || pending} onClick={() => { setEntryMode(enterExistingCodeRecovery().mode); setCode(""); setMessage(null); setRequestDiagnostic(null); }} className="inline-flex min-h-12 items-center justify-center px-3 text-sm font-semibold text-ink underline underline-offset-4">
             Already have a code?
           </button>
           </div>

@@ -2,6 +2,9 @@
 
 ## Current governing evidence
 
+- `planning/sprints/036H-privacy-safe-authentication-failure-diagnostics/` - applied strict local authority for the five-category code-first classifier, retry-later-only propagation, hidden ephemeral marker, deterministic validation and zero-live-action boundary.
+- `planning/reviews/036H-privacy-safe-authentication-failure-diagnostics.md` - exact four-file implementation, 169 counted passing assertions plus retained regressions, TypeScript/lint/build and safety proof, zero external action and `privacy-safe-authentication-diagnostic-ready-local-clean` closeout.
+
 - `planning/sprints/036G-immediate-trainer-access-recovery-and-minimal-production-cutover/` - applied strict protected-verifier activation, existing-candidate five-alias transaction, private Production journey and fixed rollback authority.
 - `planning/reviews/036G-immediate-trainer-access-recovery-and-minimal-production-cutover.md` - 99 passing assertions, exact retained-pilot/candidate/rollback proof, five candidate and five rollback assignments, sanitized failed authentication, final five/five Ready rollback and `production-trainer-authentication-failed-rollback-clean` closeout.
 
@@ -79,6 +82,8 @@
 39. `planning/reviews/036F-corrected-wrapper-live-lifecycle-retry.md` - 495 passing assertions, exit-code-3 lifecycle, exact-token cleanup confirmation, unproven invalidation and blocked closeout.
 40. `planning/sprints/036G-immediate-trainer-access-recovery-and-minimal-production-cutover/` - applied protected verifier, existing candidate, fixed five-alias transaction, private journey and rollback authority.
 41. `planning/reviews/036G-immediate-trainer-access-recovery-and-minimal-production-cutover.md` - 99-assertion proof, exact routing transaction, sanitized authentication failure, complete rollback and current live truth.
+42. `planning/sprints/036H-privacy-safe-authentication-failure-diagnostics/` - applied local five-category diagnostic, retry-later-only propagation, ephemeral marker and no-live-action authority.
+43. `planning/reviews/036H-privacy-safe-authentication-failure-diagnostics.md` - exact four-file implementation, 169 counted passing assertions, retained regression/build/safety proof, zero external action and local diagnostic-ready closeout.
 
 ## Accepted product lineage
 

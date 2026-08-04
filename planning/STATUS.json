@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
-  "sprint": "036G-immediate-trainer-access-recovery-and-minimal-production-cutover",
+  "sprint": "036H-privacy-safe-authentication-failure-diagnostics",
   "phase": "sprint-closed",
-  "status": "production-trainer-authentication-failed-rollback-clean",
-  "branch": "codex/036G-immediate-trainer-access-recovery-and-minimal-production-cutover",
-  "startingSha": "b88d68d98fe374df7f32f3be4d0f0a73dd02c5e7",
+  "status": "privacy-safe-authentication-diagnostic-ready-local-clean",
+  "branch": "codex/036H-privacy-safe-authentication-failure-diagnostics",
+  "startingSha": "831d0465b4e71562d3c062bf3f55d6f0080e3173",
   "canonicalWorkspace": "C:\\Users\\rrank\\OneDrive\\PNR Precision Performance Canonical",
   "methodVersion": 8,
   "updated": "2026-08-05"

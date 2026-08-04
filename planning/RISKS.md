@@ -1,5 +1,12 @@
 # Current Risks
 
+## Sprint 036H local diagnostic boundary
+
+- The five-category contract is prospective local observability only. It cannot recover the historical Sprint 036G category because the raw code/status was intentionally not retained; do not describe cooldown, delivery policy, provider configuration, timeout or provider availability as the historical cause.
+- The hidden DOM marker is operational and allowlisted, but it is still intentionally ephemeral. Do not add category text, accessible naming, logging, analytics, URLs, cookies, storage or durable evidence without new privacy review and scope.
+- Diagnostic readiness does not authorize another request or any provider, mailbox, credential, deployment, alias or Production action. All five aliases remain on exact Ready rollback and the candidate remains unaccepted.
+- A future attempt requires a separate Architect Pack with exact action ceilings, rollback and privacy-safe evidence. Sprint 029N and product-wide Done remain gated.
+
 ## Sprint 036G failed authentication and restored rollback
 
 - The exact candidate passed unchanged-Product, retained-pilot, cutover and route-safety proof, but live trainer authentication did not establish a session. Do not describe Sprint 036G as stable Production trainer access or candidate acceptance.

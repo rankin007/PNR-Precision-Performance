@@ -7,15 +7,15 @@
 
 Sprint 034D retirement is complete and does not answer either question. The safe archive, accepted vault set, private manifest and unaccepted attempt remain retained; no cleanup or deletion is authorized by inference.
 
-## Current forward decisions after Sprint 036G
+## Current forward decisions after Sprint 036H
 
-Sprint 036G is closed `production-trainer-authentication-failed-rollback-clean`; live trainer acceptance remains incomplete. Candidate cutover and route safety passed, but the single fresh retry returned generic `retry-later` before code request or session. All five aliases are restored to exact Ready rollback.
+Sprint 036H is closed `privacy-safe-authentication-diagnostic-ready-local-clean`. The application can prospectively classify an existing operational rejection into one of five allowlisted categories without changing public wording or persisting provider detail. It still cannot identify the historical 036G cause. All five aliases remain on exact Ready rollback.
 
-1. Should Production remain deliberately on the compatible rollback, or should Architect later propose a genuinely distinct, separately authorized diagnosis and acceptance approach that does not repeat the consumed retry?
-2. If a new approach is desired, what privacy-safe evidence can distinguish cooldown, delivery, transport and provider compatibility without mailbox inspection, protected provider output or provider-configuration mutation?
+1. Should Production remain deliberately on rollback, or should Architect later define a separate bounded acceptance attempt that may consume the local diagnostic category without exposing or persisting provider detail?
+2. If another attempt is justified, what exact request ceiling, cooldown timing, human coordination, failure classification and all-five rollback trigger should govern it?
 3. Sprint 029N remains behind the live trainer-access gate. Should that dependency remain, or should the owner make a separate explicit roadmap decision before defining the governed public enquiry workflow?
 
-None of these questions authorizes another sign-in attempt, credential action, implementation, deployment, alias mutation, provider mutation or any other Production change. Sprint 036G closeout supplies no retry authority.
+None of these questions authorizes another sign-in attempt, credential action, implementation, deployment, alias mutation, provider mutation or any other Production change. Sprint 036H supplies local readiness only and no retry authority.
 
 ## Sprint 030 commercial authority pending
 

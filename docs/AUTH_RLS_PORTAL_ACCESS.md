@@ -168,6 +168,16 @@ Migration 0015 is applied once and fixes the author mutation boundary, but its a
 
 Migration 0016 is applied once and normalizes nullable authorization predicates, but the first genuine active-author direct positive failed exact true/one-row/attribution. The matrix stopped before later denials and before rendered proof; exact cleanup restored `0/0/0`. Do not use the soft-delete RPC as authorization-complete. Preserve 0014–0016 and require an additive 0017 diagnostic/correction before any retry.
 
+# Sprint 036H Privacy-Safe OTP Request Diagnostics
+
+Sprint 036H adds a prospective local diagnostic contract without changing the public OTP-request disposition. The public result remains exactly `indeterminate | retry-later`; accepted and missing-identity requests remain indistinguishable.
+
+Only the existing `retry-later` branch can carry one of five allowlisted operational categories: `cooldown`, `delivery-policy`, `provider-configuration`, `transport-timeout`, or `provider-unavailable`. Classification uses a normalized provider code before the narrow `429`/`>=500` fallback and never inspects a provider message, stack, cause, header, body, email, identity or other payload field.
+
+The sign-in form retains its exact generic visible wording. While that notice is active, the allowlisted category may exist only in ephemeral component state and one hidden `data-auth-request-diagnostic` marker. It clears before a new request, verification, email change, request reset, existing-code recovery or any non-retry-later transition. It is not written to logs, analytics, storage, cookies, URLs, accessible naming, files or external systems.
+
+This local contract cannot recover the historical Sprint 036G cause and supplies no OTP retry, provider read, mailbox inspection, deployment, alias or Production authority. The exact five/five Ready rollback remains live, the candidate remains unaccepted and Sprint 029N remains gated.
+
 # Sprint 021AH Application-Proof Completion
 
 Migration 0017 is applied once and replaces only the exact authenticated soft-delete RPC with valid `IS TRUE`/`IS NOT TRUE` null-safe authorization. The genuine direct authorization matrix passed 17/17 and the unchanged rendered lifecycle passed 48/48. Final Auth/application/Storage state is `0/0/0`, ledger is `0001`–`0017`, and the RPC boundary is authorization-complete for the proven matrix.

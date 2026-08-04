@@ -65,6 +65,12 @@ Sprint 036G closed `production-trainer-authentication-failed-rollback-clean`. Ex
 
 Builder then assigned all five aliases to exact rollback `dpl_EUJyBLQp7okgbPwtBU6nmMH88L6A` in fixed apex-outward order and independently reread all five after every assignment. Final five/five Ready rollback and canonical public/protected/API/disabled-commerce safety passed. Per-alias resolution remains routing authority. Do not retry sign-in, inspect a mailbox/provider identity surface, diagnose or change provider configuration, or re-cut over under 036G; any future action requires a separate Architect Pack with a genuinely distinct approach.
 
+### Sprint 036H local diagnostic-ready boundary
+
+Sprint 036H closed `privacy-safe-authentication-diagnostic-ready-local-clean`. It adds only a local five-category, code-first request diagnostic on the existing generic `retry-later` branch. The category is non-visible, allowlisted, ephemeral and cleared across flow transitions; public wording and missing-identity indistinguishability are unchanged.
+
+The contract is prospective only. It cannot classify the historical 036G failure because no raw provider code or status was retained. It does not authorize another OTP request, mailbox/provider inspection, credential, hosted configuration change, deployment, alias movement or Production action. Operations must keep all five aliases on exact Ready rollback and treat the candidate as unaccepted unless a later separate Architect Pack grants a distinct, bounded attempt.
+
 ## Governance and unresolved duties
 
 - Privacy owner must define data-subject request, retention/deletion, breach notification and evidence-upload procedures before those capabilities are operationally accepted.

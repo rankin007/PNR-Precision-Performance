@@ -1,5 +1,11 @@
 # Project State
 
+## Sprint 036H closed `privacy-safe-authentication-diagnostic-ready-local-clean` - 2026-08-05
+
+Sprint 036H added a separate five-value, code-first OTP-request diagnostic classifier while preserving the exact public `indeterminate | retry-later` contract. Only the existing operational `retry-later` result may carry an allowlisted category; the sign-in form keeps the existing generic visible copy and exposes the category only through one hidden ephemeral marker with explicit clearing on every relevant flow transition. No raw provider message, code, status, identity fact or protected value is returned or persisted.
+
+The exact four-file implementation passed 70 new plus 99 retained counted assertions, three additional retained authentication regression scripts, TypeScript, zero-warning lint and the 29-page Production build. Scope, JSON, whitespace, UTF-8, secret/private-data, raw-output, persistence and generated-residue checks passed. No OTP, verification, mailbox, browser authentication, credential, provider/configuration, deployment, alias, DNS, schema, RLS, identity, fixture, data, Storage, commit or push action occurred. Sprint 036G's historical cause remains unknown; all five Production aliases remain on exact Ready rollback, the candidate remains unaccepted, no retry is authorized and Sprint 029N remains gated.
+
 ## Sprint 036G closed `production-trainer-authentication-failed-rollback-clean` - 2026-08-05
 
 Sprint 036G applied the exact strict four-file Pack from closed Sprint 036F SHA `b88d68d98fe374df7f32f3be4d0f0a73dd02c5e7` and changed only the approved protected verifier wrapper and deterministic test. The wrapper allows exactly historical 035K and current 036G, refuses every other branch and preserves the byte-identical core at SHA-256 `603FF16B9F6EB30D2B5E26A39218E8307731D66008D4D384FB9696095CD3AB5A`. Focused proof passed exactly 99 assertions, the direct seven-check core self-test and proportional auth/dashboard/OTP/redirect/bootstrap/recovery/public/static/JSON/roles/Supabase-self/TypeScript/zero-warning lint/29-page Production-build gates. A documented stronger substitute covered the redirected-console wrapper SelfTest limitation without weakening a protected boundary.

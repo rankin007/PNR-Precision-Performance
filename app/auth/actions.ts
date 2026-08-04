@@ -3,7 +3,11 @@
 import { redirect } from "next/navigation";
 import { headers } from "next/headers";
 import { normalizeAppRedirectPath } from "@/lib/auth/access";
-import { classifyOtpRequestError } from "@/lib/auth/otp-request";
+import {
+  classifyOtpRequestDiagnostic,
+  classifyOtpRequestError,
+  type OtpRequestDiagnostic,
+} from "@/lib/auth/otp-request";
 import {
   buildOtpVerificationPayload,
   classifyOtpVerification,
@@ -17,7 +21,8 @@ import { hasSupabaseEnv } from "@/lib/supabase/env";
 
 export type OtpActionResult =
   | { ok: true; outcome?: "indeterminate" }
-  | { ok: false; reason: "configuration" | "invalid" | "retry-later" | "unavailable"; diagnostic?: OtpVerificationDiagnostic };
+  | { ok: false; reason: "configuration" | "invalid" | "unavailable"; diagnostic?: OtpVerificationDiagnostic }
+  | { ok: false; reason: "retry-later"; requestDiagnostic?: OtpRequestDiagnostic };
 
 function readString(formData: FormData, key: string) {
   const value = formData.get(key);
@@ -91,7 +96,13 @@ export async function requestEmailOtpAction(emailInput: string, nextInput: strin
 
   // Missing identities and accepted requests intentionally share one response.
   // Operational rejection is also generic and never exposes provider detail.
-  if (classifyOtpRequestError(error) === "retry-later") return { ok: false, reason: "retry-later" };
+  if (classifyOtpRequestError(error) === "retry-later") {
+    return {
+      ok: false,
+      reason: "retry-later",
+      requestDiagnostic: classifyOtpRequestDiagnostic(error),
+    };
+  }
   return { ok: true, outcome: "indeterminate" };
 }
 
