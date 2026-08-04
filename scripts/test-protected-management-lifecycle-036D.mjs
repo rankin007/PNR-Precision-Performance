@@ -543,7 +543,10 @@ for (const forbidden of ['method: "PATCH"', 'method: "POST"', 'method: "PUT"', '
 }
 
 check(wrapperSource.includes("C:\\Users\\rrank\\OneDrive\\PNR Precision Performance Canonical"));
-check(wrapperSource.includes("codex/036E-beginner-safe-protected-interaction-correction"));
+check(
+  wrapperSource.includes("codex/036F-corrected-wrapper-live-lifecycle-retry")
+  && (wrapperSource.match(/precision-performance-036F-single-use-/g) || []).length === 2,
+);
 check(wrapperSource.includes("ValidateSet('SelfTest', 'ManagementLifecycle', 'RetainedPilotVerify')"));
 check(wrapperSource.includes("ReadSecure 'PROTECTED CREDENTIAL ENTRY - Supabase Management API bearer credential'") && wrapperSource.includes("return Read-Host $Prompt -AsSecureString"));
 check(wrapperSource.includes("Read-Host 'Protected Supabase service-role value' -AsSecureString"));
@@ -605,7 +608,11 @@ const managementFlowEnd = wrapperSource.indexOf("function Get-ValidatedSelfTestF
 const managementFlowSource = wrapperSource.slice(managementFlowStart, managementFlowEnd);
 const createInstructionIndex = managementFlowSource.indexOf("instruction=CREATE THE CREDENTIAL NOW");
 check(managementFlowSource.indexOf("ReadDecision 'operator-preflight'") < createInstructionIndex);
-check(managementFlowSource.indexOf("ReadDecision 'token-class'") < createInstructionIndex);
+check(
+  managementFlowSource.indexOf("ReadDecision 'token-class'") < createInstructionIndex
+  && !managementFlowSource.includes("classic-pat-harness-bounded")
+  && !managementFlowSource.includes("classic-acknowledgement"),
+);
 check(managementFlowSource.indexOf("ReadDecision 'token-scope'") < createInstructionIndex);
 check(managementFlowSource.indexOf("ReadDecision 'input-method'") < createInstructionIndex);
 check(managementFlowSource.indexOf("ReadDecision 'clipboard-safety'") < createInstructionIndex);
@@ -847,4 +854,4 @@ const retainedFixtureRefusal = runProtectedFixtureArgumentRefusal("RetainedPilot
 deepEqual({ status: retainedFixtureRefusal.status, code: retainedFixtureRefusal.values.code }, { status: 2, code: "SELF_TEST_SCENARIO_REFUSED" });
 
 check(assertions + 1 === 360, `expected exactly 360 assertions, received ${assertions + 1}`);
-console.log(`Sprint 036E beginner-safe protected interaction deterministic tests passed (${assertions} assertions).`);
+console.log(`Sprint 036F corrected-wrapper live lifecycle deterministic tests passed (${assertions} assertions).`);

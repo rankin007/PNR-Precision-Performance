@@ -7,14 +7,14 @@
 
 Sprint 034D retirement is complete and does not answer either question. The safe archive, accepted vault set, private manifest and unaccepted attempt remain retained; no cleanup or deletion is authorized by inference.
 
-## Current forward decisions after Sprint 036E
+## Current forward decisions after Sprint 036F
 
-Sprint 036E is closed `beginner-safe-protected-interaction-corrected-clean`; live trainer acceptance remains incomplete. No credential, provider request, deployment or alias mutation occurred.
+Sprint 036F is closed `production-management-access-revocation-blocked`; live trainer acceptance remains incomplete. The exact token row is confirmed absent with no other token changed and no replacement token, but same-token invalidation is unproven. No retained-pilot, deployment or alias action occurred.
 
-1. Should Production remain deliberately on the compatible rollback, or should a later separately authorized sprint retry the corrected Management lifecycle under a new exact credential/provider/revocation contract?
+1. Should Production remain deliberately on the compatible rollback, or should Architect later propose a genuinely new, separately authorized approach to the blocked Management revocation/invalidation boundary?
 2. Sprint 029N remains behind the live trainer-access gate. If the owner later opens that gate explicitly, which approved privacy, storage, notification, retention and submission rules will govern the currently unavailable public enquiry workflow?
 
-Neither question authorizes credential creation/rotation, another sprint, implementation, deployment, alias mutation, provider mutation or any other Production change. Sprint 036E proof alone supplies no live retry authority.
+Neither question authorizes credential creation/rotation, another sprint, implementation, deployment, alias mutation, provider mutation or any other Production change. Sprint 036F closeout supplies no retry authority.
 
 ## Sprint 030 commercial authority pending
 

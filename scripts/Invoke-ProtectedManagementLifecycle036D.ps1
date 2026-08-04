@@ -29,7 +29,7 @@ param(
 
 $ErrorActionPreference = 'Stop'
 $expectedRoot = 'C:\Users\rrank\OneDrive\PNR Precision Performance Canonical'
-$expectedBranch = 'codex/036E-beginner-safe-protected-interaction-correction'
+$expectedBranch = 'codex/036F-corrected-wrapper-live-lifecycle-retry'
 $expectedNodePath = 'C:\Program Files\nodejs\node.exe'
 $expectedProjectUrl = 'https://uvskssaecdhxcgytkasc.supabase.co/'
 $expected036CCoreSha256 = '0860B6490D477578ADD79514148C0CC899A13C56F496D17A7516FD7F06518B42'
@@ -50,7 +50,7 @@ $managementSafeChildNames = @(
 $serviceRoleSafeChildNames = @('PP035K_SUPABASE_URL', 'PP035K_RUN')
 $safeChildNames = @($managementSafeChildNames + $serviceRoleSafeChildNames)
 $allowedCodes = @(
-    'BRANCH_REFUSED', 'CLASSIC_PAT_ACKNOWLEDGEMENT_REQUIRED', 'CLIPBOARD_CLEAR_FAILED',
+    'BRANCH_REFUSED', 'CLIPBOARD_CLEAR_FAILED',
     'BUFFERED_INPUT_REFUSED', 'CLIPBOARD_SAFETY_CONFIRMATION_REQUIRED', 'CONFLICT_REFUSED',
     'CONSOLE_INPUT_STATE_REFUSED', 'CREATION_CONFIRMATION_REQUIRED',
     'HELPER_CONTRACT_REFUSED', 'HELPER_FAILED_SANITIZED', 'HELPER_MISSING',
@@ -513,18 +513,10 @@ function Invoke-ManagementLifecycleFlow036D {
             $operatorPreflight = & $ReadDecision 'operator-preflight' 'Press P after privately confirming approved-project access, MFA/recovery readiness, and no same-name token.' @{ P = 'OPERATOR-PREFLIGHT-PASS' }
             if ($operatorPreflight -cne 'OPERATOR-PREFLIGHT-PASS') { throw 'OPERATOR_PREFLIGHT_REQUIRED' }
 
-            $result.tokenClass = & $ReadDecision 'token-class' 'Press F for fine-grained auth_config_read, or C for classic PAT harness-bounded.' @{ F = 'fine-grained-auth-config-read'; C = 'classic-pat-harness-bounded' }
-            if ($result.tokenClass -cne 'fine-grained-auth-config-read' -and $result.tokenClass -cne 'classic-pat-harness-bounded') {
-                throw 'TOKEN_CLASS_REFUSED'
-            }
-            if ($result.tokenClass -ceq 'fine-grained-auth-config-read') {
-                $scopeConfirmation = & $ReadDecision 'token-scope' 'Press S after privately confirming exact auth_config_read and the approved boundary only.' @{ S = 'TOKEN-SCOPE-CONFIRMED' }
-                if ($scopeConfirmation -cne 'TOKEN-SCOPE-CONFIRMED') { throw 'TOKEN_SCOPE_CONFIRMATION_REQUIRED' }
-            }
-            else {
-                $classicAcknowledgement = & $ReadDecision 'classic-acknowledgement' 'Press A after privately acknowledging full account privilege and mandatory immediate revocation.' @{ A = 'CLASSIC-PAT-RISK-ACKNOWLEDGED' }
-                if ($classicAcknowledgement -cne 'CLASSIC-PAT-RISK-ACKNOWLEDGED') { throw 'CLASSIC_PAT_ACKNOWLEDGEMENT_REQUIRED' }
-            }
+            $result.tokenClass = & $ReadDecision 'token-class' 'Press F for fine-grained auth_config_read. No other Management credential class is permitted.' @{ F = 'fine-grained-auth-config-read' }
+            if ($result.tokenClass -cne 'fine-grained-auth-config-read') { throw 'TOKEN_CLASS_REFUSED' }
+            $scopeConfirmation = & $ReadDecision 'token-scope' 'Press S after privately confirming exact auth_config_read and the approved boundary only.' @{ S = 'TOKEN-SCOPE-CONFIRMED' }
+            if ($scopeConfirmation -cne 'TOKEN-SCOPE-CONFIRMED') { throw 'TOKEN_SCOPE_CONFIRMATION_REQUIRED' }
 
             $result.inputMethod = & $ReadDecision 'input-method' 'Press T for direct typing, or P for protected paste.' @{ T = 'TYPE'; P = 'PASTE' }
             if ($result.inputMethod -cne 'TYPE' -and $result.inputMethod -cne 'PASTE') { throw 'TOKEN_CLASS_REFUSED' }
@@ -920,7 +912,7 @@ function Invoke-DeterministicSelfTestScenario036D(
         [Environment]::SetEnvironmentVariable('PP036D_REQUEST_COUNT', 'synthetic-self-test-only', 'Process')
     }
 
-    $tokenName = 'precision-performance-036D-single-use-20260804T000000Z'
+    $tokenName = 'precision-performance-036F-single-use-20260804T000000Z'
     $result = Invoke-ManagementLifecycleFlow036D `
         -TokenName $tokenName `
         -ReadDecision $readDecision `
@@ -1115,7 +1107,7 @@ if ($Operation -eq 'RetainedPilotVerify') {
     exit $pilotExitCode
 }
 
-$tokenName = 'precision-performance-036D-single-use-' + (Get-Date).ToUniversalTime().ToString('yyyyMMddTHHmmssZ')
+$tokenName = 'precision-performance-036F-single-use-' + (Get-Date).ToUniversalTime().ToString('yyyyMMddTHHmmssZ')
 $realEmit = { param([string]$Line) [Console]::Out.WriteLine($Line) }
 $realKeyAvailable = { return [Console]::KeyAvailable }
 $realReadKey = { return [Console]::ReadKey($true) }

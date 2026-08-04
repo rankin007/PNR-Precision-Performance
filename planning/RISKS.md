@@ -1,5 +1,12 @@
 # Current Risks
 
+## Sprint 036F blocked revocation and deliberate non-promotion
+
+- The corrected wrapper passed deterministic proof, but the only live lifecycle exited `management-access-revocation-blocked`; do not describe 036F as a successful provider pass, same-token invalidation or live trainer-access proof.
+- The exact 036F token row is confirmed absent, no other token changed and no replacement token was created. Manual row absence proves cleanup only; it cannot recreate the terminated process's required same-token `401`/`403` evidence.
+- No second lifecycle, retained-pilot, Vercel, deployment, alias, OTP or Production action is authorized by this closeout. A new attempt would require a separate Architect Pack, a genuinely new exact authority boundary and fresh execution-time evidence.
+- Production remains deliberately unpromoted on the historically proven Ready rollback. Sprint 029N and product-wide Done remain gated.
+
 ## Sprint 036E corrected interaction and remaining live boundary
 
 - The local beginner-facing defect is corrected and executably proven, but no real credential or Management lifecycle ran. Do not describe 036E as same-token invalidation, provider preflight or live trainer-access proof.

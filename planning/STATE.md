@@ -1,5 +1,13 @@
 # Project State
 
+## Sprint 036F closed `production-management-access-revocation-blocked` - 2026-08-04
+
+Sprint 036F applied the exact strict four-file Pack from closed Sprint 036E SHA `6c632262438d84ef64931a1c360cc453621762ec` and implemented only the approved wrapper and deterministic test. The wrapper is bound to the exact 036F branch, accepts only fine-grained `auth_config_read` access and removes classic-PAT continuation. The core and every Product/runtime/package file remain byte-identical. Corrected proof passed exactly 360 assertions plus 135 inherited, for 495 passing and zero failing; wrapper self-test, focused controls, static, JSON, roles, Supabase-self, TypeScript, zero-warning lint and the 29-page Production build passed. The known optional `playwright-core` aggregate transport limitation was covered by the Pack-approved direct 031C substitute.
+
+The only permitted private `ManagementLifecycle` exited with sanitized wrapper code `3`, classifying `management-access-revocation-blocked`. The operator then confirmed the exact 036F token row absent, no other token changed and no replacement token created. Protected process-environment and temporary residue are zero. Manual row absence proves cleanup but cannot prove the required same-token `401`/`403` invalidation after the process terminated.
+
+No second lifecycle, retained-pilot Verify, Vercel baseline, candidate staging, deployment, alias transition, OTP, mailbox, session or Production journey began. No Product, provider configuration, Auth, callback, SMTP, template, schema, RLS, role, permission, identity, fixture, data, Storage or DNS mutation occurred. Production remains deliberately unpromoted on the historically proven rollback, Sprint 029N remains gated, and any retry or external continuation requires a separate Architect Pack and explicit authority.
+
 ## Sprint 036E closed `beginner-safe-protected-interaction-corrected-clean` - 2026-08-04
 
 Sprint 036E applied the exact strict four-file Pack and changed only the approved protected Management wrapper and deterministic test. The wrapper now gives a six-step beginner orientation, labels every ordinary decision as a non-secret control, uses intercepted single-key input with buffered-input refusal, completes every decision before credential creation is invited, and transitions directly from the exact create instruction to the single protected `Read-Host -AsSecureString` prompt. Cancellation after the instruction enters possible-credential compensation instead of a clean no-creation path.

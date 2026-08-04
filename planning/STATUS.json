@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
-  "sprint": "036E-beginner-safe-protected-interaction-correction",
+  "sprint": "036F-corrected-wrapper-live-lifecycle-retry",
   "phase": "sprint-closed",
-  "status": "beginner-safe-protected-interaction-corrected-clean",
-  "branch": "codex/036E-beginner-safe-protected-interaction-correction",
-  "startingSha": "2b8bf17f180af85fef71748b367eb6215622ca9c",
+  "status": "production-management-access-revocation-blocked",
+  "branch": "codex/036F-corrected-wrapper-live-lifecycle-retry",
+  "startingSha": "6c632262438d84ef64931a1c360cc453621762ec",
   "canonicalWorkspace": "C:\\Users\\rrank\\OneDrive\\PNR Precision Performance Canonical",
   "methodVersion": 8,
   "updated": "2026-08-04"

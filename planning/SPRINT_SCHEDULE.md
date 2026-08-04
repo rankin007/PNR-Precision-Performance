@@ -2,10 +2,11 @@
 
 ## Active direction
 
-Sprint 036E is closed `beginner-safe-protected-interaction-corrected-clean`. The exact two-file local correction passed 495 counted assertions and zero external actions: non-secret decisions are beginner-labelled and intercepted, buffered input fails closed, creation is directly adjacent to protected entry and cancellation compensates. Sprint 036D remains the blocked live lifecycle truth; same-token invalidation and Production trainer acceptance remain unproven. Architect review is next, deliberate non-promotion remains current and Sprint 029N remains behind the live-access gate.
+Sprint 036F is closed `production-management-access-revocation-blocked`. The exact two-file activation passed 495 counted assertions, but the single private lifecycle exited code `3`. The exact token row is confirmed absent, no other token changed and no replacement token was created; same-token invalidation and Production trainer acceptance remain unproven. No downstream action began. Architect review and a deliberate non-promotion decision are next; Sprint 029N remains behind the live-access gate.
 
 | Sprint | Outcome | Profile / proof |
 |---|---|---|
+| 036F | Closed `production-management-access-revocation-blocked` | Strict two-file corrected-wrapper activation; 360 corrected plus 135 inherited assertions passed; one private lifecycle exited code 3; exact token cleanup confirmed, invalidation unproven and all downstream operations stopped |
 | 036E | Closed `beginner-safe-protected-interaction-corrected-clean` | Strict two-file local correction; 360 corrected plus 135 inherited assertions passed; zero credential/provider/release action; no live retry authority |
 | 036D | Closed `production-management-access-revocation-blocked` | Strict three-file non-runtime lifecycle; 295 new plus 236 inherited counted assertions passed; one token manually revoked/list-absent after prompt-order exposure; invalidation unproven and all downstream operations stopped |
 | 036C | Closed `production-protected-preflight-access-unavailable-clean` | Strict identity-blind fixed-GET tooling; 135 new assertions plus four wrapper checks and unchanged-application gates passed; no existing Management API credential, provider request, deployment, alias/provider/data mutation or human sign-in |

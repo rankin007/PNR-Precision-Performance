@@ -2,6 +2,9 @@
 
 ## Current governing evidence
 
+- `planning/sprints/036F-corrected-wrapper-live-lifecycle-retry/` - applied strict corrected-wrapper activation, single-token lifecycle, cleanup, downstream-gating and blocked-outcome authority.
+- `planning/reviews/036F-corrected-wrapper-live-lifecycle-retry.md` - exact two-file implementation, 495 passing assertions, single sanitized exit-code-3 lifecycle, operator-confirmed exact-token cleanup, unproven same-token invalidation, zero downstream action and `production-management-access-revocation-blocked` closeout.
+
 - `planning/sprints/036E-beginner-safe-protected-interaction-correction/` - applied strict local/offline authority for beginner-safe non-echoing controls, protected-entry adjacency and executable novice-flow proof.
 - `planning/reviews/036E-beginner-safe-protected-interaction-correction.md` - exact two-file implementation, 360 corrected plus 135 inherited passing assertions, unchanged runtime/core proof, zero external action and `beginner-safe-protected-interaction-corrected-clean` closeout.
 
@@ -69,6 +72,8 @@
 35. `planning/reviews/036D-single-use-management-access-and-live-trainer-acceptance.md` - corrected deterministic proof, human-factors boundary incident, exact blocked lifecycle disposition and zero downstream action.
 36. `planning/sprints/036E-beginner-safe-protected-interaction-correction/` - applied beginner-safe local interaction correction authority.
 37. `planning/reviews/036E-beginner-safe-protected-interaction-correction.md` - 495 counted passing assertions, exact no-runtime-diff proof, zero external action and local correction closeout.
+38. `planning/sprints/036F-corrected-wrapper-live-lifecycle-retry/` - applied corrected-wrapper single-lifecycle and downstream-gating authority.
+39. `planning/reviews/036F-corrected-wrapper-live-lifecycle-retry.md` - 495 passing assertions, exit-code-3 lifecycle, exact-token cleanup confirmation, unproven invalidation and blocked closeout.
 
 ## Accepted product lineage
 

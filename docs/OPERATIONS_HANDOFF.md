@@ -53,6 +53,12 @@ Sprint 036B independently re-proved all five accepted aliases on Ready rollback 
 
 Do not use an Authentication user-list surface for sanitized provider compatibility checks. A future corrective run requires an allowlisted protected mechanism that returns configuration booleans/counts only for the exact Site URL/callback, SMTP/template, six-digit OTP, expiry/cooldown and retained-pilot invariants. It must not enumerate or render Auth identities. Until such a run is separately planned and applied, retain the five-alias rollback and do not infer live trainer acceptance.
 
+### Sprint 036F blocked lifecycle boundary
+
+Sprint 036F closed `production-management-access-revocation-blocked`. The corrected wrapper and proportional validation passed, but the only authorized private Management lifecycle exited with sanitized code `3`. The operator then confirmed the exact 036F token row absent, no other token changed and no replacement token created. Local protected process-environment and temporary residue are zero.
+
+Exact-row absence proves cleanup only. It does not prove the terminated process's required same-token `401`/`403` invalidation, successful provider projection or a clean Management lifecycle. No second lifecycle, retained-pilot Verify, Vercel inspection/deploy/alias action, OTP, mailbox/session journey or Production acceptance began. Keep all five stable aliases on the historically proven Ready rollback and do not retry, replace the token or continue downstream without a separate Architect Pack and explicit authority.
+
 ## Governance and unresolved duties
 
 - Privacy owner must define data-subject request, retention/deletion, breach notification and evidence-upload procedures before those capabilities are operationally accepted.

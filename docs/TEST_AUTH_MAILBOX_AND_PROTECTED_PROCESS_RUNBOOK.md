@@ -89,3 +89,11 @@ For any separately authorized future lifecycle, the wrapper must run from a priv
 The wrapper retains the inherited transcript/redirection refusal, trusted executable and SystemRoot checks, exact minimal child environments, clipboard clearing without reading, same-token compensation, request ceilings, body-blind invalidation, BSTR zeroing, `SecureString` disposal and process cleanup. Deterministic decision injection is `SelfTest`-only and is refused by protected operations.
 
 Sprint 036E closed `beginner-safe-protected-interaction-corrected-clean` with 360 corrected plus 135 inherited assertions passing and zero external actions. Sprint 036D remains `production-management-access-revocation-blocked`; no later live retry may be inferred from this runbook entry.
+
+## Sprint 036F blocked corrected-wrapper lifecycle
+
+Sprint 036F consumed its exact one-lifecycle authority in one private interactive non-transcribed ConsoleHost. The wrapper returned sanitized exit code `3`, `management-access-revocation-blocked`. Do not rerun it under 036F and do not create a replacement token.
+
+The operator privately confirmed only the authorized sanitized facts: the exact 036F token row is absent, no other token changed and no replacement token was created. This proves exact-token cleanup. It does not prove same-token `401`/`403` invalidation, provider projection success or request-count completion after the protected process terminated.
+
+No retained-pilot, Vercel, deployment, alias, OTP, mailbox, session or Production continuation occurred. Local protected process-environment and `pp036d-*` residue are zero. Any later attempt requires a separate Architect Pack and explicit authority; never infer retry authority from cleanup completion or from the 036E interaction correction.
