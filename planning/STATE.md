@@ -1,5 +1,13 @@
 # Project State
 
+## Sprint 036E closed `beginner-safe-protected-interaction-corrected-clean` - 2026-08-04
+
+Sprint 036E applied the exact strict four-file Pack and changed only the approved protected Management wrapper and deterministic test. The wrapper now gives a six-step beginner orientation, labels every ordinary decision as a non-secret control, uses intercepted single-key input with buffered-input refusal, completes every decision before credential creation is invited, and transitions directly from the exact create instruction to the single protected `Read-Host -AsSecureString` prompt. Cancellation after the instruction enters possible-credential compensation instead of a clean no-creation path.
+
+Deterministic proof passed exactly 360 corrected assertions: 292 retained, three one-for-one replacements and 65 new 036E interaction assertions. The inherited Sprint 036C suite passed 135 assertions, for 495 counted passing and zero failing. Core five-check and wrapper two-check self-tests, static validation, JSON, PowerShell parsing, whitespace, scope, runtime-byte, import, secret/private-data and environment/temp-residue gates all passed. The 036D core remains byte-identical at its approved hash; Product/runtime/package bytes remain unchanged.
+
+No real credential, provider page, API request, retained-pilot operation, Vercel command, deployment, alias change, OTP, mailbox, session or Production action occurred. Sprint 036D remains historically `production-management-access-revocation-blocked`; same-token invalidation and live trainer acceptance remain unproven. Sprint 036E supplies no live retry authority, deliberate non-promotion remains in force and Sprint 029N remains gated pending later Architect review.
+
 ## Sprint 036D closed `production-management-access-revocation-blocked` - 2026-08-04
 
 Sprint 036D applied the exact strict four-file Pack and implemented only the three approved non-runtime protected-lifecycle files. After two accepted in-sprint security corrections, deterministic proof passed 295 Sprint 036D assertions, five core checks and two wrapper checks; the inherited counted total is 531 passing assertions (295 + 135 + 89 + 12). Focused validation, TypeScript, zero-warning lint, static checks and the 29-page Production build passed. Runtime bytes/imports remained unchanged.

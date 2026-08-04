@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
-  "sprint": "036D-single-use-management-access-and-live-trainer-acceptance",
+  "sprint": "036E-beginner-safe-protected-interaction-correction",
   "phase": "sprint-closed",
-  "status": "production-management-access-revocation-blocked",
-  "branch": "codex/036D-single-use-management-access-and-live-trainer-acceptance",
-  "startingSha": "9a2af97550ff90924f3c2f0286c67f03ddb20828",
+  "status": "beginner-safe-protected-interaction-corrected-clean",
+  "branch": "codex/036E-beginner-safe-protected-interaction-correction",
+  "startingSha": "2b8bf17f180af85fef71748b367eb6215622ca9c",
   "canonicalWorkspace": "C:\\Users\\rrank\\OneDrive\\PNR Precision Performance Canonical",
   "methodVersion": 8,
   "updated": "2026-08-04"

@@ -543,9 +543,9 @@ for (const forbidden of ['method: "PATCH"', 'method: "POST"', 'method: "PUT"', '
 }
 
 check(wrapperSource.includes("C:\\Users\\rrank\\OneDrive\\PNR Precision Performance Canonical"));
-check(wrapperSource.includes("codex/036D-single-use-management-access-and-live-trainer-acceptance"));
+check(wrapperSource.includes("codex/036E-beginner-safe-protected-interaction-correction"));
 check(wrapperSource.includes("ValidateSet('SelfTest', 'ManagementLifecycle', 'RetainedPilotVerify')"));
-check(wrapperSource.includes("ReadSecure 'Protected Supabase Management API bearer credential'") && wrapperSource.includes("return Read-Host $Prompt -AsSecureString"));
+check(wrapperSource.includes("ReadSecure 'PROTECTED CREDENTIAL ENTRY - Supabase Management API bearer credential'") && wrapperSource.includes("return Read-Host $Prompt -AsSecureString"));
 check(wrapperSource.includes("Read-Host 'Protected Supabase service-role value' -AsSecureString"));
 check(
   wrapperSource.includes("$hostUiType.GetProperty('IsTranscribing', $bindingFlags)")
@@ -568,7 +568,7 @@ check(!wrapperSource.includes("Invoke-RestMethod"));
 check(!wrapperSource.includes("/account/tokens"));
 check(wrapperSource.includes("automationOfTokenCreation=false"));
 check(wrapperSource.includes("automationOfTokenRevocation=false"));
-check(wrapperSource.includes("instruction=privately-create-exactly-one-named-token-now"));
+check(wrapperSource.includes("instruction=CREATE THE CREDENTIAL NOW"));
 check(wrapperSource.includes("REVOKED-AND-ABSENT"));
 check(wrapperSource.includes("credentialMayStillBeActive=true"));
 check(wrapperSource.includes("vercelProductionContinuation=false"));
@@ -579,6 +579,83 @@ check(!wrapperSource.includes("OtpCode"));
 equal((wrapperSource.match(/listUsers/g) || []).length, 2);
 equal((wrapperSource.match(/perPage/g) || []).length, 2);
 check(wrapperSource.includes("$pilotSource.Contains('listUsers') -or $pilotSource.Contains('perPage')"));
+
+// Sprint 036E additive interaction proof: 34 source/ordering assertions.
+check(wrapperSource.includes("BEGINNER-SAFE PROTECTED FLOW"));
+check(wrapperSource.includes("1. DO NOT CREATE A CREDENTIAL YET."));
+check(wrapperSource.includes("2. NON-SECRET CONTROL checkpoints never accept a credential and never display the key pressed."));
+check(wrapperSource.includes("3. The wrapper will explicitly announce the only PROTECTED CREDENTIAL ENTRY prompt."));
+check(wrapperSource.includes("4. Credential creation happens only after every non-secret checkpoint is complete."));
+check(wrapperSource.includes("5. After the provider check, revoke the exact named credential and prove that it is invalid."));
+check(wrapperSource.includes("6. Any ambiguity stops the lifecycle and may require private revocation before anything else."));
+check(wrapperSource.includes("NON-SECRET CONTROL - NEVER TYPE OR PASTE A CREDENTIAL HERE"));
+check(wrapperSource.includes("[Console]::ReadKey($true)"));
+check(wrapperSource.includes("[Console]::KeyAvailable"));
+check(wrapperSource.includes("CONSOLE_INPUT_STATE_REFUSED"));
+check(!wrapperSource.includes("return Read-Host $Prompt }"));
+equal((wrapperSource.match(/Read-Host/g) || []).length, 2);
+check(wrapperSource.split(/\r?\n/).filter((line) => line.includes("Read-Host")).every((line) => line.includes("-AsSecureString")));
+check(wrapperSource.includes("ReadDecision 'creation-readiness'"));
+check(wrapperSource.includes("ReadDecision 'revocation-confirmation'"));
+check(wrapperSource.includes("ReadDecision 'retry-confirmation'"));
+check(!wrapperSource.includes("ReadDecision 'creation-confirmation'"));
+check(!wrapperSource.includes("type TOKEN-CREATED-PRIVATE"));
+const managementFlowStart = wrapperSource.indexOf("function Invoke-ManagementLifecycleFlow036D");
+const managementFlowEnd = wrapperSource.indexOf("function Get-ValidatedSelfTestFixtureDirectory036D");
+const managementFlowSource = wrapperSource.slice(managementFlowStart, managementFlowEnd);
+const createInstructionIndex = managementFlowSource.indexOf("instruction=CREATE THE CREDENTIAL NOW");
+check(managementFlowSource.indexOf("ReadDecision 'operator-preflight'") < createInstructionIndex);
+check(managementFlowSource.indexOf("ReadDecision 'token-class'") < createInstructionIndex);
+check(managementFlowSource.indexOf("ReadDecision 'token-scope'") < createInstructionIndex);
+check(managementFlowSource.indexOf("ReadDecision 'input-method'") < createInstructionIndex);
+check(managementFlowSource.indexOf("ReadDecision 'clipboard-safety'") < createInstructionIndex);
+check(managementFlowSource.indexOf("ReadDecision 'creation-readiness'") < createInstructionIndex);
+const tokenNameIndex = managementFlowSource.indexOf('Emit "tokenNameStem=$TokenName"');
+const protectedPromptIndex = managementFlowSource.indexOf("protectedPrompt=PROTECTED CREDENTIAL ENTRY - THIS IS THE ONLY CREDENTIAL PROMPT");
+const protectedReadIndex = managementFlowSource.indexOf("managementSecure = & $ReadSecure");
+check(tokenNameIndex > managementFlowSource.indexOf("ReadDecision 'creation-readiness'"));
+check(createInstructionIndex > tokenNameIndex);
+check(protectedPromptIndex > createInstructionIndex);
+check(protectedReadIndex > protectedPromptIndex);
+check(!managementFlowSource.slice(createInstructionIndex, protectedReadIndex).includes("& $ReadDecision"));
+check(/instruction=CREATE THE CREDENTIAL NOW'\s*& \$Emit 'protectedPrompt=PROTECTED CREDENTIAL ENTRY - THIS IS THE ONLY CREDENTIAL PROMPT'\s*\$managementSecure = & \$ReadSecure/.test(managementFlowSource));
+check(managementFlowSource.includes("credentialMayExist = $true"));
+check(managementFlowSource.includes("if ($result.credentialMayExist)"));
+check(/cleanResultEligible = \(\s*\$result\.credentialCreated -and\s*\$result\.credentialAvailable -and/.test(managementFlowSource));
+
+// Sprint 036E additive interaction proof: 25 executable decision assertions.
+const decisionAccepted = runWrapperScenario("DecisionAccepted");
+equal(decisionAccepted.status, 0);
+equal(decisionAccepted.values.state, "non-secret-control-self-test");
+equal(decisionAccepted.values.scenario, "DecisionAccepted");
+equal(decisionAccepted.values.decision, "SELF-TEST-ACCEPTED");
+equal(decisionAccepted.values.code, "NONE");
+equal(decisionAccepted.values.acceptedKeyRead, "true");
+equal(decisionAccepted.values.drainedCount, "0");
+equal(decisionAccepted.values.labelPresent, "true");
+equal(decisionAccepted.values.keyValuesEmitted, "false");
+equal(decisionAccepted.values.protectedValuesEmitted, "false");
+equal(decisionAccepted.values.remoteMutation, "none");
+
+const decisionWrongKey = runWrapperScenario("DecisionWrongKey");
+equal(decisionWrongKey.status, 0);
+equal(decisionWrongKey.values.code, "NON_SECRET_CONTROL_REFUSED");
+equal(decisionWrongKey.values.decision, "NONE");
+equal(decisionWrongKey.values.drainedCount, "0");
+equal(decisionWrongKey.values.keyValuesEmitted, "false");
+
+const decisionBuffered = runWrapperScenario("DecisionBufferedInput");
+equal(decisionBuffered.status, 0);
+equal(decisionBuffered.values.code, "BUFFERED_INPUT_REFUSED");
+equal(decisionBuffered.values.decision, "NONE");
+equal(decisionBuffered.values.acceptedKeyRead, "false");
+check(Number(decisionBuffered.values.drainedCount) > 0);
+equal(decisionBuffered.values.labelPresent, "true");
+check(!decisionBuffered.combined.includes(["synthetic", "-buffered-input-canary"].join("")));
+
+const decisionPostReadBuffered = runWrapperScenario("DecisionPostReadBufferedInput");
+equal(decisionPostReadBuffered.values.code, "BUFFERED_INPUT_REFUSED");
+equal(decisionPostReadBuffered.values.acceptedKeyRead, "true");
 
 check(pilotSource.includes("uvskssaecdhxcgytkasc"));
 check(pilotSource.includes("tagnbgkroihagjmvehlx"));
@@ -597,6 +674,8 @@ check(activeTranscript.stdout.includes("code=TRANSCRIPTION_REFUSED"), "active tr
 check(activeTranscript.stdout.includes("protectedValuesEmitted=false"), "active transcript refusal must preserve protected-output boundary");
 check(!activeTranscriptText.includes("instruction=privately-create-exactly-one-named-token-now"), "active transcript must precede token creation instruction");
 check(!activeTranscriptText.includes("Protected Supabase Management API bearer credential"), "active transcript must precede protected prompt");
+check(!activeTranscriptText.includes("instruction=CREATE THE CREDENTIAL NOW"), "active transcript must precede the 036E creation instruction");
+check(!activeTranscriptText.includes("PROTECTED CREDENTIAL ENTRY - THIS IS THE ONLY CREDENTIAL PROMPT"), "active transcript must precede the 036E protected prompt");
 check(!activeTranscriptText.includes("privately-revoke-exact-token"), "active transcript must precede compensation and downstream work");
 equal(activeTranscript.helperInvoked, false, "active transcript must prevent helper execution");
 check(!activeTranscript.stdout.includes("requestCount="), "active transcript must prevent request execution");
@@ -613,6 +692,8 @@ equal(clipboardFailure.values.credentialRevoked, "true");
 equal(clipboardFailure.values.invalidationChildCallCount, "1");
 equal(clipboardFailure.values.cleanResultEligible, "true");
 equal(clipboardFailure.values.managementEnvironmentCleared, "true");
+equal(clipboardFailure.values.orientationBeforeFirstDecision, "true");
+equal(clipboardFailure.values.creationProtectedAdjacency, "true");
 
 const helperStartFailure = runWrapperScenario("HelperStartFailure");
 equal(helperStartFailure.status, 0, "helper-start failure scenario process must complete deterministically");
@@ -635,6 +716,8 @@ equal(missingCredentialScenario.values.invalidationChildCallCount, "0");
 equal(missingCredentialScenario.values.cleanResultEligible, "false");
 equal(missingCredentialScenario.values.manualInterventionRequired, "true");
 equal(missingCredentialScenario.values.cleanupCode, "SECRET_INPUT_CANCELLED");
+equal(missingCredentialScenario.values.creationInstructionIssued, "true");
+equal(missingCredentialScenario.values.credentialMayExist, "true");
 
 const revocationFailure = runWrapperScenario("RevocationConfirmationFailure");
 equal(revocationFailure.status, 0, "revocation-confirmation scenario process must complete deterministically");
@@ -763,5 +846,5 @@ deepEqual({ status: managementFixtureRefusal.status, code: managementFixtureRefu
 const retainedFixtureRefusal = runProtectedFixtureArgumentRefusal("RetainedPilotVerify");
 deepEqual({ status: retainedFixtureRefusal.status, code: retainedFixtureRefusal.values.code }, { status: 2, code: "SELF_TEST_SCENARIO_REFUSED" });
 
-check(assertions + 1 === 295, `expected exactly 295 assertions, received ${assertions + 1}`);
-console.log(`Sprint 036D protected management lifecycle deterministic tests passed (${assertions} assertions).`);
+check(assertions + 1 === 360, `expected exactly 360 assertions, received ${assertions + 1}`);
+console.log(`Sprint 036E beginner-safe protected interaction deterministic tests passed (${assertions} assertions).`);

@@ -1,88 +1,95 @@
-# Architect Briefing - Sprint 036D Revocation Blocked
+# Architect Briefing - Sprint 036E Closed Clean
 
 ## Executive summary
 
-**Business outcome:** Sprint 036D delivered the corrected protected-lifecycle tooling, but the live Management lifecycle failed its protected-output and same-token invalidation gates. The sprint is closed blocked, not clean.
+**Business outcome:** Sprint 036E removed the beginner-facing prompt-order hazard while preserving the accepted credential, compensation, environment and request-safety controls.
 
-**Current focus:** Define whether a narrow Sprint 036E should correct the beginner-facing prompt order before any separately authorized live retry.
+**Current focus:** Decide whether deliberate non-promotion continues or a later separately scoped sprint should retry the full protected lifecycle under fresh explicit authority.
 
-**What is proven:** Exact three-file non-runtime scope; 295 Sprint 036D assertions, five core checks and two wrapper checks; 531 total counted assertions; inherited hashes; focused validation; TypeScript; zero-warning lint; static checks; and a 29-page Production build. The exact created credential was manually revoked and its row was confirmed absent.
+**What is proven:** Six-step orientation; non-echoing single-key controls; pre/post buffered-input refusal; final creation/protected-entry adjacency; cancellation compensation; unchanged core/runtime; 360 corrected plus 135 inherited assertions; static/JSON/scope/integrity proof; and zero protected residue.
 
-**What is not live:** Same-token 401/403 invalidation, provider projection, retained-pilot Verify, Vercel baseline, a fresh candidate, alias transition, OTP requests and human Production acceptance were not completed or begun.
+**What is not live:** No real Management credential, provider request, same-token invalidation, retained-pilot Verify, Vercel baseline, candidate, alias transition, OTP or Production trainer acceptance occurred.
 
 ## Readiness signals
 
 | Signal | Status | Evidence |
 |---|---|---|
-| Corrected protected-lifecycle implementation | passed | 295 Sprint 036D assertions and seven self-tests passed; transcript, compensation and minimal child-environment controls are executable |
-| Unchanged application behavior | passed | Inherited 036C/035K/032 proof, focused validation, TypeScript, zero-warning lint, static checks and 29-page build passed; runtime diffs/imports are zero |
-| Live Management credential lifecycle | blocked | One credential was manually revoked and confirmed absent, but it was entered at the wrong prompt and required same-token invalidation is unproven |
-| Retained-pilot and Production acceptance | not started | The blocked Management gate stopped all provider API, retained-pilot, Vercel, release, alias, OTP and human Production work |
+| Beginner-safe protected interaction | passed | Six-step orientation, intercepted non-secret controls, exact creation/protected-entry adjacency and cancellation compensation passed executable proof |
+| Inherited security and runtime integrity | passed | Core hash exact; 135 inherited assertions, core/wrapper self-tests, runtime-byte and import equality passed |
+| Local validation and residue safety | passed | 495 counted assertions, static/JSON/parser/whitespace/scans passed; protected environment and temporary residue are zero |
+| Live Management lifecycle and Production acceptance | attention | Sprint 036D remains revocation-blocked; 036E performed zero live/external actions and grants no retry authority |
 
 ## Where things stand
 
-The repository has a deterministic protected lifecycle that fails closed and compensates after credential creation. The only live attempt exposed a human-factors flaw before hidden input: a beginner treated the ordinary acknowledgement as the credential prompt. Immediate surfaces were removed and the exact credential was manually revoked/list-absent, but the missing same-token invalidation proof prevents a clean result.
+The confusing protected flow is corrected locally. A first-time operator now sees six plain-language steps before any input, every ordinary checkpoint says it is non-secret and cannot display the key pressed, and credential creation is not mentioned until every checkpoint is finished. The creation instruction then leads directly to the one protected credential prompt.
+
+The correction passed all local and inherited proof without using a credential or touching Supabase, Vercel or Production. This makes the interaction ready for Architect review, but it does not repair the missing live invalidation evidence from Sprint 036D and it does not authorize another attempt.
 
 ## Current status
 
-Sprint 036D is closed `production-management-access-revocation-blocked`. Deliberate non-promotion remains in force. Sprint 029N remains gated, and no retry or replacement credential is authorized.
+Sprint 036E is closed `beginner-safe-protected-interaction-corrected-clean`. Sprint 036D remains historically `production-management-access-revocation-blocked`. Deliberate non-promotion remains in force and Sprint 029N remains gated.
 
 ## Since last sprint
 
-Builder applied the 036D Pack, added the three approved operations files and completed two accepted in-sprint security corrections: guaranteed compensation/transcript refusal and protected-child environment isolation. Complete deterministic and unchanged-application validation passed. During the first live Management attempt, the prompt-order incident triggered the required stop, followed by manual exact-token revocation and list-absence confirmation; all downstream work remained zero.
+Builder applied the exact 036E Pack, created the scoped branch and passed the mandatory two-file code gate. The approved implementation replaced every ordinary Management decision with an intercepted single-key reader, added buffered-input refusal and moved token creation to the one protected-entry boundary. The deterministic suite grew from the accepted 295 baseline to exactly 360 corrected assertions.
+
+No Product/runtime, package, core, inherited helper, provider, data or external state changed.
 
 ## Architecture / file map
 
-- `scripts/protected-management-lifecycle-036D-core.mjs` - monotonic lifecycle, fixed provider projection, bounded requests and body-blind invalidation semantics.
-- `scripts/Invoke-ProtectedManagementLifecycle036D.ps1` - private ConsoleHost wrapper, hidden input, transcript guard, compensation, child-environment isolation, memory clearing and human-only create/revoke boundaries.
-- `scripts/test-protected-management-lifecycle-036D.mjs` - deterministic request, compensation, transcription, sanitization and protected-child isolation proof.
-- `planning/sprints/036D-single-use-management-access-and-live-trainer-acceptance/` - applied strict execution authority and acceptance truth.
-- `planning/reviews/036D-single-use-management-access-and-live-trainer-acceptance.md` - implementation, deterministic proof, live incident and blocked closeout evidence.
+- `scripts/Invoke-ProtectedManagementLifecycle036D.ps1` - current beginner-safe wrapper; orientation, non-secret decision reader, creation/protected-entry adjacency and possible-credential compensation.
+- `scripts/protected-management-lifecycle-036D-core.mjs` - unchanged fixed provider/invalidation core at approved SHA-256.
+- `scripts/test-protected-management-lifecycle-036D.mjs` - 360-assertion corrected deterministic suite.
+- `planning/sprints/036E-beginner-safe-protected-interaction-correction/` - applied strict source of truth and completed acceptance checklist.
+- `planning/reviews/036E-beginner-safe-protected-interaction-correction.md` - exact implementation, mechanism, validation, hashes and zero-external-action evidence.
+- `docs/TEST_AUTH_MAILBOX_AND_PROTECTED_PROCESS_RUNBOOK.md` - proven beginner-safe interaction procedure with explicit no-live-authority boundary.
 
 ## Decisions
 
-- Close at the exact permitted blocked outcome; do not describe manual revocation/list absence as accepted same-token invalidation.
-- Do not retry, create a replacement credential or enter any downstream release phase in Sprint 036D.
-- Preserve the implementation files unchanged at closeout.
-- Recommend only an Architect-scoped narrow 036E human-factors correction; the recommendation grants no implementation or external authority.
+- Close only the local interaction outcome; do not reinterpret it as a successful Management lifecycle.
+- Preserve Sprint 036D blocked live truth and the missing same-token invalidation boundary.
+- Keep the 036D core and every Product/runtime/package/provider path unchanged.
+- Require another Architect Pack and explicit authority before any credential, provider, retained-pilot, Vercel or Production action.
 
 ## Risks / watch-items
 
-- A protected value was visible in the private console and an authorized diagnostic image. Both surfaces were terminated/deleted, repository and temporary-residue scans are clean, and the exact credential was manually revoked/list-absent; nevertheless the protected-output boundary failed.
-- Same-token invalidation is unproven because the wrapper never received or retained the credential. A clean lifecycle cannot be inferred.
-- The ordinary acknowledgement appears before the hidden credential prompt and is not beginner-safe.
-- Production remains unchanged on the historically proven Ready rollback; any later release requires fresh, separately authorized evidence.
+- A future operator still handles a high-privilege credential; the corrected interface reduces prompt confusion but does not remove private-console, transcript, compensation or exact-target obligations.
+- A live retry could fail for provider access, token class, revocation propagation, retained-pilot or release reasons not exercised by 036E.
+- Production remains on the historically proven Ready rollback and live trainer access remains incomplete.
+- Product-wide Done and Sprint 029N must not be inferred from a local tool correction.
 
 ## Open questions for the Architect
 
-- What narrow 036E interaction contract makes non-secret acknowledgements unmistakable and credential entry safely isolated for a first-time operator?
-- Should token creation be deferred until immediately before an unmistakable hidden prompt, and what executable novice-flow proof is required without weakening current security controls?
+- Should Production remain deliberately unpromoted?
+- If a later retry is wanted, what exact credential class, provider operator, create/revoke authority and execution window should the new Pack authorize?
+- Should Sprint 029N remain gated until Production trainer acceptance passes, or should the owner make a separate explicit roadmap decision?
 
 ## Evidence
 
-- Canonical root and Git top-level exact after Windows path normalization; one worktree; 036D starting SHA `9a2af97550ff90924f3c2f0286c67f03ddb20828`.
-- Pack dry-run/application/post-dry-run: exactly four Sprint 036D files.
-- New deterministic suite: 295 assertions passed; core self-test: five checks; wrapper self-test: two checks.
-- Inherited counted suites: 135 Sprint 036C + 89 Sprint 035K + 12 Sprint 032; total counted proof 531 passing.
-- Focused auth/dashboard/OTP/redirect/bootstrap/recovery/session/permission validation, JSON, roles, Supabase-self, static, TypeScript, zero-warning lint and 29-page Production build passed.
-- Frozen implementation SHA-256 values: wrapper `29BEB27F5652985E92F02830196A3F8E2AC7FCDDBB7DDB7245DE559183726028`; core `98DD491B136018AA98F1486D645EBB0AEDACFE8294D622D638B91250D598CCE1`; test `2B2C72475B50D9C2AADB9504851230C987660075A52075DCBC6F5C257FB6F3F6`.
-- Live result: one human-created credential; sanitized preflight refusal before protected helper/request; manual exact-token revocation and row-absence confirmation; same-token invalidation unproven.
-- External result: no provider API, retained-pilot, Vercel, deployment, alias, Production authentication, schema, Auth, data, Storage, DNS or session action.
+- Canonical root and Git top-level exact; one worktree; branch `codex/036E-beginner-safe-protected-interaction-correction`; starting/current SHA `2b8bf17f180af85fef71748b367eb6215622ca9c`.
+- Pack dry-run/application/post-dry-run: exactly four Sprint 036E files.
+- Starting hashes exact: wrapper `29BEB27F...`, core `98DD491B...`, test `2B2C7247...`.
+- Final hashes: wrapper `5DF552844AF0AAEDF9FFFDDBD0E63EE539238CA5D65BE4486CBB21F12042BB4D`; core unchanged `98DD491B136018AA98F1486D645EBB0AEDACFE8294D622D638B91250D598CCE1`; test `04D78E23AB3DFC897C8084CD3CE25228AB4A9E400618AF1EEF07B8187006C27F`.
+- Assertion arithmetic: 292 retained + three one-for-one replacements + 65 new = 360 corrected; inherited 036C = 135; counted total = 495.
+- Wrapper self-test passed 360 assertions, core five checks and wrapper two checks with `protectedValuesEmitted=false`, `remoteMutation=none`.
+- Static validation passed 1,017 maintained text files and maintained static validators; JSON passed eight self-tests and seven files.
+- Runtime diff/import count, plaintext Management `Read-Host`, high-confidence secret/private-email matches, protected environment residue and temporary residue are all zero.
+- No credential, provider page/request, retained-pilot, Vercel, deployment, alias, mailbox, OTP, session, Production, schema, data, Storage, DNS, commit or push action occurred.
 
 ## Plan corrections
 
-The Pack assumed that fixed acknowledgement prompts before hidden credential input would be sufficiently self-explanatory. In the first-time operator flow, the plain `Read-Host` acknowledgement was interpreted as the place to paste the credential. That prompt-order assumption was wrong and caused a protected value to become visible before the hidden prompt.
-
-A narrow 036E should define the human interaction, not broaden the release outcome: provide beginner-readable steps before credential creation, make every non-secret acknowledgement unmistakable, and isolate credential entry at the exact hidden-input moment. It must retain transcript detection, absolute executable validation, minimal child environments, compensation, request ceilings, sanitization, memory clearing and private human-only creation/revocation. No Pack or implementation is created by this recommendation.
+None - the plan held. The exact two-file boundary, 360-assertion arithmetic, safe official-semantics substitute for real keyboard driving and zero-external-action contract all remained sufficient.
 
 ## Validation / test status
 
-**Tests:** 531 passing, 0 failing in the counted Sprint 036D, 036C, 035K and 032 suites. Five core and two wrapper self-test checks also passed. Focused validation, static checks, TypeScript, zero-warning lint and the 29-page Production build passed. The live protected gate is separately blocked and is not represented as a passing test.
+**Tests:** 495 passing, 0 failing.
+
+The corrected Sprint 036E suite passed exactly 360 assertions and the inherited Sprint 036C suite passed 135. Core five-check and wrapper two-check self-tests also passed. Static validation, JSON validation, PowerShell parsing, `git diff --check`, exact scope, runtime-byte equality, runtime-import absence, high-confidence scans and environment/temp cleanup all passed. The accepted Sprint 036D Product build remains applicable because Product/runtime/package bytes are unchanged; no new Product readiness claim is made.
 
 ## Recommended next Architect action
 
-**Do:** Scope a narrow Sprint 036E for beginner-safe protected prompt ordering and executable novice-flow proof. Keep deliberate non-promotion and do not authorize a live credential retry until that correction is separately applied and reviewed.
+**Do:** Review the closed local correction and decide deliberate non-promotion versus a separately scoped live lifecycle retry. If retrying, create a new Pack that names the exact credential class, operator authority, protected execution window, cleanup/invalidation gates and downstream stop conditions.
 
-**Owner:** Architect for the interaction contract and Pack; Builder only after a future Pack handoff; authorized provider operator only under later explicit live authority.
+**Owner:** Architect for the decision and any future Pack; authorized provider operator only under later explicit live authority.
 
-**Decision:** Sprint 036D closes blocked with immediate credential revocation/list absence but without same-token invalidation. Do not begin Sprint 029N or any Production work.
+**Decision:** Sprint 036E is locally corrected clean. Sprint 036D remains revocation-blocked, Production acceptance is incomplete, no live retry is authorized and Sprint 029N remains gated.

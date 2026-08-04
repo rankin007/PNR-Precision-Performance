@@ -2,6 +2,9 @@
 
 ## Current governing evidence
 
+- `planning/sprints/036E-beginner-safe-protected-interaction-correction/` - applied strict local/offline authority for beginner-safe non-echoing controls, protected-entry adjacency and executable novice-flow proof.
+- `planning/reviews/036E-beginner-safe-protected-interaction-correction.md` - exact two-file implementation, 360 corrected plus 135 inherited passing assertions, unchanged runtime/core proof, zero external action and `beginner-safe-protected-interaction-corrected-clean` closeout.
+
 - `planning/sprints/036D-single-use-management-access-and-live-trainer-acceptance/` - applied strict single-use Management lifecycle, retained-pilot, release transaction, rollback and private Production acceptance authority.
 - `planning/reviews/036D-single-use-management-access-and-live-trainer-acceptance.md` - exact three-file tooling proof, 531 counted passing assertions, prompt-order protected-output incident, manual exact-token revocation/list absence, unproven invalidation and `production-management-access-revocation-blocked` closeout.
 - `planning/sprints/036C-protected-production-preflight-and-live-trainer-acceptance/` - applied strict identity-blind provider/pilot preflight, unchanged-product validation, five-alias transaction, rollback and private Production acceptance authority.
@@ -64,6 +67,8 @@
 33. `planning/reviews/036C-protected-production-preflight-and-live-trainer-acceptance.md` - identity-blind tooling proof, Management credential access-unavailable stop, zero external mutation and incomplete live-access gate.
 34. `planning/sprints/036D-single-use-management-access-and-live-trainer-acceptance/` - applied four-file single-use credential lifecycle and live trainer acceptance authority.
 35. `planning/reviews/036D-single-use-management-access-and-live-trainer-acceptance.md` - corrected deterministic proof, human-factors boundary incident, exact blocked lifecycle disposition and zero downstream action.
+36. `planning/sprints/036E-beginner-safe-protected-interaction-correction/` - applied beginner-safe local interaction correction authority.
+37. `planning/reviews/036E-beginner-safe-protected-interaction-correction.md` - 495 counted passing assertions, exact no-runtime-diff proof, zero external action and local correction closeout.
 
 ## Accepted product lineage
 

@@ -15,7 +15,11 @@ param(
         'InvalidationFailureRetrySuccess',
         'InvalidationFailureRetryFailure',
         'CleanupEnvironmentProof',
-        'ProtectedChildEnvironmentIsolation'
+        'ProtectedChildEnvironmentIsolation',
+        'DecisionAccepted',
+        'DecisionWrongKey',
+        'DecisionBufferedInput',
+        'DecisionPostReadBufferedInput'
     )]
     [string]$SelfTestScenario = '',
 
@@ -25,7 +29,7 @@ param(
 
 $ErrorActionPreference = 'Stop'
 $expectedRoot = 'C:\Users\rrank\OneDrive\PNR Precision Performance Canonical'
-$expectedBranch = 'codex/036D-single-use-management-access-and-live-trainer-acceptance'
+$expectedBranch = 'codex/036E-beginner-safe-protected-interaction-correction'
 $expectedNodePath = 'C:\Program Files\nodejs\node.exe'
 $expectedProjectUrl = 'https://uvskssaecdhxcgytkasc.supabase.co/'
 $expected036CCoreSha256 = '0860B6490D477578ADD79514148C0CC899A13C56F496D17A7516FD7F06518B42'
@@ -47,11 +51,12 @@ $serviceRoleSafeChildNames = @('PP035K_SUPABASE_URL', 'PP035K_RUN')
 $safeChildNames = @($managementSafeChildNames + $serviceRoleSafeChildNames)
 $allowedCodes = @(
     'BRANCH_REFUSED', 'CLASSIC_PAT_ACKNOWLEDGEMENT_REQUIRED', 'CLIPBOARD_CLEAR_FAILED',
-    'CLIPBOARD_SAFETY_CONFIRMATION_REQUIRED', 'CONFLICT_REFUSED', 'CREATION_CONFIRMATION_REQUIRED',
+    'BUFFERED_INPUT_REFUSED', 'CLIPBOARD_SAFETY_CONFIRMATION_REQUIRED', 'CONFLICT_REFUSED',
+    'CONSOLE_INPUT_STATE_REFUSED', 'CREATION_CONFIRMATION_REQUIRED',
     'HELPER_CONTRACT_REFUSED', 'HELPER_FAILED_SANITIZED', 'HELPER_MISSING',
     'INVALIDATION_RETRY_NOT_JUSTIFIED', 'NODE_MISSING', 'NON_INTERACTIVE_REFUSED',
     'NODE_EXECUTABLE_REFUSED', 'PROTECTED_CHILD_ENVIRONMENT_REFUSED',
-    'OPERATOR_PREFLIGHT_REQUIRED', 'PROTECTED_ENVIRONMENT_REFUSED', 'REVOCATION_CONFIRMATION_REQUIRED',
+    'NON_SECRET_CONTROL_REFUSED', 'OPERATOR_PREFLIGHT_REQUIRED', 'PROTECTED_ENVIRONMENT_REFUSED', 'REVOCATION_CONFIRMATION_REQUIRED',
     'REVOCATION_INVALIDATION_UNPROVEN', 'SECRET_INPUT_CANCELLED', 'SELF_TEST_FAILED',
     'SELF_TEST_FIXTURE_REFUSED', 'SELF_TEST_SCENARIO_REFUSED', 'TOKEN_CLASS_REFUSED', 'TOKEN_SCOPE_CONFIRMATION_REQUIRED',
     'TRANSCRIPTION_REFUSED', 'UNEXPECTED', 'WORKSPACE_REFUSED'
@@ -164,6 +169,81 @@ function Assert-PrivateConsole036D {
             Write-SanitizedStop036D 'PROTECTED_ENVIRONMENT_REFUSED'
         }
     }
+}
+
+function Write-BeginnerOrientation036E([scriptblock]$Emit) {
+    & $Emit 'BEGINNER-SAFE PROTECTED FLOW'
+    & $Emit '1. DO NOT CREATE A CREDENTIAL YET.'
+    & $Emit '2. NON-SECRET CONTROL checkpoints never accept a credential and never display the key pressed.'
+    & $Emit '3. The wrapper will explicitly announce the only PROTECTED CREDENTIAL ENTRY prompt.'
+    & $Emit '4. Credential creation happens only after every non-secret checkpoint is complete.'
+    & $Emit '5. After the provider check, revoke the exact named credential and prove that it is invalid.'
+    & $Emit '6. Any ambiguity stops the lifecycle and may require private revocation before anything else.'
+}
+
+function Invoke-NonSecretDecisionReader036E {
+    param(
+        [Parameter(Mandatory = $true)][string]$Id,
+        [Parameter(Mandatory = $true)][string]$Prompt,
+        [Parameter(Mandatory = $true)][Collections.IDictionary]$AcceptedKeys,
+        [Parameter(Mandatory = $true)][scriptblock]$KeyAvailable,
+        [Parameter(Mandatory = $true)][scriptblock]$ReadKey,
+        [Parameter(Mandatory = $true)][scriptblock]$Emit
+    )
+
+    & $Emit 'NON-SECRET CONTROL - NEVER TYPE OR PASTE A CREDENTIAL HERE'
+    & $Emit "control=$Id"
+    & $Emit "prompt=$Prompt"
+
+    $drainedCount = 0
+    try {
+        $available = & $KeyAvailable
+        if ($available -isnot [bool]) { throw 'CONSOLE_INPUT_STATE_REFUSED' }
+        while ($available) {
+            if ($drainedCount -ge 1024) { throw 'CONSOLE_INPUT_STATE_REFUSED' }
+            $null = & $ReadKey
+            $drainedCount += 1
+            $available = & $KeyAvailable
+            if ($available -isnot [bool]) { throw 'CONSOLE_INPUT_STATE_REFUSED' }
+        }
+    }
+    catch {
+        $code = Get-SanitizedCode036D $_
+        if ($code -eq 'HELPER_FAILED_SANITIZED') { $code = 'CONSOLE_INPUT_STATE_REFUSED' }
+        throw $code
+    }
+    if ($drainedCount -gt 0) { throw 'BUFFERED_INPUT_REFUSED' }
+
+    $keyInfo = $null
+    try {
+        $keyInfo = & $ReadKey
+        if ($null -eq $keyInfo -or $null -eq $keyInfo.Key) { throw 'CONSOLE_INPUT_STATE_REFUSED' }
+
+        $available = & $KeyAvailable
+        if ($available -isnot [bool]) { throw 'CONSOLE_INPUT_STATE_REFUSED' }
+        while ($available) {
+            if ($drainedCount -ge 1024) { throw 'CONSOLE_INPUT_STATE_REFUSED' }
+            $null = & $ReadKey
+            $drainedCount += 1
+            $available = & $KeyAvailable
+            if ($available -isnot [bool]) { throw 'CONSOLE_INPUT_STATE_REFUSED' }
+        }
+    }
+    catch {
+        $keyInfo = $null
+        $code = Get-SanitizedCode036D $_
+        if ($code -eq 'HELPER_FAILED_SANITIZED') { $code = 'CONSOLE_INPUT_STATE_REFUSED' }
+        throw $code
+    }
+    if ($drainedCount -gt 0) {
+        $keyInfo = $null
+        throw 'BUFFERED_INPUT_REFUSED'
+    }
+
+    $keyName = [string]$keyInfo.Key
+    $keyInfo = $null
+    if (-not $AcceptedKeys.Contains($keyName)) { throw 'NON_SECRET_CONTROL_REFUSED' }
+    return [string]$AcceptedKeys[$keyName]
 }
 
 function Clear-ClipboardWithoutReading036D {
@@ -382,7 +462,7 @@ function Invoke-ProtectedNodeChild036D {
 function Invoke-ManagementLifecycleFlow036D {
     param(
         [Parameter(Mandatory = $true)][string]$TokenName,
-        [Parameter(Mandatory = $true)][scriptblock]$ReadText,
+        [Parameter(Mandatory = $true)][scriptblock]$ReadDecision,
         [Parameter(Mandatory = $true)][scriptblock]$ReadSecure,
         [Parameter(Mandatory = $true)][scriptblock]$ClearClipboard,
         [Parameter(Mandatory = $true)][scriptblock]$InvokeChild,
@@ -395,6 +475,8 @@ function Invoke-ManagementLifecycleFlow036D {
         tokenName = $TokenName
         tokenClass = $null
         inputMethod = $null
+        creationInstructionIssued = $false
+        credentialMayExist = $false
         credentialCreated = $false
         credentialAvailable = $false
         providerAttempted = $false
@@ -423,42 +505,47 @@ function Invoke-ManagementLifecycleFlow036D {
     try {
         try {
             & $Emit 'humanAction=private-provider-token-lifecycle'
-            & $Emit "tokenNameStem=$TokenName"
             & $Emit 'automationOfTokenPage=false'
             & $Emit 'automationOfTokenCreation=false'
             & $Emit 'automationOfTokenRevocation=false'
+            Write-BeginnerOrientation036E $Emit
 
-            $operatorPreflight = & $ReadText 'operator-preflight' 'After privately confirming approved-project access, MFA/recovery readiness, and no same-name token, type OPERATOR-PREFLIGHT-PASS'
+            $operatorPreflight = & $ReadDecision 'operator-preflight' 'Press P after privately confirming approved-project access, MFA/recovery readiness, and no same-name token.' @{ P = 'OPERATOR-PREFLIGHT-PASS' }
             if ($operatorPreflight -cne 'OPERATOR-PREFLIGHT-PASS') { throw 'OPERATOR_PREFLIGHT_REQUIRED' }
 
-            $result.tokenClass = & $ReadText 'token-class' 'Enter token class: fine-grained-auth-config-read or classic-pat-harness-bounded'
+            $result.tokenClass = & $ReadDecision 'token-class' 'Press F for fine-grained auth_config_read, or C for classic PAT harness-bounded.' @{ F = 'fine-grained-auth-config-read'; C = 'classic-pat-harness-bounded' }
             if ($result.tokenClass -cne 'fine-grained-auth-config-read' -and $result.tokenClass -cne 'classic-pat-harness-bounded') {
                 throw 'TOKEN_CLASS_REFUSED'
             }
             if ($result.tokenClass -ceq 'fine-grained-auth-config-read') {
-                $scopeConfirmation = & $ReadText 'token-scope' 'After privately confirming exact auth_config_read and approved boundary only, type TOKEN-SCOPE-CONFIRMED'
+                $scopeConfirmation = & $ReadDecision 'token-scope' 'Press S after privately confirming exact auth_config_read and the approved boundary only.' @{ S = 'TOKEN-SCOPE-CONFIRMED' }
                 if ($scopeConfirmation -cne 'TOKEN-SCOPE-CONFIRMED') { throw 'TOKEN_SCOPE_CONFIRMATION_REQUIRED' }
             }
             else {
-                $classicAcknowledgement = & $ReadText 'classic-acknowledgement' 'After privately acknowledging full account privilege and mandatory immediate revocation, type CLASSIC-PAT-RISK-ACKNOWLEDGED'
+                $classicAcknowledgement = & $ReadDecision 'classic-acknowledgement' 'Press A after privately acknowledging full account privilege and mandatory immediate revocation.' @{ A = 'CLASSIC-PAT-RISK-ACKNOWLEDGED' }
                 if ($classicAcknowledgement -cne 'CLASSIC-PAT-RISK-ACKNOWLEDGED') { throw 'CLASSIC_PAT_ACKNOWLEDGEMENT_REQUIRED' }
             }
 
-            $result.inputMethod = & $ReadText 'input-method' 'Enter protected token input method: TYPE or PASTE'
+            $result.inputMethod = & $ReadDecision 'input-method' 'Press T for direct typing, or P for protected paste.' @{ T = 'TYPE'; P = 'PASTE' }
             if ($result.inputMethod -cne 'TYPE' -and $result.inputMethod -cne 'PASTE') { throw 'TOKEN_CLASS_REFUSED' }
             if ($result.inputMethod -ceq 'PASTE') {
-                $clipboardSafety = & $ReadText 'clipboard-safety' 'After privately disabling clipboard history and cross-device sync, type CLIPBOARD-SAFETY-CONFIRMED'
+                $clipboardSafety = & $ReadDecision 'clipboard-safety' 'Press L after privately disabling clipboard history and cross-device sync.' @{ L = 'CLIPBOARD-SAFETY-CONFIRMED' }
                 if ($clipboardSafety -cne 'CLIPBOARD-SAFETY-CONFIRMED') { throw 'CLIPBOARD_SAFETY_CONFIRMATION_REQUIRED' }
             }
 
-            & $Emit 'instruction=privately-create-exactly-one-named-token-now'
-            $creationConfirmation = & $ReadText 'creation-confirmation' 'After privately creating exactly the named token, type TOKEN-CREATED-PRIVATE'
-            if ($creationConfirmation -cne 'TOKEN-CREATED-PRIVATE') { throw 'CREATION_CONFIRMATION_REQUIRED' }
+            $creationReadiness = & $ReadDecision 'creation-readiness' 'Press R only when ready for the next visible prompt to be the sole protected credential-entry location.' @{ R = 'CREATION-READY' }
+            if ($creationReadiness -cne 'CREATION-READY') { throw 'CREATION_CONFIRMATION_REQUIRED' }
+
+            $result.creationInstructionIssued = $true
+            $result.credentialMayExist = $true
             $result.credentialCreated = $true
             $result.createdUtc = & $NowUtc
 
             try {
-                $managementSecure = & $ReadSecure 'Protected Supabase Management API bearer credential'
+                & $Emit "tokenNameStem=$TokenName"
+                & $Emit 'instruction=CREATE THE CREDENTIAL NOW'
+                & $Emit 'protectedPrompt=PROTECTED CREDENTIAL ENTRY - THIS IS THE ONLY CREDENTIAL PROMPT'
+                $managementSecure = & $ReadSecure 'PROTECTED CREDENTIAL ENTRY - Supabase Management API bearer credential'
                 if ($null -eq $managementSecure -or $managementSecure.Length -eq 0) { throw 'SECRET_INPUT_CANCELLED' }
                 $result.credentialAvailable = $true
                 $result.secureValueDisposed = $false
@@ -479,11 +566,11 @@ function Invoke-ManagementLifecycleFlow036D {
             $result.primaryError = Get-SanitizedCode036D $_
         }
 
-        if ($result.credentialCreated) {
+        if ($result.credentialMayExist) {
             try {
                 & $Emit "instruction=privately-revoke-exact-token-$TokenName-and-confirm-row-absent"
                 $result.revocationPromptAttempted = $true
-                $revocationConfirmation = & $ReadText 'revocation-confirmation' 'After privately revoking only the named token and confirming its row absent, type REVOKED-AND-ABSENT'
+                $revocationConfirmation = & $ReadDecision 'revocation-confirmation' 'Press R after privately revoking only the named token and confirming its row absent.' @{ R = 'REVOKED-AND-ABSENT' }
                 if ($revocationConfirmation -cne 'REVOKED-AND-ABSENT') { throw 'REVOCATION_CONFIRMATION_REQUIRED' }
                 $result.credentialRevoked = $true
                 $result.postRevokeListAbsent = $true
@@ -518,7 +605,7 @@ function Invoke-ManagementLifecycleFlow036D {
 
                     if ($invalidationExitCode -ne 0) {
                         try {
-                            $retryConfirmation = & $ReadText 'retry-confirmation' 'Only with operator-confirmed propagation or rate-limit evidence, type JUSTIFIED-INVALIDATION-RETRY; otherwise press Enter'
+                            $retryConfirmation = & $ReadDecision 'retry-confirmation' 'Press Y only with operator-confirmed propagation or rate-limit evidence; otherwise press N.' @{ Y = 'JUSTIFIED-INVALIDATION-RETRY'; N = 'NO-RETRY' }
                             if ($retryConfirmation -cne 'JUSTIFIED-INVALIDATION-RETRY') { throw 'REVOCATION_INVALIDATION_UNPROVEN' }
                             $result.retryAttempted = $true
                             $result.invalidationAttemptCount = 2
@@ -578,6 +665,7 @@ function Invoke-ManagementLifecycleFlow036D {
 
     $result.cleanResultEligible = (
         $result.credentialCreated -and
+        $result.credentialAvailable -and
         $result.credentialRevoked -and
         $result.postRevokeListAbsent -and
         $result.revocationVerified -and
@@ -680,6 +768,78 @@ function Invoke-DeterministicSelfTestScenario036D(
     [string]$SystemRootPath,
     [string]$WorkingDirectory
 ) {
+    if ($Scenario -in @('DecisionAccepted', 'DecisionWrongKey', 'DecisionBufferedInput', 'DecisionPostReadBufferedInput')) {
+        $decisionState = [ordered]@{
+            initialAvailabilityChecked = $false
+            acceptedKeyRead = $false
+            bufferedQueue = [Collections.Generic.Queue[object]]::new()
+            emitted = [Collections.Generic.List[string]]::new()
+            drainedCount = 0
+        }
+        if ($Scenario -eq 'DecisionBufferedInput') {
+            foreach ($character in ([char[]](('synthetic' + '-buffered-input-canary')))) {
+                $decisionState.bufferedQueue.Enqueue([pscustomobject]@{ Key = 'X'; KeyChar = $character })
+            }
+        }
+        elseif ($Scenario -eq 'DecisionPostReadBufferedInput') {
+            foreach ($character in ([char[]](('synthetic' + '-post-read-buffer-canary')))) {
+                $decisionState.bufferedQueue.Enqueue([pscustomobject]@{ Key = 'X'; KeyChar = $character })
+            }
+        }
+
+        $keyAvailable = {
+            if (-not $decisionState.initialAvailabilityChecked) {
+                $decisionState.initialAvailabilityChecked = $true
+                return ($Scenario -eq 'DecisionBufferedInput' -and $decisionState.bufferedQueue.Count -gt 0)
+            }
+            if ($Scenario -eq 'DecisionPostReadBufferedInput' -and $decisionState.acceptedKeyRead) {
+                return ($decisionState.bufferedQueue.Count -gt 0)
+            }
+            return ($decisionState.bufferedQueue.Count -gt 0)
+        }.GetNewClosure()
+        $readKey = {
+            if ($Scenario -eq 'DecisionPostReadBufferedInput' -and -not $decisionState.acceptedKeyRead) {
+                $decisionState.acceptedKeyRead = $true
+                return [pscustomobject]@{ Key = 'P'; KeyChar = [char]'P' }
+            }
+            if ($decisionState.bufferedQueue.Count -gt 0) {
+                $decisionState.drainedCount += 1
+                return $decisionState.bufferedQueue.Dequeue()
+            }
+            $decisionState.acceptedKeyRead = $true
+            if ($Scenario -eq 'DecisionWrongKey') { return [pscustomobject]@{ Key = 'X'; KeyChar = [char]'X' } }
+            return [pscustomobject]@{ Key = 'P'; KeyChar = [char]'P' }
+        }.GetNewClosure()
+        $emitDecision = { param([string]$Line) $decisionState.emitted.Add($Line) | Out-Null }.GetNewClosure()
+
+        $decision = $null
+        $decisionCode = 'NONE'
+        try {
+            $decision = Invoke-NonSecretDecisionReader036E `
+                -Id 'self-test-decision' `
+                -Prompt 'Press P for the synthetic accepted path.' `
+                -AcceptedKeys @{ P = 'SELF-TEST-ACCEPTED' } `
+                -KeyAvailable $keyAvailable `
+                -ReadKey $readKey `
+                -Emit $emitDecision
+        }
+        catch {
+            $decisionCode = Get-SanitizedCode036D $_
+        }
+
+        [Console]::Out.WriteLine('state=non-secret-control-self-test')
+        [Console]::Out.WriteLine("scenario=$Scenario")
+        [Console]::Out.WriteLine("decision=$(if ($null -eq $decision) { 'NONE' } else { $decision })")
+        [Console]::Out.WriteLine("code=$decisionCode")
+        [Console]::Out.WriteLine("acceptedKeyRead=$(ConvertTo-LowerBoolean036D $decisionState.acceptedKeyRead)")
+        [Console]::Out.WriteLine("drainedCount=$($decisionState.drainedCount)")
+        [Console]::Out.WriteLine("labelPresent=$(ConvertTo-LowerBoolean036D ($decisionState.emitted -contains 'NON-SECRET CONTROL - NEVER TYPE OR PASTE A CREDENTIAL HERE'))")
+        [Console]::Out.WriteLine('keyValuesEmitted=false')
+        [Console]::Out.WriteLine('protectedValuesEmitted=false')
+        [Console]::Out.WriteLine('remoteMutation=none')
+        exit 0
+    }
+
     if ($Scenario -ceq 'ProtectedChildEnvironmentIsolation') {
         Invoke-ProtectedChildEnvironmentIsolationScenario036D `
             -FixtureDirectory $FixtureDirectory `
@@ -695,16 +855,20 @@ function Invoke-DeterministicSelfTestScenario036D(
         secureReads = 0
         clipboardCalls = 0
         emitted = [Collections.Generic.List[string]]::new()
+        events = [Collections.Generic.List[string]]::new()
+        decisionIds = [Collections.Generic.List[string]]::new()
     }
-    $readText = {
-        param([string]$Id, [string]$Prompt)
+    $readDecision = {
+        param([string]$Id, [string]$Prompt, [Collections.IDictionary]$AcceptedKeys)
+        $scenarioState.decisionIds.Add($Id) | Out-Null
+        $scenarioState.events.Add("decision:$Id") | Out-Null
         switch ($Id) {
             'operator-preflight' { return 'OPERATOR-PREFLIGHT-PASS' }
             'token-class' { return 'fine-grained-auth-config-read' }
             'token-scope' { return 'TOKEN-SCOPE-CONFIRMED' }
             'input-method' { if ($Scenario -ceq 'ClipboardClearFailureAfterCreation') { return 'PASTE' }; return 'TYPE' }
             'clipboard-safety' { return 'CLIPBOARD-SAFETY-CONFIRMED' }
-            'creation-confirmation' { return 'TOKEN-CREATED-PRIVATE' }
+            'creation-readiness' { return 'CREATION-READY' }
             'revocation-confirmation' { if ($Scenario -ceq 'RevocationConfirmationFailure') { return 'NOT-CONFIRMED' }; return 'REVOKED-AND-ABSENT' }
             'retry-confirmation' {
                 if ($Scenario -in @('InvalidationFailureRetrySuccess', 'InvalidationFailureRetryFailure')) {
@@ -718,6 +882,7 @@ function Invoke-DeterministicSelfTestScenario036D(
     $readSecure = {
         param([string]$Prompt)
         $scenarioState.secureReads += 1
+        $scenarioState.events.Add('secure-read') | Out-Null
         if ($Scenario -ceq 'MissingCredentialAfterCreation') { return $null }
         return ConvertTo-SecureString 'synthetic-management-self-test-value' -AsPlainText -Force
     }.GetNewClosure()
@@ -743,7 +908,11 @@ function Invoke-DeterministicSelfTestScenario036D(
         throw 'UNEXPECTED'
     }.GetNewClosure()
     $nowUtc = { return '2026-08-04T00:00:00.000Z' }
-    $emit = { param([string]$Line) $scenarioState.emitted.Add($Line) | Out-Null }.GetNewClosure()
+    $emit = {
+        param([string]$Line)
+        $scenarioState.emitted.Add($Line) | Out-Null
+        $scenarioState.events.Add("emit:$Line") | Out-Null
+    }.GetNewClosure()
 
     if ($Scenario -ceq 'CleanupEnvironmentProof') {
         [Environment]::SetEnvironmentVariable('PP036D_MANAGEMENT_API_TOKEN', 'synthetic-self-test-only', 'Process')
@@ -754,7 +923,7 @@ function Invoke-DeterministicSelfTestScenario036D(
     $tokenName = 'precision-performance-036D-single-use-20260804T000000Z'
     $result = Invoke-ManagementLifecycleFlow036D `
         -TokenName $tokenName `
-        -ReadText $readText `
+        -ReadDecision $readDecision `
         -ReadSecure $readSecure `
         -ClearClipboard $clearClipboard `
         -InvokeChild $invokeChild `
@@ -763,6 +932,8 @@ function Invoke-DeterministicSelfTestScenario036D(
 
     [Console]::Out.WriteLine('state=deterministic-self-test-scenario')
     [Console]::Out.WriteLine("scenario=$Scenario")
+    [Console]::Out.WriteLine("creationInstructionIssued=$(ConvertTo-LowerBoolean036D $result.creationInstructionIssued)")
+    [Console]::Out.WriteLine("credentialMayExist=$(ConvertTo-LowerBoolean036D $result.credentialMayExist)")
     [Console]::Out.WriteLine("credentialCreated=$(ConvertTo-LowerBoolean036D $result.credentialCreated)")
     [Console]::Out.WriteLine("credentialAvailable=$(ConvertTo-LowerBoolean036D $result.credentialAvailable)")
     [Console]::Out.WriteLine("providerAttemptCount=$($result.providerAttemptCount)")
@@ -785,6 +956,20 @@ function Invoke-DeterministicSelfTestScenario036D(
     [Console]::Out.WriteLine("clipboardCallCount=$($scenarioState.clipboardCalls)")
     [Console]::Out.WriteLine("providerChildCallCount=$($scenarioState.providerCalls)")
     [Console]::Out.WriteLine("invalidationChildCallCount=$($scenarioState.invalidationCalls)")
+    $orientationIndex = $scenarioState.events.IndexOf('emit:BEGINNER-SAFE PROTECTED FLOW')
+    $firstDecisionIndex = -1
+    for ($eventIndex = 0; $eventIndex -lt $scenarioState.events.Count; $eventIndex += 1) {
+        if ($scenarioState.events[$eventIndex].StartsWith('decision:', [StringComparison]::Ordinal)) {
+            $firstDecisionIndex = $eventIndex
+            break
+        }
+    }
+    $creationIndex = $scenarioState.events.IndexOf('emit:instruction=CREATE THE CREDENTIAL NOW')
+    $protectedPromptIndex = $scenarioState.events.IndexOf('emit:protectedPrompt=PROTECTED CREDENTIAL ENTRY - THIS IS THE ONLY CREDENTIAL PROMPT')
+    $secureReadIndex = $scenarioState.events.IndexOf('secure-read')
+    [Console]::Out.WriteLine("orientationBeforeFirstDecision=$(ConvertTo-LowerBoolean036D ($orientationIndex -ge 0 -and $firstDecisionIndex -gt $orientationIndex))")
+    [Console]::Out.WriteLine("creationProtectedAdjacency=$(ConvertTo-LowerBoolean036D ($creationIndex -ge 0 -and $protectedPromptIndex -eq ($creationIndex + 1) -and $secureReadIndex -eq ($protectedPromptIndex + 1)))")
+    [Console]::Out.WriteLine("decisionSequence=$([string]::Join(',', $scenarioState.decisionIds))")
     [Console]::Out.WriteLine('downstreamOperationCount=0')
     if ($result.credentialCreated -and -not $result.cleanResultEligible) {
         foreach ($line in Get-RevocationManualInterventionLines036D) { [Console]::Out.WriteLine($line) }
@@ -931,7 +1116,19 @@ if ($Operation -eq 'RetainedPilotVerify') {
 }
 
 $tokenName = 'precision-performance-036D-single-use-' + (Get-Date).ToUniversalTime().ToString('yyyyMMddTHHmmssZ')
-$realReadText = { param([string]$Id, [string]$Prompt) return Read-Host $Prompt }
+$realEmit = { param([string]$Line) [Console]::Out.WriteLine($Line) }
+$realKeyAvailable = { return [Console]::KeyAvailable }
+$realReadKey = { return [Console]::ReadKey($true) }
+$realReadDecision = {
+    param([string]$Id, [string]$Prompt, [Collections.IDictionary]$AcceptedKeys)
+    return Invoke-NonSecretDecisionReader036E `
+        -Id $Id `
+        -Prompt $Prompt `
+        -AcceptedKeys $AcceptedKeys `
+        -KeyAvailable $realKeyAvailable `
+        -ReadKey $realReadKey `
+        -Emit $realEmit
+}.GetNewClosure()
 $realReadSecure = { param([string]$Prompt) return Read-Host $Prompt -AsSecureString }
 $realClearClipboard = { Clear-ClipboardWithoutReading036D }
 $realInvokeChild = {
@@ -947,11 +1144,10 @@ $realInvokeChild = {
         -SystemRootPath $validatedSystemRoot
 }.GetNewClosure()
 $realNowUtc = { return (Get-Date).ToUniversalTime().ToString('o') }
-$realEmit = { param([string]$Line) [Console]::Out.WriteLine($Line) }
 
 $managementResult = Invoke-ManagementLifecycleFlow036D `
     -TokenName $tokenName `
-    -ReadText $realReadText `
+    -ReadDecision $realReadDecision `
     -ReadSecure $realReadSecure `
     -ClearClipboard $realClearClipboard `
     -InvokeChild $realInvokeChild `

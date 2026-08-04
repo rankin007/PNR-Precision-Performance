@@ -1,5 +1,12 @@
 # Current Risks
 
+## Sprint 036E corrected interaction and remaining live boundary
+
+- The local beginner-facing defect is corrected and executably proven, but no real credential or Management lifecycle ran. Do not describe 036E as same-token invalidation, provider preflight or live trainer-access proof.
+- `Console.ReadKey(true)` and buffered-input refusal reduce the risk of a credential being entered into an ordinary control; they do not authorize credential creation or remove the need for a private non-transcribed ConsoleHost and exact compensation.
+- Sprint 036D remains `production-management-access-revocation-blocked`. Any later live attempt requires a separately scoped Pack, explicit credential/provider authority and fresh execution-time evidence.
+- Production remains deliberately unpromoted on the historically proven Ready rollback; Sprint 029N and product-wide Done remain gated.
+
 ## Sprint 036C protected access and live-release risk
 
 - Identity-blind tooling now exists and passes deterministic proof, but no fresh provider configuration or retained-pilot evidence was obtained because no existing authorized Management API credential was available.

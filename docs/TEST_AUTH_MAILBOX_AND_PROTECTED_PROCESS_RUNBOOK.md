@@ -69,3 +69,23 @@ After an exact-source alias-free Preview is ready and its callback is proven, th
 Repeat the same essential journey on production only after Preview acceptance and exact promotion. Allow at most two diagnosed, cooldown-safe attempts per sprint policy; never resend blindly.
 
 At disposition, retain only after the tester returns the exact sanitized sentence `Retain the Sprint 035K pilot trainer account and synthetic fixture.` Then run `-Operation Retain` and privately type that full sentence when prompted. Retention authority is never accepted through an argument, environment variable or inference. Any other input leaves the ledger and records unchanged. Otherwise run `-Operation Cleanup`; before each deletion the helper rereads the exact row and checks its identifier plus synthetic ownership fields against the ledger. It then proves each of the eight application surfaces independently reaches zero and deletes Auth last only when Sprint 035K created it. The ledger is removed only after every required absence check passes. An adopted pre-existing Auth identity is exact-ID reverified and preserved.
+
+## Sprint 036E beginner-safe protected interaction
+
+Sprint 036E proves the local interaction contract only. It does not authorize a real credential, Management API request, retained-pilot operation, provider page, Vercel action, deployment, alias transition, OTP or Production sign-in.
+
+For any separately authorized future lifecycle, the wrapper must run from a private interactive non-transcribed ConsoleHost and present this order:
+
+1. Read all six `BEGINNER-SAFE PROTECTED FLOW` orientation steps and obey `DO NOT CREATE A CREDENTIAL YET`.
+2. Use only the displayed single keys at controls labelled `NON-SECRET CONTROL - NEVER TYPE OR PASTE A CREDENTIAL HERE`.
+3. Never type or paste a credential at a non-secret control. Keys are intercepted with `Console.ReadKey(true)` and are not printed.
+4. If unexpected input is already buffered or arrives after the selected key, the wrapper drains it through the intercepted reader, stops sanitized and does not issue the creation instruction.
+5. Complete account preflight, token class, scope/risk, input method, clipboard safety when applicable and final readiness before creating anything.
+6. Create only when the wrapper emits the exact token-name stem and `CREATE THE CREDENTIAL NOW`.
+7. Enter the credential only at `PROTECTED CREDENTIAL ENTRY - THIS IS THE ONLY CREDENTIAL PROMPT`, which immediately invokes `Read-Host -AsSecureString`.
+8. Treat cancellation or ambiguity after the creation instruction as possible credential creation. Follow the fixed private revocation/list-absence intervention and do not continue downstream.
+9. Complete revocation and any justified retry decision only through their labelled non-secret single-key controls.
+
+The wrapper retains the inherited transcript/redirection refusal, trusted executable and SystemRoot checks, exact minimal child environments, clipboard clearing without reading, same-token compensation, request ceilings, body-blind invalidation, BSTR zeroing, `SecureString` disposal and process cleanup. Deterministic decision injection is `SelfTest`-only and is refused by protected operations.
+
+Sprint 036E closed `beginner-safe-protected-interaction-corrected-clean` with 360 corrected plus 135 inherited assertions passing and zero external actions. Sprint 036D remains `production-management-access-revocation-blocked`; no later live retry may be inferred from this runbook entry.
