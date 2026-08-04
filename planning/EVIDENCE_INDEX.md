@@ -2,6 +2,8 @@
 
 ## Current governing evidence
 
+- `planning/sprints/036D-single-use-management-access-and-live-trainer-acceptance/` - applied strict single-use Management lifecycle, retained-pilot, release transaction, rollback and private Production acceptance authority.
+- `planning/reviews/036D-single-use-management-access-and-live-trainer-acceptance.md` - exact three-file tooling proof, 531 counted passing assertions, prompt-order protected-output incident, manual exact-token revocation/list absence, unproven invalidation and `production-management-access-revocation-blocked` closeout.
 - `planning/sprints/036C-protected-production-preflight-and-live-trainer-acceptance/` - applied strict identity-blind provider/pilot preflight, unchanged-product validation, five-alias transaction, rollback and private Production acceptance authority.
 - `planning/reviews/036C-protected-production-preflight-and-live-trainer-acceptance.md` - exact three-file tooling proof, 135 deterministic assertions, protected access-unavailable stop, zero provider/release/data mutation and `production-protected-preflight-access-unavailable-clean` closeout.
 - `planning/sprints/036B-authoritative-production-alias-transition-and-live-trainer-acceptance/` - applied strict corrective authority for independent five-alias routing, zero-product-change staging, rollback and two private Production journeys.
@@ -60,6 +62,8 @@
 31. `planning/reviews/036B-authoritative-production-alias-transition-and-live-trainer-acceptance.md` - exact five/five rollback preflight, protected-output stop, zero deployment/provider/data mutation and blocked-clean outcome.
 32. `planning/sprints/036C-protected-production-preflight-and-live-trainer-acceptance/` - applied four-file protected provider/pilot readback and release transaction authority.
 33. `planning/reviews/036C-protected-production-preflight-and-live-trainer-acceptance.md` - identity-blind tooling proof, Management credential access-unavailable stop, zero external mutation and incomplete live-access gate.
+34. `planning/sprints/036D-single-use-management-access-and-live-trainer-acceptance/` - applied four-file single-use credential lifecycle and live trainer acceptance authority.
+35. `planning/reviews/036D-single-use-management-access-and-live-trainer-acceptance.md` - corrected deterministic proof, human-factors boundary incident, exact blocked lifecycle disposition and zero downstream action.
 
 ## Accepted product lineage
 

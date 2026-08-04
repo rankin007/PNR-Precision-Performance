@@ -84,3 +84,7 @@ What narrow protected rendered-transport/harness approach should be approved to 
 # Sprint 031B Architect question
 
 Approve a narrow 031C ceiling reconciliation from one to two exact-owned synthetic stables while retaining three horses and three identities so cross-stable denial can execute without using non-owned data?
+
+# Sprint 036D Architect question
+
+What narrow Sprint 036E protected-interaction contract will make every non-secret acknowledgement unmistakable and keep credential entry isolated behind beginner-readable, step-by-step guidance, while preserving hidden input, transcript and child-environment guards, compensation, request ceilings, sanitization and the private human create/revoke boundary? This question grants no implementation, credential or external-action authority.

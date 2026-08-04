@@ -2,10 +2,12 @@
 
 ## Active direction
 
-Sprint 036C is closed `production-protected-preflight-access-unavailable-clean`. Identity-blind protected-preflight tooling and unchanged-application validation passed, but no existing authorized Supabase Management API credential was available and token creation/rotation was outside scope. Builder stopped before any provider request, retained-pilot Verify, Vercel baseline, candidate staging, alias mutation, OTP or human Production acceptance. Deliberate non-promotion remains current and Sprint 029N remains behind the live-access gate.
+Sprint 036D is closed `production-management-access-revocation-blocked`. Deterministic lifecycle and unchanged-application proof passed, but the only credential was entered into the plain acknowledgement prompt before hidden input. The exact credential was manually revoked and its row confirmed absent; same-token invalidation remains unproven. No provider API request, retained-pilot Verify, Vercel action, candidate, alias transition, OTP or human Production acceptance began. Architect consideration of a narrow 036E beginner-safe interaction correction is next; deliberate non-promotion remains current and Sprint 029N remains behind the live-access gate.
 
 | Sprint | Outcome | Profile / proof |
 |---|---|---|
+| 036E | Planned beginner-safe protected interaction correction | Narrow Architect-defined human-factors contract only; preserve hidden input, transcript/environment isolation, compensation and ceilings; no implementation or live retry authority yet |
+| 036D | Closed `production-management-access-revocation-blocked` | Strict three-file non-runtime lifecycle; 295 new plus 236 inherited counted assertions passed; one token manually revoked/list-absent after prompt-order exposure; invalidation unproven and all downstream operations stopped |
 | 036C | Closed `production-protected-preflight-access-unavailable-clean` | Strict identity-blind fixed-GET tooling; 135 new assertions plus four wrapper checks and unchanged-application gates passed; no existing Management API credential, provider request, deployment, alias/provider/data mutation or human sign-in |
 | 036B | Closed `production-alias-transition-preflight-blocked-clean` | Strict zero-product-change preflight; 101 counted assertions plus focused/canonical/build gates passed; exact five-alias rollback baseline passed; protected-output stop before deployment/provider/data mutation or human sign-in |
 | 036 | Closed `production-promotion-rolled-back-clean` | Strict zero-source candidate Ready; unexpected alias reporting triggered all-five rollback; five/five aliases independently resolve to Ready rollback; canonical public/protected smoke passed; no human Production sign-in attempted |

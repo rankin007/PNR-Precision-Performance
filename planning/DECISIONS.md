@@ -195,3 +195,10 @@ Do not substitute historical/static proof for the mandatory integrated authentic
 # Sprint 031B decision — 2026-07-29
 
 Use the existing Vercel automation bypass only in protected process memory; do not create or rotate provider settings. Do not downgrade cross-stable denial to a nonexistent-horse assertion or exceed the one-stable ceiling.
+
+# Sprint 036D decisions — 2026-08-04
+
+- Close Sprint 036D at exact outcome `production-management-access-revocation-blocked`; manual revocation and confirmed row absence do not substitute for the required same-token 401/403 invalidation proof.
+- Do not create a replacement credential or retry the lifecycle in Sprint 036D. Do not begin retained-pilot, Vercel, deployment, alias or Production work from this blocked checkpoint.
+- Record the ordinary-acknowledgement-before-hidden-input sequence as a human-factors plan defect: a beginner entered the credential at the wrong prompt and crossed the protected-output boundary.
+- Recommend a narrow Sprint 036E for an Architect-defined, beginner-readable protected-interaction contract. The recommendation does not authorize implementation, credential handling or any live/external action.
