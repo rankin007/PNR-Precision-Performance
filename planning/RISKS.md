@@ -1,5 +1,12 @@
 # Current Risks
 
+## Sprint 036G failed authentication and restored rollback
+
+- The exact candidate passed unchanged-Product, retained-pilot, cutover and route-safety proof, but live trainer authentication did not establish a session. Do not describe Sprint 036G as stable Production trainer access or candidate acceptance.
+- The one Pack-permitted fresh retry returned only generic `retry-later` before code request or session. Its underlying provider/transport cause remains unknown because mailbox inspection, raw provider response capture, Auth configuration diagnosis and provider mutation were prohibited.
+- All five stable aliases independently resolve to exact Ready rollback `dpl_EUJyBLQp7okgbPwtBU6nmMH88L6A`; the candidate remains unaccepted. Do not move an alias back to candidate or perform another sign-in attempt under consumed 036G authority.
+- Any future attempt requires a separate Architect Pack with a genuinely distinct evidence-backed approach. Sprint 029N and product-wide Done remain gated.
+
 ## Sprint 036F blocked revocation and deliberate non-promotion
 
 - The corrected wrapper passed deterministic proof, but the only live lifecycle exited `management-access-revocation-blocked`; do not describe 036F as a successful provider pass, same-token invalidation or live trainer-access proof.

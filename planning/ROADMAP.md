@@ -2,10 +2,10 @@
 
 > A living estimate, not a contract. Sprints may be added, split, reordered, or dropped as evidence changes. Roadmap rows do not authorize implementation, external mutation, deployment, staging, commit, or push.
 
-**About:** About 10 named sprints on the current road
-**Last estimated:** 2026-08-04
-**Delivered since this roadmap was adopted:** 9 sprints - 034B, 034C, 034D, safely rolled-back 036, preflight-blocked-clean 036B, access-unavailable-clean 036C, revocation-blocked 036D, locally corrected 036E and revocation-blocked 036F
-**Next destination:** Architect review of the closed 036F blocked lifecycle and an explicit deliberate non-promotion decision; no retry or downstream action is authorized
+**About:** About 11 named sprints on the current road
+**Last estimated:** 2026-08-05
+**Delivered since this roadmap was adopted:** 10 sprints - 034B, 034C, 034D, safely rolled-back 036, preflight-blocked-clean 036B, access-unavailable-clean 036C, revocation-blocked 036D, locally corrected 036E, revocation-blocked 036F and authentication-failed/rolled-back 036G
+**Next destination:** Architect review of the closed 036G authentication failure and deliberate rollback; any future attempt must use a genuinely distinct, separately authorized approach rather than another retry
 
 **Completed before this roadmap existed:** sprints 001-035K, including follow-ups (the record lives in planning/sprints/, planning/STATE.md, and planning/SPRINT_LIFECYCLE_LEDGER.md)
 
@@ -20,15 +20,17 @@
 | 036D | Single-use Management access and live trainer acceptance | Release | done - revocation blocked | Deterministic lifecycle proof passed, but the only credential was entered at a plain acknowledgement prompt; it was manually revoked and confirmed absent, same-token invalidation was unprovable, and no downstream work began. |
 | 036E | Beginner-safe protected interaction correction | Release | done - local correction clean | Non-secret controls are intercepted and beginner-labelled, creation leads directly to protected entry, and 495 counted assertions pass; no credential/provider/release action occurred and no live retry is authorized. |
 | 036F | Corrected-wrapper live lifecycle retry | Release | done - revocation blocked | Corrected local proof passed 495 assertions; the single private lifecycle exited code 3, exact token cleanup was confirmed with no unrelated/replacement token change, same-token invalidation remained unproven, and all downstream work was skipped. |
+| 036G | Immediate trainer access recovery and minimal Production cutover | Release | done - authentication failed, rolled back clean | Exact 99-assertion verifier activation, unchanged Product, retained-pilot preflight and five-alias candidate cutover passed; the single retry returned `retry-later` before code/session, so all five aliases were restored to exact Ready rollback and final safety passed. |
 | 029N | Public enquiry privacy and submission completion | Conversion | planned | Resolve the accepted privacy/data boundary and turn the visibly unavailable stable-trial form into a governed submission workflow. |
 
 ## Notes
 
 - Table order is the current proposed sequence even where a follow-up keeps an earlier core sprint number.
-- Sprints 034B, 034C, 034D, 036, 036B, 036C, 036D, 036E and 036F are closed. Sprint 036F is the current blocked live truth and did not establish live trainer access. Sprint 029N remains gated.
+- Sprints 034B, 034C, 034D, 036, 036B, 036C, 036D, 036E, 036F and 036G are closed. Sprint 036G is the current live truth: candidate authentication was not accepted and exact all-five rollback is restored. Sprint 029N remains gated.
 - Historical sprints are not duplicated as done rows. The mid-flight statement and lifecycle ledger preserve that history.
 - Sprint 036C made no deployment or alias mutation. Production remains on the compatible Sprint 035D rollback according to the last authoritative five-alias proof; Preview acceptance remains distinct from Production acceptance.
 - Sprint 036D made no provider API, retained-pilot, Vercel, deployment, alias or Production attempt after the blocked credential lifecycle. Manual exact-token revocation and list absence do not replace same-token invalidation proof.
 - Sprint 036E made no credential, provider, retained-pilot, Vercel, deployment, alias or Production attempt. Its local correction does not authorize a live retry.
 - Sprint 036F used its single corrected lifecycle authority. Exact token-row absence, no other token change and no replacement token are confirmed, but same-token invalidation is unproven; no second lifecycle or downstream action is authorized.
+- Sprint 036G used its exact candidate-cutover and one-retry authority. The retry stopped at generic `retry-later` before code request or session; five candidate and five rollback assignments were the only release writes, final five/five rollback and route safety passed, and no further retry is authorized.
 - The retained Sprint 035K trainer identity and eight-record synthetic fixture remain governed until a later exact disposition changes them.

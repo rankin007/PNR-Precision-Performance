@@ -2,10 +2,11 @@
 
 ## Active direction
 
-Sprint 036F is closed `production-management-access-revocation-blocked`. The exact two-file activation passed 495 counted assertions, but the single private lifecycle exited code `3`. The exact token row is confirmed absent, no other token changed and no replacement token was created; same-token invalidation and Production trainer acceptance remain unproven. No downstream action began. Architect review and a deliberate non-promotion decision are next; Sprint 029N remains behind the live-access gate.
+Sprint 036G is closed `production-trainer-authentication-failed-rollback-clean`. Exact 99-assertion verifier activation, retained-pilot preflight, unchanged-Product proof, five/five candidate cutover and route safety passed. The first journey used incorrect private input and the one permitted fresh retry returned generic `retry-later` before code request or session. Fixed all-five rollback restored five/five exact Ready rollback and final safety passed. Architect review and a deliberate rollback decision are next; Sprint 029N remains behind the live-access gate.
 
 | Sprint | Outcome | Profile / proof |
 |---|---|---|
+| 036G | Closed `production-trainer-authentication-failed-rollback-clean` | Strict two-file verifier activation and existing-candidate transaction; 99 assertions passed; five candidate plus five rollback writes with complete five-row rereads; no accepted session; final five/five Ready rollback and canonical safety passed |
 | 036F | Closed `production-management-access-revocation-blocked` | Strict two-file corrected-wrapper activation; 360 corrected plus 135 inherited assertions passed; one private lifecycle exited code 3; exact token cleanup confirmed, invalidation unproven and all downstream operations stopped |
 | 036E | Closed `beginner-safe-protected-interaction-corrected-clean` | Strict two-file local correction; 360 corrected plus 135 inherited assertions passed; zero credential/provider/release action; no live retry authority |
 | 036D | Closed `production-management-access-revocation-blocked` | Strict three-file non-runtime lifecycle; 295 new plus 236 inherited counted assertions passed; one token manually revoked/list-absent after prompt-order exposure; invalidation unproven and all downstream operations stopped |

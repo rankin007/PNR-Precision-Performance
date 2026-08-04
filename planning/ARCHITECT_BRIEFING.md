@@ -1,96 +1,99 @@
-# Architect Briefing - Sprint 036F Closed Blocked
+# Architect Briefing - Sprint 036G Closed Rolled Back
 
 ## Executive summary
 
-**Business outcome:** Sprint 036F safely exercised the corrected protected wrapper once, completed exact private token cleanup, and stopped before any downstream Production change when revocation/invalidation proof did not complete.
+**Business outcome:** Sprint 036G safely exercised the existing Ready candidate through an exact five-alias Production cutover, but live authentication did not establish a session; Builder restored every stable alias to the exact Ready rollback.
 
-**Current focus:** Make an explicit deliberate non-promotion decision. Do not treat the blocked lifecycle as authority for another credential or retry.
+**Current focus:** Keep the rollback as deliberate live state and decide whether a genuinely distinct future authentication approach is justified. Do not repeat the consumed retry.
 
-**What is proven:** Exact two-file activation; fine-grained-only wrapper binding; unchanged core/runtime; 360 corrected plus 135 inherited assertions; proportional validation and 29-page Production build; one sanitized exit-code-3 lifecycle; exact token-row absence; no other token change; no replacement token; and zero local protected residue.
+**What is proven:** Exact two-file verifier activation; 99 passing assertions; unchanged protected core and Product; pre-cutover retained-pilot `8/1/0/0`; exact candidate/rollback readiness; five/five candidate routing with full rereads; canonical candidate safety; fixed all-five rollback; final five/five Ready rollback; final canonical safety; and zero unauthorized provider, Product or data mutation.
 
-**What is not live:** Successful provider projection, same-token 401/403 invalidation, retained-pilot Verify, Vercel baseline, candidate staging, alias transition, OTP, mailbox/session journey and Production trainer acceptance are unproven or unstarted.
+**What is not live:** No accepted Production trainer session, dashboard, workspace/action, denial or sign-out journey was completed. The candidate is unaccepted, stable Production trainer access is unproven, and Sprint 029N remains gated.
 
 ## Readiness signals
 
 | Signal | Status | Evidence |
 |---|---|---|
-| Corrected wrapper and inherited controls | passed | 360 corrected plus 135 inherited assertions, core/wrapper self-tests and exact core/runtime equality passed |
-| Credential cleanup and local residue | passed | Operator confirmed exact 036F row absent, no other token changed and no replacement token; process-environment and temporary residue are zero |
-| Management revocation/invalidation boundary | attention | The only lifecycle exited code 3; same-token 401/403 invalidation cannot be claimed from the terminated process |
-| Production trainer access | attention | No retained-pilot, Vercel, deployment, alias, OTP or Production journey began |
+| Verifier and unchanged Product | passed | 99 assertions, seven-check core self-test, exact core hash, focused suites, TypeScript, zero-warning lint and 29-page Production build passed |
+| Candidate transaction and rollback | passed | Five candidate assignments reached five/five candidate; five rollback assignments restored five/five exact Ready rollback with complete per-step rereads |
+| Final Production safety | passed | Public, protected, API, disabled-commerce and disabled-webhook checks passed on final rollback |
+| Live trainer authentication | attention | First attempt used incorrect private input; the only fresh retry returned generic `retry-later` before code request or session |
 
 ## Where things stand
 
-The corrected beginner-safe interaction was activated exactly once in a private non-transcribed ConsoleHost. The process ended at its defined revocation-blocked boundary. The operator then completed the only permitted manual cleanup and returned the three sanitized facts required to prove the exact token row absent without exposing protected data.
+The existing candidate passed every pre-authentication boundary and briefly held all five accepted aliases. Human authentication did not reach a code request or session on the one permitted fresh retry. Builder therefore consumed no further attempt and completed the Pack-defined all-five rollback.
 
-The result is safe but blocked. Cleanup is complete, yet row absence does not recreate same-token invalidation evidence. Builder therefore stopped every downstream operation and closed at the Pack's exact permitted blocked outcome.
+Production is now stable on the same exact Ready rollback that governed the baseline. This is a safe recovery result, not candidate acceptance or live trainer-access proof.
 
 ## Current status
 
-Sprint 036F is closed `production-management-access-revocation-blocked`. Production remains deliberately unpromoted on the historically proven Ready rollback. Stable live trainer access, product-wide Done and the Sprint 029N gate remain incomplete.
+Sprint 036G is closed `production-trainer-authentication-failed-rollback-clean`. All five stable aliases independently resolve to Ready rollback `dpl_EUJyBLQp7okgbPwtBU6nmMH88L6A`. Candidate `dpl_EmfhgcYxjNHk4W9LwH6ruTfASZmf` remains unaccepted. No further retry or Sprint 029N work is authorized.
 
 ## Since last sprint
 
-Builder applied the exact 036F Pack from closed 036E SHA `6c632262438d84ef64931a1c360cc453621762ec`, created the scoped branch and passed the approved two-file code gate. The wrapper now binds the exact 036F branch and token stem, accepts only `fine-grained-auth-config-read`, and removes classic-PAT continuation. The deterministic suite preserves exactly 360 assertions and inherited 036C preserves 135.
+Builder applied the strict four-file 036G Pack from closed 036F SHA `b88d68d98fe374df7f32f3be4d0f0a73dd02c5e7` and changed only the approved wrapper and deterministic test. The wrapper now permits exactly historical 035K and current 036G while preserving all protected-input, exact-project, exact-ID, no-enumeration, ledger and cleanup controls.
 
-One private lifecycle ran. It returned sanitized code `3`; no second lifecycle or replacement credential followed. The operator confirmed exact-token cleanup, and Builder performed no retained-pilot, Vercel, deployment, alias, OTP, mailbox, session or Production continuation.
+The scoped checkpoint `a66b2e4c17aa10509e9bf3f790b582ccf8305967` was pushed only to the 036G branch before Production mutation. Preflight and candidate route safety passed; the fixed candidate transaction completed; the private journey failed at authentication; and the fixed rollback plus final safety completed without any new deployment or provider/data change.
 
 ## Architecture / file map
 
-- `scripts/Invoke-ProtectedManagementLifecycle036D.ps1` - current 036F-bound beginner-safe wrapper and private lifecycle entrypoint.
-- `scripts/protected-management-lifecycle-036D-core.mjs` - unchanged fixed provider/invalidation core at the approved SHA-256.
-- `scripts/test-protected-management-lifecycle-036D.mjs` - 360-assertion 036F deterministic suite.
-- `planning/sprints/036F-corrected-wrapper-live-lifecycle-retry/` - applied strict source of truth and acceptance boundaries.
-- `planning/reviews/036F-corrected-wrapper-live-lifecycle-retry.md` - implementation, validation, live stop, private cleanup and external-action ledger.
-- `docs/TEST_AUTH_MAILBOX_AND_PROTECTED_PROCESS_RUNBOOK.md` - protected interaction and 036F no-retry boundary.
-- `docs/OPERATIONS_HANDOFF.md` - current operational deliberate non-promotion boundary.
+- `scripts/Invoke-LiveTrainerAccess035K.ps1` - exact 035K/036G branch-allowlisted protected wrapper.
+- `scripts/live-trainer-access-035K-core.mjs` - unchanged protected exact-ID verifier at SHA-256 `603FF16B9F6EB30D2B5E26A39218E8307731D66008D4D384FB9696095CD3AB5A`.
+- `scripts/test-live-trainer-access-035K.mjs` - 99-assertion deterministic verifier suite.
+- `planning/sprints/036G-immediate-trainer-access-recovery-and-minimal-production-cutover/` - applied scope, transaction, private-journey and rollback authority.
+- `planning/reviews/036G-immediate-trainer-access-recovery-and-minimal-production-cutover.md` - detailed validation, routing snapshots, sanitized journey, rollback and external-action ledger.
+- `docs/OPERATIONS_HANDOFF.md` - current no-retry and five/five rollback operating boundary.
 
 ## Decisions
 
-- Close at `production-management-access-revocation-blocked`; do not convert exact-row absence into same-token invalidation proof.
-- Treat the single private lifecycle as consumed. Do not create a replacement token or run a second attempt from 036F.
-- Preserve the unchanged core, Product/runtime/package bytes and historically proven five-alias rollback.
-- Require a separate Architect Pack and explicit authority for any genuinely new credential, provider, release or Production approach.
+- Close at `production-trainer-authentication-failed-rollback-clean`; do not reinterpret pre-authentication candidate safety as live access.
+- Treat the Pack's single fresh retry as consumed. Do not request another code or investigate provider configuration under 036G.
+- Preserve exact Ready rollback as the live routing authority and candidate as unaccepted.
+- Require separate Architect authority for any genuinely distinct future diagnosis, cutover or authentication acceptance approach.
 
 ## Risks / watch-items
 
-- A provider token can be absent while the required in-process same-token invalidation assertion remains unproven; these facts must not be conflated.
-- Repeating the lifecycle would exceed the exact single-attempt authority and introduce a new credential boundary.
-- No fresh provider projection, retained-pilot state or five-alias routing evidence was collected because the required stop preceded them.
-- Production trainer acceptance, Sprint 029N and product-wide Done remain gated.
+- Generic `retry-later` does not distinguish cooldown, delivery, transport or provider compatibility; the root cause is intentionally unresolved because protected mailbox/provider inspection and provider mutation were out of scope.
+- Moving even one alias back to candidate would breach the completed rollback boundary.
+- The retained pilot verified before cutover, but no accepted Production session followed; these proofs must not be conflated.
+- Live trainer access, Sprint 029N and product-wide Done remain gated.
 
 ## Open questions for the Architect
 
-- Should Production remain deliberately on the compatible rollback with no further live lifecycle attempt?
-- If a genuinely new approach is desired later, what distinct revocation/invalidation mechanism and exact authority would avoid repeating the consumed 036F lifecycle?
-- Should Sprint 029N remain behind Production trainer acceptance, or should the owner make a separate explicit roadmap decision?
+- Should Production remain deliberately on the compatible rollback with no new authentication attempt?
+- If future work is warranted, what distinct privacy-safe evidence and mechanism can diagnose the authentication boundary without repeating the retry or exposing mailbox/provider data?
+- Should Sprint 029N remain behind live trainer acceptance, or should the owner make a separate explicit roadmap decision?
 
 ## Evidence
 
-- Canonical root and Git top-level exact; one worktree; scoped branch `codex/036F-corrected-wrapper-live-lifecycle-retry`; starting SHA `6c632262438d84ef64931a1c360cc453621762ec`.
-- Pack SHA-256 `36AC029CC69FFE4A2397D7459A72657455035AF6D1FECC5E71AAF4FE5197D912`; dry-run/application/post-dry-run named exactly four Sprint 036F files.
-- Starting hashes: wrapper `5DF552844AF0AAEDF9FFFDDBD0E63EE539238CA5D65BE4486CBB21F12042BB4D`; core `98DD491B136018AA98F1486D645EBB0AEDACFE8294D622D638B91250D598CCE1`; test `04D78E23AB3DFC897C8084CD3CE25228AB4A9E400618AF1EEF07B8187006C27F`.
-- Final hashes: wrapper `653E4F57D87000724AD19F0900B6FE0B753550BB4506E3C362D27F82A3F0541B`; core unchanged `98DD491B136018AA98F1486D645EBB0AEDACFE8294D622D638B91250D598CCE1`; test `D6F7EBA42CF811BD04C2BF281636F11E72984B841A90CEF45CBE7935567E4A10`.
-- Corrected suite passed 360; inherited 036C passed 135; counted total is 495 passing and zero failing. Five core plus two wrapper self-tests passed with `protectedValuesEmitted=false` and `remoteMutation=none`.
-- Static validation passed 1,023 maintained files; JSON passed eight self-tests and seven files. Roles, Supabase-self, focused auth/dashboard/OTP/redirect/bootstrap/recovery/public controls, TypeScript, zero-warning lint and the 29-page Production build passed.
-- Aggregate domain validation reached the known optional missing `playwright-core` dependency after preceding components passed; Pack-approved direct 031C execution passed as equivalent focused proof.
-- One private non-transcribed lifecycle exited sanitized code `3`. Operator confirmed exact row absent, no other token changed and no replacement token; protected process-environment and `pp036d-*` residue are zero.
-- Product/runtime diff and protected runtime imports are zero. No provider configuration, retained-pilot, Vercel, deployment, alias, OTP, mailbox, session or Production continuation occurred.
+- Canonical root/Git top-level and single-worktree guard passed; branch is `codex/036G-immediate-trainer-access-recovery-and-minimal-production-cutover`; starting SHA is `b88d68d98fe374df7f32f3be4d0f0a73dd02c5e7`.
+- Final tooling hashes: wrapper `8C2EAB11471D65CCBD3858ED92E83BFE79887E4519A107FF908E74AFE48667DE`; test `C94F899867F78F87DD68C72E6C8E398610E4970657183303D1676C6DB91AB49E`; core unchanged `603FF16B9F6EB30D2B5E26A39218E8307731D66008D4D384FB9696095CD3AB5A`.
+- Focused proof passed 89 inherited plus 10 new assertions = 99. Direct core self-test passed seven checks. PowerShell parsing, guard/hash checks and live wrapper Verify passed.
+- Dashboard, OTP, passwordless redirect, bootstrap concurrency, recovery, public controls, static, JSON, roles, Supabase-self, TypeScript, zero-warning lint and the 29-page Production build passed.
+- Product bytes have zero difference from candidate source `38ab1acc2776124ba8b54fd33eb346bf7f28f99a`; accepted correction `76f66f5f9803e5d1f85a6dd3f71adf302b8a1810` remains in ancestry.
+- Pre-cutover exact-ID Verify passed application/Auth/Storage/wrong-horse `8/1/0/0`. Management credential/API counts are `0/0`.
+- Existing candidate `dpl_EmfhgcYxjNHk4W9LwH6ruTfASZmf` and rollback `dpl_EUJyBLQp7okgbPwtBU6nmMH88L6A` were exact Ready Production targets for project `prj_6To7czLpCEGL6fInkQwE4egePPpq`.
+- Cutover snapshots proved candidate/rollback `1/4`, `2/3`, `3/2`, `4/1`, `5/0`; separate `candidate-live` was five/five candidate. Exactly five candidate assignments occurred.
+- The tester's fixed retry report was code requested `no`, code entered `no`, session `no`, dashboard `no`, workspace/action `no`, denial `no`, sign-out `no`; no protected value was recorded.
+- Rollback snapshots proved rollback/candidate `1/4`, `2/3`, `3/2`, `4/1`, `5/0`; separate `final-rollback` was five/five Ready rollback. Exactly five rollback assignments occurred.
+- Final canonical responses were 200 for public/sign-in/health, 307 for anonymous protected routes, 405 for unsafe health POST, 303 for disabled checkout and 503 for disabled webhook. No third deployment or partial mapping remained.
 
 ## Plan corrections
 
-The local activation and validation plan held. The live revocation/invalidation boundary did not complete, so the plan stopped at its defined blocked outcome. Private exact-token cleanup closed the safety obligation but did not substitute for same-token invalidation. No corrective retry was introduced inside the consumed sprint authority.
+The first private journey used incorrect input, so it was not accepted. The one Pack-permitted fresh retry then returned generic `retry-later` before a code request or session; the retry ceiling was exhausted and the plan entered its fixed all-five rollback path.
+
+Direct anonymous immutable-deployment requests met Vercel SSO, so authenticated read-only `vercel curl` supplied equivalent candidate smoke without changing protection or settings. Redirected agent-terminal constraints prevented wrapper SelfTest; the accepted stronger substitute combined direct seven-check core self-test, 99 executable assertions, PowerShell parsing, exact guard/hash checks and successful live wrapper Verify. Two deterministic PowerShell harness parse typos were corrected before any request and did not affect Product or external state.
 
 ## Validation / test status
 
-**Tests:** 495 passing, 0 failing.
+**Tests:** 99 passing, 0 failing.
 
-The corrected Sprint 036F suite passed exactly 360 assertions and inherited Sprint 036C passed 135. Core five-check and wrapper two-check self-tests passed. Static, JSON, roles, Supabase-self, focused controls, PowerShell parsing, TypeScript, zero-warning lint, the 29-page Production build, whitespace, exact scope, runtime equality, protected-data scans and environment/temp cleanup passed. The optional aggregate transport dependency was covered by the passing direct 031C substitute without weakening a security or product boundary.
+The exact focused target passed 89 inherited plus 10 Sprint 036G assertions. Direct core self-test, PowerShell parsing, focused authentication/dashboard/OTP/redirect/bootstrap/recovery/public suites, static, JSON, roles, Supabase-self, TypeScript, zero-warning lint, 29-page Production build, Product equality, secret/private-data, scope, encoding, whitespace and residue checks passed. Final rollback route safety passed. The wrapper SelfTest and immutable SSO limitations were covered by the documented equivalent-or-stronger proofs above.
 
 ## Recommended next Architect action
 
-**Do:** Record deliberate non-promotion as the immediate direction and decide whether any genuinely different future revocation/invalidation approach is worth planning. Do not issue a retry Pack that merely repeats the consumed 036F lifecycle.
+**Do:** Record deliberate rollback as the immediate direction. If further work is justified, define a genuinely distinct privacy-safe authentication diagnosis/acceptance approach; do not issue a Pack that merely repeats the consumed retry.
 
-**Owner:** Architect for roadmap and any future Pack; authorized provider operator only under separate explicit live authority.
+**Owner:** Architect and product owner for roadmap/acceptance direction; authorized platform operator only under a future separate live-action Pack.
 
-**Decision:** Sprint 036F is safely closed but revocation-blocked. Exact token cleanup is complete, same-token invalidation and Production trainer acceptance are unproven, no downstream action occurred, and Sprint 029N remains gated.
+**Decision:** Sprint 036G is safely closed with all five aliases on exact Ready rollback, the candidate unaccepted, live Production trainer access unproven and Sprint 029N gated.

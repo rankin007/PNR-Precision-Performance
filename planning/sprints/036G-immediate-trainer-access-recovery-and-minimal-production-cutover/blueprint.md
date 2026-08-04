@@ -221,3 +221,7 @@ Never record the email, OTP, mailbox content, Auth ID, row IDs, session material
 Record canonical/remote authority, exact two-file tooling diff, before/after hashes, unchanged core hash, deterministic test arithmetic, zero Management activity, protected verifier results, Product equality/validation, current official mechanism references, exact candidate/rollback proof, every five-row routing snapshot, both private human journeys, route safety, final external-mutation ledger, final outcome, rollback readiness, protected residue and scoped branch equality.
 
 Only `production-trainer-access-stable-live-accepted-clean` completes the live trainer-access gate. Stop without beginning Sprint 029N.
+
+## Executed path
+
+The executed state path was `preflight-passed` -> `candidate-live` -> `first-journey-input-failed` -> `retry-later` -> `all-five-rollback` -> `final-rollback`. The single permitted retry established no code request or session. All five rollback assignments and full rereads completed, final canonical route safety passed, and the sprint closed `production-trainer-authentication-failed-rollback-clean` without beginning Sprint 029N.

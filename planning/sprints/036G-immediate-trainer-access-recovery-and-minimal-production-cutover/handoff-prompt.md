@@ -43,3 +43,7 @@ Exact rollback assigns all five aliases to `pnr-precision-performance-qpd244v93-
 Apply the Evidence-Proportional Execution Standard. Substitute equivalent or stronger safe proof when optional tooling is unavailable; keep contract-preserving wrapper/test/reporter corrections inside 036G. Stop only for material target, authority, security/privacy, Production, integrity, scope, protected cleanup or rollback risk. Use manual intervention only after safe alternatives are exhausted, with exact secret-free steps and the verification that follows. Never request a service-role value, email, OTP, raw response, screenshot or private identifier in conversation.
 
 Close `production-trainer-access-stable-live-accepted-clean` only when both Production sign-ins, final exact-ID pilot proof, five/five candidate routing and safety pass with zero unauthorized mutation. Otherwise use one listed permitted outcome, complete all-five rollback as applicable, refresh proportional records, intentionally commit/push only the 036G branch and stop. Do not begin Sprint 029N.
+
+## Builder result
+
+Builder closed `production-trainer-authentication-failed-rollback-clean`. Candidate cutover and route safety passed, but the first private journey used incorrect input and the one permitted fresh retry stopped at generic `retry-later` before code request or session. No protected value or mailbox content was captured. The exact all-five rollback and final safety proof passed; the candidate remains unaccepted and no further retry or Sprint 029N work is authorized.

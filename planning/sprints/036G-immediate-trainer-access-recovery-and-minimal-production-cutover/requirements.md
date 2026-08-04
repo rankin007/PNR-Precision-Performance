@@ -246,3 +246,7 @@ If manual intervention remains necessary after safe alternatives are exhausted, 
 - what Builder will verify afterward.
 
 Never ask for a service-role value, email, OTP, raw provider response, screenshot, account detail or private identifier in conversation. No manual intervention may create or rotate a Management token or broaden the external-action set.
+
+## Execution outcome
+
+Closed 2026-08-05 as `production-trainer-authentication-failed-rollback-clean`. Preflight, exact-ID Verify, unchanged-Product validation, five/five candidate cutover and canonical safety passed. The first private journey used incorrect input; the one permitted fresh retry returned generic `retry-later` before a code request or session. The retry ceiling was exhausted, so Builder completed the fixed all-five rollback and proved five/five exact Ready rollback plus final canonical safety. Live Production trainer access was not accepted and Sprint 029N remains gated.

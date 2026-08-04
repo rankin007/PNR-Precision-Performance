@@ -2,6 +2,9 @@
 
 ## Current governing evidence
 
+- `planning/sprints/036G-immediate-trainer-access-recovery-and-minimal-production-cutover/` - applied strict protected-verifier activation, existing-candidate five-alias transaction, private Production journey and fixed rollback authority.
+- `planning/reviews/036G-immediate-trainer-access-recovery-and-minimal-production-cutover.md` - 99 passing assertions, exact retained-pilot/candidate/rollback proof, five candidate and five rollback assignments, sanitized failed authentication, final five/five Ready rollback and `production-trainer-authentication-failed-rollback-clean` closeout.
+
 - `planning/sprints/036F-corrected-wrapper-live-lifecycle-retry/` - applied strict corrected-wrapper activation, single-token lifecycle, cleanup, downstream-gating and blocked-outcome authority.
 - `planning/reviews/036F-corrected-wrapper-live-lifecycle-retry.md` - exact two-file implementation, 495 passing assertions, single sanitized exit-code-3 lifecycle, operator-confirmed exact-token cleanup, unproven same-token invalidation, zero downstream action and `production-management-access-revocation-blocked` closeout.
 
@@ -74,6 +77,8 @@
 37. `planning/reviews/036E-beginner-safe-protected-interaction-correction.md` - 495 counted passing assertions, exact no-runtime-diff proof, zero external action and local correction closeout.
 38. `planning/sprints/036F-corrected-wrapper-live-lifecycle-retry/` - applied corrected-wrapper single-lifecycle and downstream-gating authority.
 39. `planning/reviews/036F-corrected-wrapper-live-lifecycle-retry.md` - 495 passing assertions, exit-code-3 lifecycle, exact-token cleanup confirmation, unproven invalidation and blocked closeout.
+40. `planning/sprints/036G-immediate-trainer-access-recovery-and-minimal-production-cutover/` - applied protected verifier, existing candidate, fixed five-alias transaction, private journey and rollback authority.
+41. `planning/reviews/036G-immediate-trainer-access-recovery-and-minimal-production-cutover.md` - 99-assertion proof, exact routing transaction, sanitized authentication failure, complete rollback and current live truth.
 
 ## Accepted product lineage
 

@@ -2,9 +2,9 @@
 
 ## Current checkpoint
 
-Status: pre-cutover checkpoint green; Production alias mutation has not started.
+Status: closed `production-trainer-authentication-failed-rollback-clean`; all five Production aliases are restored to the exact Ready rollback.
 
-Recorded 2026-08-04 AEST from the permanent canonical repository on branch `codex/036G-immediate-trainer-access-recovery-and-minimal-production-cutover`, starting at closed Sprint 036F SHA `b88d68d98fe374df7f32f3be4d0f0a73dd02c5e7`.
+Recorded 2026-08-05 AEST from the permanent canonical repository on branch `codex/036G-immediate-trainer-access-recovery-and-minimal-production-cutover`, starting at closed Sprint 036F SHA `b88d68d98fe374df7f32f3be4d0f0a73dd02c5e7`.
 
 ## Authority and scope
 
@@ -52,11 +52,35 @@ Recorded 2026-08-04 AEST from the permanent canonical repository on branch `code
 - Supabase Management API requests: 0.
 - Retained-pilot Verify operations: 1 read-only pre-cutover operation.
 - Fresh deployments, promotes or platform rollbacks: 0.
-- Candidate alias assignments: 0 of exactly 5 authorized success-path writes.
-- Rollback alias assignments: 0.
+- Candidate alias assignments: exactly 5, one for each accepted alias in the fixed cutover order.
+- Rollback alias assignments: exactly 5, one for each accepted alias in the fixed recovery order.
 - DNS, environment, provider, project-setting, Product, identity, fixture and data mutations: 0.
-- Private OTP requests/sign-ins: 0; human Production acceptance remains gated on `candidate-live` safety.
+- Private accepted OTP requests/sign-ins: 0. The first journey used incorrect private input; the one permitted fresh retry stopped at a generic retry-later response before a code request or session.
 
-## Next exact gate
+## Checkpoint and routing transaction
 
-Commit and push the scoped pre-cutover checkpoint, prove direct-remote equality, reread candidate/rollback/all-five routing, then perform the fixed five alias assignments in legacy-team, team-project, project, `www`, apex order. After every assignment, independently reread all five aliases. Any mismatch enters the fixed all-five rollback before human authentication.
+- Pre-cutover checkpoint `a66b2e4c17aa10509e9bf3f790b582ccf8305967` was pushed only to the scoped 036G branch and direct-remote equality passed before Production mutation.
+- Baseline independently proved five/five aliases on exact Ready rollback.
+- Candidate cutover reread all five aliases after every fixed-order assignment and proved candidate/rollback counts `1/4` at `2026-08-04T09:11:52Z`, `2/3` at `09:12:22Z`, `3/2` at `09:12:51Z`, `4/1` at `09:13:23Z` and `5/0` at `09:14:00Z`.
+- A separate `candidate-live` snapshot proved five/five Ready candidate at `2026-08-04T09:14:26Z`.
+- Canonical candidate safety passed public, protected, API, disabled-commerce and disabled-webhook checks before private authentication.
+
+## Private Production journey and sanitized diagnosis
+
+- The first private journey used the wrong email/input. No protected value was recorded and no accepted session was established.
+- The Pack-permitted single fresh retry was attempted only after a fresh five/five candidate snapshot and route-safety proof. The application returned the generic classification `retry-later`: sign-in was temporarily unavailable and another code request should wait.
+- The tester reported the fixed booleans only: code requested `no`; code entered `no`; session `no`; dashboard `no`; workspace/action `no`; denial `no`; sign-out `no`.
+- The retry ceiling was exhausted. No mailbox inspection, protected response capture, provider diagnosis, configuration change or further OTP attempt occurred.
+
+## Fixed all-five rollback and final safety
+
+- Material Production authentication failure triggered the fixed all-five rollback without source, provider, schema, identity, fixture or data change.
+- Recovery reread all five aliases after every fixed-order assignment and proved rollback/candidate counts `1/4` at `2026-08-04T20:34:53Z`, `2/3` at `20:35:33Z`, `3/2` at `20:36:01Z`, `4/1` at `20:36:31Z` and `5/0` at `20:37:03Z`.
+- A separate `final-rollback` snapshot proved five/five exact Ready rollback at `2026-08-04T20:37:54Z`, with no third deployment or partial mapping.
+- Final canonical safety passed: `/`, `/pricing`, `/disclaimer`, hero, `/sign-in` and `/api/health` returned 200; anonymous `/portal`, synthetic nonexistent horse and `/admin` returned 307; unsafe health POST returned 405; disabled checkout returned 303; disabled webhook returned 503.
+- The authorized second retained-pilot Verify was not used because no session, identity, fixture, application-data or Storage mutation occurred. The passing pre-cutover exact-ID `8/1/0/0` Verify, zero Product/data mutation and exact all-five rollback are proportionate final proof for this rollback outcome.
+- Protected process environment and pending-file residue are zero. The retry browser tab was closed without content inspection; no exact first-journey task-marker tab remained visible. The retained ownership ledger was preserved without reading protected contents.
+
+## Outcome
+
+Sprint 036G closes `production-trainer-authentication-failed-rollback-clean`. The candidate remains unaccepted, live Production trainer access is not proven, all five stable aliases remain on exact Ready rollback `dpl_EUJyBLQp7okgbPwtBU6nmMH88L6A`, and Sprint 029N remains gated. No further retry, PR, merge, `develop` push, force-push or other branch export is authorized by this closeout.
