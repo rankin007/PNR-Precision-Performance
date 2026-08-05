@@ -15,13 +15,13 @@ const checks = [
   ["public indexing enabled", layout.includes("index: true") && layout.includes("follow: true")],
   ["preview page override removed", !home.includes("index: false") && !home.includes("follow: false")],
   ["primary acquisition wording", home.includes("Request a Stable Trial") && pricing.includes("Request a Stable Trial")],
-  ["commerce remains qualified", home.includes("commerce and onboarding remain unavailable") && pricing.includes("not confirmed for online purchase")],
-  ["form remains non-transmitting", form.includes("does not transmit, store, email or log information")],
+  ["commerce remains qualified", home.includes("Commerce and onboarding remain unavailable") && pricing.includes("not confirmed for online purchase")],
+  ["form uses governed submission", form.includes('fetch("/api/enquiries"') && form.includes("Enquiry received") && form.includes("Privacy notice")],
   ["public disclaimer linked", home.includes('href="/disclaimer"')],
   ["non-medical disclaimer", disclaimer.includes("does not replace trainer observation, veterinary assessment")],
   ["robots protects private routes", ["/admin/", "/api/", "/auth/", "/data-entry/", "/portal/", "/sign-in"].every((route) => robots.includes(`"${route}"`))],
   ["robots exposes sitemap", robots.includes("https://precisionperformance.com.au/sitemap.xml")],
-  ["sitemap lists only public routes", sitemap.includes("/pricing") && sitemap.includes("/disclaimer") && !sitemap.includes("/portal")],
+  ["sitemap lists only public routes", sitemap.includes("/pricing") && sitemap.includes("/privacy") && sitemap.includes("/disclaimer") && !sitemap.includes("/portal")],
   ["no stale preview marker", !home.includes("noindex") && !form.includes("Local preview")],
 ];
 

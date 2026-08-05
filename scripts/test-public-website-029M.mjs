@@ -17,9 +17,9 @@ const assertions = [
   [pricing.includes("Prices, inclusions, tax, freight, terms and availability are not confirmed") && !pricing.includes("AUD $5,500"), "Sprint 030 safely supersedes unapproved pricing"],
   [pricing.includes("Request a Stable Trial") && !pricing.includes("$150") && !pricing.includes("$250"), "visitor-facing stable-trial wording replaces speculative pricing"],
   [!pricing.includes("checkout") && !pricing.includes("12 months") && !pricing.includes("twelve-month"), "checkout and undefined twelve-month offer are absent"],
-  [form.includes("noValidate onSubmit={validate}") && !form.includes("action=") && !form.includes("fetch("), "form validation is client-only with no transmission action"],
+  [form.includes("noValidate onSubmit={submit}") && form.includes('fetch("/api/enquiries"') && form.includes("submissionAvailable"), "form preserves validation while using the governed enquiry endpoint"],
   [form.includes("trainerName") && form.includes("stableName") && form.includes("stableAddress") && form.includes("phone") && form.includes("email") && form.includes("horseVolume") && form.includes("referredBy"), "form contains exactly the approved enquiry field concepts"],
-  [form.includes("No information has been sent or saved") && form.includes("submission unavailable"), "non-submission state is explicit"],
+  [form.includes("Enquiry received") && form.includes("Privacy notice") && form.includes("not marketing consent"), "governed receipt and collection notice replace the superseded non-submission state"],
   [checkout.includes("commercialAuthority.reasonCode"), "checkout route remains authority-gated"],
   [protectedShell.includes("requirePortalAppContext") && protectedShell.includes("requireAdminAppContext"), "protected application shells remain authentication and role gated"],
 ];

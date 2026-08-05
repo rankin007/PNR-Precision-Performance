@@ -17,7 +17,7 @@ assert.doesNotMatch(checkout, /getStripeServerClient|createPendingOrderForChecko
 assert.match(webhook, /if \(!commercialAuthority\.checkoutEnabled\)/);
 assert.ok(webhook.indexOf("if (!commercialAuthority.checkoutEnabled)") < webhook.indexOf("request.text()"));
 assert.doesNotMatch(pricing, /\$5,500|Including GST|Postage additional/);
-assert.match(pricing, /does not transmit it online/);
+assert.match(pricing, /does not create an order, account or subscription/);
 assert.match(shop, /Historical or seeded|historical catalogue/i);
 assert.match(detail, /not an active online offer/i);
 assert.match(admin, /historical reconciliation data only/i);

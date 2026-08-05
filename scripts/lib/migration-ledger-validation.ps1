@@ -8,9 +8,9 @@ function Test-CandidateMigrationLedger {
   $migrations = @($files | Where-Object Name -Match '^\d{4}_.+\.sql$' | Sort-Object { [int]$_.Name.Substring(0,4) }, Name)
   $groups = $migrations | Group-Object { $_.Name.Substring(0,4) }
   if ($groups | Where-Object Count -ne 1) { throw 'Candidate repository migration chain contains a duplicate version.' }
-  $expected = 1..21 | ForEach-Object { '{0:D4}' -f $_ }
+  $expected = 1..22 | ForEach-Object { '{0:D4}' -f $_ }
   $actual = $migrations | ForEach-Object { $_.Name.Substring(0,4) }
-  if (Compare-Object $expected $actual) { throw 'Candidate repository migration versions must be exactly 0001 through 0021.' }
+  if (Compare-Object $expected $actual) { throw 'Candidate repository migration versions must be exactly 0001 through 0022.' }
   $candidate = @($migrations | Where-Object Name -EQ '0018_test_evidence_upload_and_storage.sql')
   if ($candidate.Count -ne 1) { throw 'Candidate repository chain requires exact 0018_test_evidence_upload_and_storage.sql.' }
   $bytes = [IO.File]::ReadAllBytes($candidate[0].FullName)
@@ -58,5 +58,10 @@ function Test-CandidateMigrationLedger {
     'Sprint 023P additive PostgreSQL filename extension parser correction'
   )) { if (-not $parserSql.Contains($marker)) { throw "Candidate 0021 missing identity marker: $marker" } }
   if ($parserSql -match 'search_path[^\r\n]*extensions') { throw 'Candidate 0021 must not widen the function search path.' }
-  [pscustomobject]@{ Migrations=$migrations; Candidate=$parserCorrection[0]; Diagnostic='Candidate repository migration chain is aligned through 0021; no applied or remote status was inspected.' }
+  $enquiryMigration = @($migrations | Where-Object Name -EQ '0022_public_trainer_enquiries.sql')
+  if ($enquiryMigration.Count -ne 1) { throw 'Candidate repository chain requires exact 0022_public_trainer_enquiries.sql.' }
+  $enquiryBytes = [IO.File]::ReadAllBytes($enquiryMigration[0].FullName)
+  if ($enquiryBytes.Length -ge 3 -and $enquiryBytes[0] -eq 0xEF -and $enquiryBytes[1] -eq 0xBB -and $enquiryBytes[2] -eq 0xBF) { throw 'Candidate 0022 must be UTF-8 without BOM.' }
+  [void][Text.UTF8Encoding]::new($false,$true).GetString($enquiryBytes)
+  [pscustomobject]@{ Migrations=$migrations; Candidate=$parserCorrection[0]; Head=$enquiryMigration[0]; Diagnostic='Candidate repository migration chain is aligned through 0022; no applied or remote status was inspected.' }
 }

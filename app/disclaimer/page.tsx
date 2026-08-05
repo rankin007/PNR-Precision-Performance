@@ -16,7 +16,8 @@ export default function DisclaimerPage() {
           <p>Precision Performance provides educational and informational support for qualified trainers and stable professionals.</p>
           <p>Public examples are anonymised demonstrations. They are not live horse records, clinical thresholds, diagnoses, treatment advice or automated recommendations.</p>
           <p>Precision Performance does not replace trainer observation, veterinary assessment or advice from other appropriately qualified professionals.</p>
-          <p>Commercial terms and online purchasing are not currently available. The public enquiry form does not transmit or store information.</p>
+          <p>Commercial terms and online purchasing are not currently available. A stable-trial enquiry is used only to respond to the request and does not create an order, account or subscription.</p>
+          <p>Read the <Link href="/privacy" className="font-semibold text-brand underline underline-offset-4">Privacy notice</Link> before sending an enquiry.</p>
         </div>
         <Link href="/" className="mt-8 inline-flex min-h-12 items-center justify-center rounded-full bg-brand px-6 py-3 text-sm font-bold text-white hover:bg-technical">
           Return to Precision Performance

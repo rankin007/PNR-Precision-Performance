@@ -2,6 +2,10 @@ import Image from "next/image";
 import Link from "next/link";
 import { TrainerEnquiryForm } from "@/components/forms/trainer-enquiry-form";
 import { HorseMark } from "@/components/marketing/horse-mark";
+import { getPublicEnquiryAvailability } from "@/lib/enquiries/env";
+
+export const dynamic = "force-dynamic";
+export const runtime = "nodejs";
 
 const methodSteps = [
   { label: "01", title: "Biochemical profiling", text: "Bring horse details, stable observations, instrument readings, team notes and feeding protocols into one consistent review." },
@@ -39,6 +43,7 @@ function HorseItem({ children }: { children: React.ReactNode }) {
 }
 
 export default function HomePage() {
+  const enquiryAvailability = getPublicEnquiryAvailability();
   return (
     <main className="site-shell overflow-x-hidden bg-canvas">
       <section className="relative min-h-[92svh] overflow-hidden bg-technical text-white">
@@ -117,7 +122,7 @@ export default function HomePage() {
 
       <section className="px-4 py-16 md:px-8 md:py-24"><div className="mx-auto w-full max-w-[1180px]"><p className="eyebrow">The Precision Performance Approach</p><div className="mt-6 rounded-xl border border-accent/40 bg-brand p-7 text-white md:p-10"><h2 className="font-display text-3xl md:text-4xl">Practical insight for the working stable.</h2><p className="mt-5 max-w-3xl text-base leading-8 text-white/75">Precision Performance is designed around consistent observation, non-invasive measurement and informed professional review—helping trainers build a clearer picture of each horse over time.</p></div></div></section>
 
-      <section id="enquiry" className="bg-brand px-4 py-16 text-white md:px-8 md:py-24"><div className="mx-auto grid w-full max-w-[1180px] gap-10 lg:grid-cols-[0.75fr_1.25fr] lg:items-start"><div><p className="text-xs font-bold uppercase tracking-[0.22em] text-accent">Get in Touch</p><h2 className="mt-5 font-display text-4xl leading-tight md:text-5xl">Request a Stable Trial.</h2><p className="mt-5 text-base leading-8 text-white/76">Stable enquiries are personally handled by founder Phillip Rankin. Online enquiry transmission, commerce and onboarding remain unavailable while their requirements are completed.</p><Link href="/pricing" className="mt-6 inline-flex min-h-12 items-center justify-center rounded-full border border-white/35 px-6 py-3 text-sm font-semibold hover:bg-white/10">View commercial information</Link><p className="mt-6 text-sm leading-6 text-white/70">Precision Performance provides educational and informational support only. It does not diagnose or treat horses and does not replace trainer or veterinary judgement.</p><Link href="/disclaimer" className="mt-3 inline-flex text-sm font-semibold underline underline-offset-4 hover:text-accent">Read the public information disclaimer</Link></div><TrainerEnquiryForm /></div></section>
+      <section id="enquiry" className="bg-brand px-4 py-16 text-white md:px-8 md:py-24"><div className="mx-auto grid w-full max-w-[1180px] gap-10 lg:grid-cols-[0.75fr_1.25fr] lg:items-start"><div><p className="text-xs font-bold uppercase tracking-[0.22em] text-accent">Get in Touch</p><h2 className="mt-5 font-display text-4xl leading-tight md:text-5xl">Request a Stable Trial.</h2><p className="mt-5 text-base leading-8 text-white/76">Tell us about your stable and we will respond about a stable trial, consultation and related Precision Performance services. Commerce and onboarding remain unavailable online.</p><Link href="/pricing" className="mt-6 inline-flex min-h-12 items-center justify-center rounded-full border border-white/35 px-6 py-3 text-sm font-semibold hover:bg-white/10">View commercial information</Link><p className="mt-6 text-sm leading-6 text-white/70">Precision Performance provides educational and informational support only. It does not diagnose or treat horses and does not replace trainer or veterinary judgement.</p><div className="mt-3 flex flex-wrap gap-x-5 gap-y-2"><Link href="/privacy" className="inline-flex text-sm font-semibold underline underline-offset-4 hover:text-accent">Read the Privacy notice</Link><Link href="/disclaimer" className="inline-flex text-sm font-semibold underline underline-offset-4 hover:text-accent">Read the public information disclaimer</Link></div></div><TrainerEnquiryForm submissionAvailable={enquiryAvailability.available} /></div></section>
     </main>
   );
 }
