@@ -1,5 +1,13 @@
 # Current Risks
 
+## Sprint 029O corrected inert boundary
+
+- Public enquiry remains unavailable because the candidate's authenticated SMTP no-send verification returned non-ready. The sanitized evidence does not identify or justify guessing a host, address, account, credential or provider-side cause.
+- Migration 0023 and its exact database-owned cleanup job are live on the approved Supabase project with aggregate `0/0`. Preserve them; do not repair, reset, remove or reapply the migration by inference.
+- The Ready 029O candidate and the older 029N candidate are both unaliased. Do not promote either, make a second deployment, retry SMTP, submit a live/synthetic enquiry or move aliases under closed Sprint 029O authority.
+- `CRON_SECRET` was rotated once through a reviewed stdin-only process and remains one Sensitive Production blank-branch binding. Do not expose, export or ask a person to re-enter it; any later environment change requires exact authority and metadata-only proof.
+- All five aliases remain on accepted 036L deployment `dpl_4bjHgm4KL3DBo7wmbVPW4VJUk2Sf`. Public enquiry activation requires a future Architect outcome that preserves this rollback and supplies an authoritative SMTP repair source.
+
 ## Sprint 036L accepted live boundary
 
 - Current Production truth is exact Ready candidate `dpl_4bjHgm4KL3DBo7wmbVPW4VJUk2Sf` at five/five with the complete approved three-binding projection. Do not restore an earlier deployment or old-project binding set independently; any incident action must assess alias and binding compatibility together.

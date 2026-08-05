@@ -7,15 +7,15 @@
 
 Sprint 034D retirement is complete and does not answer either question. The safe archive, accepted vault set, private manifest and unaccepted attempt remain retained; no cleanup or deletion is authorized by inference.
 
-## Current forward decisions after Sprint 036L
+## Current forward decisions after Sprint 029O
 
-Sprint 036L is closed `negative-path-trainer-access-live-accepted-clean`. The technical Production trainer journey and negative paths are accepted on the exact live candidate with approved bindings and exact retained synthetic graph. There is no unresolved 036L retry or Product-correction question.
+Sprint 029O is closed `public-enquiry-corrected-inert-rolled-back-clean`. Its corrected privacy schema and cleanup job are live with zero rows, while public enquiry remains unavailable and all aliases remain on accepted 036L.
 
-1. For Sprint 029N discovery, what exact enquiry privacy, collection, retention, delivery, incident and ownership decisions authorize a governed submission workflow?
+1. What authoritative encrypted provider/configuration source and bounded repair authority may diagnose and correct the sanitized SMTP no-send non-ready result without exposing or manually re-entering values?
 2. For later Sprint 036K, what private evidence and owner authority will govern credential rotation, real trainer delivery rehearsal and disposition of the two excluded Auth identities?
 3. When should the retained synthetic trainer identity and eight-record graph be retired, and what exact cleanup/retention evidence is required after real delivery is proven?
 
-These questions authorize discovery only. They do not authorize 029N implementation, identity mutation/deletion, credential rotation, real delivery, provider change or Production mutation.
+These questions authorize discovery only. They do not authorize SMTP retry, provider/configuration change, a second enquiry deployment, public submission, alias movement, identity mutation/deletion, real delivery or other Production mutation.
 
 ## Sprint 030 commercial authority pending
 

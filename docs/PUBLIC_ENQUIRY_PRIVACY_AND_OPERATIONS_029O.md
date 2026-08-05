@@ -32,7 +32,9 @@ Notification mail remains plain text, single-recipient and necessary-fields-only
 
 ## Configuration and safe evidence
 
-Required server-only Production bindings remain `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`, `SMTP_FROM`, `CONTACT_ENQUIRY_EMAIL`, `ENQUIRY_ABUSE_HMAC_SECRET`, `CRON_SECRET`, and the approved Supabase URL, anon key and service-role key. Values stay in provider-managed encrypted configuration and process memory. Operators and automation must not print, export, persist, place in arguments, replace or ask a person to re-enter them.
+Required server-only Production bindings remain `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`, `SMTP_FROM`, `CONTACT_ENQUIRY_EMAIL`, `ENQUIRY_ABUSE_HMAC_SECRET`, `CRON_SECRET`, and the approved Supabase URL, anon key and service-role key. Values stay in provider-managed encrypted configuration and process memory. Operators and automation must not print, export, persist, place values in arguments or ask a person to re-enter them. A specifically reviewed app-owned credential-transport correction may rotate one binding only through process memory and stdin or an API request body, while preserving exact name, type, target and branch metadata and returning metadata-only evidence.
+
+Sprint 029O used that exception once for `CRON_SECRET`. The first API update returned `api_error` and was transactionally unchanged. An exact-key `env add ... --force` stdin substitute then preserved one Sensitive Production blank-branch record and returned metadata-only `updatedAt=1785957325573`; the value was not exposed or manually entered. SMTP, recipient, Supabase and provider-identity bindings were not changed.
 
 Safe evidence is limited to timestamps, opaque references, provider/status/result/error classes, project/deployment identifiers, booleans and counts. No mailbox access, OTP, password, code or manual secret entry is part of the workflow. Historical reference `PP-3B4BDEE2D55CB313` is permanently excluded from retry or recreation, and its historical SMTP cause or mailbox outcome is not inferred.
 
@@ -43,3 +45,9 @@ Before release, remote proof must show migration head 0023, the nullable set-nul
 The new request must be `sent` once, replay-safe, negative/rate/retention safe and then purged exactly. Aggregate `0/0` is required before any alias moves. Five aliases move only in the governed candidate order with independent readback after each assignment. Any failure restores all five in reverse order to accepted Sprint 036L deployment `dpl_4bjHgm4KL3DBo7wmbVPW4VJUk2Sf`. Sprint 029N candidate `dpl_1r4BKiWXkEis9BXnmnYs4HpK2exB` is never promoted.
 
 If migration 0023 succeeds but delivery or release does not, the corrected empty locked-down schema and database cleanup job may remain installed while all aliases remain on 036L. A clean outcome always requires proven zero synthetic residue.
+
+## Sprint closeout outcome
+
+Sprint 029O closed as `public-enquiry-corrected-inert-rolled-back-clean`, not live accepted. Exact migration 0023 is installed and the self-cleaning retention proof passed with final enquiry/bucket aggregate `0/0`. Candidate `dpl_GA8Y3d8RGnqUv5WGHUmkrgP8hFFq` is Ready, Production-targeted and unaliased. Authenticated internal schema/retention checks passed, but the SMTP no-send preflight returned sanitized non-ready status before any `/api/enquiries` request.
+
+No email, stored public enquiry, notification attempt, replay, live negative submission, submission-fixture purge, alias assignment or second deployment occurred. All five public aliases remain on accepted Sprint 036L deployment `dpl_4bjHgm4KL3DBo7wmbVPW4VJUk2Sf`; Sprint 029N and 029O candidates remain inert. Do not retry SMTP, deploy again or promote either candidate under closed 029O authority.

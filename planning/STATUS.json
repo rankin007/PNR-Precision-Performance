@@ -1,11 +1,14 @@
 {
   "schemaVersion": 1,
   "sprint": "029O-public-enquiry-corrective-completion",
-  "phase": "building",
-  "status": "implementation-in-progress",
+  "phase": "sprint-closed",
+  "status": "public-enquiry-corrected-inert-rolled-back-clean",
   "branch": "codex/029O-public-enquiry-corrective-completion",
   "startingSha": "8968415a89dc187e3994cd9bcb8bcecd793a0854",
   "canonicalWorkspace": "C:\\Users\\rrank\\OneDrive\\PNR Precision Performance Canonical",
   "methodVersion": 8,
-  "updated": "2026-08-05"
+  "headSha": "ed54481b73fe6968e6597a3e07e09d27c84d29a6",
+  "candidateDeployment": "dpl_GA8Y3d8RGnqUv5WGHUmkrgP8hFFq",
+  "liveDeployment": "dpl_4bjHgm4KL3DBo7wmbVPW4VJUk2Sf",
+  "updated": "2026-08-06"
 }
