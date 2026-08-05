@@ -247,7 +247,7 @@ language plpgsql volatile security definer
 set search_path = pg_catalog, public
 as $$
 declare
-  v_reference text := 'PP-' || pg_catalog.upper(pg_catalog.substring(pg_catalog.replace(gen_random_uuid()::text, '-', '') from 1 for 16));
+  v_reference text := 'PP-' || pg_catalog.upper(pg_catalog.substring(pg_catalog.replace(gen_random_uuid()::text, '-', ''), 1, 16));
   v_bucket_hash text := pg_catalog.replace(gen_random_uuid()::text, '-', '') || pg_catalog.replace(gen_random_uuid()::text, '-', '');
   v_idempotency_hash text := pg_catalog.replace(gen_random_uuid()::text, '-', '') || pg_catalog.replace(gen_random_uuid()::text, '-', '');
   v_enquiry_retained integer;

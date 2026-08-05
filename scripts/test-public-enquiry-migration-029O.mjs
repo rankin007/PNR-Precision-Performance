@@ -46,7 +46,7 @@ match(/if v_bucket is not null then[\s\S]*else[\s\S]*v_buckets := 0/i, "fixture 
 match(/create or replace function public\.prove_trainer_enquiry_rate_limit/i, "rate-limit proof retained");
 match(/values\(p_bucket_hash, p_window_started_at, 5, p_window_started_at \+ interval '2 hours'\)/i, "rate-limit proof uses corrected expiry");
 
-match(/create or replace function public\.prove_trainer_enquiry_retention\(\)/i, "retention proof function");
+check(/pg_catalog\.substring\(pg_catalog\.replace\(gen_random_uuid\(\)::text,\s*'-',\s*''\),\s*1,\s*16\)/i.test(proofBody) && !/pg_catalog\.substring\([^\r\n]*\bfrom\b[^\r\n]*\bfor\b/i.test(proofBody), "retention proof function uses ordinary comma arguments for schema-qualified substring");
 match(/returns table\(enquiry_retained integer, bucket_deleted integer, link_nulled integer, fixture_residue integer\)/i, "retention proof returns only sanitized counts");
 check(/2000-01-01 00:00:00\+00/i.test(proofBody) && /2000-01-01 02:00:00\+00/i.test(proofBody), "proof creates an expired two-hour bucket");
 check(/insert into public\.trainer_enquiries/i.test(proofBody), "proof creates a surviving linked enquiry");
