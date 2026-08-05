@@ -25,6 +25,25 @@ type ClaimedRow = {
   provider_class: string;
   notification_attempts: number;
 };
+type EnquirySchemaStatusRow = {
+  enquiry_table_count: number;
+  bucket_table_count: number;
+  rls_table_count: number;
+  browser_policy_count: number;
+  browser_grant_count: number;
+  service_function_count: number;
+  enquiry_row_count: number;
+};
+type EnquiryRetentionStatusRow = {
+  nullable_link_count: number;
+  set_null_fk_count: number;
+  two_hour_expiry_count: number;
+  bucket_row_count: number;
+  linked_enquiry_count: number;
+  unlinked_enquiry_count: number;
+  cleanup_job_count: number;
+  cleanup_job_active_count: number;
+};
 
 export type EnquiryDependencies = {
   admin: EnquiryAdmin;
@@ -42,6 +61,10 @@ export type EnquirySubmissionResult =
 function firstRow<T>(value: T[] | T | null): T | null {
   if (Array.isArray(value)) return value[0] ?? null;
   return value;
+}
+
+function isSafeCount(value: unknown): value is number {
+  return typeof value === "number" && Number.isSafeInteger(value) && value >= 0;
 }
 
 function hmac(secret: string, purpose: string, value: string) {
@@ -249,11 +272,41 @@ export async function proveRetention(suppliedDependencies: EnquiryDependencies |
 export async function readSchemaStatus(suppliedDependencies: EnquiryDependencies | null = null) {
   const dependencies = suppliedDependencies ?? await defaultEnquiryDependencies();
   if (!dependencies) return { result: "unavailable" as const };
-  const schemaResponse = await dependencies.admin.rpc<Array<Record<string, number>>>("trainer_enquiry_schema_status");
-  const retentionResponse = await dependencies.admin.rpc<Array<Record<string, number>>>("trainer_enquiry_retention_status");
-  const schema = schemaResponse.error ? null : firstRow(schemaResponse.data);
-  const retention = retentionResponse.error ? null : firstRow(retentionResponse.data);
-  return schema && retention
-    ? { result: "schema-status" as const, ...schema, ...retention }
-    : { result: "unavailable" as const };
+  try {
+    const [schemaResponse, retentionResponse] = await Promise.all([
+      dependencies.admin.rpc<EnquirySchemaStatusRow[]>("trainer_enquiry_schema_status"),
+      dependencies.admin.rpc<EnquiryRetentionStatusRow[]>("trainer_enquiry_retention_status"),
+    ]);
+    const schema = schemaResponse.error ? null : firstRow(schemaResponse.data);
+    const retention = retentionResponse.error ? null : firstRow(retentionResponse.data);
+    if (
+      !schema || !retention || ![
+        schema.enquiry_table_count, schema.bucket_table_count, schema.rls_table_count,
+        schema.browser_policy_count, schema.browser_grant_count, schema.service_function_count,
+        schema.enquiry_row_count, retention.nullable_link_count, retention.set_null_fk_count,
+        retention.two_hour_expiry_count, retention.bucket_row_count, retention.linked_enquiry_count,
+        retention.unlinked_enquiry_count, retention.cleanup_job_count, retention.cleanup_job_active_count,
+      ].every(isSafeCount)
+    ) return { result: "unavailable" as const };
+    return {
+      result: "schema-status" as const,
+      enquiry_table_count: schema.enquiry_table_count,
+      bucket_table_count: schema.bucket_table_count,
+      rls_table_count: schema.rls_table_count,
+      browser_policy_count: schema.browser_policy_count,
+      browser_grant_count: schema.browser_grant_count,
+      service_function_count: schema.service_function_count,
+      enquiry_row_count: schema.enquiry_row_count,
+      nullable_link_count: retention.nullable_link_count,
+      set_null_fk_count: retention.set_null_fk_count,
+      two_hour_expiry_count: retention.two_hour_expiry_count,
+      bucket_row_count: retention.bucket_row_count,
+      linked_enquiry_count: retention.linked_enquiry_count,
+      unlinked_enquiry_count: retention.unlinked_enquiry_count,
+      cleanup_job_count: retention.cleanup_job_count,
+      cleanup_job_active_count: retention.cleanup_job_active_count,
+    };
+  } catch {
+    return { result: "unavailable" as const };
+  }
 }

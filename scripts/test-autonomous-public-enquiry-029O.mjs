@@ -85,7 +85,13 @@ const fakeFetch = async (url, options = {}) => {
     if (action === "rate-limit-proof") return response(200, { result: "rate-limit-proven", limited: true, rowsCreated: 0, notificationsAttempted: 0, fixtureResidue: 0 });
     if (action === "purge-fixture") { stored = false; return response(200, { result: "deleted", rows_deleted: 1, buckets_deleted: 1 }); }
     if (action === "status") return response(200, { result: "status", row_count: stored ? 1 : 0, bucket_count: stored ? 1 : 0, notification_status: stored ? "sent" : null, notification_attempts: stored ? 1 : 0 });
-    if (action === "schema-status") return response(200, { result: "schema-status", enquiry_row_count: 0, bucket_row_count: 0 });
+    if (action === "schema-status") return response(200, {
+      result: "schema-status", enquiry_table_count: 1, bucket_table_count: 1, rls_table_count: 2,
+      browser_policy_count: 0, browser_grant_count: 0, service_function_count: 12,
+      enquiry_row_count: 0, nullable_link_count: 1, set_null_fk_count: 1, two_hour_expiry_count: 1,
+      bucket_row_count: 0, linked_enquiry_count: 0, unlinked_enquiry_count: 0,
+      cleanup_job_count: 1, cleanup_job_active_count: 1,
+    });
   }
   if (parsed.pathname === "/api/enquiries" && method === "POST") {
     const body = JSON.parse(options.body);
@@ -114,7 +120,14 @@ check(calls.length === 1 && calls[0].path === "/api/internal/enquiries" && !call
 const retention = await retentionProof(origin, { ...readyEnv }, fakeFetch);
 equal(retention.state, "retention-proven", "retention state");
 check(retention.enquiryRetained === 1 && retention.bucketDeleted === 1 && retention.linkNulled === 1 && retention.fixtureResidue === 0, "retention tuple exact");
-equal((await aggregateStatus(origin, { ...readyEnv }, fakeFetch)).state, "aggregate-zero", "aggregate zero");
+const aggregate = await aggregateStatus(origin, { ...readyEnv }, fakeFetch);
+let missingBucketRefused = false;
+try {
+  await aggregateStatus(origin, { ...readyEnv }, async () => response(200, { result: "schema-status", enquiry_row_count: 0 }));
+} catch (error) {
+  missingBucketRefused = error?.code === "FIXTURE_REFUSED";
+}
+check(aggregate.state === "aggregate-zero" && missingBucketRefused, "aggregate requires merged enquiry and retention zero counts");
 
 calls.length = 0; stored = true;
 const live = await liveCandidate(origin, { ...readyEnv }, fakeFetch);
