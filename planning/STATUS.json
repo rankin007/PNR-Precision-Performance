@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
-  "sprint": "036I-diagnostic-guided-production-trainer-acceptance",
-  "phase": "sprint-closed",
-  "status": "production-diagnostic-candidate-preflight-blocked-clean",
-  "branch": "codex/036I-diagnostic-guided-production-trainer-acceptance",
-  "startingSha": "6c0244439c7c938945831c909c1737c615ee8cfa",
+  "sprint": "036J-autonomous-trainer-access-recovery-and-membership-acceptance",
+  "phase": "release",
+  "status": "protected-preflight-passed-checkpoint-pending",
+  "branch": "codex/036J-autonomous-trainer-access-recovery-and-membership-acceptance",
+  "startingSha": "67f07c455f5ec3f12cbc1748ecec241ec764ef7e",
   "canonicalWorkspace": "C:\\Users\\rrank\\OneDrive\\PNR Precision Performance Canonical",
   "methodVersion": 8,
   "updated": "2026-08-05"
