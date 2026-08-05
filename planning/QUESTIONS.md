@@ -7,15 +7,15 @@
 
 Sprint 034D retirement is complete and does not answer either question. The safe archive, accepted vault set, private manifest and unaccepted attempt remain retained; no cleanup or deletion is authorized by inference.
 
-## Current forward decisions after Sprint 036H
+## Current forward decisions after Sprint 036I
 
-Sprint 036H is closed `privacy-safe-authentication-diagnostic-ready-local-clean`. The application can prospectively classify an existing operational rejection into one of five allowlisted categories without changing public wording or persisting provider detail. It still cannot identify the historical 036G cause. All five aliases remain on exact Ready rollback.
+Sprint 036I is closed `production-diagnostic-candidate-preflight-blocked-clean`. Local verifier activation and the 036H diagnostic Product passed, but the first protected exact-ID Verify exited 2 without accepted `8/1/0/0` evidence. The user directed closure without the remaining permitted Verify. No candidate, deployment, alias or authentication action began, and all five aliases remain on the last authoritative exact Ready rollback.
 
-1. Should Production remain deliberately on rollback, or should Architect later define a separate bounded acceptance attempt that may consume the local diagnostic category without exposing or persisting provider detail?
-2. If another attempt is justified, what exact request ceiling, cooldown timing, human coordination, failure classification and all-five rollback trigger should govern it?
+1. Should Production remain deliberately on rollback, or should Architect later define a new protected-evidence contract that can prove exact-ID retained-pilot state without exposing protected values or losing its sanitized failure classification?
+2. If another attempt is ever justified, what genuinely new authority and evidence path prevents repetition of the unaccepted 036I preflight while retaining exact request, deployment, cutover and rollback ceilings?
 3. Sprint 029N remains behind the live trainer-access gate. Should that dependency remain, or should the owner make a separate explicit roadmap decision before defining the governed public enquiry workflow?
 
-None of these questions authorizes another sign-in attempt, credential action, implementation, deployment, alias mutation, provider mutation or any other Production change. Sprint 036H supplies local readiness only and no retry authority.
+None of these questions authorizes another protected Verify, sign-in attempt, credential action, implementation, deployment, alias mutation, provider mutation or any other Production change. Sprint 036I is closed and supplies no retry authority.
 
 ## Sprint 030 commercial authority pending
 

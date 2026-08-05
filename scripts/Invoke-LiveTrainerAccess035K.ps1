@@ -8,7 +8,8 @@ param(
 $ErrorActionPreference = 'Stop'
 $allowedBranches = @(
     'codex/035K-live-trainer-access-and-human-acceptance',
-    'codex/036G-immediate-trainer-access-recovery-and-minimal-production-cutover'
+    'codex/036G-immediate-trainer-access-recovery-and-minimal-production-cutover',
+    'codex/036I-diagnostic-guided-production-trainer-acceptance'
 )
 $expectedProjectUrl = 'https://uvskssaecdhxcgytkasc.supabase.co/'
 $helperRelativePath = 'scripts/live-trainer-access-035K-core.mjs'

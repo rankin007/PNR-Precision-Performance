@@ -1,89 +1,92 @@
-# Architect Briefing - Sprint 036H Closed Local Diagnostic Ready
+# Architect Briefing - Sprint 036I Closed At Protected Preflight
+
+## Where things stand
+
+The new diagnostic build was never deployed. Its local verifier activation and full application checks passed, but the required private retained-pilot verification did not produce an accepted result. The owner chose to close there, so Production stayed untouched on the known-safe rollback and no trainer sign-in was attempted.
 
 ## Executive summary
 
-**Business outcome:** Precision Performance now has a bounded local way to distinguish five operational OTP-request failure classes without changing what users see or exposing provider, identity or protected detail.
+**Business outcome:** Sprint 036I proved the local release candidate remains unchanged and safely activatable for its governed verifier, but it did not prove the retained pilot or stable Production trainer access.
 
-**Current focus:** Decide whether Production should remain deliberately on rollback or whether a separate future Pack should authorize one tightly bounded acceptance attempt that can consume the new ephemeral category.
+**Current focus:** Decide whether deliberate rollback should remain the long-term direction or whether a later Pack should define a genuinely new privacy-safe retained-pilot evidence channel before any deployment is reconsidered.
 
-**What is proven:** Exact four-file implementation; code-first five-category taxonomy; unchanged public/non-enumerating behavior; retry-later-only propagation; one hidden ephemeral marker with clearing; 169 counted passing assertions; three retained auth regression scripts; TypeScript; zero-warning lint; 29-page Production build; and all scope/privacy/residue checks.
+**What is proven:** Exact two-file verifier activation; 101 focused assertions; unchanged 70-assertion 036H diagnostic contract; retained auth/dashboard/public/static/JSON/role/Supabase controls; TypeScript; zero-warning lint; 29-page Production build; exact 036H Product hashes; byte-identical protected core; protected SelfTest exit 0; zero Product diff and zero protected residue.
 
-**What is not live:** Sprint 036G's historical category is unknown. No new OTP request, session, delivery, provider compatibility, candidate acceptance or Production trainer access was proven, and Sprint 029N remains gated.
+**What is not live:** Exact-ID retained-pilot `8/1/0/0`, a 036I candidate deployment, five-alias cutover, OTP delivery, private trainer sessions, candidate acceptance and Sprint 029N eligibility are not proven.
 
 ## Readiness signals
 
 | Signal | Status | Evidence |
 |---|---|---|
-| Local diagnostic contract | passed | All nine exact codes, code precedence, narrow status fallback and no-diagnostic cases passed the 70-assertion Sprint 036H test |
-| Retained application behavior | passed | 99 retained counted assertions plus 035D, 035C and 035F scripts, TypeScript, zero-warning lint and 29-page build passed |
-| Privacy and scope | passed | Generic copy/non-enumeration retained; exact four-file source scope, raw-output, persistence, secret/private-data and residue checks passed |
-| Live trainer authentication | attention | No live attempt occurred; five/five rollback remains live and the candidate remains unaccepted |
-
-## Where things stand
-
-The application can now classify a future operational sign-in rejection without telling the user anything new or retaining provider detail. This is local readiness only: Production is still safely on the known rollback, and the failed historical attempt cannot be reclassified after the fact. Any new attempt needs a separate decision and Pack.
+| Local verifier and diagnostic contract | passed | 101 verifier assertions plus 70 diagnostic assertions passed with exact branch order and unchanged Product/core hashes |
+| Retained application validation | passed | Auth regressions, dashboard/public/static/JSON/roles/Supabase-self, TypeScript, zero-warning lint and 29-page build passed |
+| Protected retained-pilot Verify | attention | SelfTest exited 0; exact-ID Verify exited 2 without accepted `8/1/0/0` or an agent-visible sanitized subcode |
+| Live Production trainer access | attention | No candidate, alias, OTP, verification or session action occurred; five/five rollback remains the authoritative live state |
 
 ## Current status
 
-Sprint 036H is closed `privacy-safe-authentication-diagnostic-ready-local-clean`. The implementation and local validation are complete; no live, external, commit or push action occurred.
+Sprint 036I is closed `production-diagnostic-candidate-preflight-blocked-clean`. The user directed closure without the one remaining Pack-permitted Verify. No retry or downstream action is authorized.
 
 ## Since last sprint
 
-Sprint 036G ended with a generic `retry-later`, no session and an exact all-five rollback. Sprint 036H added a separate prospective classifier, safe retry-later-only action propagation, one hidden ephemeral form marker and deterministic no-network proof while leaving visible wording, request behavior and live state unchanged.
+Sprint 036H supplied a local five-category request diagnostic with no live authority. Sprint 036I added the exact branch-only verifier activation and attempted the mandatory protected retained-pilot gate. Because accepted pilot evidence was not established, the sprint stopped before checkpoint/deployment preflight and no live release transaction began.
 
 ## Architecture / file map
 
-- `lib/auth/otp-request.ts` - unchanged public disposition plus separate five-category code-first classifier.
-- `app/auth/actions.ts` - allowlisted request diagnostic only on the existing retry-later result.
-- `components/auth/sign-in-form.tsx` - exact visible copy and hidden ephemeral marker with explicit clearing.
-- `scripts/test-auth-request-diagnostics-036H.mjs` - 70 taxonomy, parity, propagation, clearing and privacy assertions.
-- `planning/reviews/036H-privacy-safe-authentication-failure-diagnostics.md` - exact validation, hashes and zero-external-action ledger.
-- `docs/AUTH_RLS_PORTAL_ACCESS.md` and `docs/OPERATIONS_HANDOFF.md` - local diagnostic and no-retry operating boundary.
+- `scripts/Invoke-LiveTrainerAccess035K.ps1` - exact three-branch allowlist: 035K, 036G and 036I.
+- `scripts/test-live-trainer-access-035K.mjs` - exact 101-assertion verifier/ownership/source contract.
+- `scripts/live-trainer-access-035K-core.mjs` - unchanged protected exact-ID core at approved SHA-256.
+- `planning/reviews/036I-diagnostic-guided-production-trainer-acceptance.md` - complete local, protected-stop and zero-downstream-action ledger.
+- `docs/OPERATIONS_HANDOFF.md`, `docs/AUTH_RLS_PORTAL_ACCESS.md` and `docs/TEST_AUTH_MAILBOX_AND_PROTECTED_PROCESS_RUNBOOK.md` - durable no-retry and deliberate-rollback boundaries.
 
 ## Decisions
 
-- Keep the public disposition exactly `indeterminate | retry-later`; missing identities remain indistinguishable.
-- Use exact normalized code before narrow `429`/`>=500` fallback; never inspect messages or provider payload fields.
-- Keep the category non-visible and ephemeral with no logging, storage, analytics, cookies, URLs or accessible naming.
-- Treat diagnostic readiness as prospective local evidence only, not historical root cause or retry authority.
+- Close at the exact Pack-permitted preflight outcome rather than use the remaining Verify.
+- Do not infer the missing private-console subcode or reinterpret exit 2 as retained-pilot proof.
+- Preserve the last authoritative five/five Ready rollback and the Sprint 029N gate.
+- Require separate Architect authority for any future protected Verify, deployment, alias or OTP attempt.
 
 ## Risks / watch-items
 
-- The historical 036G cause remains unknown and must not be inferred from the new taxonomy.
-- Exposing or persisting the marker in a future change would cross the accepted privacy boundary.
-- A local category alone does not prove delivery, provider compatibility, session establishment or safe Production promotion.
-- Sprint 029N and product-wide Done remain gated.
+- The private wrapper failure subcode is unknown in agent evidence; future planning must not guess which protected boundary refused the run.
+- Repeating the same interaction without a new evidence contract would risk another non-actionable stop.
+- Local diagnostic readiness still does not prove provider delivery, session establishment or stable Production access.
+- The retained pilot ledger remains governed and uninspected; do not alter it outside exact future authority.
 
 ## Open questions for the Architect
 
 - Should deliberate rollback remain the chosen direction?
-- If one future attempt is justified, what exact request ceiling, cooldown timing, private human coordination and all-five rollback trigger should govern it?
-- Should Sprint 029N remain behind live trainer acceptance, or should the owner make a separate roadmap decision?
+- If a later attempt is proposed, how will its protected result channel preserve secrecy while returning a durable allowlisted success/failure classification?
+- Should Sprint 029N remain behind live trainer acceptance, or should the owner make a separate explicit roadmap decision?
 
 ## Evidence
 
-- Canonical root/Git top-level, exact 036H branch, starting SHA `831d0465b4e71562d3c062bf3f55d6f0080e3173`, one worktree and all four starting hashes passed.
+- Canonical current directory/Git top-level, exact starting SHA `6c0244439c7c938945831c909c1737c615ee8cfa`, exact 036I branch and one worktree passed.
 - Pack dry run reported four creates; application created exactly four strict sprint files.
+- All seven starting hashes matched.
+- `node --experimental-strip-types scripts/test-live-trainer-access-035K.mjs` passed 101 assertions.
 - `node --experimental-strip-types scripts/test-auth-request-diagnostics-036H.mjs` passed 70 assertions.
-- Retained 035D, 035C and 035F scripts passed; `scripts/test-live-trainer-access-035K.mjs` passed 99 assertions.
+- Retained 035D, 035C and 035F scripts passed.
+- Dashboard, public relaunch, static, JSON, roles and Supabase-self commands passed.
 - `npm run typecheck`, `npm run lint -- --max-warnings=0` and `npm run build` passed; build generated 29 pages/routes.
-- `git diff --check`, exact source scope, status JSON, UTF-8/no-BOM/final-newline, whitespace, secret/private-data, persistence, raw-provider-output and generated-residue checks passed.
-- OTP/verification, mailbox/provider/browser, credential, hosted configuration, deployment/alias/DNS, data and Git publication counts were all zero.
+- Product diff/import checks, exact implementation/core hashes, PowerShell parse, JSON, whitespace and protected-residue checks passed.
+- Protected wrapper SelfTest exited 0; one exact-ID Verify exited 2 without accepted `8/1/0/0` evidence or protected output capture.
+- Vercel/project/deployment/alias, OTP/verification, mailbox/browser-session, provider/configuration and Product/data mutation counts were all zero.
 
 ## Plan corrections
 
-The first new-test run found a deterministic harness slice anchored to an earlier effect cleanup `return`. The test-only anchor was narrowed to search after `verifyCode`; the same 70-assertion target then passed. Product behavior and scope did not change.
+The Pack correctly required exact-ID Verify before release work, but the protected console intentionally did not expose its allowlisted failure subcode to agent output. That preserves privacy but leaves only exit code 2 as durable evidence. The safe conclusion is still deterministic: accepted `8/1/0/0` proof is absent, so deployment and authentication remain prohibited. Any future Pack should define a privacy-safe durable result channel before authorizing another attempt.
 
 ## Validation / test status
 
-**Tests:** 169 passing, 0 failing.
+**Tests:** 171 passing, 0 failing.
 
-The counted total is 70 Sprint 036H assertions plus 99 retained Sprint 035K assertions. The retained 035D, 035C and 035F pass-contract scripts also passed but are not added to the assertion arithmetic. TypeScript, zero-warning lint, the 29-page Production build and all local safety checks passed.
+The counted total is 101 Sprint 036I verifier assertions plus 70 retained Sprint 036H diagnostic assertions. The retained 035D, 035C and 035F scripts and dashboard/public/static/JSON/roles/Supabase-self controls also passed but are not added to the assertion arithmetic. TypeScript, zero-warning lint, the 29-page Production build and local integrity/privacy checks passed. Protected exact-ID Verify is an unmet operational gate, not a counted test failure.
 
 ## Recommended next Architect action
 
-**Do:** Review whether deliberate rollback should remain, or define a separate tightly bounded acceptance Pack that may consume the new ephemeral diagnostic without exposing or persisting it.
+**Do:** Review whether to keep Production deliberately on rollback or design a genuinely new protected retained-pilot evidence contract before any future live attempt.
 
-**Owner:** Architect and product owner for roadmap/acceptance direction; an authorized operator only under a later exact live-action Pack.
+**Owner:** Architect and product owner for roadmap direction; security/platform owner for any future protected-result mechanism.
 
-**Decision:** Sprint 036H is locally complete. Five/five rollback remains live, the candidate is unaccepted, no retry is authorized and Sprint 029N remains gated.
+**Decision:** Sprint 036I is closed at protected preflight. No candidate exists, five/five rollback remains authoritative, no retry is authorized and Sprint 029N remains gated.

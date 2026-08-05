@@ -2,6 +2,9 @@
 
 ## Current governing evidence
 
+- `planning/sprints/036I-diagnostic-guided-production-trainer-acceptance/` - applied strict verifier activation, protected exact-ID pilot gate, single candidate, fixed five-alias transaction, diagnostic-guided private acceptance and rollback authority; execution stopped at protected preflight.
+- `planning/reviews/036I-diagnostic-guided-production-trainer-acceptance.md` - exact two-file implementation, 171 counted passing assertions plus retained controls, TypeScript/lint/build, protected SelfTest pass, exact-ID Verify exit 2, zero downstream action and `production-diagnostic-candidate-preflight-blocked-clean` closeout.
+
 - `planning/sprints/036H-privacy-safe-authentication-failure-diagnostics/` - applied strict local authority for the five-category code-first classifier, retry-later-only propagation, hidden ephemeral marker, deterministic validation and zero-live-action boundary.
 - `planning/reviews/036H-privacy-safe-authentication-failure-diagnostics.md` - exact four-file implementation, 169 counted passing assertions plus retained regressions, TypeScript/lint/build and safety proof, zero external action and `privacy-safe-authentication-diagnostic-ready-local-clean` closeout.
 

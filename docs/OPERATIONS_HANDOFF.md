@@ -71,6 +71,12 @@ Sprint 036H closed `privacy-safe-authentication-diagnostic-ready-local-clean`. I
 
 The contract is prospective only. It cannot classify the historical 036G failure because no raw provider code or status was retained. It does not authorize another OTP request, mailbox/provider inspection, credential, hosted configuration change, deployment, alias movement or Production action. Operations must keep all five aliases on exact Ready rollback and treat the candidate as unaccepted unless a later separate Architect Pack grants a distinct, bounded attempt.
 
+### Sprint 036I protected-preflight-blocked boundary
+
+Sprint 036I closed `production-diagnostic-candidate-preflight-blocked-clean`. Exact branch activation and all local Product/privacy gates passed, and the protected wrapper SelfTest exited 0. The required exact-ID retained-pilot Verify then exited 2 without producing accepted `8/1/0/0` evidence. Its private in-console subcode was not retained in agent evidence, so the failure must not be narrowed or reinterpreted.
+
+The owner directed closure without the remaining permitted Verify. No Vercel baseline, candidate deployment, alias assignment, OTP request, mailbox interaction or Production journey began, and no 036I candidate exists. Preserve the last authoritative five/five exact Ready rollback `dpl_EUJyBLQp7okgbPwtBU6nmMH88L6A`. Do not rerun Verify, deploy, reassign an alias or request a code under 036I; any future action requires a separate Architect decision and exact Pack.
+
 ## Governance and unresolved duties
 
 - Privacy owner must define data-subject request, retention/deletion, breach notification and evidence-upload procedures before those capabilities are operationally accepted.

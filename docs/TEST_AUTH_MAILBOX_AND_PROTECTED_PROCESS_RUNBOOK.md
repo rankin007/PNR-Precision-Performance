@@ -97,3 +97,11 @@ Sprint 036F consumed its exact one-lifecycle authority in one private interactiv
 The operator privately confirmed only the authorized sanitized facts: the exact 036F token row is absent, no other token changed and no replacement token was created. This proves exact-token cleanup. It does not prove same-token `401`/`403` invalidation, provider projection success or request-count completion after the protected process terminated.
 
 No retained-pilot, Vercel, deployment, alias, OTP, mailbox, session or Production continuation occurred. Local protected process-environment and `pp036d-*` residue are zero. Any later attempt requires a separate Architect Pack and explicit authority; never infer retry authority from cleanup completion or from the 036E interaction correction.
+
+## Sprint 036I retained-pilot Verify stop
+
+Sprint 036I activated `scripts/Invoke-LiveTrainerAccess035K.ps1` for exactly historical 035K, closed 036G and current 036I. Local deterministic proof passed 101 assertions and the core remained byte-identical. Protected SelfTest exited 0 in a visible private non-transcribed ConsoleHost.
+
+The first exact-ID Verify wrapper process exited 2 without accepted `8/1/0/0` evidence. Its allowlisted private console subcode was not captured into agent output. Process service-role, target and run variables and pending-file residue were zero afterward; the governed retained ledger remained present and uninspected. The owner directed closure without the remaining permitted Verify.
+
+Do not rerun the wrapper under 036I, infer the missing subcode, inspect the ledger, expose a protected value, or continue into Vercel/deployment/alias/OTP work. Any future retained-pilot attempt requires a separate exact Pack that defines both the protected input path and a durable privacy-safe result channel.

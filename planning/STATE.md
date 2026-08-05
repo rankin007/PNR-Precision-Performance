@@ -1,5 +1,13 @@
 # Project State
 
+## Sprint 036I closed `production-diagnostic-candidate-preflight-blocked-clean` - 2026-08-05
+
+Sprint 036I applied the exact strict four-file Pack from closed Sprint 036H SHA `6c0244439c7c938945831c909c1737c615ee8cfa` and changed only the approved protected verifier wrapper and deterministic test. The wrapper now accepts exactly historical 035K, closed 036G and current 036I, refuses every other branch and preserves the byte-identical core at SHA-256 `603FF16B9F6EB30D2B5E26A39218E8307731D66008D4D384FB9696095CD3AB5A`. Focused proof passed exactly 101 assertions, the unchanged 036H diagnostic contract passed 70, all retained local controls passed, TypeScript and zero-warning lint passed, and the Production build generated 29 pages/routes. Product/runtime/package/configuration/migration bytes remained unchanged.
+
+Protected wrapper `SelfTest` exited 0 in a visible private non-transcribed ConsoleHost. The first exact-ID retained-pilot `Verify` wrapper process exited 2 and did not establish accepted `8/1/0/0` evidence. Its in-console sanitized subcode was not captured into agent output by design. Protected process variables and pending-file residue were zero afterward, and the governed retained ledger remained present and unchanged. At the user's direction, Builder closed without using the remaining Pack-permitted Verify.
+
+No scoped pre-deployment checkpoint, Vercel inspection, candidate deployment, alias assignment, rollback write, OTP request, verification, mailbox interaction, session, provider/configuration action, Product/data mutation or Production action began. No 036I candidate exists. The last authoritative routing state remains five/five exact Ready rollback `dpl_EUJyBLQp7okgbPwtBU6nmMH88L6A`; live trainer access remains unaccepted and Sprint 029N remains gated.
+
 ## Sprint 036H closed `privacy-safe-authentication-diagnostic-ready-local-clean` - 2026-08-05
 
 Sprint 036H added a separate five-value, code-first OTP-request diagnostic classifier while preserving the exact public `indeterminate | retry-later` contract. Only the existing operational `retry-later` result may carry an allowlisted category; the sign-in form keeps the existing generic visible copy and exposes the category only through one hidden ephemeral marker with explicit clearing on every relevant flow transition. No raw provider message, code, status, identity fact or protected value is returned or persisted.

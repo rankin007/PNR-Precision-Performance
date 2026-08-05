@@ -178,6 +178,14 @@ The sign-in form retains its exact generic visible wording. While that notice is
 
 This local contract cannot recover the historical Sprint 036G cause and supplies no OTP retry, provider read, mailbox inspection, deployment, alias or Production authority. The exact five/five Ready rollback remains live, the candidate remains unaccepted and Sprint 029N remains gated.
 
+# Sprint 036I Protected Retained-Pilot Preflight
+
+Sprint 036I added only the exact branch activation for the existing protected retained-pilot wrapper and two deterministic assertions. The focused suite passed 101 assertions; the unchanged 036H diagnostic suite passed 70; all retained auth/dashboard/public controls, TypeScript, zero-warning lint and the 29-page Production build passed. Application/runtime/package/configuration/migration bytes remain unchanged.
+
+Protected SelfTest exited 0, but the required exact-ID Verify exited 2 without accepted `state=verified`, application `8`, Auth `1`, Storage `0`, wrong-horse rows `0` evidence. The private in-console sanitized subcode was not captured, and it must not be inferred. No authentication request or browser journey occurred.
+
+Sprint 036I therefore closes before candidate creation, deployment or alias movement. The last authoritative Production state remains five/five exact Ready rollback, live trainer access remains unaccepted and Sprint 029N remains gated. No second Verify, OTP attempt or provider correction is authorized by this closeout.
+
 # Sprint 021AH Application-Proof Completion
 
 Migration 0017 is applied once and replaces only the exact authenticated soft-delete RPC with valid `IS TRUE`/`IS NOT TRUE` null-safe authorization. The genuine direct authorization matrix passed 17/17 and the unchanged rendered lifecycle passed 48/48. Final Auth/application/Storage state is `0/0/0`, ledger is `0001`–`0017`, and the RPC boundary is authorization-complete for the proven matrix.

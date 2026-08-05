@@ -1,5 +1,12 @@
 # Current Risks
 
+## Sprint 036I protected preflight boundary
+
+- Local verifier activation and Product integrity are proven, but the first protected exact-ID Verify exited 2 without accepted `8/1/0/0` evidence. Do not describe 036I as retained-pilot verification, candidate readiness or live trainer-access proof.
+- The exact in-console sanitized failure subcode was not captured into agent evidence. Do not infer whether the stop occurred at private input, ledger agreement, exact identity, target, helper or another allowlisted wrapper boundary.
+- The user directed closure without the remaining Pack-permitted Verify. No future Verify, deployment, alias movement or OTP attempt is authorized by this closeout.
+- No 036I candidate exists and no routing write occurred. Preserve the last authoritative five/five Ready rollback; Sprint 029N and product-wide Done remain gated.
+
 ## Sprint 036H local diagnostic boundary
 
 - The five-category contract is prospective local observability only. It cannot recover the historical Sprint 036G category because the raw code/status was intentionally not retained; do not describe cooldown, delivery policy, provider configuration, timeout or provider availability as the historical cause.
