@@ -59,6 +59,11 @@ export function parseEnquiryPayload(input: unknown): EnquiryParseResult {
     return { ok: false, kind: "unknown", fields: {} };
   }
 
+  // Inspect the original strings before trim/collapse can erase prohibited input.
+  if (enquiryKeys.some((key) => typeof record[key] === "string" && controlsPattern.test(record[key]))) {
+    return { ok: false, kind: "invalid", fields: {} };
+  }
+
   const website = normalizedText(record.website);
   if (website === null || website !== "") {
     return { ok: false, kind: "honeypot", fields: {} };

@@ -3,7 +3,9 @@ import "server-only";
 import { createHmac, randomBytes, timingSafeEqual } from "node:crypto";
 import { ENQUIRY_NOTICE_VERSION, type EnquiryPayload } from "@/lib/enquiries/contract";
 import { readEnquiryEnvironment, type EnquiryEnvironment } from "@/lib/enquiries/env";
-import { deliverNotification, type DeliveryOutcome } from "@/lib/enquiries/provider";
+import { deliverNotification, verifySmtpTransport, type DeliveryOutcome } from "@/lib/enquiries/provider";
+
+const RETIRED_ENQUIRY_REFERENCE = "PP-3B4BDEE2D55CB313";
 
 type RpcResult<T> = { data: T | null; error: { code?: string; message?: string } | null };
 type EnquiryAdmin = { rpc<T = unknown>(name: string, parameters?: Record<string, unknown>): PromiseLike<RpcResult<T>> };
@@ -30,6 +32,7 @@ export type EnquiryDependencies = {
   now: () => Date;
   randomReference: () => string;
   deliver: typeof deliverNotification;
+  verify: typeof verifySmtpTransport;
 };
 
 export type EnquirySubmissionResult =
@@ -59,6 +62,7 @@ export async function defaultEnquiryDependencies(): Promise<EnquiryDependencies 
     now: () => new Date(),
     randomReference: () => `PP-${randomBytes(8).toString("hex").toUpperCase()}`,
     deliver: deliverNotification,
+    verify: verifySmtpTransport,
   };
 }
 
@@ -88,6 +92,11 @@ async function completeNotification(admin: EnquiryAdmin, row: ClaimedRow, outcom
 }
 
 async function notifyClaim(row: ClaimedRow, dependencies: EnquiryDependencies) {
+  if (row.public_reference === RETIRED_ENQUIRY_REFERENCE) {
+    const outcome = { state: "delivery_unknown", errorClass: "unexpected" } as const;
+    await completeNotification(dependencies.admin, row, outcome);
+    return outcome.state;
+  }
   const outcome = await dependencies.deliver(
     dependencies.environment,
     payloadFromClaim(row),
@@ -107,6 +116,7 @@ export async function submitEnquiry(payload: EnquiryPayload, networkIdentifier: 
   const abuseBucketHash = hmac(dependencies.environment.abuseSecret, "network-hour", `${windowStartedAt}\0${networkIdentifier}`);
   networkIdentifier = "";
   const publicReference = dependencies.randomReference();
+  if (publicReference === RETIRED_ENQUIRY_REFERENCE) return { result: "unavailable" };
   const accepted = await dependencies.admin.rpc<AcceptedRow[]>("accept_trainer_enquiry", {
     p_public_reference: publicReference,
     p_idempotency_hash: idempotencyHash,
@@ -199,10 +209,51 @@ export async function proveRateLimit(suppliedDependencies: EnquiryDependencies |
     : { result: "unavailable" as const };
 }
 
+export async function runSmtpPreflight(suppliedDependencies: EnquiryDependencies | null = null) {
+  const dependencies = suppliedDependencies ?? await defaultEnquiryDependencies();
+  if (!dependencies) {
+    return { result: "smtp-preflight" as const, status: "unavailable" as const, providerClass: null, errorClass: "unexpected" as const };
+  }
+  const outcome = await dependencies.verify(dependencies.environment);
+  return {
+    result: "smtp-preflight" as const,
+    status: outcome.status,
+    providerClass: dependencies.environment.provider.providerClass,
+    errorClass: outcome.errorClass,
+  };
+}
+
+export async function proveRetention(suppliedDependencies: EnquiryDependencies | null = null) {
+  const dependencies = suppliedDependencies ?? await defaultEnquiryDependencies();
+  if (!dependencies) return { result: "unavailable" as const };
+  const response = await dependencies.admin.rpc<Array<{
+    enquiry_retained: number;
+    bucket_deleted: number;
+    link_nulled: number;
+    fixture_residue: number;
+  }>>("prove_trainer_enquiry_retention");
+  const row = response.error ? null : firstRow(response.data);
+  if (
+    !row || row.enquiry_retained !== 1 || row.bucket_deleted !== 1 ||
+    row.link_nulled !== 1 || row.fixture_residue !== 0
+  ) return { result: "unavailable" as const };
+  return {
+    result: "retention-proven" as const,
+    enquiryRetained: 1 as const,
+    bucketDeleted: 1 as const,
+    linkNulled: 1 as const,
+    fixtureResidue: 0 as const,
+  };
+}
+
 export async function readSchemaStatus(suppliedDependencies: EnquiryDependencies | null = null) {
   const dependencies = suppliedDependencies ?? await defaultEnquiryDependencies();
   if (!dependencies) return { result: "unavailable" as const };
-  const response = await dependencies.admin.rpc<Array<Record<string, number>>>("trainer_enquiry_schema_status");
-  const row = response.error ? null : firstRow(response.data);
-  return row ? { result: "schema-status" as const, ...row } : { result: "unavailable" as const };
+  const schemaResponse = await dependencies.admin.rpc<Array<Record<string, number>>>("trainer_enquiry_schema_status");
+  const retentionResponse = await dependencies.admin.rpc<Array<Record<string, number>>>("trainer_enquiry_retention_status");
+  const schema = schemaResponse.error ? null : firstRow(schemaResponse.data);
+  const retention = retentionResponse.error ? null : firstRow(retentionResponse.data);
+  return schema && retention
+    ? { result: "schema-status" as const, ...schema, ...retention }
+    : { result: "unavailable" as const };
 }

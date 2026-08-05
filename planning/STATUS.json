@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
-  "sprint": "036L-privacy-safe-negative-path-production-trainer-acceptance",
-  "phase": "sprint-closed",
-  "status": "negative-path-trainer-access-live-accepted-clean",
-  "branch": "codex/036L-privacy-safe-negative-path-production-trainer-acceptance",
-  "startingSha": "5a99c98fffd095bcf44166d049026c217951f7b1",
+  "sprint": "029O-public-enquiry-corrective-completion",
+  "phase": "building",
+  "status": "implementation-in-progress",
+  "branch": "codex/029O-public-enquiry-corrective-completion",
+  "startingSha": "8968415a89dc187e3994cd9bcb8bcecd793a0854",
   "canonicalWorkspace": "C:\\Users\\rrank\\OneDrive\\PNR Precision Performance Canonical",
   "methodVersion": 8,
   "updated": "2026-08-05"

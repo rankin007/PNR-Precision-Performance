@@ -8,9 +8,9 @@ function Test-CandidateMigrationLedger {
   $migrations = @($files | Where-Object Name -Match '^\d{4}_.+\.sql$' | Sort-Object { [int]$_.Name.Substring(0,4) }, Name)
   $groups = $migrations | Group-Object { $_.Name.Substring(0,4) }
   if ($groups | Where-Object Count -ne 1) { throw 'Candidate repository migration chain contains a duplicate version.' }
-  $expected = 1..22 | ForEach-Object { '{0:D4}' -f $_ }
+  $expected = 1..23 | ForEach-Object { '{0:D4}' -f $_ }
   $actual = $migrations | ForEach-Object { $_.Name.Substring(0,4) }
-  if (Compare-Object $expected $actual) { throw 'Candidate repository migration versions must be exactly 0001 through 0022.' }
+  if (Compare-Object $expected $actual) { throw 'Candidate repository migration versions must be exactly 0001 through 0023.' }
   $candidate = @($migrations | Where-Object Name -EQ '0018_test_evidence_upload_and_storage.sql')
   if ($candidate.Count -ne 1) { throw 'Candidate repository chain requires exact 0018_test_evidence_upload_and_storage.sql.' }
   $bytes = [IO.File]::ReadAllBytes($candidate[0].FullName)
@@ -63,5 +63,16 @@ function Test-CandidateMigrationLedger {
   $enquiryBytes = [IO.File]::ReadAllBytes($enquiryMigration[0].FullName)
   if ($enquiryBytes.Length -ge 3 -and $enquiryBytes[0] -eq 0xEF -and $enquiryBytes[1] -eq 0xBB -and $enquiryBytes[2] -eq 0xBF) { throw 'Candidate 0022 must be UTF-8 without BOM.' }
   [void][Text.UTF8Encoding]::new($false,$true).GetString($enquiryBytes)
-  [pscustomobject]@{ Migrations=$migrations; Candidate=$parserCorrection[0]; Head=$enquiryMigration[0]; Diagnostic='Candidate repository migration chain is aligned through 0022; no applied or remote status was inspected.' }
+  $retentionCorrection = @($migrations | Where-Object Name -EQ '0023_public_trainer_enquiry_retention_correction.sql')
+  if ($retentionCorrection.Count -ne 1) { throw 'Candidate repository chain requires exact 0023_public_trainer_enquiry_retention_correction.sql.' }
+  $retentionBytes = [IO.File]::ReadAllBytes($retentionCorrection[0].FullName)
+  if ($retentionBytes.Length -ge 3 -and $retentionBytes[0] -eq 0xEF -and $retentionBytes[1] -eq 0xBB -and $retentionBytes[2] -eq 0xBF) { throw 'Candidate 0023 must be UTF-8 without BOM.' }
+  $retentionSql = [Text.UTF8Encoding]::new($false,$true).GetString($retentionBytes)
+  foreach ($marker in @(
+    'alter column abuse_bucket_hash drop not null','on delete set null',"interval '2 hours'",
+    'cleanup_trainer_enquiry_abuse_buckets','for update skip locked','prove_trainer_enquiry_retention',
+    'trainer_enquiry_retention_status','trainer-enquiry-abuse-cleanup-hourly','5 * * * *',
+    'revoke all on function','to service_role','Sprint 029O'
+  )) { if ($retentionSql -notmatch [regex]::Escape($marker)) { throw "Candidate 0023 missing identity marker: $marker" } }
+  [pscustomobject]@{ Migrations=$migrations; Candidate=$parserCorrection[0]; Head=$retentionCorrection[0]; Diagnostic='Candidate repository migration chain is aligned through 0023; no applied or remote status was inspected.' }
 }

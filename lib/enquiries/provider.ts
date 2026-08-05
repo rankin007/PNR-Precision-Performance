@@ -10,6 +10,13 @@ export type DeliveryOutcome =
   | { state: "sent"; errorClass: null }
   | { state: "retryable"; errorClass: "connection" | "authentication" | "pre_envelope" }
   | { state: "delivery_unknown"; errorClass: "ambiguous" | "unexpected" };
+export type SmtpPreflightOutcome =
+  | { status: "ready"; errorClass: null }
+  | { status: "unavailable"; errorClass: Exclude<DeliveryOutcome["errorClass"], null> };
+
+const SMTP_CONNECTION_TIMEOUT_MS = 10_000;
+const SMTP_GREETING_TIMEOUT_MS = 10_000;
+const SMTP_SOCKET_TIMEOUT_MS = 20_000;
 
 const exactProviders = new Map<string, SmtpProvider>([
   ["smtp.gmail.com", { providerClass: "google_workspace", publicLabel: "Google email services", processingDisclosure: "Email delivery may involve processing outside Australia, including in the United States." }],
@@ -54,13 +61,53 @@ export function buildNotificationMessage(config: EnquiryEnvironment, payload: En
   };
 }
 
-function classifyProviderError(error: unknown): DeliveryOutcome {
-  const command = typeof error === "object" && error !== null && "command" in error ? String((error as { command?: unknown }).command ?? "").toUpperCase() : "";
-  if (command === "CONN") return { state: "retryable", errorClass: "connection" };
-  if (command === "AUTH" || command === "STARTTLS") return { state: "retryable", errorClass: "authentication" };
-  if (["EHLO", "HELO", "MAIL FROM", "RCPT TO"].includes(command)) return { state: "retryable", errorClass: "pre_envelope" };
+export function classifyProviderError(error: unknown): Exclude<DeliveryOutcome, { state: "sent" }> {
+  const properties = typeof error === "object" && error !== null
+    ? error as { code?: unknown; command?: unknown; responseCode?: unknown }
+    : {};
+  const code = typeof properties.code === "string" ? properties.code.trim().toUpperCase() : "";
+  const command = typeof properties.command === "string" ? properties.command.trim().toUpperCase() : "";
+  const responseCode = typeof properties.responseCode === "number" ? properties.responseCode : Number.NaN;
+
+  if (code === "EAUTH" || responseCode === 535 || command.startsWith("AUTH")) {
+    return { state: "retryable", errorClass: "authentication" };
+  }
+  if (
+    command === "CONN" || command === "STARTTLS" ||
+    ["ECONNECTION", "ECONNREFUSED", "ECONNRESET", "EDNS", "EAI_AGAIN", "ENOTFOUND", "ESOCKET", "ETIMEDOUT"].includes(code)
+  ) return { state: "retryable", errorClass: "connection" };
+  if (code === "EENVELOPE" || ["EHLO", "HELO", "MAIL FROM", "RCPT TO"].includes(command)) {
+    return { state: "retryable", errorClass: "pre_envelope" };
+  }
   if (["DATA", "DOT"].includes(command)) return { state: "delivery_unknown", errorClass: "ambiguous" };
   return { state: "delivery_unknown", errorClass: "unexpected" };
+}
+
+function createSmtpTransport(config: EnquiryEnvironment) {
+  return nodemailer.createTransport({
+    host: config.smtpHost,
+    port: config.smtpPort,
+    secure: config.smtpPort === 465,
+    auth: { user: config.smtpUser, pass: config.smtpPass },
+    connectionTimeout: SMTP_CONNECTION_TIMEOUT_MS,
+    greetingTimeout: SMTP_GREETING_TIMEOUT_MS,
+    socketTimeout: SMTP_SOCKET_TIMEOUT_MS,
+  });
+}
+
+export async function verifySmtpTransport(
+  config: EnquiryEnvironment,
+  transport?: Pick<Transporter, "verify">,
+): Promise<SmtpPreflightOutcome> {
+  const activeTransport = transport ?? createSmtpTransport(config);
+  try {
+    return await activeTransport.verify() === true
+      ? { status: "ready", errorClass: null }
+      : { status: "unavailable", errorClass: "unexpected" };
+  } catch (error) {
+    const classified = classifyProviderError(error);
+    return { status: "unavailable", errorClass: classified.errorClass };
+  }
 }
 
 export async function deliverNotification(
@@ -70,15 +117,7 @@ export async function deliverNotification(
   submittedAt: string,
   transport?: Pick<Transporter, "sendMail">,
 ): Promise<DeliveryOutcome> {
-  const activeTransport = transport ?? nodemailer.createTransport({
-    host: config.smtpHost,
-    port: config.smtpPort,
-    secure: config.smtpPort === 465,
-    auth: { user: config.smtpUser, pass: config.smtpPass },
-    connectionTimeout: 10_000,
-    greetingTimeout: 10_000,
-    socketTimeout: 20_000,
-  });
+  const activeTransport = transport ?? createSmtpTransport(config);
   try {
     const info = await activeTransport.sendMail(buildNotificationMessage(config, payload, reference, submittedAt)) as SentMessageInfo;
     const accepted = Array.isArray(info.accepted) ? info.accepted.length : 0;

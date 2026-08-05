@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { readEnquiryEnvironment } from "@/lib/enquiries/env";
-import { deleteFixture, internalRequestIsAuthorized, proveRateLimit, readFixtureStatus, readSchemaStatus, runEnquiryMaintenance } from "@/lib/enquiries/server";
+import { deleteFixture, internalRequestIsAuthorized, proveRateLimit, proveRetention, readFixtureStatus, readSchemaStatus, runEnquiryMaintenance, runSmtpPreflight } from "@/lib/enquiries/server";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -36,8 +36,17 @@ export async function POST(request: Request) {
         ? await readSchemaStatus()
         : body.action === "rate-limit-proof"
           ? await proveRateLimit()
-        : body.action === "maintain"
-          ? await runEnquiryMaintenance()
-            : { result: "unavailable" as const };
-  return NextResponse.json(result, { status: result.result === "unavailable" ? 400 : 200 });
+          : body.action === "retention-proof"
+            ? await proveRetention()
+            : body.action === "smtp-preflight"
+              ? await runSmtpPreflight()
+              : body.action === "maintain"
+                ? await runEnquiryMaintenance()
+                : { result: "unavailable" as const };
+  const status = result.result === "unavailable"
+    ? 400
+    : result.result === "smtp-preflight" && result.status !== "ready"
+      ? 503
+      : 200;
+  return NextResponse.json(result, { status });
 }
