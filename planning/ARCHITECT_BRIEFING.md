@@ -1,95 +1,94 @@
-# Architect Briefing - Sprint 036J Rolled Back Clean
+# Architect Briefing - Sprint 036L Live Accepted Clean
 
 ## Executive summary
 
-**Business outcome:** Sprint 036J proved the binding, identity, membership graph and positive trainer journey can run autonomously without mailbox codes, but it did not accept the complete live negative-path journey.
+**Business outcome:** Production trainer access is technically accepted end to end on one exact-source live candidate, including the privacy-safe wrong-horse, sign-out and anonymous paths that remained unresolved after Sprint 036J.
 
-**Current focus:** Define one consolidated correction for the live wrong-horse denial proof without reopening solved binding, identity or manual-code work.
+**Current focus:** Begin Architect discovery for Sprint 029N's public enquiry privacy/submission outcome while preserving the accepted trainer-access state and the later Sprint 036K prelaunch obligations.
 
-**What is proven:** Process-only approved bindings; exactly one authoritative retained identity out of three; two excluded identities unchanged; exact `8/1/0/0` graph; active trainer membership and write permission; one exact-source Ready candidate; five-alias cutover; real SSR session; retained dashboard, exact horse and permitted workflow; complete alias/binding rollback and final safety.
+**What is proven:** Exact checkpoint/source; one Ready candidate live five/five; complete approved three-binding projection; three Auth identities with one exact retained authority and two exclusions unchanged; exact `8/1/0/0` graph with zero repairs; active trainer membership/write permission; real dashboard, retained horse, permitted workflow, generic wrong-horse denial, sign-out, signed-out redirect and fresh anonymous redirect; no email/OTP/password/manual code; final safety/privacy/residue.
 
-**What is not live:** Wrong-horse denial, sign-out and anonymous post-session denial are not accepted; the candidate is alias-free; Production bindings are restored to the original old-project set; stable Production trainer access and Sprint 029N eligibility remain unproven.
+**What is not live:** Sprint 029N submission, real trainer delivery rehearsal, credential rotation, disposition of the two excluded identities, real-device timing and product-wide Done are not established.
 
 ## Readiness signals
 
 | Signal | Status | Evidence |
 |---|---|---|
-| Binding, identity and membership graph foundation | passed | Approved three-binding projection; one ID-plus-hash identity; two excluded unchanged; exact `8/1/0/0`; zero repairs |
-| Positive authenticated trainer journey | passed | Real generated-link SSR session rendered portal, exact horse and permitted workflow without email/OTP handling |
-| Complete live session acceptance | attention | Sanitized wrong-horse gate failed; sign-out/anonymous steps were not reached |
-| Production containment | passed | Five/five exact Ready rollback, original three bindings restored, candidate alias-free, final route safety passed |
+| Production trainer session and negative paths | passed | Real generated-link session passed dashboard, exact horse, workflow, wrong-horse denial, sign-out and anonymous denial |
+| Binding, identity and membership graph | passed | Approved three-binding projection; identity `3/1/2`; exclusions unchanged; exact `8/1/0/0`; zero repairs |
+| Release routing and safety | passed | Candidate `dpl_4bjHgm4KL3DBo7wmbVPW4VJUk2Sf` Ready and five/five; immutable and canonical safety passed |
+| Prelaunch identity and delivery hardening | attention | Two excluded Auth identities remain unchanged; credential rotation and real trainer delivery remain Sprint 036K work |
 
 ## Where things stand
 
-The technical recovery moved materially forward: the legitimate retained trainer and exact membership graph are now known and executable, and secret handling is automated through process-only environment injection. The one candidate was safely tested and fully rolled back after the unresolved negative-path boundary. Production remains on the known-safe release with no partial alias or binding state.
+Sprint 036L completed the remaining technical Production trainer-access boundary without changing Product/runtime code. Production now routes all five stable aliases to the accepted candidate and retains the approved Supabase binding projection. The trainer-access dependency no longer blocks 029N discovery, but separate privacy/data authority is still required before 029N implementation.
 
 ## Current status
 
-Sprint 036J is complete as `autonomous-trainer-access-rolled-back-clean`. Target live acceptance was not reached, and no redeployment, recutover or binding repair remains authorized by this sprint.
+Sprint 036L is complete as `negative-path-trainer-access-live-accepted-clean`. Flight class was `critical`; the exact plan passed review decision 1/3, and the distinct final inspector passed decision 1/3. Both finding/advisory ledgers are empty.
 
 ## Since last sprint
 
-Sprint 036I stopped before a candidate because its protected retained-pilot verifier did not establish accepted graph evidence. Sprint 036J replaced that manual/protected path with an autonomous harness, proved the exact graph and real positive Production session, exercised one governed candidate and then completed automatic five-alias plus three-binding rollback when the wrong-horse boundary remained unresolved.
+Sprint 036J proved the bindings, exact retained identity/graph and positive session but rolled back after its original verifier could not distinguish caller-owned route transport from protected leakage. Sprint 036L added only the planned two-script discriminating correction, re-ran the governed binding/release transaction once, and completed every positive and negative live session boundary successfully.
 
 ## Architecture / file map
 
-- `middleware.ts` - root request-time Supabase session refresh entrypoint.
-- `lib/supabase/middleware.ts` - cookie propagation, safe fallback and private/no-store protected responses.
-- `scripts/autonomous-trainer-access-036J.mjs` - redacted binding transaction, exact identity/graph reconciliation and in-memory session journey.
-- `scripts/test-autonomous-trainer-access-036J.mjs` - 131-assertion deterministic contract including binding compensation and negative-path red controls.
-- `planning/sprints/036J-autonomous-trainer-access-recovery-and-membership-acceptance/acceptance.md` - exact execution, rollback and inspection ledger.
-- `docs/OPERATIONS_HANDOFF.md` and `docs/AUTH_RLS_PORTAL_ACCESS.md` - durable live-state and no-retry boundaries.
+- `scripts/autonomous-trainer-access-036J.mjs` - process-only binding transaction, exact identity/graph proof, in-memory session and corrected privacy-safe denial sink.
+- `scripts/test-autonomous-trainer-access-036J.mjs` - 136-assertion contract covering transport echo, protected leakage, unauthorized grant, sign-out and anonymous red controls.
+- `planning/sprints/036L-privacy-safe-negative-path-production-trainer-acceptance/acceptance.md` - exact local/live/inspection closeout ledger.
+- `docs/OPERATIONS_HANDOFF.md` - current accepted deployment, binding, monitoring and rollback compatibility boundary.
+- `docs/AUTH_RLS_PORTAL_ACCESS.md` - current technical Production identity-to-render and negative-path evidence.
 
 ## Decisions
 
-- Treat exact retained Auth ID plus retained email hash as the only authoritative identity rule; preserve both other Auth identities unchanged.
-- Keep secrets, token hash and cookies in process memory only; do not send email or request a human code.
-- Treat independent per-alias resolution as routing authority.
-- Retain corrected Production bindings only on full target success; restore the original complete set on every non-target outcome.
-- Close on the governed rollback after the unresolved live wrong-horse gate; do not reinterpret the local `INSPECT-001` correction as live acceptance.
+- Treat exact retained Auth ID plus email hash as the sole authoritative trainer identity rule; preserve both excluded identities unchanged for later governed disposition.
+- Treat caller-controlled route UUID transport echo as non-protected while rejecting database-derived horse/stable/state/count/record output and any unauthorized grant.
+- Retain candidate `dpl_4bjHgm4KL3DBo7wmbVPW4VJUk2Sf`, all five aliases and the approved three-binding projection because the complete target journey passed.
+- Keep secrets, token hash and cookies in process memory; no mailbox, email delivery, OTP, password or manual PowerShell secret entry is part of technical acceptance.
+- Clear Sprint 029N only for Architect discovery; do not infer implementation authority or product-wide completion.
 
 ## Risks / watch-items
 
-- Production again uses the original old-project Supabase binding set; the known-safe rollback was built against that historical configuration, but new Product work must not assume the approved project is currently bound.
-- Two non-authoritative Auth identities remain intentionally unresolved and unchanged.
-- The local harness now distinguishes caller-supplied route metadata from protected identity/state/count leakage, but that corrected proof has not run against a live candidate.
-- The 036J candidate is Ready and alias-free; accidental promotion is prohibited.
+- Current deployment and binding state are a compatible accepted pair. Do not independently restore an old alias target or old-project binding set during incident response.
+- The accepted identity/graph is governed synthetic evidence, not proof of real trainer delivery or real-device timing.
+- Two excluded Auth identities remain intentionally unresolved and must not be modified or deleted before Sprint 036K authority.
+- Product-wide Done remains false because enquiry privacy/submission, clinical/domain, uploads, trends, commerce and other acceptance boundaries remain separate.
 
 ## Open questions for the Architect
 
-- What exact rendered response contract should establish wrong-horse denial without treating a caller-supplied URL parameter as protected identity leakage?
-- Can the next corrective Pack reuse the proven binding, identity, graph and session machinery and limit Product change to the smallest negative-path contract necessary?
-- Sprint 029N remains gated; no separate owner decision has released it.
+- What exact privacy, collection, retention, delivery, incident and ownership decisions define Sprint 029N's governed enquiry submission?
+- What later Sprint 036K authority will govern credential rotation, real trainer delivery rehearsal and disposition of the two excluded identities?
+- What retained synthetic identity/graph cleanup or retention contract applies after real trainer delivery is proven?
 
 ## Evidence
 
-- Canonical current directory and Git top-level matched; inherited method/template changes remained excluded.
-- Final focused and retained arithmetic is 131 + 101 + 70 = 302 passing, 0 failing.
-- Initial Production binding projection was complete/prohibited; one captured exact-project key read and one three-write transaction produced a complete approved projection; final three-write restoration produced a complete prohibited projection.
-- Live classify/reconcile reported three identities, one authoritative, two excluded unchanged, exact `8/1/0/0`, active membership/write permission and zero repairs.
-- Checkpoint `cf7c134d3a5d26015be93b17f78dafccd8a1e6eb` was exact on the authorized direct remote.
-- Candidate `dpl_HQmutgVoA1rdXDWSgQ5qGwW7YeBY` was exact-project, exact checkpoint source, Production-targeted, Ready and alias-free before cutover.
-- Cutover rereads proved `1/4`, `2/3`, `3/2`, `4/1`, `5/0`; rollback rereads proved the same sequence back to exact rollback `dpl_EUJyBLQp7okgbPwtBU6nmMH88L6A`.
-- Immutable, candidate-live and final rollback public/protected/API/disabled-commerce safety matrices passed.
-- Secret scan counts for JWT-like values, assigned Supabase values, cookie material and raw token hashes were all zero.
-- Fresh critical inspection found `INSPECT-001` on decision 1/3; the scoped correction passed 131/131 plus retained gates, and decision 2/3 returned PASS with no new findings.
+- Canonical directory/Git root and exact 036L branch passed at every role/external transition; inherited method/template dirt remained excluded.
+- Checkpoint `bfeb0b23c339b819f5dbcd4fe28d61c7a4dd9570` was direct-remote equal.
+- Two implementation scripts passed syntax; Product/runtime diff remained empty.
+- Counted proof is `136 + 101 + 70 = 307/307`, with TypeScript, zero-warning lint, JSON/static/encoding/privacy/scope checks and 29-route Production build passing.
+- Initial binding projection was complete/prohibited; one key read and three stdin-only writes produced the final complete approved projection.
+- Live classification reported identity count 3, authoritative 1, excluded 2 unchanged, exact `8/1/0/0`, active membership/write permission and zero repairs.
+- Exactly one deployment produced Ready candidate `dpl_4bjHgm4KL3DBo7wmbVPW4VJUk2Sf` from the exact branch/checkpoint; initial five/five rollback and no automatic movement were proven.
+- Immutable safety passed; five fixed writes produced independent `1/4`, `2/3`, `3/2`, `4/1`, `5/0`; final five/five candidate and canonical safety passed.
+- Session/dashboard/horse/workflow/wrong-horse/sign-out/anonymous results were all true. Email/OTP/password/manual-code use, protected literals/residue and forbidden mutation were all zero.
+- Plan review decision 1/3 and inspection decision 1/3 passed with empty finding ledgers.
 
 ## Plan corrections
 
-- `J036-001`: the first Pack contradicted the needed three-binding authority; explicit user approval and Pack amendment resolved it before implementation.
-- `J036-002`: Vercel accepted `--sensitive` variables but omitted them from `env run`; the user-authorized focused decision 4/4 corrected the transaction to ordinary encrypted stdin-only writes.
-- `INSPECT-001`: the original wrong-horse assertion treated caller-controlled route metadata as protected leakage; the local harness/test correction resolved the false-negative design while preserving owned identity/state/count red controls.
+None - the plan held.
+
+Supporting-tool substitutions did not change scope or Product behavior: optional 031B was unavailable because `playwright-core` is absent, so the stronger 136-assertion SSR/HTTP suite plus direct 031C supplied the boundary; authenticated `vercel curl` supplied immutable SSO-safe proof; deterministic command-harness/counter corrections remained inside the approved two-script outcome.
 
 ## Validation / test status
 
-**Tests:** 302 passing, 0 failing.
+**Tests:** 307 passing, 0 failing.
 
-The counted total is 131 Sprint 036J assertions, 101 retained 035K assertions and 70 retained 036H assertions. Mapped auth, role, dashboard, public, static, JSON, Supabase-self and disabled-commerce checks also passed. Both 036J scripts pass syntax checks; TypeScript, zero-warning lint, the 29-page Production build, diff, scope, encoding and privacy checks pass.
+The counted total is 136 focused 036L/036J assertions, 101 retained 035K assertions and 70 retained 036H assertions. Mapped role, dashboard, public, static, JSON, Supabase-self and disabled-commerce controls passed. TypeScript, zero-warning lint, the 29-route Production build, diff, encoding, scope and protected-literal/residue checks passed. The unavailable optional 031B constituent is recorded with the stronger substitute above and is not a Product blocker.
 
 ## Recommended next Architect action
 
-**Do:** Create one consolidated corrective Pack that starts from the proven 036J foundation, defines an unambiguous live wrong-horse denial sink, preserves automatic binding/alias compensation and completes the remaining wrong-horse, sign-out and anonymous journey without mailbox/code handling.
+**Do:** Start Sprint 029N Architect discovery by resolving its enquiry privacy/data authority and defining one bounded submission outcome. Preserve the accepted 036L deployment/binding/identity state; do not combine 036K credential or identity work into 029N.
 
-**Owner:** Architect with security/product review for the negative-path disclosure contract; Builder only after the Pack handoff.
+**Owner:** Architect with business/privacy owner input for 029N. Security/platform and the real trainer participant remain later 036K owners.
 
-**Decision:** Sprint 036J is closed rolled back clean. Sprint 029N stays gated, Sprint 036K remains later pre-launch rotation/ambiguous-identity/real-delivery work, and no 036J external retry is authorized.
+**Decision:** Trainer access is technically live accepted clean and no longer gates 029N discovery. 029N implementation still requires its own Pack, and 036K remains mandatory before public launch for credential rotation, excluded-identity disposition and real trainer delivery rehearsal.

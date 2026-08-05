@@ -5,9 +5,9 @@ Date: 2026-08-05. Owner names are intentionally left as roles until durably assi
 ## Production identity
 
 - Five stable aliases: `https://precisionperformance.com.au`, `https://www.precisionperformance.com.au`, `https://pnr-precision-performance.vercel.app`, `https://pnr-precision-performance-rankin007s-projects.vercel.app`, `https://pnr-precision-performance-rankin007-rankin007s-projects.vercel.app`.
-- Vercel project `pnr-precision-performance`; current known-safe deployment `dpl_EUJyBLQp7okgbPwtBU6nmMH88L6A`; exact source `3be6b6c3622150a3c2009ed8564795b14e3e6c2b`. All five aliases independently resolved to it after Sprint 036 rollback.
-- Unaccepted Sprint 036 candidate `dpl_EmfhgcYxjNHk4W9LwH6ruTfASZmf` is Ready but must not receive a stable alias without new exact release authority. Database rollback is not part of this procedure.
-- Unaccepted Sprint 036J candidate `dpl_HQmutgVoA1rdXDWSgQ5qGwW7YeBY` is Ready, exact-source and alias-free. It must not receive a stable alias without a new exact Pack; Sprint 036J permits no redeployment or recutover.
+- Vercel project `pnr-precision-performance`; current accepted deployment `dpl_4bjHgm4KL3DBo7wmbVPW4VJUk2Sf`; exact checkpoint source `bfeb0b23c339b819f5dbcd4fe28d61c7a4dd9570`. Sprint 036L independently proved all five aliases resolve to this Ready candidate.
+- Current Production uses the complete approved Supabase three-binding projection. Exact retained Auth selection is one authoritative ID-plus-hash match out of three; two excluded identities remain unchanged. The retained synthetic graph is exact `8/1/0/0` with active trainer membership and write permission.
+- Earlier deployments `dpl_EUJyBLQp7okgbPwtBU6nmMH88L6A`, `dpl_EmfhgcYxjNHk4W9LwH6ruTfASZmf` and `dpl_HQmutgVoA1rdXDWSgQ5qGwW7YeBY` are historical release/rollback evidence, not current routing authority.
 
 ## Monitoring
 
@@ -24,7 +24,7 @@ Evidence must use synthetic identifiers or redaction. Never place credentials, t
 
 ## Rollback
 
-Rollback is appropriate for a release-caused P0/P1 regression when the prior deployment is known safe and the incident is not caused by shared provider/database state. Until a later accepted release supersedes it, the known-safe exact target is `dpl_EUJyBLQp7okgbPwtBU6nmMH88L6A`. An authorized release/platform owner assigns all five recorded aliases to that deployment through Vercel as one bounded transaction. Do not alter DNS, environment values, Supabase or Stripe as part of this outline. Afterwards independently resolve all five aliases, then verify public routes/assets, canonical/robots/sitemap, health, anonymous protected redirects, disabled checkout/webhook posture and Ready status; record the resulting deployment identity. Escalate separately if database/security state is implicated.
+Rollback is appropriate for a release-caused P0/P1 regression only after the release/platform owner proves an exact compatible deployment and binding state. Sprint 036L superseded the prior alias-only rollback assumption: current accepted routing is `dpl_4bjHgm4KL3DBo7wmbVPW4VJUk2Sf` and current Production bindings target the approved Supabase project. Do not assign the older `dpl_EUJyBLQp7okgbPwtBU6nmMH88L6A` deployment or restore the historical old-project bindings independently. A governed rollback must treat the five aliases and three bindings as one compatibility decision, preserve protected values in process memory, independently reread all aliases and binding classes, and re-run public/protected/API/disabled-commerce safety. DNS and Stripe remain outside this outline.
 
 ## Support and access
 
@@ -85,6 +85,14 @@ Sprint 036J closed `autonomous-trainer-access-rolled-back-clean`. It eliminated 
 The single source-proven candidate passed immutable safety. Five fixed alias assignments reached five/five candidate with full rereads, and a generated-link session established real SSR cookies without sending email. The retained trainer dashboard, exact horse workspace and permitted workflow rendered. The subsequent live wrong-horse boundary returned only sanitized `WRONG_HORSE_DENIAL_FAILED`; sign-out/anonymous steps were not reached, so stable trainer access is not accepted.
 
 Builder restored apex, `www`, project, team-project and legacy-team aliases to exact Ready rollback in fixed order with a full five-alias reread after every assignment. Builder then restored the original three Production bindings from the unchanged Development copy and independently proved the complete old-project projection. Final canonical public/protected/API/disabled-commerce safety passed, and the 036J candidate remains Ready with zero stable aliases. Fresh inspection resolved local harness finding `INSPECT-001`, but that correction supplies no live proof or external authority. Do not redeploy, repair bindings, move aliases or rerun the journey under 036J. Any later attempt must reuse the proven binding/identity/session foundation and define a separate exact wrong-horse denial acceptance boundary.
+
+### Sprint 036L accepted Production trainer boundary
+
+Sprint 036L closed `negative-path-trainer-access-live-accepted-clean`. The only implementation change was the two-script verifier/test correction; Product/runtime source remained unchanged. Focused and retained proof passed 307/307 counted assertions, TypeScript, zero-warning lint, the 29-route Production build and mapped local safety gates. Optional browser constituent 031B was unavailable because `playwright-core` is absent; the stronger 136-assertion SSR/HTTP suite and direct 031C passed as the recorded substitute.
+
+One authenticated in-memory key read and three stdin-only writes established the complete approved Production binding projection. Auth classification proved three identities, exactly one retained ID-plus-hash authority, two exclusions unchanged and exact `8/1/0/0` with zero repairs. No email, OTP, password, manual code or protected value entry was used.
+
+The single exact-source candidate `dpl_4bjHgm4KL3DBo7wmbVPW4VJUk2Sf` passed immutable safety and reached five/five through the fixed `1/4` to `5/0` alias transaction. The real session then passed dashboard, exact retained horse, permitted workflow, privacy-safe wrong-horse denial, local sign-out, signed-out redirect and fresh anonymous redirect. Final canonical safety, approved bindings, graph, routing, privacy and residue checks passed. Treat this candidate/binding state as current Production truth. Sprint 029N is cleared for Architect discovery only; Sprint 036K still owns later credential rotation, real trainer delivery rehearsal and disposition of both excluded identities.
 
 ## Governance and unresolved duties
 

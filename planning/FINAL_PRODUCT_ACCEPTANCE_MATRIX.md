@@ -6,7 +6,7 @@ Public release: Sprint 032 remains valid and Ready with accepted limitations.
 
 Evidence classes: `production` current live/read-only proof; `hosted` authenticated/provider proof; `executable` maintained automated proof; `static` source/contract proof; `historical` dated qualified evidence; `authority` unresolved owner decision.
 
-Current Production trainer-access gate: **not accepted**. Sprint 036J proved the approved binding set, exact retained identity/`8/1/0/0` graph, a real session, trainer dashboard, exact horse and permitted workflow on one source-proven candidate. The live wrong-horse denial boundary remained unaccepted, so all five aliases and the original three Production bindings were restored. This does not invalidate earlier hosted role/assignment evidence, but it prohibits a current stable Production trainer-access claim.
+Current Production trainer-access gate: **accepted with governed synthetic evidence**. Sprint 036L retains one exact-source Ready candidate five/five with the approved three-binding projection, exact one-of-three retained identity authority, two exclusions unchanged and exact `8/1/0/0`. The real autonomous Production session passed trainer dashboard, exact horse, permitted workflow, privacy-safe wrong-horse denial, sign-out and fresh anonymous denial without email, OTP, password or manual code handling. This clears the trainer-access dependency for Sprint 029N Architect discovery, but does not establish product-wide Done, real-device timing, real trainer delivery or the later 036K credential/identity obligations.
 
 | ID | Canonical criterion | Disposition | Evidence | Production relevance / limitation | Owner role | Next action |
 |---|---|---|---|---|---|---|
@@ -42,7 +42,7 @@ Current Production trainer-access gate: **not accepted**. Sprint 036J proved the
 | P30 | Vet read-only unless managed exception | passed-with-accepted-limitation | hosted/static: role proof; managed exception authority remains open | Base denial/read contract proven | Product/security owner | Finalize exception rules |
 | P31 | Stable staff has limited write | passed-with-accepted-limitation | hosted: accepted role matrix | Exact future access changes remain governed | Security owner | Maintain |
 | P32 | Admin has full approved access/control | passed | hosted: Sprint 021AH | Within existing product contracts | Security owner | Maintain |
-| P33 | Users see assigned horses only | passed | hosted: Sprint 021AH | Direct and rendered proof | Security owner | Maintain |
+| P33 | Users see assigned horses only | passed | production/executable: Sprint 036L plus Sprint 021AH | Exact retained horse renders; proven-absent wrong horse returns generic privacy-safe denial without protected identity/state/count/record data | Security owner | Maintain |
 | P34 | No cross-stable visibility | passed | hosted: Sprint 031C accepted evidence cited by Sprint 032 | Synthetic denial boundary passed | Security owner | Maintain |
 | P35 | Corrections are audited | passed | hosted/executable: Sprint 021AH | Comment/correction lifecycle proven | Security owner | Maintain |
 | P36 | Upload access matches horse/test boundary | not-proven | no reconciled accepted final upload proof | Security/privacy criterion remains mandatory | Privacy/security owner | Reconcile hosted denial evidence |

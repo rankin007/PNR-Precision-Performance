@@ -1,5 +1,12 @@
 # Current Risks
 
+## Sprint 036L accepted live boundary
+
+- Current Production truth is exact Ready candidate `dpl_4bjHgm4KL3DBo7wmbVPW4VJUk2Sf` at five/five with the complete approved three-binding projection. Do not restore an earlier deployment or old-project binding set independently; any incident action must assess alias and binding compatibility together.
+- The accepted session uses the retained governed synthetic trainer identity and eight application rows. It proves the technical Production boundary, not real trainer delivery, commercial launch readiness or product-wide Done.
+- Two excluded Auth identities remain deliberately unchanged. Do not select, merge, modify or delete them by inference; Sprint 036K owns later prelaunch disposition and credential rotation.
+- Sprint 029N's trainer-access dependency is cleared for Architect discovery only. Its privacy/data authority and implementation remain separate work.
+
 ## Sprint 036I protected preflight boundary
 
 - Local verifier activation and Product integrity are proven, but the first protected exact-ID Verify exited 2 without accepted `8/1/0/0` evidence. Do not describe 036I as retained-pilot verification, candidate readiness or live trainer-access proof.

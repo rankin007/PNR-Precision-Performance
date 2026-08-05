@@ -2,6 +2,9 @@
 
 ## Current governing evidence
 
+- `planning/sprints/036L-privacy-safe-negative-path-production-trainer-acceptance/` - applied critical authority for the corrected privacy-safe verifier, exact three-binding transaction, exact retained identity/graph, one candidate, five-alias cutover, complete autonomous session and compensation.
+- `planning/sprints/036L-privacy-safe-negative-path-production-trainer-acceptance/acceptance.md` - 307/307 counted assertions, exact checkpoint/candidate/binding/identity/graph evidence, five/five live routing, complete dashboard/horse/workflow/wrong-horse/sign-out/anonymous journey, empty plan/inspection ledgers and `negative-path-trainer-access-live-accepted-clean` closeout.
+
 - `planning/sprints/036J-autonomous-trainer-access-recovery-and-membership-acceptance/` - applied strict process-only binding repair, exact identity/graph reconciliation, autonomous session, one candidate, fixed five-alias transaction and automatic binding/alias rollback authority.
 - `planning/sprints/036J-autonomous-trainer-access-recovery-and-membership-acceptance/acceptance.md` - 302 counted passing assertions, exact approved binding and `8/1/0/0` proof, one candidate, five/five cutover, positive authenticated journey, sanitized wrong-horse stop, complete five-alias plus all-three binding restoration, resolved `INSPECT-001` and `autonomous-trainer-access-rolled-back-clean` closeout.
 
