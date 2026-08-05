@@ -2,10 +2,10 @@
 
 > A living estimate, not a contract. Sprints may be added, split, reordered, or dropped as evidence changes. Roadmap rows do not authorize implementation, external mutation, deployment, staging, commit, or push.
 
-**About:** About 15 named sprints on the current road
+**About:** About 16 named sprints on the current road
 **Last estimated:** 2026-08-05
 **Delivered since this roadmap was adopted:** 13 sprints - 034B, 034C, 034D, safely rolled-back 036, preflight-blocked-clean 036B, access-unavailable-clean 036C, revocation-blocked 036D, locally corrected 036E, revocation-blocked 036F, authentication-failed/rolled-back 036G, local diagnostic-ready 036H, protected-preflight-blocked 036I and autonomously rolled-back-clean 036J
-**Next destination:** One consolidated Architect correction for the unresolved live wrong-horse denial proof, reusing the proven binding/identity/session foundation without another mailbox/code workflow; Sprint 029N remains gated and Sprint 036K remains later pre-launch work
+**Next destination:** Sprint 036L completes the corrected live wrong-horse, sign-out and anonymous trainer journey in one compensated Production flight, reusing the proven binding/identity/session foundation without mailbox or code handling
 
 **Completed before this roadmap existed:** sprints 001-035K, including follow-ups (the record lives in planning/sprints/, planning/STATE.md, and planning/SPRINT_LIFECYCLE_LEDGER.md)
 
@@ -24,13 +24,14 @@
 | 036H | Privacy-safe authentication failure diagnostics | Release | done - local diagnostic ready clean | A separate five-category code-first classifier, retry-later-only propagation and hidden ephemeral marker passed 169 counted assertions plus retained regressions and full local validation; no live/external action occurred and no retry authority follows. |
 | 036I | Diagnostic-guided Production trainer acceptance | Release | done - protected preflight blocked clean | Exact verifier activation and all local gates passed; protected SelfTest passed, but exact-ID Verify exited 2 without accepted `8/1/0/0`, so the user closed before checkpoint, deployment, alias or authentication action. |
 | 036J | Autonomous trainer access recovery and membership acceptance | Release | done - session boundary failed, rolled back clean | Approved bindings, exact one-of-three retained identity selection, unchanged `8/1/0/0` graph, real trainer session/dashboard/exact-horse/workflow and five-alias cutover all passed; the wrong-horse gate remained unaccepted, so five aliases and all three original bindings were restored and safety re-proved. |
+| 036L | Privacy-safe negative-path Production trainer acceptance | Release | planned | Run the corrected discriminating wrong-horse verifier against one exact-source candidate, complete sign-out and anonymous denial, and retain the approved three-binding/five-alias state only when the whole autonomous journey passes. |
 | 029N | Public enquiry privacy and submission completion | Conversion | planned | Resolve the accepted privacy/data boundary and turn the visibly unavailable stable-trial form into a governed submission workflow. |
 | 036K | Pre-public-launch credential rotation and real trainer delivery rehearsal | Launch | planned | After trainer access is technically stable and before public launch or sensitive/commercial data, rotate temporary credentials, resolve the two preserved ambiguous Auth identities, and rehearse the real trainer delivery path under launch controls. |
 
 ## Notes
 
 - Table order is the current proposed sequence even where a follow-up keeps an earlier core sprint number.
-- Sprints 034B, 034C, 034D, 036, 036B, 036C, 036D, 036E, 036F, 036G, 036H, 036I and 036J are closed. Sprint 036J is the latest truth: the binding, identity, graph, deployment, cutover and positive session path are proven, but the live wrong-horse denial boundary is not accepted; exact all-five rollback and the original three-binding set are restored. Sprint 029N remains gated, and 036K remains a later pre-launch security and real-delivery obligation.
+- Sprints 034B, 034C, 034D, 036, 036B, 036C, 036D, 036E, 036F, 036G, 036H, 036I and 036J are closed. Sprint 036L is the one consolidated active road item for the remaining live negative-path acceptance. Sprint 029N remains gated until 036L target success, and 036K remains a later pre-launch security and real-delivery obligation.
 - Historical sprints are not duplicated as done rows. The mid-flight statement and lifecycle ledger preserve that history.
 - Sprint 036C made no deployment or alias mutation. Production remains on the compatible Sprint 035D rollback according to the last authoritative five-alias proof; Preview acceptance remains distinct from Production acceptance.
 - Sprint 036D made no provider API, retained-pilot, Vercel, deployment, alias or Production attempt after the blocked credential lifecycle. Manual exact-token revocation and list absence do not replace same-token invalidation proof.

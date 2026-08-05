@@ -184,22 +184,38 @@ class FakeAdapter {
   async countRowById(table, id) { return this.table(table).has(id) ? 1 : 0; }
 }
 
-function makeSessionAdapter({ identity = true, cookie = true, cleared = true } = {}) {
+function makeSessionAdapter({ identity = true, cookie = true, cleared = true, retainedCookie = false } = {}) {
   return {
     async establish() {
       return { userIdMatches: identity, cookieHeader: cookie ? "sb-session=private-cookie" : "", cookieCount: cookie ? 1 : 0 };
     },
-    async signOut() { return { cleared, cookieHeader: cleared ? "" : "sb-session=private-cookie" }; },
+    async signOut() { return { cleared, cookieHeader: retainedCookie || !cleared ? "sb-session=private-cookie" : "" }; },
     clear() {},
   };
 }
 
-function makeHttpAdapter({ portal = true, horse = true, workflow = true, wrongDenied = true, wrongRequestIdInTransport = false, wrongCountLeak = false, anonymousDenied = true } = {}) {
+function makeHttpAdapter({
+  portal = true,
+  horse = true,
+  workflow = true,
+  wrongGranted = false,
+  wrongRequestIdInTransport = false,
+  wrongHorseNameLeak = false,
+  wrongStableNameLeak = false,
+  wrongStatusLeak = false,
+  wrongCountLeak = false,
+  wrongRecordLeak = false,
+  signedOutDenied = true,
+  freshAnonymousDenied = true,
+} = {}) {
+  let anonymousPortalRequests = 0;
   return {
     async get(url, cookieHeader) {
       const parsed = new URL(url);
       if (!cookieHeader && parsed.pathname === "/portal") {
-        return anonymousDenied
+        anonymousPortalRequests += 1;
+        const denied = anonymousPortalRequests === 1 ? signedOutDenied : freshAnonymousDenied;
+        return denied
           ? { status: 307, location: "/sign-in?next=%2Fportal", body: "" }
           : { status: 200, location: null, body: "Trainer dashboard" };
       }
@@ -214,9 +230,15 @@ function makeHttpAdapter({ portal = true, horse = true, workflow = true, wrongDe
       }
       if (parsed.pathname.startsWith("/portal/horses/")) {
         const requestedId = parsed.pathname.slice("/portal/horses/".length);
+        if (requestedId !== ledger.wrongHorseId) throw new Error("unproven wrong-horse test id");
+        if (wrongGranted) return { status: 200, location: null, body: "Horse Detail Unauthorized horse workspace" };
         const transportState = wrongRequestIdInTransport ? ` <script data-route-state="${requestedId}"></script>` : "";
+        const horseNameState = wrongHorseNameLeak ? ` ${FIXTURE.horseName}` : "";
+        const stableNameState = wrongStableNameLeak ? ` ${FIXTURE.stableName}` : "";
+        const statusState = wrongStatusLeak ? " Status: active" : "";
         const countState = wrongCountLeak ? " Count: 1" : "";
-        return { status: 200, location: null, body: wrongDenied ? `Horse not available${transportState}${countState}` : `Horse Detail Status: ${FIXTURE.horseName}` };
+        const recordState = wrongRecordLeak ? " Latest result: protected" : "";
+        return { status: 200, location: null, body: `Horse not available${transportState}${horseNameState}${stableNameState}${statusState}${countState}${recordState}` };
       }
       throw new Error("unexpected test route");
     },
@@ -315,10 +337,15 @@ await throwsCode(() => proveSessionJourney({ sessionAdapter: makeSessionAdapter(
 await throwsCode(() => proveSessionJourney({ sessionAdapter: makeSessionAdapter(), httpAdapter: makeHttpAdapter({ portal: false }), ledger, email, origin: CANONICAL_ORIGIN }), "PORTAL_PROOF_FAILED");
 await throwsCode(() => proveSessionJourney({ sessionAdapter: makeSessionAdapter(), httpAdapter: makeHttpAdapter({ horse: false }), ledger, email, origin: CANONICAL_ORIGIN }), "HORSE_WORKSPACE_PROOF_FAILED");
 await throwsCode(() => proveSessionJourney({ sessionAdapter: makeSessionAdapter(), httpAdapter: makeHttpAdapter({ workflow: false }), ledger, email, origin: CANONICAL_ORIGIN }), "WORKFLOW_PERMISSION_PROOF_FAILED");
-await throwsCode(() => proveSessionJourney({ sessionAdapter: makeSessionAdapter(), httpAdapter: makeHttpAdapter({ wrongDenied: false }), ledger, email, origin: CANONICAL_ORIGIN }), "WRONG_HORSE_DENIAL_FAILED");
+await throwsCode(() => proveSessionJourney({ sessionAdapter: makeSessionAdapter(), httpAdapter: makeHttpAdapter({ wrongGranted: true }), ledger, email, origin: CANONICAL_ORIGIN }), "WRONG_HORSE_DENIAL_FAILED");
+await throwsCode(() => proveSessionJourney({ sessionAdapter: makeSessionAdapter(), httpAdapter: makeHttpAdapter({ wrongHorseNameLeak: true }), ledger, email, origin: CANONICAL_ORIGIN }), "WRONG_HORSE_DENIAL_FAILED");
+await throwsCode(() => proveSessionJourney({ sessionAdapter: makeSessionAdapter(), httpAdapter: makeHttpAdapter({ wrongStableNameLeak: true }), ledger, email, origin: CANONICAL_ORIGIN }), "WRONG_HORSE_DENIAL_FAILED");
+await throwsCode(() => proveSessionJourney({ sessionAdapter: makeSessionAdapter(), httpAdapter: makeHttpAdapter({ wrongStatusLeak: true }), ledger, email, origin: CANONICAL_ORIGIN }), "WRONG_HORSE_DENIAL_FAILED");
 await throwsCode(() => proveSessionJourney({ sessionAdapter: makeSessionAdapter(), httpAdapter: makeHttpAdapter({ wrongCountLeak: true }), ledger, email, origin: CANONICAL_ORIGIN }), "WRONG_HORSE_DENIAL_FAILED");
-await throwsCode(() => proveSessionJourney({ sessionAdapter: makeSessionAdapter({ cleared: false }), httpAdapter: makeHttpAdapter(), ledger, email, origin: CANONICAL_ORIGIN }), "SIGN_OUT_FAILED");
-await throwsCode(() => proveSessionJourney({ sessionAdapter: makeSessionAdapter(), httpAdapter: makeHttpAdapter({ anonymousDenied: false }), ledger, email, origin: CANONICAL_ORIGIN }), "SIGN_OUT_FAILED");
+await throwsCode(() => proveSessionJourney({ sessionAdapter: makeSessionAdapter(), httpAdapter: makeHttpAdapter({ wrongRecordLeak: true }), ledger, email, origin: CANONICAL_ORIGIN }), "WRONG_HORSE_DENIAL_FAILED");
+await throwsCode(() => proveSessionJourney({ sessionAdapter: makeSessionAdapter({ retainedCookie: true }), httpAdapter: makeHttpAdapter(), ledger, email, origin: CANONICAL_ORIGIN }), "SIGN_OUT_FAILED");
+await throwsCode(() => proveSessionJourney({ sessionAdapter: makeSessionAdapter(), httpAdapter: makeHttpAdapter({ signedOutDenied: false }), ledger, email, origin: CANONICAL_ORIGIN }), "SIGN_OUT_FAILED");
+await throwsCode(() => proveSessionJourney({ sessionAdapter: makeSessionAdapter(), httpAdapter: makeHttpAdapter({ freshAnonymousDenied: false }), ledger, email, origin: CANONICAL_ORIGIN }), "ANONYMOUS_DENIAL_FAILED");
 
 // Middleware, noninteractive operation and disclosure controls: 16 assertions.
 const harnessSource = readFileSync("scripts/autonomous-trainer-access-036J.mjs", "utf8");
@@ -452,5 +479,5 @@ equal(parseCli(["node", "script", "restore-production-bindings"]).mode, "restore
 await throwsCode(() => parseCli(["node", "script", "repair-production-bindings", "--origin", CANONICAL_ORIGIN]), "MODE_REFUSED");
 await throwsCode(() => assertSafeResult({ state: "bad", value: approvedSet.NEXT_PUBLIC_SUPABASE_ANON_KEY }), "CHILD_OUTPUT_REFUSED");
 
-assert.equal(assertions, 131, `expected exactly 131 assertions, received ${assertions}`);
+assert.equal(assertions, 136, `expected exactly 136 assertions, received ${assertions}`);
 console.log(`Sprint 036J autonomous trainer access deterministic tests passed (${assertions} assertions).`);

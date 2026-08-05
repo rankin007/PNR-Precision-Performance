@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { createHash, randomUUID } from "node:crypto";
+import { createHash } from "node:crypto";
 import { spawn } from "node:child_process";
 import { readFileSync } from "node:fs";
 import { createRequire } from "node:module";
@@ -731,6 +731,30 @@ function isSignInRedirect(response) {
   return [302, 303, 307, 308].includes(response.status) && typeof response.location === "string" && response.location.includes("/sign-in");
 }
 
+const WRONG_HORSE_PROTECTED_MARKERS = Object.freeze([
+  FIXTURE.horseName,
+  FIXTURE.stableName,
+  "Status:",
+  "Count:",
+  "Breed:",
+  "Colour:",
+  "Date of birth:",
+  "Latest result:",
+  "Operational summary",
+  "Workflow state",
+]);
+
+function assertWrongHorseDenied(response) {
+  if (
+    response.status !== 200
+    || typeof response.body !== "string"
+    || !response.body.includes("Horse not available")
+    || WRONG_HORSE_PROTECTED_MARKERS.some((marker) => response.body.includes(marker))
+  ) {
+    fail("WRONG_HORSE_DENIAL_FAILED");
+  }
+}
+
 export async function proveSessionJourney({ sessionAdapter, httpAdapter, ledger, email, origin }) {
   const session = await sessionAdapter.establish({ email, expectedAuthId: ledger.ids.auth, origin });
   if (!session.userIdMatches) fail("SESSION_IDENTITY_MISMATCH");
@@ -752,12 +776,10 @@ export async function proveSessionJourney({ sessionAdapter, httpAdapter, ledger,
     workflowBody = workflow.body;
     if (workflow.status !== 200 || !workflowBody.includes("Daily record submission")) fail("WORKFLOW_PERMISSION_PROOF_FAILED");
 
-    const wrongHorseId = randomUUID();
+    const wrongHorseId = ledger.wrongHorseId;
     const wrong = await readHttp(httpAdapter, `${origin}/portal/horses/${wrongHorseId}`, session.cookieHeader);
     wrongBody = wrong.body;
-    if (wrong.status !== 200 || !wrongBody.includes("Horse not available") || wrongBody.includes(FIXTURE.horseName) || wrongBody.includes(FIXTURE.stableName) || wrongBody.includes("Status:") || wrongBody.includes("Count:")) {
-      fail("WRONG_HORSE_DENIAL_FAILED");
-    }
+    assertWrongHorseDenied(wrong);
 
     const signedOut = await sessionAdapter.signOut();
     if (!signedOut.cleared || signedOut.cookieHeader) fail("SIGN_OUT_FAILED");
