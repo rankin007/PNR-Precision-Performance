@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "sprint": "036J-autonomous-trainer-access-recovery-and-membership-acceptance",
-  "phase": "release",
-  "status": "protected-preflight-passed-checkpoint-pending",
+  "phase": "closed",
+  "status": "autonomous-trainer-access-rolled-back-clean",
   "branch": "codex/036J-autonomous-trainer-access-recovery-and-membership-acceptance",
   "startingSha": "67f07c455f5ec3f12cbc1748ecec241ec764ef7e",
   "canonicalWorkspace": "C:\\Users\\rrank\\OneDrive\\PNR Precision Performance Canonical",

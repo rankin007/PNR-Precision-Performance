@@ -1,10 +1,12 @@
 # Final Product Acceptance Matrix
 
-Date: 2026-07-30
+Date: 2026-08-05
 Decision: **Not Done — operational handoff complete**
 Public release: Sprint 032 remains valid and Ready with accepted limitations.
 
 Evidence classes: `production` current live/read-only proof; `hosted` authenticated/provider proof; `executable` maintained automated proof; `static` source/contract proof; `historical` dated qualified evidence; `authority` unresolved owner decision.
+
+Current Production trainer-access gate: **not accepted**. Sprint 036J proved the approved binding set, exact retained identity/`8/1/0/0` graph, a real session, trainer dashboard, exact horse and permitted workflow on one source-proven candidate. The live wrong-horse denial boundary remained unaccepted, so all five aliases and the original three Production bindings were restored. This does not invalidate earlier hosted role/assignment evidence, but it prohibits a current stable Production trainer-access claim.
 
 | ID | Canonical criterion | Disposition | Evidence | Production relevance / limitation | Owner role | Next action |
 |---|---|---|---|---|---|---|

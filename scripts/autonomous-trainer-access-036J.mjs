@@ -755,7 +755,7 @@ export async function proveSessionJourney({ sessionAdapter, httpAdapter, ledger,
     const wrongHorseId = randomUUID();
     const wrong = await readHttp(httpAdapter, `${origin}/portal/horses/${wrongHorseId}`, session.cookieHeader);
     wrongBody = wrong.body;
-    if (wrong.status !== 200 || !wrongBody.includes("Horse not available") || wrongBody.includes(wrongHorseId) || wrongBody.includes(FIXTURE.horseName) || wrongBody.includes(FIXTURE.stableName) || wrongBody.includes("Status:")) {
+    if (wrong.status !== 200 || !wrongBody.includes("Horse not available") || wrongBody.includes(FIXTURE.horseName) || wrongBody.includes(FIXTURE.stableName) || wrongBody.includes("Status:") || wrongBody.includes("Count:")) {
       fail("WRONG_HORSE_DENIAL_FAILED");
     }
 

@@ -2,6 +2,9 @@
 
 ## Current governing evidence
 
+- `planning/sprints/036J-autonomous-trainer-access-recovery-and-membership-acceptance/` - applied strict process-only binding repair, exact identity/graph reconciliation, autonomous session, one candidate, fixed five-alias transaction and automatic binding/alias rollback authority.
+- `planning/sprints/036J-autonomous-trainer-access-recovery-and-membership-acceptance/acceptance.md` - 302 counted passing assertions, exact approved binding and `8/1/0/0` proof, one candidate, five/five cutover, positive authenticated journey, sanitized wrong-horse stop, complete five-alias plus all-three binding restoration, resolved `INSPECT-001` and `autonomous-trainer-access-rolled-back-clean` closeout.
+
 - `planning/sprints/036I-diagnostic-guided-production-trainer-acceptance/` - applied strict verifier activation, protected exact-ID pilot gate, single candidate, fixed five-alias transaction, diagnostic-guided private acceptance and rollback authority; execution stopped at protected preflight.
 - `planning/reviews/036I-diagnostic-guided-production-trainer-acceptance.md` - exact two-file implementation, 171 counted passing assertions plus retained controls, TypeScript/lint/build, protected SelfTest pass, exact-ID Verify exit 2, zero downstream action and `production-diagnostic-candidate-preflight-blocked-clean` closeout.
 

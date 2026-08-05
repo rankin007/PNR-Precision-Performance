@@ -2,10 +2,11 @@
 
 ## Active direction
 
-Sprint 036I is closed `production-diagnostic-candidate-preflight-blocked-clean`. Exact two-file activation passed 101 assertions, the retained 70-assertion diagnostic and full local gates passed, and protected SelfTest exited 0. Exact-ID Verify exited 2 without accepted `8/1/0/0`; the user directed closure without the remaining permitted Verify. No candidate, Vercel, deployment, alias, OTP or Production action began. Five/five rollback remains live and Sprint 029N remains behind the live-access gate.
+Sprint 036J is closed `autonomous-trainer-access-rolled-back-clean`. Final focused/retained proof passed 302/302 counted assertions and full local gates. Exact approved bindings, one authoritative retained identity out of three, unchanged `8/1/0/0` graph, one source-proven candidate, five-alias cutover, canonical safety and the authenticated portal/exact-horse/workflow path passed. The live wrong-horse denial boundary remained unaccepted, so all five aliases and the original three Production bindings were restored and independently re-proven. Sprint 029N remains behind the live-access gate; Sprint 036K remains later pre-launch work and supplies no retry authority.
 
 | Sprint | Outcome | Profile / proof |
 |---|---|---|
+| 036J | Closed `autonomous-trainer-access-rolled-back-clean` | Strict four-file implementation; 302 counted assertions plus mapped gates passed; one exact candidate and five-alias cutover reached a real trainer session/positive workflow; wrong-horse proof remained unaccepted; fixed five-alias and all-three binding rollback passed; inspection decision 2/3 passed after local harness correction |
 | 036I | Closed `production-diagnostic-candidate-preflight-blocked-clean` | Strict two-file verifier activation; 171 counted local assertions and full gates passed; protected SelfTest passed, exact-ID Verify did not establish `8/1/0/0`; zero downstream action and no retry authority |
 | 036H | Closed `privacy-safe-authentication-diagnostic-ready-local-clean` | Strict four-file local diagnostic contract; 70 new plus 99 retained counted assertions and three retained scripts passed; generic public behavior, hidden ephemeral output and zero external activity proven; no retry authority |
 | 036G | Closed `production-trainer-authentication-failed-rollback-clean` | Strict two-file verifier activation and existing-candidate transaction; 99 assertions passed; five candidate plus five rollback writes with complete five-row rereads; no accepted session; final five/five Ready rollback and canonical safety passed |

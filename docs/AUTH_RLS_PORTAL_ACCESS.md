@@ -186,6 +186,14 @@ Protected SelfTest exited 0, but the required exact-ID Verify exited 2 without a
 
 Sprint 036I therefore closes before candidate creation, deployment or alias movement. The last authoritative Production state remains five/five exact Ready rollback, live trainer access remains unaccepted and Sprint 029N remains gated. No second Verify, OTP attempt or provider correction is authorized by this closeout.
 
+# Sprint 036J Autonomous Identity-To-Render Boundary
+
+Sprint 036J proved the exact approved Supabase binding set through process-only injection, then classified three Auth identities entirely in memory. Exactly one record matched the retained Auth ID plus retained email hash; the other two were excluded and preserved unchanged. Exact-owned reconciliation returned `application=8`, `auth=1`, `storage=0`, `wrongHorse=0`, active user/profile/trainer membership and effective `horse.records.write`, with zero inserts and zero updates.
+
+The root middleware now performs Supabase SSR cookie refresh while server application context remains the authorization source. A generated Admin link for only the retained identity sent no email; token hash and SSR cookies remained in memory. On the single Production candidate, the real session rendered the retained trainer dashboard, exact horse workspace and permitted data-entry workflow before the sanitized wrong-horse gate failed. Because the combined result did not establish the complete negative-path contract, sign-out/anonymous proof was not reached and stable live trainer access is not accepted.
+
+All five aliases were restored to exact Ready rollback, all three original Production bindings were restored and the candidate is alias-free. Local finding `INSPECT-001` now distinguishes caller-supplied route metadata from protected horse identity/state/count leakage and passes discriminating tests, but it was not rerun live and supplies no deployment or cutover authority. Sprint 029N remains gated; Sprint 036K remains later pre-launch credential rotation, ambiguous-identity disposition and real-delivery rehearsal.
+
 # Sprint 021AH Application-Proof Completion
 
 Migration 0017 is applied once and replaces only the exact authenticated soft-delete RPC with valid `IS TRUE`/`IS NOT TRUE` null-safe authorization. The genuine direct authorization matrix passed 17/17 and the unchanged rendered lifecycle passed 48/48. Final Auth/application/Storage state is `0/0/0`, ledger is `0001`–`0017`, and the RPC boundary is authorization-complete for the proven matrix.
