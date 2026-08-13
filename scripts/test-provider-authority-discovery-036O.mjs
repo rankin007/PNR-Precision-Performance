@@ -1,0 +1,23 @@
+import { strict as a } from "node:assert";
+import { CLASSES, SOURCE } from "./provider-authority-projections-036O.mjs";
+import { PHASES, SINKS, buildSourceGraph, buildFallbackManifest, validateManifest, classifyOutcome, createController } from "./provider-authority-discovery-036O.mjs";
+let n=0;const e=(x,y)=>{a.deepEqual(x,y);n++},o=x=>{a.ok(x);n++},b=(f,c)=>{a.throws(f,x=>x.code===c);n++};
+const base={
+ "lib/env.ts":"export const service=process.env.SUPABASE_SERVICE_ROLE_KEY;",
+ "lib/supabase/admin.ts":"import {service} from '../env'; export const admin=service;",
+ "app/(portal)/portal/page.tsx":"import {admin} from '@/lib/supabase/admin'; export default function Page(){return null}",
+ "app/api/internal/evidence/reconcile/route.ts":"export const cron=process.env.CRON_SECRET;",
+ "lib/stripe/env.ts":"export const key=process.env.STRIPE_SECRET_KEY; export const hook=process.env.STRIPE_WEBHOOK_SECRET;",
+ "app/api/stripe/webhook/route.ts":"import {hook} from '../../../../lib/stripe/env'; export const POST=()=>hook;",
+ "lib/runtime/platform-status.ts":"export const railway=process.env.RAILWAY_API_TOKEN;",
+ "vercel.json":"{\"crons\":[]}",
+ "docs/mention.md":"PUBLIC_ENQUIRY_SMTP_PASS ENQUIRY_ABUSE_HMAC_SECRET",
+ "scripts/test-secret.mjs":"process.env.PUBLIC_ENQUIRY_SMTP_PASS"
+};
+const runner=(files=base)=>((cmd,args)=>{if(args[0]==="ls-tree")return Buffer.from(Object.keys(files).join("\n"));if(args[0]==="show"){const name=args[1].slice(SOURCE.length+1);if(!(name in files))throw Error("missing");return Buffer.from(files[name])}throw Error("command")});
+o(CLASSES.length===7&&new Set(CLASSES).size===7&&SOURCE.length===40);o(PHASES.length===9&&SINKS.length===16);
+const graph=buildSourceGraph(runner());e(graph.gitObject,SOURCE);e(graph.fileCount,8);e(graph.graphHash.length,64);e(graph.classes.length,7);o(graph.totalBytes>0);e(graph.providerDeploymentSinksResolved,false);o(graph.classes.every(x=>Object.isFrozen(x)));o(graph.classes.every(x=>x.consumers.every(y=>y.sha256.length===64)));o(graph.classes.every(x=>x.consumers.every(y=>!/^docs\//.test(y.path)&&!/^scripts\//.test(y.path))));
+const by=Object.fromEntries(graph.classes.map(x=>[x.class,x]));e(by.SUPABASE_SERVICE_ROLE_KEY.roots[0],"lib/env.ts");o(by.SUPABASE_SERVICE_ROLE_KEY.consumers.some(x=>x.path==="lib/supabase/admin.ts"));o(by.SUPABASE_SERVICE_ROLE_KEY.consumers.some(x=>x.path==="app/(portal)/portal/page.tsx"));o(by.SUPABASE_SERVICE_ROLE_KEY.consumers.some(x=>x.sinks.includes("admin-client")));o(by.SUPABASE_SERVICE_ROLE_KEY.consumers.some(x=>x.sinks.includes("portal")));e(by.CRON_SECRET.roots[0],"app/api/internal/evidence/reconcile/route.ts");e(by.STRIPE_SECRET_KEY.roots[0],"lib/stripe/env.ts");o(by.STRIPE_WEBHOOK_SECRET.consumers.some(x=>x.sinks.includes("stripe-webhook")));e(by.RAILWAY_API_TOKEN.roots[0],"lib/runtime/platform-status.ts");e(by.ENQUIRY_ABUSE_HMAC_SECRET.sourceExcluded,true);e(by.PUBLIC_ENQUIRY_SMTP_PASS.sourceExcluded,true);
+const manifest=buildFallbackManifest(graph,{excluded:true,paginationComplete:true});e(manifest.rows.length,7);o(manifest.rows.every(x=>x.reachability==="unknown-blocking"));o(manifest.rows.every(x=>x.providerEvidence===false));o(manifest.rows.every(x=>x.paginationComplete===false));o(manifest.rows.every((x,i)=>x.class===CLASSES[i]));o(manifest.rows.every(x=>Object.keys(x).length===14));e(validateManifest(manifest),manifest);e(classifyOutcome(manifest),"provider-authority-discovery-blocked-clean");b(()=>validateManifest({rows:manifest.rows}),"MANIFEST_REFUSED");b(()=>classifyOutcome(manifest.rows),"MANIFEST_REFUSED");
+const c=createController();e(c.snapshot().phase,"not-started");for(const phase of PHASES)c.advance(phase);e(c.snapshot().phase,"close");e(c.snapshot().ledger.length,9);e(c.snapshot().providerReads,0);e(c.snapshot().mutations,0);b(()=>c.advance("close"),"PHASE_ORDER_REFUSED");b(()=>createController().advance("source"),"PHASE_ORDER_REFUSED");b(()=>createController().advance("local",{token:"x"}),"PROJECTION_REFUSED");
+e(buildSourceGraph(runner({...base,"app/broken.ts":"import './missing'"})).unresolvedImports.length,1);b(()=>buildSourceGraph(runner({...base,"app/client.tsx":"'use client'; process.env.CRON_SECRET"})),"CLIENT_SECRET_BOUNDARY_REFUSED");const dynamic=buildSourceGraph(runner({...base,"lib/dynamic.ts":"const n='X'; process.env[n]"}));e(dynamic.classes[0].graphComplete,false);b(()=>buildSourceGraph(runner(Object.fromEntries(Array.from({length:5001},(_,i)=>[`app/f${i}.ts`,"export {}"])))),"SOURCE_BOUNDS_REFUSED");b(()=>buildSourceGraph(runner({...base,"lib/huge.ts":"x".repeat(524289)})),"SOURCE_BOUNDS_REFUSED");a.equal(n,45);console.log(`provider-authority-discovery-036O ${n}/45 PASS`);

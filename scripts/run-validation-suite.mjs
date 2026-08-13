@@ -61,22 +61,51 @@ export function commandPlan(mode, commands = platformCommands()) {
       ["biochemistry-recommendations", node, ["--experimental-strip-types", "scripts/validate-biochemistry-recommendations.ts"]],
       ["biochemistry-workflow-022", node, ["--experimental-strip-types", "scripts/test-biochemistry-workflow-022.mjs"]],
       ["biochemistry-authority-025", node, ["--experimental-strip-types", "scripts/test-biochemistry-authority-025.mjs"]],
+      ["biochemistry-scoring-025c", node, ["--experimental-strip-types", "--disable-warning=MODULE_TYPELESS_PACKAGE_JSON", "scripts/test-biochemistry-scoring-025C.mjs"]],
+      ["biochemistry-migration-025c", node, ["--experimental-strip-types", "scripts/test-biochemistry-migration-025C.mjs"]],
+      ["biochemistry-workflow-025c", node, ["--experimental-strip-types", "--disable-warning=MODULE_TYPELESS_PACKAGE_JSON", "scripts/test-biochemistry-workflow-025C.mjs"]],
       ["test-evidence-026", node, ["--experimental-strip-types", "scripts/test-test-evidence-026.mjs"]],
       ["biochemistry-voice-027", node, ["--experimental-strip-types", "scripts/test-biochemistry-voice-027.mjs"]],
       ["stable-workspace-028", node, ["--experimental-strip-types", "scripts/test-stable-workspace-028.mjs"]],
-      ["commerce-disabled-030", node, ["scripts/test-commerce-disabled-030.mjs"]],
+      ["biochemistry-trends-028b", node, ["--experimental-strip-types", "--disable-warning=MODULE_TYPELESS_PACKAGE_JSON", "scripts/test-biochemistry-trends-028B.mjs"]],
+      ["trainer-cockpit-035r", node, ["--experimental-strip-types", "--disable-warning=MODULE_TYPELESS_PACKAGE_JSON", "scripts/test-trainer-cockpit-035R.mjs"]],
+      ["commerce-disabled-030", node, ["--conditions=react-server", "--experimental-strip-types", "--disable-warning=MODULE_TYPELESS_PACKAGE_JSON", "scripts/test-commerce-disabled-030.mjs"]],
+      ["commercial-schedule-030b", node, ["--conditions=react-server", "--experimental-strip-types", "--disable-warning=MODULE_TYPELESS_PACKAGE_JSON", "scripts/test-commercial-schedule-030B.mjs"]],
       ["field-trial-controls-031", node, ["scripts/test-field-trial-controls-031.mjs"]],
       ["protected-preview-transport-031b", node, ["scripts/test-protected-preview-transport-031B.mjs"]],
       ["field-trial-controls-031c", node, ["scripts/test-field-trial-controls-031C.mjs"]],
+      ["operational-readiness-033b", node, ["scripts/test-operational-readiness-033B.mjs"]],
+      ["migration-ledger-033b", node, ["scripts/test-migration-ledger-033B.mjs"]],
     ],
     roles: [["role-tests", node, ["--experimental-strip-types", "--disable-warning=MODULE_TYPELESS_PACKAGE_JSON", "scripts/test-role-matrix-021.mjs"]]],
+    "prelaunch-036k": [
+      ["prelaunch-readiness-036k", node, ["scripts/test-prelaunch-readiness-036K.mjs"]],
+      ["prelaunch-provider-036k", node, ["scripts/test-prelaunch-provider-036K.mjs"]],
+    ],
+    "prelaunch-036m": [
+      ["prelaunch-recovery-036m", node, ["scripts/test-prelaunch-recovery-036M.mjs"]],
+      ["prelaunch-provider-036m", node, ["scripts/test-prelaunch-provider-036M.mjs"]],
+      ["prelaunch-identity-036m", node, ["scripts/test-prelaunch-identity-036M.mjs"]],
+      ["prelaunch-trainer-036m", node, ["scripts/test-prelaunch-trainer-036M.mjs"]],
+      ["supabase-api-key-compatibility-036m", node, ["--experimental-strip-types", "--disable-warning=MODULE_TYPELESS_PACKAGE_JSON", "scripts/test-supabase-api-key-compatibility-036M.mjs"]],
+    ],
+    "prelaunch-036n": [
+      ["native-closure-036n", node, ["scripts/test-native-closure-036N.mjs"]],
+      ["native-provider-036n", node, ["scripts/test-native-provider-036N.mjs"]],
+      ["native-transport-036n", node, ["scripts/test-native-transport-036N.mjs"]],
+    ],
+    "provider-authority-036o": [
+      ["provider-authority-discovery-036o", node, ["scripts/test-provider-authority-discovery-036O.mjs"]],
+      ["provider-authority-projections-036o", node, ["scripts/test-provider-authority-projections-036O.mjs"]],
+      ["provider-authority-transport-036o", node, ["scripts/test-provider-authority-transport-036O.mjs"]],
+    ],
     "supabase-self": SUPABASE_SELF_TESTS.map((path) => [`self:${path}`, node, [path]]),
     static: [
       ["encoding", node, ["scripts/validate-text-encoding.mjs"]],
       ...STATIC_VALIDATORS.map((path) => [`static:${path}`, ps, ["-NoProfile", "-ExecutionPolicy", "Bypass", "-File", path]]),
     ],
   };
-  const components = [...groups.json, ...groups.domain, ...groups.roles, ...groups["supabase-self"], ...groups.static];
+  const components = [...groups.json, ...groups.domain, ...groups.roles, ...groups["prelaunch-036n"], ...groups["provider-authority-036o"], ...groups["supabase-self"], ...groups.static];
   const quality = [
     ["lint", npmCommand, [...npmPrefix, "run", "lint"]],
     ["typecheck", npmCommand, [...npmPrefix, "run", "typecheck"]],

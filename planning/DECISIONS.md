@@ -5,6 +5,35 @@ Record durable decisions future sprints must respect.
 ---
 
 ## Decision Log
+| 2026-08-13 | Close Sprint 036O as `provider-authority-discovery-blocked-clean`; target not met. | Exact focused 120/120 plus retained 1483/1483 equals 1603/1603, fresh critical inspection 3/3 passed, the bounded accepted-object graph recorded one missing local import, and no safe composed provider reader was available. All seven 14-field rows remain unknown-blocking; provider reads/actions/mutations/residue/trainer actions are 0/0/0/0/0. | Preserve accepted Sprint 036L unchanged; do not infer credential, identity, trainer, launch or Product Done authority. Require fresh corrective Architect authority for the missing edge, executable protected five-provider reader and independent lifecycle/predecessor oracles before any external action. |
+| 2026-08-12 | Close Sprint 021AI as `managed-role-journeys-and-owner-experience-local-complete-clean`. | Existing-rule Administrator/Trainer managed access and the Owner read-only result/trend journey passed required Product `376/376`, geometry `13/13`, captures `5/5`, exact responsive gates, quality/build and final critical inspection decision 3/3 after `PLAN-001/002` and `INSPECT-001..004` were resolved. | Preserve existing RLS/roles, exact already-scoped Vet/Stable Staff authority, Owner read-only neutrality and generic denial. Keep O07, P48, Production/remote activation, representative acceptance and Product-wide Done open; advance to Sprint 030B. |
+
+
+| 2026-08-11 | Close Sprint 035R as `trainer-daily-cockpit-and-guided-mobile-review-complete-clean`. | The all-accessible-horse cockpit, one derived action, horse-aware review, 97 focused assertions, guided iPhone observation and final critical inspection 3/3 pass after three resolved findings. | Preserve the 6-minute result as guided/no-submit only; do not claim under-60 or independent trainer acceptance. Keep clinical content unavailable, leave Sprint 025C local-only, and decide 025D authority before otherwise advancing to 028B. |
+
+| 2026-08-10 | Close Sprint 025C as `four-loss-scoring-source-and-versioned-migration-local-complete-clean`. | Named product/veterinary decisions and the accepted v3 workbook support four-loss numeric scoring. Source 12/12, focused 44/44, retained gates and final critical inspection passed after all four findings were resolved. | Treat v2 numeric scoring and migration 0024 as locally proven only. Preserve v1/Urea history, keep classifications/recommendations unavailable, require separate remote activation authority, move next to 035R and reserve 025D for remaining clinical-content authority. |
+
+| 2026-08-07 | Close Sprint 029W as `final-readiness-blocked-material`, park public enquiry, and end the 029 transport-recovery sequence. | The isolated projector/controller passed 153/153 and final critical inspection, but the final reviewed read-only Inventory retry returned fixed `INVENTORY_PROJECTOR_REFUSED` before an inventory was accepted. Zero external effects/residue occurred. | Do not create another 029 transport suffix or infer readiness. Keep 029R conditional/not ready and advance current Architect work to 025B domain authority, followed by 035R trainer-visible workflow. |
+
+| 2026-08-07 | Make Sprint 029W the single final public-enquiry transport-readiness attempt, then advance to 025B and 035R regardless of outcome. | The user accepted the recommendation to cap infrastructure work. Value-free discovery proved a safe child projection is feasible: nine pages/168 rows, three known row shapes, protected `creator`/`meta` contained, and the missing list `id` explained by installed CLI 50.42.0 source. | 029W may perform one guarded no-send attempt under exact safety/compensation gates. A clean non-ready result parks public enquiry and creates no further transport-recovery suffix; a material result stops for safety only. Public activation remains outside 029W. |
+
+| 2026-08-07 | Close Sprint 029V as `agent-envelope-alias-isolation-blocked-clean` at the first incompatible full-inventory shape. | The exact Vercel 50.42.0 controller and 110/110 focused proof passed; final critical inspection decision 3/3 passed after three resolved findings. Read-only Baseline proved accepted 036L five/five and zero 029V resources, but the next full Inventory failed closed as sanitized `VERCEL_JSON_REFUSED`, so stable empty active-queue proof was unavailable before freeze. | Preserve the unchanged dashboard setting and accepted routing. No credential, deployment, request, email, enquiry, data, activation or alias authority survives closeout. A future Architect may perform read-only JSON-shape discovery and must not weaken protected-field refusal. |
+
+| 2026-08-07 | Close Sprint 029U as `operator-isolated-readiness-blocked-clean`, preserve the local kill switch, and grant no readiness retry. | 1004/1004 local proof and both critical review phases passed. The one bounded deployment encountered Vercel JSON drift and automatically moved three stable aliases despite `--skip-domain`; candidate adoption and all request gates were skipped. Compensation removed the seven owned rows, fixed credential and candidate; the operator deleted the exact key; fresh approval restored only the three displaced aliases. | Treat accepted Sprint 036L five/five and zero Sprint-owned residue as current truth. Keep public enquiry unavailable and 029R conditional/not ready. Any corrective 029V requires new Architect discovery, Pack and human `go`; do not infer key/configuration/deployment/request/email/enquiry/activation/alias authority. |
+
+| 2026-08-06 | Close Sprint 029T as `provider-copy-prevalidation-blocked-clean`, not ready or live. | Inspection decision 2/3 passed after local resolution of `INSPECT-001`, with no blockers or advisories. Final proof is 932/932, scan `0/17`, manifest `17/17`, the clean recorded Baseline and a passing final local readback with zero external calls. Copy count `0` stopped work before key creation, and the earlier browser identity incident exposed no secret/token and caused no mutation. | Keep public enquiry unavailable, retained Preview inert/unaliased and 029R conditional/not ready. Require a new Fly and follow-up sprint for any later readiness attempt. No key, configuration, credential, deployment, request, email, data or alias mutation is authorized or implied. |
+
+| 2026-08-06 | Resolve Sprint 029T inspection decision 1/3 stable finding `INSPECT-001` locally and retain inspection-pending status. | The command-specific parser admitted unknown row fields and classified any non-Production inspect target as Preview. Exact installed CLI mappers establish finite top-level and row fields plus known deployment targets. | Environment, alias, list, inspect and deploy projections now reject unknown fields; custom targets such as `staging` fail closed; six shape and three target refusal fixtures pass. No external action occurred. Decision 2/3 must judge the correction. |
+
+| 2026-08-06 | Prepare Sprint 029T fallback `provider-copy-prevalidation-blocked-clean` for fresh inspection; do not claim readiness or final closure. | Exact command/projection proof and the final read-only Baseline passed. An early signed-in snapshot displayed protected account identity without secret/token output or mutation. The later fixed identity-blind projection returned Copy count `0`, so the Pack stopped before key creation. | Retain the local safety implementation and clean baseline evidence. Run no more 029T browser/provider/credential/deployment/request actions. Keep public enquiry unavailable, 029R conditional/not ready, accepted 036L live five/five and the retained 029S Preview inert. Fresh inspection must judge the fallback before final closeout. |
+
+| 2026-08-06 | Close Sprint 029S as `preflight-origin-provider-projection-and-readiness-recovery-blocked-clean`, not ready or done. | Origin hardening, identity-blind projection and 744/744 local proof passed. A read-only helper used `$Args` as its formal parameter, lost the intended Vercel inspection arguments and ran bare Vercel, producing one unintended Ready Preview. It is non-Production, zero-alias and inert. Builder stopped without retry; no target credential, configuration, authenticated no-send request, email, data, migration or alias effect followed. | Retain the accepted origin/projector foundation and the inert Preview evidence. Define clean only as zero new Resend credential, dedicated/temporary configuration, local live credential, Production target and live-routing residue. Plan Sprint 029T as discovery/future-Pack work only, with no Pack yet, to remove the helper hazard, re-establish zero-resource ceilings and define a new one-attempt boundary before conditional 029R. |
+
+| 2026-08-06 | Close Sprint 029Q as `dedicated-preflight-auth-and-smtp-readiness-recovery-blocked-clean`, not ready or done. | Independent local authentication/controller implementation passed 616/616 and full gates. Provider baseline was established, but a broad signed-in snapshot rendered protected account identity/address in tool output, so Builder stopped before every mutation. Final dedicated and temporary rows are zero, live credential is absent, browser tabs are zero and five aliases remain on accepted 036L. | Retain the local implementation but grant no retry authority. Require a new approved follow-up/Fly with bounded identity-blind provider projection and `INSPECT-001` origin hardening before any key, binding, credential, deployment or request. Keep 029R conditional/not ready and never request secrets through chat. |
+
+| 2026-08-06 | Maintain `delivery_road_map.md` as the detailed path to canonical Done and update it at every sprint close. | The user requested one durable delivery sequence and ongoing closeout maintenance; the compact roadmap alone did not schedule the remaining product, authority, field-acceptance and operational obligations required by the Final Product Acceptance Matrix. | `planning/ROADMAP.md` remains the compact sequence, while `delivery_road_map.md` records detailed dependencies, owners, acceptance coverage and revision history. Every Builder closeout must update and reconcile both without silently lowering Done. |
+
+| 2026-08-06 | Close Sprint 029P as `resend-smtp-readiness-recovery-blocked-clean`, not ready or done. | Dedicated-only local implementation passed 488/488 and all mapped gates, but Vercel runtime supplied only `3/11` required bindings and the existing Sensitive internal-auth value is non-readable. Builder stopped before any key, binding or deployment creation. Metadata-only `.env.example` contamination was repaired from clean HEAD without inspecting a value or line; possible prior OneDrive/version-history exposure remains. | Preserve zero external mutation and accepted 036L routing. Require future authoritative credential rotation for the residual and a separately planned dedicated temporary preflight-auth design using encrypted process-only storage, never shared CRON or plaintext. Keep 029Q conditional and unauthorized. |
 
 | 2026-08-06 | Close Sprint 029O as `public-enquiry-corrected-inert-rolled-back-clean`, not done or live accepted. | Exact migration 0023, privacy retention, validation, service-only proof, candidate safety and aggregate zero passed, but authenticated SMTP no-send preflight returned non-ready before any public request or notification. The one candidate stayed unaliased and all five aliases stayed on accepted 036L. | Retain migration 0023 and its database cleanup job, keep both 029N and 029O candidates inert, prohibit a second deployment/retry under 029O, and require a future Architect decision with an authoritative SMTP repair source before public enquiry activation. |
 
@@ -216,3 +245,103 @@ Use the existing Vercel automation bypass only in protected process memory; do n
 - Do not create a replacement credential or retry the lifecycle in Sprint 036D. Do not begin retained-pilot, Vercel, deployment, alias or Production work from this blocked checkpoint.
 - Record the ordinary-acknowledgement-before-hidden-input sequence as a human-factors plan defect: a beginner entered the credential at the wrong prompt and crossed the protected-output boundary.
 - Recommend a narrow Sprint 036E for an Architect-defined, beginner-readable protected-interaction contract. The recommendation does not authorize implementation, credential handling or any live/external action.
+# Sprint 025B decisions — 2026-08-07
+
+- Close Sprint 025B at exact outcome `versioned-domain-authority-package-owner-input-required-clean`.
+- Package `sprint-025B-authority-v1` remains `owner-input-required` and is not accepted product/domain or veterinary authority.
+- Record the direction from Phillip Rankin not to use Average pH as a material conflict with the active `L_pH` score contract, not as implementation authority. No runtime or formula changed; a fresh Architect plan and a veterinary decision from Randell Rankin must define raw-pH treatment, replacement input and revised weights before Sprint 025C can proceed.
+- Established software facts remain active; all missing measurement, device, threshold, terminology, Table of Knowledge, disclaimer and escalation decisions remain unavailable.
+- `Precision Performance Done.docx` retains its limited authority as the expanded Done source under the existing decision record, but it and the other candidate client sources do not establish named, dated Sprint 025B approval.
+- Sprint 025C remains blocked. Final Product Acceptance Matrix IDs changed: none and the matrix file remains unchanged.
+- Sprint 035R is now closed. Public enquiry remains parked and Sprint 029R remains conditional/not ready.
+- Critical plan decision 3/3 and corrective inspection decision 2/3 passed after `PLAN-001` and `INSPECT-001` through `INSPECT-003` were resolved. No residual risk was accepted.
+- Staged, external mutation and external residue counts are `0/0/0`; no commit, push, deployment or external action occurred.
+
+
+# Sprint 035R Architect decisions — 2026-08-11
+
+- Use iPhone XS Max portrait at 414 × 896 CSS pixels as the primary mobile target.
+- Use the user-nominated reviewer for a guided no-submit observation from cockpit action to complete review.
+- Treat it as one usability observation only, not independent trainer acceptance, Sprint 035S completion or a public/universal under-60-second claim.
+- Use Australia/Brisbane as the explicit “today” and AM/PM basis; defaults remain editable and deterministic.
+- Keep semantics operational and clinically neutral; add no thresholds, classifications, recommendations, treatment, urgency or race-readiness behavior.
+- No migration application, deployment, credential action, email, enquiry, alias movement, commit or push is part of 035R.
+- Close 035R as `trainer-daily-cockpit-and-guided-mobile-review-complete-clean` after final critical inspection 3/3 passes with `INSPECT-001` through `INSPECT-003` resolved.
+- Preserve all accessible horses and exactly one derived card action; any future performance redesign must not restore a silent cap or weaken fail-closed permission behavior.
+- Record the guided result as 6 minutes to no-submit Review with no reported friction; P02, O01 and L06 remain not-proven.
+- Final staged/external/residue counts are `0/0/0`; no commit, push, deployment, migration, credential, email, enquiry or alias action occurred.
+
+# Sprint 028B Builder decisions — 2026-08-11
+
+- Close 028B as `longitudinal-trends-history-and-saved-views-local-complete-clean` after fresh critical inspection passed with no findings.
+- Expose no count or point until two complete independently paged passes match exact count, stable order and every selected Product field.
+- Preserve stored score snapshots, create gaps for missing/blocked/unscored compatibility values and split score lines across formula/source changes; never recalculate history.
+- Permit only compatible combined score or pH series; keep Carbohydrate and Conductivity separate and add no normalization, dual axis or clinical threshold.
+- Keep saved views configuration-only, derive ownership from authenticated server context, enforce active-user self-only RLS with no administrator bypass and serialize default changes through a database user-row lock.
+- Report proof honestly as `209` freshly executed plus `12` prior accepted source-integrity assertions, exactly `221` evidence-covered; the actual concurrency gate is additional and uncounted.
+- Correct acceptance P11 to `not-proven`, pass local P37/P38/P40/P41/P42, strengthen O06 with its independent-field limitation and keep full P39, P12, P43, P44, O04 and Product-wide Done open.
+- Keep migrations 0024/0025 local-only. No deployment, credential, email, enquiry, alias, real-data, stage, commit or push action is authorized by this closeout.
+- Advance next to 025D only when complete named clinical-content authority exists; otherwise preserve the fail-closed local boundary.
+
+# Sprint 025D Builder decisions — 2026-08-11
+
+- Close 025D as `numeric-results-presented-guidance-deferred-local-complete-clean`.
+- Present approved numeric readings, derived conductivity, Hydration Score, the display-only Biochemistry Trend Score and provenance without visible classifications, recommendations or today guidance.
+- Treat P06, P16, P18, P20, P22, P43, P44, P49 and O05 as `deferred-by-approved-scope`; preserve P19/P21/P23 and keep P46/O07 open.
+- Preserve the versioned future threshold/recommendation extension byte-for-byte and inactive; do not activate fixture content or infer clinical authority.
+- Accept the retained 025C UI-test correction and evidence-harness corrections as deterministic in-scope proof maintenance, not Product scope expansion.
+- Record `124/124` counted assertions plus role/access PASS, two exact complete visuals, separate 200%-equivalent geometry and critical inspection PASS.
+- Keep migrations 0024/0025 local-only. No deployment, credential, email, enquiry, alias, real-data, stage, commit or push action occurred.
+- Advance next to Sprint 027C. Final staged/external/residue counts are `0/0/0`.
+
+## 2026-08-11 - Private photos and PDFs deferred to MVP 2
+
+- The user approved presenting current-MVP data without private photos or PDFs.
+- Record P04, P24, P25, P36 and O03 as deferred to approved MVP 2 scope; keep composite P47 open for its remaining non-upload gaps.
+- Preserve Sprint 023Q as the future MVP 2 private-evidence placeholder, not the next current-MVP outcome.
+- Require a future authority-complete Architect Pack before any scanner/sanitiser, Storage, upload, lifecycle, privacy, denial, cleanup or recovery work.
+- Request no private photos or PDFs for current-MVP planning, implementation or acceptance.
+
+# Sprint 027C Builder decisions - 2026-08-11
+
+- Close 027C as `voice-fallback-done-closure-complete-clean` with no Product-source change.
+- Accept always-available typed editable notes as the current-MVP launch fallback; optional device-keyboard dictation may enter text into the same field and every non-empty note requires review.
+- Keep application-controlled microphone/audio/transcription unavailable and `deferred-by-approved-scope`; make no guarantee about device dictation availability, privacy, region, offline behavior, security or accuracy.
+- Set O02 to `passed-with-accepted-limitation`, keep P03 deferred for application voice, and keep P47 `not-proven` for its other full-contract gaps.
+- Preserve Sprint 023Q/private photos/PDFs as future MVP 2 scope.
+- Record `34 + 64 = 98`, four exact synthetic renders, unchanged Product/contract hashes and final staged/external/residue counts `0/0/0`.
+- Advance the current-MVP road to Sprint 021AI; fresh Architect authority is required before its implementation.
+# Sprint 030B Builder decisions - 2026-08-12
+
+- Close 030B as `commercial-schedule-approved-commerce-disabled-safe-clean`.
+- Accept `030B-consultation-led-v1` as the owner-approved schedule: the BE Kit and Onboarding Package is `AUD $5,500 including GST`; destination-based freight and complete total are confirmed in the accepted written quote.
+- Keep `commerce-disabled-safe`: approval creates no checkout, payment, order, subscription, reconciliation, onboarding or automatic stable-trial entitlement.
+- Preserve existing orders on original terms and all legacy/seeded prices as read-only conflict evidence.
+- Keep L04 `deferred-by-approved-scope`; advance L09 only to `passed-with-accepted-limitation` for the local schedule. Named operational ownership, legal/customer acceptance and Production remain open.
+- Accept the inspected broad-suite substitutes: exact 158/158 plus type/lint/JSON/build/render/privacy/scope proof. Do not represent the historical migration-ledger or missing-playwright retained stops as passing.
+- Record retained `test-public-relaunch-032.mjs` as stale/out-of-scope against the approved Pricing wording; correct it only under later authority.
+- Advance next to Sprint 033B; about five current-MVP outcomes remain. Final staged/external/residue is `0/0/0`.
+| 2026-08-12 | Close Sprint 033B as `operational-ownership-incident-and-logical-restoration-local-complete-clean`. | Named owners, 392/392 counted proof, standalone 17/17 synthetic same-process logical rehearsal, resolved INSPECT-001..006 and final human-authorized readback passed. | Strengthen O08/O10/L08 locally; retain L04/L09 limits and all provider-native/Production/private MFA/legal/customer/representative/036K/Done gaps; advance to 036K. |
+
+## Sprint 036K Builder decisions - 2026-08-12
+
+- Close Sprint 036K as `prelaunch-readiness-blocked-clean`, not target completion, live readiness or Product Done.
+- Accept the inspected local controller/evidence result: readiness `260/260` plus provider `36/36` equals focused `296/296`, retained `647/647` and total `943/943`.
+- Retain all seven credential classes as `blocked-retained` and both excluded identities as `unresolved-retained-blocking`; preserve the retained synthetic trainer/eight-row graph unchanged.
+- Record provider/login/read/write, identity/session/application/Storage/fixture, trainer/message/verification and deploy/alias actions as zero; final staged/unauthorized-external/residue is `0/0/0`.
+- Preserve Sprint 036L as the last durable live authority; do not infer fresh provider compatibility from local proof.
+- Advance next to corrective suffix 036M for fresh Architect discovery. Keep about four current-MVP outcomes because 036M replaces the uncompleted 036K target.
+
+## Sprint 036M Builder decisions - 2026-08-13
+
+- Close `prelaunch-recovery-blocked-clean`, not launch readiness or target completion.
+- Accept `360 + 943 = 1303` and repair-diff PASS for local controls only.
+- Do not start ProtectedWindow while native consumer/old-deployment closure is unavailable; retain six non-Supabase classes blocked and trainer path closed.
+- Preserve both excluded identities, prior graph and accepted 036L live state unchanged; record exact `0/0/0` and no commit/push/PR.
+
+## Sprint 036N Builder decisions - 2026-08-13
+
+- Close `native-closure-blocked-clean`; target, provider inventory, credential closure and deployment retirement are not complete.
+- Accept focused `180/180`, retained `1303/1303`, total `1483/1483`, and final same-Architect diff PASS.
+- Remove every live/protected provider entrypoint because current native adapters and predecessor oracles are not safely executable.
+- Preserve accepted Sprint 036L and record external/private/mutation/residue `0/0/0/0`; no next sprint is planned.

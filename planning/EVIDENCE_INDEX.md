@@ -2,6 +2,61 @@
 
 ## Current governing evidence
 
+- `planning/reviews/030B-commercial-trial-onboarding-and-support-authority.md` - critical PLAN-001..003 and inspection 1/3 PASS, AC-01 through AC-40, substitutions and preserved limitations.
+- `evidence/professional-engineering/030B-commercial-trial-onboarding-and-support-authority/SPRINT-030B-REPORT.md` - closed local commercial-authority outcome, exact 158/158 and no-user-action statement.
+- `evidence/professional-engineering/030B-commercial-trial-onboarding-and-support-authority/evidence.md` - authority/refusal/privacy, geometry, visual hashes, quality, substitute and 0/0/0 ledgers.
+- `evidence/professional-engineering/030B-commercial-trial-onboarding-and-support-authority/visuals/manifest.json` and `geometry.json` - five exact synthetic images and thirteen effective-client/200%/320 runs.
+- Sprint 030B keeps L04 deferred, advances L09 only with local-schedule limitation and leaves operations/legal/customer/Production/Product-wide Done open.
+
+- `planning/reviews/021AI-managed-role-journeys-and-owner-experience-completion.md` - critical plan/inspection ledgers, AC-01 through AC-40 PASS and preserved O07/P48/Production/Product-wide limitations.
+- `evidence/professional-engineering/021AI-managed-role-journeys-and-owner-experience-completion/SPRINT-021AI-REPORT.md` - closed local Product outcome, exact 376/376 arithmetic, acceptance impact, safety and no-user-action statement.
+- `evidence/professional-engineering/021AI-managed-role-journeys-and-owner-experience-completion/evidence.md` - assertion, access/privacy, geometry, substitute-proof and final 0/0/0 ledgers.
+- `evidence/professional-engineering/021AI-managed-role-journeys-and-owner-experience-completion/visuals/manifest.json` and `geometry.json` - five exact synthetic images and thirteen effective-client/200%/320 runs.
+- Sprint 021AI preserves existing RLS/roles, completes local managed-access and Owner read-only journeys, and leaves O07, P48, remote activation, Production acceptance and Product-wide Done open.
+
+- `evidence/professional-engineering/027C-voice-fallback-done-closure/SPRINT-027C-REPORT.md` - closed current-MVP voice-fallback outcome, limitations, safety and no-user-action statement.
+- `planning/reviews/027C-voice-fallback-done-closure.md` - AC-01 through AC-25 PASS for the retained typed/device fallback and no-Product-change boundary.
+- `evidence/professional-engineering/027C-voice-fallback-done-closure/evidence.md` - exact 98-assertion arithmetic, read-only hashes, validation, rendered proof and `0/0/0` closeout.
+- `evidence/professional-engineering/027C-voice-fallback-done-closure/visuals/manifest.json` - four exact synthetic PNG hashes/dimensions plus geometry; no audio, private data or submission.
+- Sprint 027C sets O02 to `passed-with-accepted-limitation`, keeps P03 deferred for application voice and leaves P47 open for its other contract gaps. Sprint 023Q remains MVP 2.
+
+- `evidence/professional-engineering/025D-numeric-results-with-deferred-guidance/SPRINT-025D-REPORT.md` - closed numeric-presentation/deferred-guidance outcome, proof, limitations, next work and no-user-action statement.
+- `planning/reviews/025D-numeric-results-with-deferred-guidance.md` - fresh critical inspection, AC-01 through AC-21 reconciliation and resolved in-scope evidence corrections.
+- `evidence/professional-engineering/025D-numeric-results-with-deferred-guidance/evidence.md` - 124/124 arithmetic, exact visual hashes, responsive/DPR2 geometry, validation and final `0/0/0` safety.
+
+- `evidence/professional-engineering/028B-longitudinal-trends-history-and-saved-views/SPRINT-028B-REPORT.md` - closed local Product/schema outcome, exact `209 fresh + 12 prior accepted = 221 evidence-covered`, limitations and no-user-action statement.
+- `planning/reviews/028B-longitudinal-trends-history-and-saved-views.md` - passed critical plan/implementation review, AC-01 through AC-33 reconciliation and preserved Product-wide limitations.
+- `evidence/professional-engineering/028B-longitudinal-trends-history-and-saved-views/evidence.md` - four visual hashes, two-pass 1,001-row proof, 24/24 pgTAP, two-session serialization, responsive/accessibility geometry and final `0/0/0` safety.
+- `evidence/professional-engineering/035R-trainer-daily-cockpit-and-timed-mobile-workflow/SPRINT-035R-REPORT.md` - closed local/guided outcome, 97 focused assertions, 6-minute iPhone limitation, exact safety ledger and no-user-action statement.
+- `planning/reviews/035R-trainer-daily-cockpit-and-timed-mobile-workflow.md` - critical plan/inspection ledgers, all three resolved findings and final decision 3/3 PASS.
+- `evidence/professional-engineering/035R-trainer-daily-cockpit-and-timed-mobile-workflow/evidence.md` - five visual hashes, geometry/Axe proof, guided fixture/timing and final `0/0/0` cleanup.
+- `planning/sprints/025C-four-loss-scoring-source-and-versioned-migration/acceptance.md` — AC-01 through AC-39 closed; source `12/12`, focused `44/44`, final critical inspection PASS and exact local-only limitation.
+- `planning/reviews/025C-four-loss-scoring-source-and-versioned-migration.md` — resolved plan/inspection ledgers, PostgreSQL NULL correction and proportional static-proof substitution.
+- `evidence/professional-engineering/025C-four-loss-scoring-source-and-versioned-migration/SPRINT-025C-REPORT.md` — plain-English outcome, proof, safety boundary, next work and no-user-action statement.
+- `docs/BIOCHEMISTRY_SCORING_025C.md` — accepted v2 formula/source contract, `0.0..15.0` Carbohydrate boundary, conductivity transformation and fail-closed content boundary.
+- `planning/sprints/025B-versioned-domain-authority-package/acceptance.md` — retained authority provenance; remaining clinical content moves to 025D.
+- Sprint 028B passed local P37, P38, P40, P41 and P42, strengthened O06 and corrected P11. Sprint 025D later set P43/P44 and related guidance rows to `deferred-by-approved-scope`; full P39, P12, O04 and Product-wide Done remain open. Migrations 0024/0025 remain local-only.
+- `planning/sprints/029V-vercel-agent-envelope-and-alias-isolation-recovery/` - applied critical authority and truthful pre-freeze blocked-clean closeout for exact CLI envelope repair, value-free isolation controls and one bounded readiness flight.
+- `planning/sprints/029V-vercel-agent-envelope-and-alias-isolation-recovery/acceptance.md` - exact A001-A040 disposition; 110/110 focused proof; proportional retained proof; final inspection decision 3/3 PASS; clean Baseline; full Inventory `VERCEL_JSON_REFUSED`; zero setting, credential, deployment, request, email, enquiry, data, activation or alias effect; zero acceptance-matrix changes.
+- `evidence/professional-engineering/029V-vercel-agent-envelope-and-alias-isolation-recovery/SPRINT-029V-REPORT.md` - plain-English evidence, first failing gate, mutation/request ledger, review corrections, archive hashes and no-user-action statement.
+- `planning/archive/STATE-pre-029V-close.md` and `planning/archive/ARCHITECT_BRIEFING-pre-029V-close.md` - byte-identical SHA-256-verified pre-close boot-file archives.
+- `planning/sprints/029U-operator-isolated-guarded-smtp-readiness-recovery/` - applied critical authority and truthful blocked-clean closeout for the fail-closed public gate, operator-isolated transfer, one bounded deployment attempt, exact compensation and approved alias restoration.
+- `planning/sprints/029U-operator-isolated-guarded-smtp-readiness-recovery/acceptance.md` - exact A001-A036 disposition; 1004/1004 local proof; plan and inspection decision 3/3 PASS; resolved `PLAN-001` and `INSPECT-001` through `INSPECT-003`; Vercel JSON refusal; one removed candidate; three automatic alias moves and approved restoration; exact key deletion confirmation; final clean Baseline and zero acceptance-matrix changes.
+- `planning/archive/STATE-pre-029U-close.md` and `planning/archive/ARCHITECT_BRIEFING-pre-029U-close.md` - byte-identical SHA-256-verified pre-close boot-file archives.
+
+- `planning/sprints/029T-readiness-boundary-recovery-after-inert-preview/` - closed critical sprint for exact command safety, bounded projections, the provider Copy prevalidation stop and clean read-only baseline; inspection decision 2/3 passed after resolved `INSPECT-001`.
+- `planning/sprints/029T-readiness-boundary-recovery-after-inert-preview/acceptance.md` - exact proven set A001-A015, A017, A029, A031-A034; 932/932 combined proof; decision 1/3 stable `INSPECT-001` and its exact JSON shape/target refusal correction; decision 2/3 pass; protected scan `0/17`; manifest `17/17`; early protected-identity incident recorded without detail; Copy count `0`; zero target resources and unchanged routing.
+- `docs/PUBLIC_ENQUIRY_READINESS_BOUNDARY_RECOVERY_029T.md` - exact command, projection, baseline, compensation and safe-evidence operating boundary.
+
+- `planning/sprints/029S-preflight-origin-hardening-bounded-provider-projection-and-readiness-recovery/` - applied critical authority and truthful blocked-clean closeout for accepted origin hardening, identity-blind provider projection, the stopped readiness attempt and retained inert Preview.
+- `planning/sprints/029S-preflight-origin-hardening-bounded-provider-projection-and-readiness-recovery/acceptance.md` - exact A001-A032 disposition, 744/744 local proof, seven-file clean scan/manifest, plan decision 2/3, inspection decision 1/3, narrow clean fallback, one retained non-Production zero-alias Preview and zero target credential/configuration/request/live-routing residue.
+
+- `planning/sprints/029Q-dedicated-preflight-auth-and-smtp-readiness-recovery/` - applied critical authority and truthful blocked-clean closeout for independent bounded preflight authentication, protected provider stop, zero-resource containment and conditional future recovery.
+- `planning/sprints/029Q-dedicated-preflight-auth-and-smtp-readiness-recovery/acceptance.md` - exact A001-A030 disposition, 616/616 local proof, plan decision 3/3, inspection fallback decision 1/3, protected-output failure, zero resource/browser residue and deferred `INSPECT-001`.
+
+- `planning/sprints/029P-resend-smtp-readiness-recovery/` - applied critical authority for dedicated-only SMTP configuration, protected credential transfer, one candidate/no-send proof, clean compensation and zero alias/data effect.
+- `planning/sprints/029P-resend-smtp-readiness-recovery/acceptance.md` - 488/488 local proof, sanitized runtime `3/11` authentication stop, zero new provider/Vercel/deployment resources, unchanged five generic rows, 029N/029O unaliased, five aliases on accepted 036L, resolved `PLAN-001/002/003` and `INSPECT-001`, and `resend-smtp-readiness-recovery-blocked-clean` closeout.
+
 - `planning/sprints/036L-privacy-safe-negative-path-production-trainer-acceptance/` - applied critical authority for the corrected privacy-safe verifier, exact three-binding transaction, exact retained identity/graph, one candidate, five-alias cutover, complete autonomous session and compensation.
 - `planning/sprints/036L-privacy-safe-negative-path-production-trainer-acceptance/acceptance.md` - 307/307 counted assertions, exact checkpoint/candidate/binding/identity/graph evidence, five/five live routing, complete dashboard/horse/workflow/wrong-horse/sign-out/anonymous journey, empty plan/inspection ledgers and `negative-path-trainer-access-live-accepted-clean` closeout.
 
@@ -104,3 +159,23 @@
 ## Historical evidence
 
 Historical packs, sprint files and reviews remain in place and retain their original outcomes. Their presence is not evidence of application or completion; use the lifecycle ledger and accepted lineage above. Adverse security, migration, cleanup and production evidence remains preserved.
+- `planning/reviews/033B-operational-ownership-incident-and-restoration-readiness.md` - PLAN and INSPECT-001..006 history, AC-01 through AC-40 PASS and final human-authorized readback.
+- `evidence/professional-engineering/033B-operational-ownership-incident-and-restoration-readiness/SPRINT-033B-REPORT.md` - closed local outcome, 392/392, standalone 17/17 and exact no-user-action ending.
+- `evidence/professional-engineering/033B-operational-ownership-incident-and-restoration-readiness/evidence.md` and `rehearsal-summary.json` - counted, adversarial, cleanup, limitations and quality evidence.
+
+- `planning/sprints/036K-pre-public-launch-credential-rotation-and-real-trainer-delivery-rehearsal/acceptance.md` - annotated target/fallback closeout for AC-01 through AC-40.
+- `planning/reviews/036K-pre-public-launch-credential-rotation-and-real-trainer-delivery-rehearsal.md` - complete plan/inspection history, final PASS and blocked-clean limitations.
+- `evidence/professional-engineering/036K-pre-public-launch-credential-rotation-and-real-trainer-delivery-rehearsal/SPRINT-036K-REPORT.md` - exact outcome, 943/943 proof and final no-user-action ending.
+- `evidence/professional-engineering/036K-pre-public-launch-credential-rotation-and-real-trainer-delivery-rehearsal/evidence.md` and `external-ledger.json` - sanitized counted evidence and exact zero-action ledger.
+
+- `planning/sprints/036M-corrective-prelaunch-readiness-and-real-delivery-recovery/acceptance.md` - AC-01..40 passed/fallback/not-started closeout and `1303/1303` arithmetic.
+- `planning/reviews/036M-corrective-prelaunch-readiness-and-real-delivery-recovery.md` - same-Architect repair-diff PASS, native closure blocker and exact zero-action decision.
+- `evidence/professional-engineering/036M-corrective-prelaunch-readiness-and-real-delivery-recovery/` - report, evidence, local-readiness and external ledgers with `0/0/0` truth.
+
+- `planning/sprints/036N-native-consumer-and-credential-readback-recovery/acceptance.md` - AC-01..40 blocked-clean closeout.
+- `planning/reviews/036N-native-consumer-and-credential-readback-recovery.md` - PLAN-001..005, INSPECT-001..004 and final same-Architect PASS.
+- `evidence/professional-engineering/036N-native-consumer-and-credential-readback-recovery/` - report, evidence and exact `0/0/0/0` external ledger.
+
+- `planning/sprints/036O-provider-authority-and-trainer-path-discovery/acceptance.md` - AC-01..40 truthful blocked-clean closeout authority.
+- `planning/reviews/036O-provider-authority-and-trainer-path-discovery.md` - plan/inspection repair history, final fresh inspection 3/3 PASS and grouped AC disposition.
+- `evidence/professional-engineering/036O-provider-authority-and-trainer-path-discovery/` - exact 120/1483/1603 proof, official-source/access-alternative record and seven 14-field unknown-blocking rows with `0/0/0/0/0` provider/action/mutation/residue/trainer truth.

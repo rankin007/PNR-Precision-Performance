@@ -1,0 +1,426 @@
+{
+    "sprint":  "036O",
+    "outcome":  "provider-authority-discovery-blocked-clean",
+    "targetMet":  false,
+    "sourceGitObject":  "bfeb0b23c339b819f5dbcd4fe28d61c7a4dd9570",
+    "sourceGraphHash":  "1c4725c67c899c88132e853bfc7104e97f0f92aa27d7b6b21c714d97a2153c42",
+    "sourceFileCount":  121,
+    "sourceGraphComplete":  false,
+    "unresolvedImports":  [
+                              {
+                                  "from":  "app/(ops)/data-entry/biochemistry/[testId]/page.tsx",
+                                  "spec":  "@/components/ops/test-evidence-manager"
+                              }
+                          ],
+    "providerEvidence":  false,
+    "documentationCurrentAsOf":  "2026-08-13",
+    "documentationRetrievedOn":  "2026-08-13",
+    "officialSources":  [
+                            {
+                                "provider":  "Vercel",
+                                "fixtureKinds":  [
+                                                     "vercel-project"
+                                                 ],
+                                "urls":  [
+                                             "https://vercel.com/docs/rest-api",
+                                             "https://vercel.com/changelog"
+                                         ],
+                                "version":  "REST GET /v9/projects/{idOrName}",
+                                "currentAsOf":  "2026-08-13",
+                                "retrievedOn":  "2026-08-13",
+                                "fixtureOnly":  true,
+                                "providerEvidence":  false
+                            },
+                            {
+                                "provider":  "Vercel",
+                                "fixtureKinds":  [
+                                                     "vercel-deployments"
+                                                 ],
+                                "urls":  [
+                                             "https://vercel.com/docs/rest-api",
+                                             "https://vercel.com/docs/agent-resources/vercel-mcp/tools",
+                                             "https://vercel.com/changelog"
+                                         ],
+                                "version":  "current REST/MCP list-deployments; no global API version",
+                                "currentAsOf":  "2026-08-13",
+                                "retrievedOn":  "2026-08-13",
+                                "fixtureOnly":  true,
+                                "providerEvidence":  false
+                            },
+                            {
+                                "provider":  "Vercel",
+                                "fixtureKinds":  [
+                                                     "vercel-env"
+                                                 ],
+                                "urls":  [
+                                             "https://vercel.com/docs/rest-api",
+                                             "https://vercel.com/docs/integrations/create-integration/vercel-api-integrations",
+                                             "https://vercel.com/docs/environment-variables",
+                                             "https://vercel.com/changelog"
+                                         ],
+                                "version":  "REST GET /v9/projects/{idOrName}/env",
+                                "currentAsOf":  "2026-08-13",
+                                "retrievedOn":  "2026-08-13",
+                                "fixtureOnly":  true,
+                                "providerEvidence":  false
+                            },
+                            {
+                                "provider":  "Vercel",
+                                "fixtureKinds":  [
+                                                     "vercel-aliases",
+                                                     "vercel-crons",
+                                                     "vercel-integrations",
+                                                     "vercel-webhooks"
+                                                 ],
+                                "urls":  [
+                                             "https://vercel.com/docs/rest-api",
+                                             "https://vercel.com/docs/cron-jobs/manage-cron-jobs",
+                                             "https://vercel.com/changelog"
+                                         ],
+                                "version":  "mutable REST endpoint revisions and Cron docs",
+                                "currentAsOf":  "2026-08-13",
+                                "retrievedOn":  "2026-08-13",
+                                "fixtureOnly":  true,
+                                "providerEvidence":  false
+                            },
+                            {
+                                "provider":  "Supabase",
+                                "fixtureKinds":  [
+                                                     "supabase-keys"
+                                                 ],
+                                "urls":  [
+                                             "https://supabase.com/changelog.md",
+                                             "https://supabase.com/docs/reference/api/introduction",
+                                             "https://supabase.com/docs/guides/getting-started/api-keys"
+                                         ],
+                                "version":  "Management API v1 GET /v1/projects/{ref}/api-keys?reveal=false",
+                                "currentAsOf":  "2026-08-13",
+                                "retrievedOn":  "2026-08-13",
+                                "fixtureOnly":  true,
+                                "providerEvidence":  false
+                            },
+                            {
+                                "provider":  "Supabase",
+                                "fixtureKinds":  [
+                                                     "supabase-functions"
+                                                 ],
+                                "urls":  [
+                                             "https://supabase.com/changelog.md",
+                                             "https://supabase.com/docs/reference/api/introduction",
+                                             "https://supabase.com/changelog/33720-deploy-and-update-edge-functions-using-the-management-api"
+                                         ],
+                                "version":  "Management API v1 GET /v1/projects/{ref}/functions",
+                                "currentAsOf":  "2026-08-13",
+                                "retrievedOn":  "2026-08-13",
+                                "fixtureOnly":  true,
+                                "providerEvidence":  false
+                            },
+                            {
+                                "provider":  "Supabase",
+                                "fixtureKinds":  [
+                                                     "supabase-catalog"
+                                                 ],
+                                "urls":  [
+                                             "https://supabase.com/changelog.md",
+                                             "https://supabase.com/docs/guides/database/webhooks",
+                                             "https://supabase.com/docs/guides/cron"
+                                         ],
+                                "version":  "PostgreSQL catalog concepts for database webhooks, pg_net and pg_cron",
+                                "currentAsOf":  "2026-08-13",
+                                "retrievedOn":  "2026-08-13",
+                                "fixtureOnly":  true,
+                                "providerEvidence":  false
+                            },
+                            {
+                                "provider":  "Resend",
+                                "fixtureKinds":  [
+                                                     "resend-keys"
+                                                 ],
+                                "urls":  [
+                                             "https://resend.com/docs/api-reference/api-keys/list-api-keys",
+                                             "https://resend.com/docs/api-reference/pagination",
+                                             "https://resend.com/changelog"
+                                         ],
+                                "version":  "current REST GET /api-keys; documented response has drifted from reduced fixture",
+                                "currentAsOf":  "2026-08-13",
+                                "retrievedOn":  "2026-08-13",
+                                "fixtureOnly":  true,
+                                "providerEvidence":  false
+                            },
+                            {
+                                "provider":  "Resend",
+                                "fixtureKinds":  [
+                                                     "resend-domains"
+                                                 ],
+                                "urls":  [
+                                             "https://resend.com/docs/api-reference/domains/list-domains",
+                                             "https://resend.com/docs/api-reference/pagination",
+                                             "https://resend.com/changelog"
+                                         ],
+                                "version":  "current REST GET /domains; capabilities object has drifted from reduced fixture",
+                                "currentAsOf":  "2026-08-13",
+                                "retrievedOn":  "2026-08-13",
+                                "fixtureOnly":  true,
+                                "providerEvidence":  false
+                            },
+                            {
+                                "provider":  "Stripe",
+                                "fixtureKinds":  [
+                                                     "stripe-account"
+                                                 ],
+                                "urls":  [
+                                             "https://docs.stripe.com/api/accounts/retrieve",
+                                             "https://docs.stripe.com/changelog"
+                                         ],
+                                "version":  "Stripe API v1 GET /v1/accounts/{id}",
+                                "currentAsOf":  "2026-08-13",
+                                "retrievedOn":  "2026-08-13",
+                                "fixtureOnly":  true,
+                                "providerEvidence":  false
+                            },
+                            {
+                                "provider":  "Stripe",
+                                "fixtureKinds":  [
+                                                     "stripe-webhooks"
+                                                 ],
+                                "urls":  [
+                                             "https://docs.stripe.com/api/webhook_endpoints/list",
+                                             "https://docs.stripe.com/api/pagination",
+                                             "https://docs.stripe.com/changelog"
+                                         ],
+                                "version":  "Stripe API v1 GET /v1/webhook_endpoints cursor pagination",
+                                "currentAsOf":  "2026-08-13",
+                                "retrievedOn":  "2026-08-13",
+                                "fixtureOnly":  true,
+                                "providerEvidence":  false
+                            },
+                            {
+                                "provider":  "Railway",
+                                "fixtureKinds":  [
+                                                     "railway"
+                                                 ],
+                                "urls":  [
+                                             "https://docs.railway.com/integrations/api",
+                                             "https://docs.railway.com/integrations/api/graphql-overview",
+                                             "https://docs.railway.com/integrations/api/api-cookbook",
+                                             "https://railway.com/changelog"
+                                         ],
+                                "version":  "GraphQL v2 https://backboard.railway.com/graphql/v2",
+                                "currentAsOf":  "2026-08-13",
+                                "retrievedOn":  "2026-08-13",
+                                "fixtureOnly":  true,
+                                "providerEvidence":  false
+                            }
+                        ],
+    "accessAlternatives":  [
+                               {
+                                   "mechanism":  "direct-api-graphql",
+                                   "checked":  true,
+                                   "result":  "refused-unavailable",
+                                   "detail":  "no composed authority-bound reader; all five provider credential environment names absent; no provider called"
+                               },
+                               {
+                                   "mechanism":  "vercel-connector",
+                                   "checked":  true,
+                                   "result":  "insufficient-not-called",
+                                   "detail":  "project/deployment tools present but not exhaustive five-provider protected reconciliation; durable output boundary"
+                               },
+                               {
+                                   "mechanism":  "supabase-connector",
+                                   "checked":  true,
+                                   "result":  "insufficient-not-called",
+                                   "detail":  "project/function/SQL tools present but no complete five-provider reveal=false authority; no SQL or provider row read"
+                               },
+                               {
+                                   "mechanism":  "resend-stripe-railway-connectors",
+                                   "checked":  true,
+                                   "result":  "unavailable",
+                                   "detail":  "no callable connectors installed in current tool catalog"
+                               },
+                               {
+                                   "mechanism":  "vercel-cli",
+                                   "checked":  true,
+                                   "result":  "installed-linked-not-called",
+                                   "detail":  "VERCEL_TOKEN absent; auth status intentionally not probed"
+                               },
+                               {
+                                   "mechanism":  "supabase-cli",
+                                   "checked":  true,
+                                   "result":  "not-installed-not-called",
+                                   "detail":  "project-ref marker present; SUPABASE_ACCESS_TOKEN absent"
+                               },
+                               {
+                                   "mechanism":  "resend-cli",
+                                   "checked":  true,
+                                   "result":  "not-installed-not-called",
+                                   "detail":  "RESEND_API_KEY absent"
+                               },
+                               {
+                                   "mechanism":  "stripe-cli",
+                                   "checked":  true,
+                                   "result":  "installed-not-called",
+                                   "detail":  "STRIPE_SECRET_KEY absent; auth status intentionally not probed"
+                               },
+                               {
+                                   "mechanism":  "railway-cli",
+                                   "checked":  true,
+                                   "result":  "installed-not-called",
+                                   "detail":  "RAILWAY_API_TOKEN absent; auth status intentionally not probed"
+                               },
+                               {
+                                   "mechanism":  "existing-browser-chrome-session",
+                                   "checked":  true,
+                                   "result":  "unverified-refused",
+                                   "detail":  "control capability exists; no verified single five-provider session; individual provider navigation refused outside zero-output composition"
+                               },
+                               {
+                                   "mechanism":  "credential-files-clipboard-chat",
+                                   "checked":  true,
+                                   "result":  "refused-not-inspected",
+                                   "detail":  "protected values were not opened, copied or transcribed"
+                               }
+                           ],
+    "authorityRowAllowlist":  [
+                                  "class",
+                                  "authority",
+                                  "consumerCount",
+                                  "graphComplete",
+                                  "providerEvidence",
+                                  "paginationComplete",
+                                  "reachability",
+                                  "replacement",
+                                  "installTargets",
+                                  "readback",
+                                  "predecessorAction",
+                                  "predecessorOracle",
+                                  "manualUiRequired",
+                                  "laterMutation"
+                              ],
+    "authorityRows":  [
+                          {
+                              "class":  "SUPABASE_SERVICE_ROLE_KEY",
+                              "authority":  "Supabase",
+                              "consumerCount":  51,
+                              "graphComplete":  false,
+                              "providerEvidence":  false,
+                              "paginationComplete":  false,
+                              "reachability":  "unknown-blocking",
+                              "replacement":  "modern secret key create/select or legacy dashboard replacement",
+                              "installTargets":  "server/admin provider targets",
+                              "readback":  "provider metadata or harmless admin auth",
+                              "predecessorAction":  "delete/revoke exact key",
+                              "predecessorOracle":  "independent metadata absence or auth rejection",
+                              "manualUiRequired":  false,
+                              "laterMutation":  "blocked"
+                          },
+                          {
+                              "class":  "CRON_SECRET",
+                              "authority":  "Vercel",
+                              "consumerCount":  1,
+                              "graphComplete":  false,
+                              "providerEvidence":  false,
+                              "paginationComplete":  false,
+                              "reachability":  "unknown-blocking",
+                              "replacement":  "generate replacement",
+                              "installTargets":  "Vercel environment targets",
+                              "readback":  "protected route non-mutating rejection",
+                              "predecessorAction":  "remove predecessor binding",
+                              "predecessorOracle":  "old-route rejection",
+                              "manualUiRequired":  false,
+                              "laterMutation":  "blocked"
+                          },
+                          {
+                              "class":  "ENQUIRY_ABUSE_HMAC_SECRET",
+                              "authority":  "Vercel",
+                              "consumerCount":  0,
+                              "graphComplete":  false,
+                              "providerEvidence":  false,
+                              "paginationComplete":  false,
+                              "reachability":  "unknown-blocking",
+                              "replacement":  "generate replacement",
+                              "installTargets":  "Vercel environment targets",
+                              "readback":  "enquiry preflight authentication only",
+                              "predecessorAction":  "remove predecessor binding",
+                              "predecessorOracle":  "binding and deployment absence",
+                              "manualUiRequired":  false,
+                              "laterMutation":  "blocked"
+                          },
+                          {
+                              "class":  "PUBLIC_ENQUIRY_SMTP_PASS",
+                              "authority":  "Resend/Vercel",
+                              "consumerCount":  0,
+                              "graphComplete":  false,
+                              "providerEvidence":  false,
+                              "paginationComplete":  false,
+                              "reachability":  "unknown-blocking",
+                              "replacement":  "create/select restricted SMTP credential",
+                              "installTargets":  "Vercel environment targets",
+                              "readback":  "metadata authentication without send",
+                              "predecessorAction":  "delete predecessor key",
+                              "predecessorOracle":  "key metadata absence or auth rejection",
+                              "manualUiRequired":  false,
+                              "laterMutation":  "blocked"
+                          },
+                          {
+                              "class":  "STRIPE_SECRET_KEY",
+                              "authority":  "Stripe/Vercel",
+                              "consumerCount":  6,
+                              "graphComplete":  false,
+                              "providerEvidence":  false,
+                              "paginationComplete":  false,
+                              "reachability":  "unknown-blocking",
+                              "replacement":  "create restricted key",
+                              "installTargets":  "Vercel environment targets",
+                              "readback":  "account retrieval",
+                              "predecessorAction":  "expire/delete predecessor",
+                              "predecessorOracle":  "exact key absence or harmless auth rejection",
+                              "manualUiRequired":  false,
+                              "laterMutation":  "blocked"
+                          },
+                          {
+                              "class":  "STRIPE_WEBHOOK_SECRET",
+                              "authority":  "Stripe/Vercel",
+                              "consumerCount":  6,
+                              "graphComplete":  false,
+                              "providerEvidence":  false,
+                              "paginationComplete":  false,
+                              "reachability":  "unknown-blocking",
+                              "replacement":  "roll endpoint secret",
+                              "installTargets":  "Vercel environment target",
+                              "readback":  "webhook metadata only",
+                              "predecessorAction":  "expire predecessor",
+                              "predecessorOracle":  "no non-business rejection oracle established",
+                              "manualUiRequired":  true,
+                              "laterMutation":  "blocked"
+                          },
+                          {
+                              "class":  "RAILWAY_API_TOKEN",
+                              "authority":  "Railway/Vercel",
+                              "consumerCount":  3,
+                              "graphComplete":  false,
+                              "providerEvidence":  false,
+                              "paginationComplete":  false,
+                              "reachability":  "unknown-blocking",
+                              "replacement":  "create scoped token",
+                              "installTargets":  "Railway/Vercel install target",
+                              "readback":  "bounded GraphQL query",
+                              "predecessorAction":  "revoke predecessor",
+                              "predecessorOracle":  "readback absence or auth rejection",
+                              "manualUiRequired":  false,
+                              "laterMutation":  "blocked"
+                          }
+                      ],
+    "providerReads":  0,
+    "externalActions":  0,
+    "externalMutations":  0,
+    "externalResidue":  0,
+    "trainerActions":  0,
+    "protectedWindowStarted":  false,
+    "assertions":  {
+                       "focused":  120,
+                       "retained":  1483,
+                       "total":  1603,
+                       "passed":  true
+                   },
+    "blocker":  "PROVIDER_READER_UNAVAILABLE"
+}

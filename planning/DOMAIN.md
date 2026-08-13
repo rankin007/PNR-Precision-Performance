@@ -175,13 +175,13 @@ Final Sprint 010 live acceptance status: partial with documented blockers.
 
 Sprint 011 realigns the product target from a deployed MVP shell to the full trainer-ready biochemistry portal described in `Precision Performance Done.docx` and distilled in `planning/DEFINITION_OF_DONE.md`.
 
-The current production app remains live at `https://precisionperformance.com.au`, but full project Done now requires a secure mobile-first portal where trainers can submit per-horse biochemistry tests in under 60 seconds, attach voice notes and photos/PDFs, confirm instrument readings, receive Hydration Score and Health Score results, get Table of Knowledge recommendations, and review trends over time.
+The current production app remains live at `https://precisionperformance.com.au`. The current-MVP target is a secure mobile-first portal where trainers can submit per-horse biochemistry tests in under 60 seconds, use a launch-accepted notes fallback, confirm instrument readings, receive the approved numeric score results and review trends over time. Optional private photos/PDFs are now an explicit MVP 2 placeholder; clinical guidance remains separately deferred by approved scope.
 
 The trainer-ready target includes these product capabilities:
 
 - mobile test capture for assigned horses
 - voice-to-text notes attached to test records
-- upload support for photos, PDFs, pH readings, refractometer readings, conductivity meter readings, and related evidence
+- future MVP 2 upload support for optional photos, PDFs and related private evidence
 - carbohydrate, conductivity, pH urine, pH saliva, turbidity, temperature, water intake, and workload/context inputs
 - pink Horiba conductivity multiplier of `1.43`
 - pH urine and saliva `.1` calibration
@@ -199,6 +199,16 @@ The trainer-ready target includes these product capabilities:
 - saved favorite/default chart configurations
 - history panel highlighting horses by zone and attention filters
 
-Earlier MVP1 out-of-scope language remains historical context for Sprints 003-010. It should not be used to exclude the Done document capabilities from the forward roadmap. Instead, unresolved MVP1/MVP2 boundaries should be decided explicitly in Sprints 012-016, especially for OCR/photo recognition, voice-to-text provider behavior, Table of Knowledge content maturity, and trainer-managed vet/stable-staff access exceptions.
+Earlier MVP1 out-of-scope language remains historical context for Sprints 003-010. The 2026-08-11 owner decision explicitly places private photo/PDF evidence and its safety lifecycle in `planning/MVP2_PROJECT_LIST.md`; OCR/photo recognition remains a separate future enhancement. Other approved deferrals and unresolved boundaries retain their own roadmap authority.
 
 The next recommended sprint is Sprint 012 - Live Acceptance Closeout And Safety Hardening, because production live acceptance blockers from Sprint 010 should be closed before deeper scoring, uploads, and recommendation work begins.
+
+---
+
+# Sprint 036O Domain Update
+
+Sprint 036O closes `provider-authority-discovery-blocked-clean`; target not met. The accepted Sprint 036L Git object is the only source authority for its bounded graph. One exact local import is absent, so source completeness is false. Provider documentation and reduced fixtures are not provider evidence.
+
+All seven credential capability rows remain `unknown-blocking`. No Vercel, Supabase, Resend, Stripe or Railway read occurred; no credential, deployment, alias, environment, identity, message, verification, trainer, data, commerce, enquiry or Product action occurred. Accepted Sprint 036L remains the last durable live authority.
+
+Any later correction requires fresh Architect authority for the missing edge, one executable protected five-provider reader with exhaustive pagination and independently verified lifecycle/predecessor oracles. Sprint 036O does not establish launch readiness, real trainer delivery or Product Done.
