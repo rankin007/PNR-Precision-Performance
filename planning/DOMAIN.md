@@ -212,3 +212,9 @@ Sprint 036O closes `provider-authority-discovery-blocked-clean`; target not met.
 All seven credential capability rows remain `unknown-blocking`. No Vercel, Supabase, Resend, Stripe or Railway read occurred; no credential, deployment, alias, environment, identity, message, verification, trainer, data, commerce, enquiry or Product action occurred. Accepted Sprint 036L remains the last durable live authority.
 
 Any later correction requires fresh Architect authority for the missing edge, one executable protected five-provider reader with exhaustive pagination and independently verified lifecycle/predecessor oracles. Sprint 036O does not establish launch readiness, real trainer delivery or Product Done.
+
+# Sprint 036P Domain Update
+
+Sprint 036P establishes the accepted Sprint 036L Git object as a complete 124-file source graph for this authority boundary. Provider documentation, fixture projections, CLI presence and caller labels remain non-authoritative. Exact provider authority is established only by the bounded LIVE provenance path with exact account/team/project binding and exhausted pagination.
+
+The durable provider session stopped after four read-only requests. Vercel pagination is incomplete; Supabase exact-project authority is ambiguous; Resend exact-team binding and Stripe/Railway protected access are unavailable. All seven rows therefore remain `unknown-blocking`. No credential rotation, identity disposition, trainer delivery, launch readiness or Product Done authority follows.

@@ -279,3 +279,11 @@ The unchanged cross-stable denial case cannot be genuinely executed with only on
 - Vercel/Supabase connectors, individual CLIs or signed-in pages do not by themselves establish exhaustive five-provider authority, pagination completeness or zero-output transport.
 - All seven classes remain `unknown-blocking`. Provider/credential/identity/deployment/trainer work must not start without fresh corrective Architect authority and independent lifecycle/predecessor oracles.
 - Accepted Sprint 036L remains the last durable live authority. Launch readiness, representative acceptance, Production completion and Product Done are false/open.
+
+## Sprint 036P retained risks - 2026-08-14
+
+- A complete accepted-source graph does not establish provider authority, consumer completeness or credential safety.
+- Four read-only requests are durable history, not exhaustive five-provider inventory. Vercel pagination, Supabase exact-project binding, Resend exact-team binding and Stripe/Railway protected access remain incomplete.
+- TEST provenance, documentation fixtures, installed CLIs, connector presence and caller labels must never mint LIVE provider success or durable target state.
+- All seven classes remain `unknown-blocking`. Credential, deployment, identity and trainer work must not start without fresh corrective Architect authority and independent lifecycle/predecessor oracles.
+- Accepted Sprint 036L remains the last durable live authority. Launch readiness, representative acceptance, Production completion and Product Done are false/open.

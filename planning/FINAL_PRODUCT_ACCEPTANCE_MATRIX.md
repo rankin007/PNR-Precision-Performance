@@ -104,3 +104,7 @@ No matrix criterion changes. Sprint 036N closes `native-closure-blocked-clean` w
 ## Sprint 036O reconciliation
 
 No matrix criterion changes. Sprint 036O closes `provider-authority-discovery-blocked-clean` with exact `1603/1603` local/retained proof, fresh inspection 3/3 and `0/0/0/0/0` provider reads/actions/mutations/residue/trainer actions. One source edge and all five provider authorities remain incomplete; every class is `unknown-blocking`. Credential closure, excluded identities, trainer delivery, representative acceptance, Production completion and Product Done remain open; accepted Sprint 036L is unchanged.
+
+## Sprint 036P reconciliation
+
+No matrix criterion changes. Sprint 036P closes `protected-provider-authority-readback-blocked-clean` with exact `1783/1783`, fresh critical inspection 3/3, a complete 124-file accepted-source graph and durable provider reads/writes/mutations/business effects/residue/trainer actions of `4/0/0/0/0/0`. Exact five-provider authority remains incomplete and every credential capability row remains `unknown-blocking`. Credential closure, excluded identities, trainer delivery, representative acceptance, Production completion and Product Done remain open; accepted Sprint 036L is unchanged.

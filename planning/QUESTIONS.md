@@ -198,3 +198,14 @@ No user action is required for this closeout. A fresh corrective Architect must 
 - Only after those authorities pass, which private sequence governs the two excluded identities and one available real trainer's normal message and verification.
 
 Until then, no provider, credential, deployment, identity, message, verification or trainer action is authorized.
+
+## Forward inputs after Sprint 036P close
+
+No user action is required for this blocked-clean closeout. A fresh corrective Architect must decide:
+
+- How one visible non-transcribed protected session independently binds the exact Supabase project and Resend team and supplies bounded Stripe/Railway read authority.
+- Which current provider paths exhaust all required Vercel, Supabase, Resend, Stripe and Railway pages within the global request and byte ceilings.
+- Which independent lifecycle and predecessor-rejection oracles govern each of the seven classes only after authority completeness.
+- Only after those authorities pass, which private sequence governs the two excluded identities and one real trainer's normal message and verification.
+
+Until then, no credential, deployment, identity, message, verification or trainer action is authorized.

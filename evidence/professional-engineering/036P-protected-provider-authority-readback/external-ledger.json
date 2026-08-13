@@ -1,0 +1,358 @@
+{
+    "sprint":  "036P-protected-provider-authority-readback",
+    "state":  "provider-authority-readback-blocked-clean",
+    "targetMet":  false,
+    "outcome":  "protected-provider-authority-readback-blocked-clean",
+    "source":  {
+                   "gitObject":  "bfeb0b23c339b819f5dbcd4fe28d61c7a4dd9570",
+                   "managerPath":  "components/ops/test-evidence-manager.tsx",
+                   "managerBlob":  "65d74be5a3f701ae9133bf353348b3253f36feef",
+                   "fileCount":  124,
+                   "graphHash":  "36edbef5584b8edbc4363c5425bd66e645a202a90b90caeee8b2223fd0948d6b",
+                   "complete":  true,
+                   "unresolvedImports":  0
+               },
+    "focused":  {
+                    "discovery":  60,
+                    "reader":  80,
+                    "transport":  40,
+                    "total":  180
+                },
+    "retained":  1603,
+    "combined":  1783,
+    "provider":  {
+                     "requests":  4,
+                     "writes":  0,
+                     "mutations":  0,
+                     "businessEffects":  0,
+                     "residue":  0
+                 },
+    "trainerActions":  0,
+    "authorities":  [
+                        {
+                            "provider":  "vercel",
+                            "status":  "partial-read",
+                            "exactBinding":  true,
+                            "paginationComplete":  false,
+                            "evidence":  "one-team-one-project-20-deployments-next-cursor"
+                        },
+                        {
+                            "provider":  "supabase",
+                            "status":  "blocked-ambiguous",
+                            "exactBinding":  false,
+                            "paginationComplete":  false,
+                            "evidence":  "two-active-healthy-candidates"
+                        },
+                        {
+                            "provider":  "resend",
+                            "status":  "blocked-no-team-binding",
+                            "exactBinding":  false,
+                            "paginationComplete":  false,
+                            "evidence":  "cli-absent-connector-absent-process-credential-absent"
+                        },
+                        {
+                            "provider":  "stripe",
+                            "status":  "not-read-protected-access-required",
+                            "exactBinding":  false,
+                            "paginationComplete":  false,
+                            "evidence":  "cli-present-process-credential-absent"
+                        },
+                        {
+                            "provider":  "railway",
+                            "status":  "not-read-protected-access-required",
+                            "exactBinding":  false,
+                            "paginationComplete":  false,
+                            "evidence":  "cli-present-process-credential-absent"
+                        }
+                    ],
+    "capabilityRows":  [
+                           {
+                               "class":  "SUPABASE_SERVICE_ROLE_KEY",
+                               "authority":  "supabase",
+                               "sourceConsumers":  [
+                                                       "app/(admin)/admin/commerce/page.tsx",
+                                                       "app/(admin)/admin/memberships/actions.ts",
+                                                       "app/(admin)/admin/memberships/page.tsx",
+                                                       "app/(admin)/admin/users/actions.ts",
+                                                       "app/(admin)/admin/users/page.tsx",
+                                                       "app/(admin)/layout.tsx",
+                                                       "app/(ops)/data-entry/access/actions.ts",
+                                                       "app/(ops)/data-entry/actions.ts",
+                                                       "app/(ops)/data-entry/biochemistry/[testId]/page.tsx",
+                                                       "app/(ops)/data-entry/biochemistry/actions.ts",
+                                                       "app/(ops)/data-entry/biochemistry/evidence-actions.ts",
+                                                       "app/(ops)/data-entry/biochemistry/page.tsx",
+                                                       "app/(ops)/data-entry/feeding/page.tsx",
+                                                       "app/(ops)/data-entry/page.tsx",
+                                                       "app/(ops)/data-entry/submissions/[submissionId]/page.tsx",
+                                                       "app/(ops)/data-entry/submissions/page.tsx",
+                                                       "app/(ops)/data-entry/track/page.tsx",
+                                                       "app/(ops)/layout.tsx",
+                                                       "app/(portal)/layout.tsx",
+                                                       "app/(portal)/portal/horses/[horseId]/page.tsx",
+                                                       "app/(portal)/portal/horses/page.tsx",
+                                                       "app/(portal)/portal/page.tsx",
+                                                       "app/api/health/route.ts",
+                                                       "app/api/internal/evidence/reconcile/route.ts",
+                                                       "app/api/setup/status/route.ts",
+                                                       "app/api/stripe/webhook/route.ts",
+                                                       "app/auth/actions.ts",
+                                                       "app/auth/callback/route.ts",
+                                                       "app/internal/manual-preview-session/actions.ts",
+                                                       "app/internal/manual-preview-session/page.tsx",
+                                                       "app/sign-in/page.tsx",
+                                                       "components/auth/sign-in-form.tsx",
+                                                       "components/layout/app-shell.tsx",
+                                                       "components/ops/biochemistry-capture-workflow.tsx",
+                                                       "components/ops/test-evidence-manager.tsx",
+                                                       "components/ops/test-evidence-upload.tsx",
+                                                       "lib/auth/app-context.ts",
+                                                       "lib/auth/bootstrap.ts",
+                                                       "lib/auth/roles.ts",
+                                                       "lib/auth/session.ts",
+                                                       "lib/domain/food-menus.ts",
+                                                       "lib/domain/horses.ts",
+                                                       "lib/domain/operations.ts",
+                                                       "lib/domain/products.ts",
+                                                       "lib/evidence/server/repository.ts",
+                                                       "lib/runtime/platform-status.ts",
+                                                       "lib/stripe/commerce.ts",
+                                                       "lib/supabase/admin.ts",
+                                                       "lib/supabase/client.ts",
+                                                       "lib/supabase/env.ts",
+                                                       "lib/supabase/middleware.ts",
+                                                       "lib/supabase/server.ts",
+                                                       "middleware.ts"
+                                                   ],
+                               "sourceComplete":  true,
+                               "providerConsumers":  0,
+                               "paginationComplete":  false,
+                               "reachability":  "unknown-blocking",
+                               "replacement":  "modern-secret-key",
+                               "installTargets":  [
+                                                      "vercel-environments"
+                                                  ],
+                               "readback":  "read-only-admin",
+                               "predecessorAction":  "individual-disable",
+                               "predecessorOracle":  "old-key-auth-rejection",
+                               "coupling":  "legacy-coupling-refused",
+                               "manualUiRequired":  false,
+                               "laterMutation":  "blocked"
+                           },
+                           {
+                               "class":  "CRON_SECRET",
+                               "authority":  "vercel",
+                               "sourceConsumers":  [
+                                                       "app/api/internal/evidence/reconcile/route.ts"
+                                                   ],
+                               "sourceComplete":  true,
+                               "providerConsumers":  0,
+                               "paginationComplete":  false,
+                               "reachability":  "unknown-blocking",
+                               "replacement":  "generated-secret",
+                               "installTargets":  [
+                                                      "vercel-environments",
+                                                      "cron-routes"
+                                                  ],
+                               "readback":  "no-business-status",
+                               "predecessorAction":  "deployment-retirement",
+                               "predecessorOracle":  "old-route-auth-rejection",
+                               "coupling":  "reconcile-route-blocks-without-oracle",
+                               "manualUiRequired":  false,
+                               "laterMutation":  "blocked"
+                           },
+                           {
+                               "class":  "ENQUIRY_ABUSE_HMAC_SECRET",
+                               "authority":  "vercel",
+                               "sourceConsumers":  [
+
+                                                   ],
+                               "sourceComplete":  true,
+                               "providerConsumers":  0,
+                               "paginationComplete":  false,
+                               "reachability":  "unknown-blocking",
+                               "replacement":  "generated-secret",
+                               "installTargets":  [
+                                                      "vercel-environments",
+                                                      "enquiry-consumers"
+                                                  ],
+                               "readback":  "deterministic-signature",
+                               "predecessorAction":  "deployment-retirement",
+                               "predecessorOracle":  "old-deployment-incapability",
+                               "coupling":  "unknown-caller-blocks",
+                               "manualUiRequired":  false,
+                               "laterMutation":  "blocked"
+                           },
+                           {
+                               "class":  "PUBLIC_ENQUIRY_SMTP_PASS",
+                               "authority":  "resend",
+                               "sourceConsumers":  [
+
+                                                   ],
+                               "sourceComplete":  true,
+                               "providerConsumers":  0,
+                               "paginationComplete":  false,
+                               "reachability":  "unknown-blocking",
+                               "replacement":  "resend-sending-key",
+                               "installTargets":  [
+                                                      "vercel-environments"
+                                                  ],
+                               "readback":  "smtp-verify-no-send",
+                               "predecessorAction":  "delete-exact-key",
+                               "predecessorOracle":  "old-key-auth-rejection",
+                               "coupling":  "exact-team-required",
+                               "manualUiRequired":  true,
+                               "laterMutation":  "blocked"
+                           },
+                           {
+                               "class":  "STRIPE_SECRET_KEY",
+                               "authority":  "stripe",
+                               "sourceConsumers":  [
+                                                       "app/api/health/route.ts",
+                                                       "app/api/setup/status/route.ts",
+                                                       "app/api/stripe/webhook/route.ts",
+                                                       "lib/runtime/platform-status.ts",
+                                                       "lib/stripe/env.ts",
+                                                       "lib/stripe/server.ts"
+                                                   ],
+                               "sourceComplete":  true,
+                               "providerConsumers":  0,
+                               "paginationComplete":  false,
+                               "reachability":  "unknown-blocking",
+                               "replacement":  "stripe-restricted-key",
+                               "installTargets":  [
+                                                      "vercel-environments"
+                                                  ],
+                               "readback":  "account-metadata",
+                               "predecessorAction":  "expire-exact-key",
+                               "predecessorOracle":  "old-key-auth-rejection",
+                               "coupling":  "mode-bound",
+                               "manualUiRequired":  true,
+                               "laterMutation":  "blocked"
+                           },
+                           {
+                               "class":  "STRIPE_WEBHOOK_SECRET",
+                               "authority":  "stripe",
+                               "sourceConsumers":  [
+                                                       "app/api/health/route.ts",
+                                                       "app/api/setup/status/route.ts",
+                                                       "app/api/stripe/webhook/route.ts",
+                                                       "lib/runtime/platform-status.ts",
+                                                       "lib/stripe/env.ts",
+                                                       "lib/stripe/server.ts"
+                                                   ],
+                               "sourceComplete":  true,
+                               "providerConsumers":  0,
+                               "paginationComplete":  false,
+                               "reachability":  "unknown-blocking",
+                               "replacement":  "stripe-endpoint-roll",
+                               "installTargets":  [
+                                                      "vercel-environments"
+                                                  ],
+                               "readback":  "endpoint-metadata",
+                               "predecessorAction":  "roll-exact-endpoint",
+                               "predecessorOracle":  "non-business-oracle-required",
+                               "coupling":  "delivery-forbidden",
+                               "manualUiRequired":  true,
+                               "laterMutation":  "blocked"
+                           },
+                           {
+                               "class":  "RAILWAY_API_TOKEN",
+                               "authority":  "railway",
+                               "sourceConsumers":  [
+                                                       "app/api/health/route.ts",
+                                                       "app/api/setup/status/route.ts",
+                                                       "lib/runtime/platform-status.ts"
+                                                   ],
+                               "sourceComplete":  true,
+                               "providerConsumers":  0,
+                               "paginationComplete":  false,
+                               "reachability":  "unknown-blocking",
+                               "replacement":  "railway-token",
+                               "installTargets":  [
+                                                      "vercel-environments"
+                                                  ],
+                               "readback":  "project-metadata",
+                               "predecessorAction":  "revoke-exact-token",
+                               "predecessorOracle":  "old-token-auth-rejection",
+                               "coupling":  "token-type-bound",
+                               "manualUiRequired":  true,
+                               "laterMutation":  "blocked"
+                           }
+                       ],
+    "alternativesChecked":  [
+                                {
+                                    "provider":  "vercel",
+                                    "api":  "four-read-partial",
+                                    "connector":  "available",
+                                    "cli":  "50.42.0",
+                                    "signedInSession":  "not-used",
+                                    "result":  "pagination-incomplete"
+                                },
+                                {
+                                    "provider":  "supabase",
+                                    "api":  "connected-project-list",
+                                    "connector":  "available",
+                                    "cli":  "absent",
+                                    "signedInSession":  "not-used",
+                                    "result":  "exact-project-ambiguous"
+                                },
+                                {
+                                    "provider":  "resend",
+                                    "api":  "not-called",
+                                    "connector":  "absent",
+                                    "cli":  "absent",
+                                    "signedInSession":  "unavailable",
+                                    "result":  "exact-team-binding-unavailable"
+                                },
+                                {
+                                    "provider":  "stripe",
+                                    "api":  "not-called",
+                                    "connector":  "absent",
+                                    "cli":  "1.40.3",
+                                    "signedInSession":  "not-used",
+                                    "result":  "protected-access-required"
+                                },
+                                {
+                                    "provider":  "railway",
+                                    "api":  "not-called",
+                                    "connector":  "absent",
+                                    "cli":  "4.36.1",
+                                    "signedInSession":  "not-used",
+                                    "result":  "protected-access-required"
+                                }
+                            ],
+    "manualAction":  {
+                         "required":  true,
+                         "code":  "EXACT_FIVE_PROVIDER_AUTHORITY_REQUIRED",
+                         "instructionDocument":  "docs/PROTECTED_PROVIDER_AUTHORITY_READBACK_036P.md",
+                         "laterOwnerAction":  "establish one fresh visible protected session with independently bound Supabase project and Resend team plus Stripe and Railway read authority"
+                     },
+    "inspectionRepair":  {
+                             "status":  "inspection-3-pass-closeout-complete",
+                             "findings":  [
+                                              "INSPECT-001",
+                                              "INSPECT-002",
+                                              "INSPECT-003",
+                                              "INSPECT-004"
+                                          ],
+                             "executableReader":  true,
+                             "providerSpecificHandshake":  true,
+                             "targetDerivedFromPrivateTrace":  true,
+                             "evidenceFilesReconciled":  3,
+                             "childFilesystemWrites":  0,
+                             "parentAtomicCanonical":  true,
+                             "productionFaultSelfTest":  true,
+                             "retainedSubstitute":  {
+                                                        "reason":  "optional-playwright-core-absent-from-aggregate-route",
+                                                        "focused":  180,
+                                                        "retained":  1603,
+                                                        "combined":  1783
+                                                    },
+                             "repairProviderRequests":  0,
+                             "resendPaginationExhaustive":  true,
+                             "vercelOwnedRowsRequired":  true,
+                             "parentStrictResultValidation":  true,
+                             "ac29IndependentReadbackRequired":  true
+                         }
+}

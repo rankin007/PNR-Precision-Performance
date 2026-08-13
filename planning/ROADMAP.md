@@ -2,11 +2,11 @@
 
 > A living estimate, not a contract. Sprints may be added, split, reordered, or dropped as evidence changes. Roadmap rows do not authorize implementation, external mutation, deployment, staging, commit, or push.
 
-**About:** About 35 named sprints on the current road, including about 4 remaining current-MVP delivery outcomes plus an explicit MVP 2 private-evidence placeholder
-**Last estimated:** 2026-08-13
-**Delivered since this roadmap was adopted:** 22 delivered sprints; the later blocked-clean fallback chain now extends through Sprint 036O. See the lifecycle ledger for the complete outcome list.
+**About:** About 36 named sprints on the current road, including about 4 remaining current-MVP delivery outcomes plus an explicit MVP 2 private-evidence placeholder
+**Last estimated:** 2026-08-14
+**Delivered since this roadmap was adopted:** 22 delivered sprints; the later blocked-clean fallback chain now extends through Sprint 036P. See the lifecycle ledger for the complete outcome list.
 **Closed fallbacks since the delivered count:** Sprint 029O remained inert after SMTP no-send failure; 029P/Q/S/T progressively proved local transport, dedicated authentication, identity-blind projection and command safety without readiness. Sprint 029U added the fail-closed public gate and recovered cleanly from Vercel drift/alias side effects. Sprint 029V repaired the exact CLI envelope and isolation controller, then stopped blocked-clean when the full read-only inventory shape failed the strict allowlist before freeze or mutation.
-**Next destination:** No corrective sprint is planned. Fresh Architect authority is required for an executable protected five-provider reader, governance of the missing accepted-object edge and independent lifecycle/predecessor oracles. About four current-MVP outcomes remain; conditional 029R is not ready.
+**Next destination:** No corrective sprint is planned. Fresh Architect authority is required for one exact protected five-provider session before any credential, identity, deployment or trainer work. About four current-MVP outcomes remain; conditional 029R is not ready.
 
 **Completed before this roadmap existed:** sprints 001-035K, including follow-ups (the record lives in planning/sprints/, planning/STATE.md, and planning/SPRINT_LIFECYCLE_LEDGER.md)
 
@@ -46,6 +46,7 @@
 | 036N | Native consumer and credential readback recovery | Launch | closed - `native-closure-blocked-clean`, target not met | Local phase, inventory-shape, deletion and privacy contracts passed `1483/1483`; nonfunctional live adapters were removed and no provider/private/external action began. |
 | 029T | Readiness boundary recovery after inert Preview | Conversion | closed - provider-copy-prevalidation-blocked clean, not ready | Inspection decision 2/3 and the final scanner-clean local readback passed after local resolution of `INSPECT-001`. Copy control remained unavailable, so no key, configuration, credential, deployment or request mutation began. |
 | 036O | Provider authority and trainer-path discovery | Launch | closed - `provider-authority-discovery-blocked-clean`, target not met | Exact `1603/1603` and fresh inspection 3/3 passed; one accepted-object import remained missing, no provider read occurred, all seven 14-field rows stayed unknown-blocking and provider/action/mutation/residue/trainer counts were zero. |
+| 036P | Protected provider authority readback | Launch | closed - `protected-provider-authority-readback-blocked-clean`, target not met | Exact `1783/1783` and fresh inspection 3/3 passed; the 124-file graph completed, four read-only provider requests were retained, exact five-provider authority remained incomplete, all seven 15-field rows stayed unknown-blocking, and writes/mutations/residue/trainer actions remained zero. |
 | 029U | Operator-isolated guarded SMTP readiness recovery | Conversion | closed - blocked clean, not ready | The kill switch and 1004/1004 proof passed. One bounded attempt stopped at Vercel JSON drift; three aliases moved automatically despite `--skip-domain`, then all owned resources were removed and the three aliases were restored after fresh approval. |
 | 029V | Vercel agent envelope and alias-isolation recovery | Conversion | closed - pre-freeze blocked clean, not ready | Exact CLI/controller repair and 110/110 focused proof passed. Baseline proved accepted 036L five/five and zero 029V resources; full Inventory then failed closed at the strict JSON allowlist before freeze or any mutation. |
 | 029W | Privacy-safe Vercel inventory projection and final readiness attempt | Conversion | closed - final-readiness-blocked-material | Uses the exact Vercel 50.42.0 live row shapes and local source contract to isolate protected containers, recover stable inventory identity from the deployment hostname, and make one final guarded no-send readiness attempt. Any safe failure parks public enquiry and advances the visible-product road. |
@@ -92,3 +93,7 @@
 - Sprint 036N closed `native-closure-blocked-clean`: focused `180/180` plus retained `1303/1303` equals `1483/1483`, final diff PASS, and external/private/mutation/residue `0/0/0/0`. Native provider closure and target completion remained open; Sprint 036O subsequently closed blocked-clean without provider reads.
 
 - Sprint 036O closed `provider-authority-discovery-blocked-clean`: focused `120/120` plus retained `1483/1483` equals `1603/1603`, fresh inspection 3/3 passed, all seven rows remain `unknown-blocking`, accepted 036L is unchanged and provider reads/actions/mutations/residue/trainer actions are `0/0/0/0/0`. Fresh corrective Architect authority is required; about four current-MVP outcomes remain.
+
+## Sprint 036P closeout note
+
+Sprint 036P closed `protected-provider-authority-readback-blocked-clean`: focused `180/180` plus retained `1603/1603` equals `1783/1783`, fresh inspection 3/3 passed, the accepted-source graph is complete, and the retained provider boundary is four reads with writes/mutations/business effects/residue/trainer actions all zero. Exact five-provider authority and all seven capability dispositions remain incomplete; about four current-MVP outcomes remain.

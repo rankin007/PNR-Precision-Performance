@@ -345,3 +345,9 @@ Use the existing Vercel automation bypass only in protected process memory; do n
 - Accept focused `180/180`, retained `1303/1303`, total `1483/1483`, and final same-Architect diff PASS.
 - Remove every live/protected provider entrypoint because current native adapters and predecessor oracles are not safely executable.
 - Preserve accepted Sprint 036L and record external/private/mutation/residue `0/0/0/0`; no next sprint is planned.
+
+## Sprint 036P closeout decision - 2026-08-14
+
+| Date | Decision | Evidence | Consequence |
+|---|---|---|---|
+| 2026-08-14 | Close Sprint 036P as `protected-provider-authority-readback-blocked-clean`; target not met. | Exact focused 180/180 plus retained 1603/1603 equals 1783/1783; fresh critical inspection 3/3 passed; the accepted-source graph is complete; durable provider history is four read-only requests and zero writes/mutations/business effects/residue/trainer actions. | Preserve accepted Sprint 036L unchanged. Keep all seven capability rows `unknown-blocking`; require fresh corrective Architect authority for an exact visible protected five-provider session before any credential, deployment, identity or trainer action. |

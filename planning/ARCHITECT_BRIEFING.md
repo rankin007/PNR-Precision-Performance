@@ -1,16 +1,16 @@
 # Architect Briefing
 
-Version: v9 - Sprint 036O provider-authority discovery blocked-clean closeout
+Version: v10 - Sprint 036P protected provider authority readback blocked-clean closeout
 
 ## Executive summary
 
-**Business outcome:** Sprint 036O produced a bounded accepted-source graph and privacy-safe fixture contracts, then closed `provider-authority-discovery-blocked-clean`; target not met.
+**Business outcome:** Sprint 036P completed the accepted-source graph and delivered an inspected privacy-safe five-provider reader, then closed `protected-provider-authority-readback-blocked-clean`; target not met.
 
-**Current focus:** Fresh corrective Architect authority for one executable protected five-provider reader, the missing accepted-object source edge and independent lifecycle/predecessor oracles.
+**Current focus:** Fresh corrective Architect authority for one exact visible protected five-provider session and independent lifecycle/predecessor oracles.
 
-**What is proven:** Exact `45+50+25=120`, retained `1483`, combined `1603`; final inspection 3/3 PASS; seven exact 14-field rows are all unknown-blocking; provider reads/actions/mutations/residue/trainer actions are zero.
+**What is proven:** Exact `60+80+40=180`, retained `1603`, combined `1783`; final inspection 3/3 PASS; the 124-file source graph is complete; seven exact 15-field rows are all unknown-blocking; provider reads/writes/mutations/business effects/residue/trainer actions are `4/0/0/0/0/0`.
 
-**What is not live:** Fresh provider inventory, credential closure, identity disposition, real-trainer delivery, public enquiry, representative acceptance, Production completion and Product-wide Done remain open. Accepted Sprint 036L is unchanged.
+**What is not live:** Complete five-provider authority, credential closure, identity disposition, real-trainer delivery, public enquiry, representative acceptance, Production completion and Product-wide Done remain open. Accepted Sprint 036L is unchanged.
 
 ## Readiness signals
 
@@ -88,3 +88,9 @@ Inspection 1 required branded opaque authority results, exact outcomes, an execu
 **Owner:** Fresh Architect with platform/security, exact provider-account, privacy/business and trainer owners available only for later protected steps.
 
 **Decision:** Until that authority passes review, perform no provider, credential, identity, deployment, message, verification or trainer action; keep 029R conditional and Product Done false.
+
+## Sprint 036P closeout authority
+
+Sprint 036P is closed `protected-provider-authority-readback-blocked-clean`, target not met. The corrected 124-file accepted-source graph and executable protected reader passed fresh critical inspection 3/3. Durable provider history is four read-only requests with zero writes, mutations, business effects, residue or trainer actions. Exact five-provider authority and all seven credential capability dispositions remain incomplete. Accepted Sprint 036L remains the last durable live authority; no launch readiness or Product Done claim is made.
+
+**Recommended next Architect action:** create a corrective authority only when the exact Supabase project, Resend team and Stripe/Railway read access can be bound inside one visible non-transcribed protected session and every required provider page can be exhausted without durable protected output.

@@ -2,7 +2,7 @@
 
 ## Active direction
 
-Sprint 036O closed `provider-authority-discovery-blocked-clean`: focused 120/120 plus retained 1483/1483 equals 1603/1603, fresh critical inspection 3/3 PASS and provider reads/actions/mutations/residue/trainer actions 0/0/0/0/0. One accepted-object edge and all provider-native authority remain incomplete; all seven rows are unknown-blocking. No corrective sprint is planned; fresh Architect authority is required and about four current-MVP outcomes remain.
+Sprint 036P closed `protected-provider-authority-readback-blocked-clean`: focused 180/180 plus retained 1603/1603 equals 1783/1783, fresh critical inspection 3/3 PASS and provider reads/writes/mutations/business effects/residue/trainer actions 4/0/0/0/0/0. The 124-file source graph is complete; exact five-provider authority remains incomplete and all seven rows are unknown-blocking. No corrective sprint is planned; fresh Architect authority is required and about four current-MVP outcomes remain.
 
 | Sprint | Outcome | Profile / proof |
 |---|---|---|
@@ -65,3 +65,5 @@ Historical sprint status is indexed in `planning/SPRINT_LIFECYCLE_LEDGER.md`; cu
 | 036N | Closed `native-closure-blocked-clean`, target not met | Local controls `180/180` + retained `1303/1303` = `1483/1483`; final diff PASS; no live provider entrypoint; external/private/mutation/residue `0/0/0/0`. Next corrective work is unplanned. |
 
 | 036O | Closed `provider-authority-discovery-blocked-clean`, target not met | Local controls `120/120` + retained `1483/1483` = `1603/1603`; fresh inspection 3/3 PASS; seven unknown-blocking rows; provider reads/actions/mutations/residue/trainer `0/0/0/0/0`. Fresh corrective Architect authority required. |
+
+| 036P | Closed `protected-provider-authority-readback-blocked-clean`, target not met | Local controls `180/180` + retained `1603/1603` = `1783/1783`; fresh inspection 3/3 PASS; complete source graph; seven unknown-blocking rows; provider reads/writes/mutations/business effects/residue/trainer `4/0/0/0/0/0`. Fresh corrective Architect authority required. |

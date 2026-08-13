@@ -179,3 +179,10 @@ Historical packs, sprint files and reviews remain in place and retain their orig
 - `planning/sprints/036O-provider-authority-and-trainer-path-discovery/acceptance.md` - AC-01..40 truthful blocked-clean closeout authority.
 - `planning/reviews/036O-provider-authority-and-trainer-path-discovery.md` - plan/inspection repair history, final fresh inspection 3/3 PASS and grouped AC disposition.
 - `evidence/professional-engineering/036O-provider-authority-and-trainer-path-discovery/` - exact 120/1483/1603 proof, official-source/access-alternative record and seven 14-field unknown-blocking rows with `0/0/0/0/0` provider/action/mutation/residue/trainer truth.
+
+## Sprint 036P - protected provider authority readback
+
+- `planning/reviews/036P-protected-provider-authority-readback.md` - critical plan/inspection history, inspection 3/3 PASS and exact final AC disposition.
+- `evidence/professional-engineering/036P-protected-provider-authority-readback/SPRINT-036P-REPORT.md` - sole mutable AC-01..40 disposition authority and blocked-clean result.
+- `evidence/professional-engineering/036P-protected-provider-authority-readback/evidence.md` - accepted-source, focused/retained, reader/transport and provider-read proof.
+- `evidence/professional-engineering/036P-protected-provider-authority-readback/external-ledger.json` - sanitized canonical four-read, zero-write/mutation/residue provider ledger and seven 15-field rows.

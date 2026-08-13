@@ -189,3 +189,7 @@ Sprint 036M adds inspected local protected-transaction, compensation, fixture-cl
 Sprint 036N strengthens the local finite inventory, phase, deletion and privacy contracts but closes `native-closure-blocked-clean`. No provider/private/external action ran and no Done criterion is promoted. Native provider closure, identities, representative trainer acceptance and Product-wide Done remain open.
 
 Sprint 036O adds inspected local accepted-object graph, fixture-separation, pagination/refusal and protected-transport controls but closes `provider-authority-discovery-blocked-clean`; target not met. One exact source edge remains missing, no provider/trainer action ran, all seven classes remain `unknown-blocking`, and no Done criterion is promoted. Accepted Sprint 036L remains the last durable live authority; fresh provider, identity, representative acceptance, Production completion and Product-wide Done remain open.
+
+## Sprint 036P reconciliation
+
+Sprint 036P closes `protected-provider-authority-readback-blocked-clean`; target not met. The accepted-source graph is complete and the bounded protected reader passed critical inspection, but exact five-provider authority remains incomplete after four read-only requests. All seven capability rows remain `unknown-blocking`; no credential, deployment, identity or trainer action ran. No Done criterion is promoted. Accepted Sprint 036L remains the last durable live authority; representative acceptance, Production completion and Product-wide Done remain open.
