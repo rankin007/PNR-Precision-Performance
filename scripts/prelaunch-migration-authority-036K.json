@@ -1,0 +1,187 @@
+{
+  "version": 1,
+  "migrations": [
+    {
+      "name": "0001_initial_schema.sql",
+      "sha256": "5d301b81ad7eb98141d503bfa2877cbbeadf9799485fb8c558599ab395aac912",
+      "dependencyKeys": [
+        "member_profiles.user_id",
+        "user_membership_levels.user_id",
+        "daily_records.recorded_by_user_id",
+        "temperature_logs.created_by_user_id",
+        "weight_logs.created_by_user_id",
+        "water_intake_logs.created_by_user_id",
+        "feeding_logs.created_by_user_id",
+        "track_sessions.created_by_user_id",
+        "orders.user_id",
+        "subscriptions.user_id",
+        "invoices.user_id",
+        "payments.user_id",
+        "audit_logs.actor_user_id",
+        "trainers.member_profile_id",
+        "owners.member_profile_id",
+        "horse_assignments.trainer_id",
+        "horse_assignments.owner_id",
+        "horse_assignments.stable_id",
+        "dependent-horse-operational-records",
+        "dependent-stable-operational-records"
+      ]
+    },
+    {
+      "name": "0002_rls_policies.sql",
+      "sha256": "811f8d80dca95de159184cb98155638668a317b64d3728b2102459544a7ceeb4",
+      "dependencyKeys": []
+    },
+    {
+      "name": "0003_staff_scope_and_permissions.sql",
+      "sha256": "95c14bb59bf1c366976c7261b27bd44307d8b2b39433d8f771684e8f0deefcbc",
+      "dependencyKeys": [
+        "stable_staff_assignments.member_profile_id"
+      ]
+    },
+    {
+      "name": "0004_staff_rls_extension.sql",
+      "sha256": "8d47738aaac5f31fdfcee46a02a6d126757d9d096a1aabb90c4401dd49b21530",
+      "dependencyKeys": []
+    },
+    {
+      "name": "0005_membership_level_seeds.sql",
+      "sha256": "c1a48d412c0443de24595f95c093212a8a23c1431dfb2dd27de7f7a0a77c7875",
+      "dependencyKeys": []
+    },
+    {
+      "name": "0006_stripe_checkout_persistence.sql",
+      "sha256": "fd6ebf692554f69d491eb40af1b312c83cd1fac479ffd4c27eb2507c7464e94d",
+      "dependencyKeys": []
+    },
+    {
+      "name": "0007_test_product_seeds.sql",
+      "sha256": "0b986c8d3d6bde4355dd85363be51c8ffb9ad96875c453ee5b285649628652fe",
+      "dependencyKeys": []
+    },
+    {
+      "name": "0008_launch_membership_permission_seeds.sql",
+      "sha256": "29c7d0c7c29a30363dbfce469366877b8d7a879f815ec0245f2f277f753338ce",
+      "dependencyKeys": []
+    },
+    {
+      "name": "0009_biochemistry_test_data_model.sql",
+      "sha256": "b5de360d33c69f21c8967793afd66ca670a1fa32672ad60e7a47bd72f56982e3",
+      "dependencyKeys": [
+        "biochemistry_horse_access_assignments.nominated_by_user_id",
+        "biochemistry_tests.created_by_user_id",
+        "biochemistry_tests.updated_by_user_id",
+        "biochemistry_tests.deleted_by_user_id",
+        "biochemistry_test_uploads.uploaded_by_user_id",
+        "biochemistry_test_uploads.deleted_by_user_id",
+        "biochemistry_test_notes.created_by_user_id",
+        "biochemistry_test_notes.deleted_by_user_id",
+        "biochemistry_horse_access_assignments.member_profile_id",
+        "biochemistry_tests",
+        "biochemistry_test_notes",
+        "biochemistry_test_uploads"
+      ]
+    },
+    {
+      "name": "0010_secure_helper_execution.sql",
+      "sha256": "16425a5a4bebdbec6659f8743cdce6d5e31b36a432539fb878400a6c8b508279",
+      "dependencyKeys": []
+    },
+    {
+      "name": "0011_definitive_role_matrix_and_comments.sql",
+      "sha256": "aab35a16cd05e4dc6faefb1283ffd15f2301ece24456b9c38e101748b4863d32",
+      "dependencyKeys": [
+        "biochemistry_test_notes.updated_by_user_id",
+        "stable_role_assignments.assigned_by_user_id",
+        "stable_role_assignments.member_profile_id"
+      ]
+    },
+    {
+      "name": "0012_role_lifecycle_policy_hardening.sql",
+      "sha256": "e27eeb58829958e31e7ad28e2a9cb48fb95b97ddad2be7a627469245f85ba2ac",
+      "dependencyKeys": [
+        "horses.deleted_by_user_id",
+        "horse_ownership_history.changed_by_user_id",
+        "horse_ownership_history"
+      ]
+    },
+    {
+      "name": "0013_atomic_initial_administrator_claim.sql",
+      "sha256": "0b7625fb7341069d89e82b1a34e538de6c96a36c1e7a77bf312f3169257437a8",
+      "dependencyKeys": []
+    },
+    {
+      "name": "0014_authenticated_biochemistry_comment_soft_delete.sql",
+      "sha256": "63c64061419ae4db402d37cd6ee760a591d6558a89fa70b1840abbfbec904261",
+      "dependencyKeys": []
+    },
+    {
+      "name": "0015_hardened_authenticated_biochemistry_comment_soft_delete.sql",
+      "sha256": "25a797494c79590868a28ae2417126c57a3b466c5fd5ae524364bd772a48cb7e",
+      "dependencyKeys": []
+    },
+    {
+      "name": "0016_null_safe_authenticated_biochemistry_comment_soft_delete.sql",
+      "sha256": "c546cdf32024316f924666cf44328054adc546a8c6f55b5867bf3e73d4627b6c",
+      "dependencyKeys": []
+    },
+    {
+      "name": "0017_valid_null_safe_authenticated_biochemistry_comment_soft_delete.sql",
+      "sha256": "fc208e0e3ee343f802537ab47a0b4009565858cf8f6bffabcf4dee6ef945c2a0",
+      "dependencyKeys": []
+    },
+    {
+      "name": "0018_test_evidence_upload_and_storage.sql",
+      "sha256": "95448c2fb02bf6f4e197db9b969a381cd4b136a3e7d93980bcb413f5649341db",
+      "dependencyKeys": [
+        "evidence_csv_registry.approved_by_user_id",
+        "evidence_upload_attempts.user_id",
+        "evidence_holds.owner_user_id",
+        "evidence_holds.released_by_user_id",
+        "evidence_audit_events.actor_user_id",
+        "biochemistry_test_uploads.version-lineage",
+        "evidence_upload_attempts",
+        "evidence_holds",
+        "evidence_audit_events",
+        "storage.objects.bucket-object-owner"
+      ]
+    },
+    {
+      "name": "0019_test_evidence_remote_contract_completion.sql",
+      "sha256": "fb2d97f4fe339a9677c60a19308e18cc9e896571e2ebb70ae2ae2e1456ad474f",
+      "dependencyKeys": []
+    },
+    {
+      "name": "0020_schema_qualified_pgcrypto_initiation.sql",
+      "sha256": "f6c2ef2d7b336cb27ebcfd21a6b0572e6040f80ef88920d05488a3ca291135bb",
+      "dependencyKeys": []
+    },
+    {
+      "name": "0021_postgresql_filename_extension_parser_correction.sql",
+      "sha256": "a27d67629fe131d59836ab250f0591b9088735dac83363dbdc492aab75869038",
+      "dependencyKeys": []
+    },
+    {
+      "name": "0022_public_trainer_enquiries.sql",
+      "sha256": "f3945ffe4dace017b0b78cde80a0fbe823d399df92bc6cd657230c3c9bb7df59",
+      "dependencyKeys": []
+    },
+    {
+      "name": "0023_public_trainer_enquiry_retention_correction.sql",
+      "sha256": "8d0b3ad2cec9e792772c4e1040a599d83181490698430528b90c0c9471489c03",
+      "dependencyKeys": []
+    },
+    {
+      "name": "0024_versioned_four_loss_biochemistry_scoring.sql",
+      "sha256": "98e61c751c9388584007e1fbbe1147a16e45b5a08523e4b304d366599fc35a7f",
+      "dependencyKeys": []
+    },
+    {
+      "name": "0025_user_trend_view_preferences.sql",
+      "sha256": "b95d1d888b697e9e217f583cd887527509bd3b22d1bbe32afd5c35fa4050d22b",
+      "dependencyKeys": [
+        "user_trend_view_preferences.user_id"
+      ]
+    }
+  ]
+}

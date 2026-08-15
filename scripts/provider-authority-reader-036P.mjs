@@ -2,6 +2,7 @@ import { pathToFileURL } from "node:url";
 import { spawnSync } from "node:child_process";
 import path from "node:path";
 import { buildAcceptedSourceGraph } from "./provider-authority-discovery-036P.mjs";
+import { decodeDomainPage, selectExpectedDomain, decodeDomainDetail, decodeKeyPage, buildProviderDnsTuples, reconcilePublicDns, validateResendFrame } from "./provider-authority-resend-domain-036R.mjs";
 
 export const MAX_REQUESTS = 24;
 export const MAX_PAGES = 100;
@@ -29,6 +30,7 @@ export const REQUEST_MATRIX = Object.freeze({
     identity: Object.freeze({ method: "NATIVE", operation: "whoami-or-signed-in-team" }),
     keys: Object.freeze({ method: "GET", path: "/api-keys", paginated: true }),
     domains: Object.freeze({ method: "GET", path: "/domains", paginated: true }),
+    domainDetail: Object.freeze({ method: "GET", path: "/domains/{domain_id}" }),
   }),
   stripe: Object.freeze({
     account: Object.freeze({ method: "GET", path: "/v1/account" }),
@@ -51,6 +53,11 @@ const REQUIRED_OPERATIONS = Object.freeze({
   stripe: Object.freeze(["account", "webhooks"]),
   railway: Object.freeze(["graph"]),
 });
+const REQUIRED_OPERATIONS_036R = Object.freeze({
+  ...REQUIRED_OPERATIONS,
+  resend: Object.freeze(["domains", "domainDetail", "keys", "dns"]),
+});
+const OUTCOMES_036R = Object.freeze(["resend-domain-bound-five-provider-authority-complete-clean", "resend-domain-bound-five-provider-authority-blocked-clean"]);
 const CAPABILITY_CLASSES = Object.freeze([
   "SUPABASE_SERVICE_ROLE_KEY", "CRON_SECRET", "ENQUIRY_ABUSE_HMAC_SECRET",
   "PUBLIC_ENQUIRY_SMTP_PASS", "STRIPE_SECRET_KEY", "STRIPE_WEBHOOK_SECRET", "RAILWAY_API_TOKEN",
@@ -401,6 +408,22 @@ async function readHttp(provider, operation, descriptor, url, options, trace, tr
   return assertBoundedResponse(response.text);
 }
 
+async function readResendDomainDetail036R(url, options, trace, transport) {
+  assertReadOnlyRequest("resend", "domainDetail", { method: "GET", path: "/domains/{domain_id}" });
+  if (trace.requests >= MAX_REQUESTS) fail("REQUEST_CEILING_REFUSED");
+  trace.requests += 1;
+  const response = await transport.http(url, options);
+  const text = response.text ?? "";
+  const bytes = Buffer.byteLength(text);
+  const used = (trace.bytes.get("resend") ?? 0) + bytes;
+  trace.bytes.set("resend", used);
+  if (used > MAX_RESPONSE_BYTES) fail("PROVIDER_RESPONSE_BOUNDS_REFUSED");
+  if (!response.ok) fail(`HTTP_${response.status}_FALLBACK`);
+  if (PROTECTED_PATTERN.test(text)) fail("PROTECTED_RESPONSE_REFUSED");
+  try { return JSON.parse(text); } catch { fail("PROVIDER_RESPONSE_JSON_REFUSED"); }
+}
+
+
 async function exhaustPages({ provider, operation, descriptor, firstUrl, nextUrl, decode, options, trace, transport }) {
   const ids = new Set(), cursors = new Set(), rows = [];
   let cursor = null, page = 0;
@@ -498,6 +521,56 @@ async function runComposedProvider(provider, frame, trace, transport = realTrans
   fail("PROVIDER_REFUSED");
 }
 
+async function runComposedProvider036R(provider, frame, trace, transport = realTransport) {
+  if (provider !== "resend") return runComposedProvider(provider, frame, trace, transport);
+  const credential = string(frame.credential, "CHILD_AUTHORITY_REFUSED", MAX_LINE_BYTES);
+  validateResendFrame(object(frame.expected, "CHILD_AUTHORITY_REFUSED"));
+  const headers = { Authorization: `Bearer ${credential}`, "User-Agent": "precision-performance-036r/1.0" };
+  const domains = await exhaustPages({
+    provider: "resend", operation: "domains", descriptor: { method: "GET", path: "/domains" },
+    firstUrl: "https://api.resend.com/domains?limit=100",
+    nextUrl: (cursor) => `https://api.resend.com/domains?limit=100&after=${encodeURIComponent(cursor)}`,
+    decode: decodeDomainPage, options: { method: "GET", headers }, trace, transport,
+  });
+  const selected = selectExpectedDomain(domains.rows);
+  const detailRaw = await readResendDomainDetail036R(`https://api.resend.com/domains/${encodeURIComponent(selected.id)}`, { method: "GET", headers }, trace, transport);
+  const detail = decodeDomainDetail(detailRaw, selected);
+  const tuples = buildProviderDnsTuples(detail.records);
+  const dnsResult = await reconcilePublicDns(tuples, transport.dns, () => {
+    trace.dnsReads += 1;
+    if (trace.dnsReads > 5) fail("RESEND_DNS_CEILING_REFUSED");
+  });
+  const keys = await exhaustPages({
+    provider: "resend", operation: "keys", descriptor: { method: "GET", path: "/api-keys" },
+    firstUrl: "https://api.resend.com/api-keys?limit=100",
+    nextUrl: (cursor) => `https://api.resend.com/api-keys?limit=100&after=${encodeURIComponent(cursor)}`,
+    decode: decodeKeyPage, options: { method: "GET", headers }, trace, transport,
+  });
+  return Object.freeze({
+    operations: REQUIRED_OPERATIONS_036R.resend,
+    authorityBound: true,
+    facts: Object.freeze({
+      classNames: Object.freeze(["PUBLIC_ENQUIRY_SMTP_PASS"]),
+      domainAlias: "resend-domain:precisionperformance.com.au",
+      domains: domains.rows.length,
+      keys: keys.rows.length,
+      dnsMatched: dnsResult.matched,
+      dnsTuples: dnsResult.tuples,
+    }),
+  });
+}
+
+export async function exerciseComposedProvider036RForTest(provider, frame, transport, seed = {}) {
+  const trace = { requests: seed.requests ?? 0, dnsReads: seed.dnsReads ?? 0, operations: new Set(), bindings: new Set(), facts: new Map(), bytes: new Map() };
+  try {
+    const projection = await runComposedProvider036R(provider, frame, trace, transport);
+    return Object.freeze({ projection, requests: trace.requests, dnsReads: trace.dnsReads, bytes: trace.bytes.get(provider) ?? 0 });
+  } catch (error) {
+    error.context = Object.freeze({ requests: trace.requests, dnsReads: trace.dnsReads });
+    throw error;
+  }
+}
+
 export async function exerciseComposedProviderForTest(provider, frame, transport, seed = {}) {
   const trace={requests:seed.requests??0,operations:new Set(),bindings:new Set(),facts:new Map(),bytes:new Map()};
   const projection=await runComposedProvider(provider,frame,trace,transport);
@@ -570,6 +643,72 @@ async function protectedChild() {
   }
   process.stdout.write(JSON.stringify({ id: 6, state: "final", ...deriveLiveResult(trace) }) + "\n");
 }
-if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href && process.argv[2] === "--protected-child") {
+function deriveLiveResult036R(trace, fallbackReason = null) {
+  const graph = buildAcceptedSourceGraph();
+  const providerClasses = new Map(PROVIDERS.map((provider) => [provider, new Set(trace.facts.get(provider)?.classNames ?? [])]));
+  const mechanisms = {
+    SUPABASE_SERVICE_ROLE_KEY: ["modern-secret-key", ["vercel-environments"], "read-only-admin", "individual-disable", "old-key-auth-rejection", "legacy-coupling-refused"],
+    CRON_SECRET: ["generated-secret", ["vercel-environments", "cron-routes"], "no-business-status", "deployment-retirement", "old-route-auth-rejection", "reconcile-route-blocks-without-oracle"],
+    ENQUIRY_ABUSE_HMAC_SECRET: ["generated-secret", ["vercel-environments", "enquiry-consumers"], "deterministic-signature", "deployment-retirement", "old-deployment-incapability", "unknown-caller-blocks"],
+    PUBLIC_ENQUIRY_SMTP_PASS: ["resend-sending-key", ["vercel-environments"], "smtp-verify-no-send", "delete-exact-key", "old-key-auth-rejection", "domain-bound-authority-required"],
+    STRIPE_SECRET_KEY: ["stripe-restricted-key", ["vercel-environments"], "account-metadata", "expire-exact-key", "old-key-auth-rejection", "mode-bound"],
+    STRIPE_WEBHOOK_SECRET: ["stripe-endpoint-roll", ["vercel-environments"], "endpoint-metadata", "roll-exact-endpoint", "non-business-oracle-required", "delivery-forbidden"],
+    RAILWAY_API_TOKEN: ["railway-token", ["vercel-environments"], "project-metadata", "revoke-exact-token", "old-token-auth-rejection", "token-type-bound"],
+  };
+  const capabilityRows = validateCapabilityRows(graph.classes.map((row) => {
+    const authority = CLASS_PROVIDER[row.class], names = providerClasses.get(authority) ?? new Set();
+    const providerConsumers = names.has(row.class) ? 1 : 0;
+    const reachability = !graph.complete ? "unknown-blocking" : (row.consumers.length > 0 || providerConsumers > 0) ? "required" : "not-reachable-proven";
+    const [replacement, installTargets, readback, predecessorAction, predecessorOracle, coupling] = mechanisms[row.class];
+    return { class: row.class, authority, sourceConsumers: row.consumers, sourceComplete: graph.complete, providerConsumers, paginationComplete: trace.bindings.has(authority), reachability, replacement, installTargets, readback, predecessorAction, predecessorOracle, coupling, manualUiRequired: ["resend", "stripe", "railway"].includes(authority), laterMutation: reachability === "unknown-blocking" ? "blocked" : "executable" };
+  }));
+  const authorityRows = Object.freeze(PROVIDERS.map((provider) => {
+    const required = REQUIRED_OPERATIONS_036R[provider], completed = required.filter((operation) => trace.operations.has(`${provider}:${operation}`));
+    const exactBinding = trace.bindings.has(provider);
+    const extra = provider === "resend" && exactBinding ? ";domain-bound-dns-exact" : "";
+    return Object.freeze({ provider, status: exactBinding ? "complete-read" : completed.length ? "blocked-incomplete" : "not-read", exactBinding, paginationComplete: exactBinding && completed.length === required.length, evidence: `${completed.length}/${required.length}-operations${extra}` });
+  }));
+  const operationsComplete = Object.entries(REQUIRED_OPERATIONS_036R).every(([provider, operations]) => operations.every((operation) => trace.operations.has(`${provider}:${operation}`)));
+  const rowsResolved = capabilityRows.every((row) => row.reachability !== "unknown-blocking");
+  const complete = operationsComplete && trace.bindings.size === PROVIDERS.length && graph.complete && rowsResolved && trace.requests >= 19 && trace.requests <= 24 && trace.dnsReads >= 1 && trace.dnsReads <= 5 && !fallbackReason;
+  const result = Object.freeze({
+    outcome: complete ? OUTCOMES_036R[0] : OUTCOMES_036R[1], complete,
+    reason: complete ? null : fallbackReason ?? "INCOMPLETE_AUTHORITY_TRACE",
+    authorities: trace.bindings.size, authorityRows, rows: capabilityRows.length, capabilityRows,
+    providerReads: trace.requests, dnsReads: trace.dnsReads, writes: 0, mutations: 0, businessEffects: 0, residue: 0,
+  });
+  LIVE_RESULT_BRAND.add(result);
+  return result;
+}
+
+async function protectedChild036R() {
+  const iterator = readLines();
+  const first = await iterator.next();
+  if (first.done || first.value?.mode !== "protected-read" || first.value.id !== 1) fail("CHILD_MODE_REFUSED");
+  const trace = { requests: 0, dnsReads: 0, operations: new Set(), bindings: new Set(), facts: new Map(), bytes: new Map() };
+  for (let index = 0; index < PROVIDERS.length; index += 1) {
+    const provider = PROVIDERS[index];
+    process.stdout.write(JSON.stringify({ id: index + 1, state: "need-authority", provider }) + "\n");
+    const next = await iterator.next(), frame = next.value;
+    if (next.done || frame?.id !== index + 1 || frame?.provider !== provider || frame?.type !== "authority") fail("CHILD_PROTOCOL_REFUSED");
+    try {
+      const projection = await runComposedProvider036R(provider, frame, trace);
+      projection.operations.forEach((operation) => trace.operations.add(`${provider}:${operation}`));
+      if (projection.authorityBound) trace.bindings.add(provider);
+      trace.facts.set(provider, projection.facts ?? {});
+      process.stdout.write(JSON.stringify({ id: index + 1, state: "provider-complete", provider, requests: trace.requests, dnsReads: trace.dnsReads, operations: projection.operations.length }) + "\n");
+    } catch (error) {
+      const reason = error instanceof Reader036PError || error?.name === "Domain036RError" ? error.code : "PROVIDER_READ_FAILED";
+      process.stdout.write(JSON.stringify({ id: 6, state: "final", ...deriveLiveResult036R(trace, reason) }) + "\n"); return;
+    } finally {
+      frame.credential = null; frame.expected = null;
+    }
+  }
+  process.stdout.write(JSON.stringify({ id: 6, state: "final", ...deriveLiveResult036R(trace) }) + "\n");
+}
+
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href && process.argv[2] === "--protected-child-036r") {
+  protectedChild036R().catch(() => { process.stderr.write("SANITIZED_CHILD_FAILURE\n"); process.exitCode = 1; });
+} else if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href && process.argv[2] === "--protected-child") {
   protectedChild().catch(() => { process.stderr.write("SANITIZED_CHILD_FAILURE\n"); process.exitCode = 1; });
 }

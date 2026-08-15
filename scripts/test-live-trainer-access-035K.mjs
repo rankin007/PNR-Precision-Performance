@@ -102,7 +102,7 @@ check(signInForm.includes("Request another code in"));
 check(!signInForm.includes("localStorage"));
 check(!signInForm.includes("sessionStorage"));
 check(callback.includes("normalizeAppRedirectPath"));
-check(portal.includes("Accessible horse operational worklist"));
+check(portal.includes("A permission-aware daily worklist of accessible horses"));
 check(horseWorkspace.includes("Horse not available"));
 check(!horseWorkspace.includes("provider detail"));
 

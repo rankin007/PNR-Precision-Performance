@@ -1,3 +1,11 @@
+## Sprint 036K credential-class environment boundary
+
+Only these seven non-public classes are eligible: `SUPABASE_SERVICE_ROLE_KEY`, `CRON_SECRET`, `ENQUIRY_ABUSE_HMAC_SECRET`, `PUBLIC_ENQUIRY_SMTP_PASS`, `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET` and `RAILWAY_API_TOKEN`. The replacement projection must account for Development, Preview and Production bindings plus every still-addressable immutable or old deployment consumer. Public Supabase/Stripe values and Vercel OIDC are excluded.
+
+Environment presence or absence is not a provider revocation oracle. `CRON_SECRET` and `ENQUIRY_ABUSE_HMAC_SECRET` require proof that no old consumer can accept the predecessor. SMTP, Stripe and Railway `revoked-not-required` still require exact provider-native revoke or absence proof plus a fail-closed runtime. Supabase service-role work requires an individually supported create/revoke mechanism and must not change anon/public keys, JWT signing authority, sessions or unrelated project keys.
+
+The phase ledger distinguishes accepted retained bindings and candidates from residue. Before predecessor revocation, compensation restores the complete prior compatible binding/caller projection and removes the replacement. After independent predecessor invalidation, compensation may retain or repair the verified replacement but must never restore the revoked predecessor.
+
 # Environment Contract
 
 Sprint 003 documents environment truth by variable name, category, and requiredness only. Secret values, prefixes, suffixes, token fragments, and connection strings must not be printed or stored in planning docs.
@@ -106,3 +114,7 @@ Sprint 034C did not open protected environment files, inspect values, compare cr
 Environment-backed runtime credentials remain separate from human delivery/operator authentication. Supabase service-role, Stripe secret/webhook, custom SMTP and other application credential classes stay in provider-managed secret storage and are not copied into the non-secret register. Custom SMTP directly supports trainer authentication and is explicitly `trainer/application-auth-out-of-scope` for Sprint 034C.
 
 The optional Railway status-token class remains `ambiguous-retain`: no Railway deployment configuration is documented, and presence, ownership and value were not inspected. Vercel OIDC remains a provider-issued ephemeral deployment credential class; it must not be copied, manually persisted or treated as a human password. See `docs/change password.md` for sanitized ownership, rotation and recovery status.
+
+## Sprint 036M paired Supabase bindings
+
+`NEXT_PUBLIC_SUPABASE_ANON_KEY` may hold a publishable key and `SUPABASE_SERVICE_ROLE_KEY` may hold a secret key without renaming the established bindings. Change both Production bindings together and deploy at most one exact-source alias-free candidate. Opaque keys travel in `apikey`; only an exact duplicated application-key bearer is removed, while a different user-session JWT remains in `Authorization`. Vercel environment changes apply only to a new deployment; fixed aliases move only after public/user/admin probes pass.

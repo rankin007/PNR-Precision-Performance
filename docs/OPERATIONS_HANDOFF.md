@@ -1,6 +1,27 @@
+## Sprint 036K prelaunch execution boundary
+
+Sprint 036K must close its local 296-assertion focused gate and all 647 retained assertions before any provider mutation or private trainer step. Migration dependency authority is raw-byte SHA-256 anchored before parsing, then bound to the exact ordered migration 0001-0025 names and content hashes. Landing rows and phase progress are held together in a module-private append-only ledger; callers receive only fresh recursively frozen snapshots, and validation or cloning failure commits nothing. A predecessor state is monotonic after revocation, and any revoke attempt prohibits pre-revocation compensation until independent predecessor-and-replacement readback resolves it. The provider capability gate is fail-closed: every one of the seven credential classes needs complete current and still-addressable old consumers plus provider-native create/install/probe and independent predecessor-revocation evidence. Missing individual Supabase service-role creation or revocation support blocks the target cleanly; it does not authorize a project-wide key, JWT, public-key or session change.
+
+The two excluded Auth identities are handled by exact ordinal, exact protected ID-plus-email match and a migration-hash-bound direct/indirect dependency manifest. Unknown, non-owned or nonzero dependency state is retained and blocking. An obsolete identity needs protected normal-session global sign-out, independent refresh/session denial and exact-ID Auth deletion last. One delete call, directory position or count is never sufficient.
+
+Only after credential and identity prerequisites pass may the one-message, one-verification real-trainer rehearsal begin. The trainer enters their own address and normal six-digit code privately; there is no resend, generated-link substitute, mailbox automation or second trainer. Any failure closes without retry. External phases, authorized retained states, compensation and exact-owned residue must be reread separately, and a revoked predecessor is never restored.
+
 # Operations Handoff
 
-Date: 2026-08-05. Owner names are intentionally left as roles until durably assigned.
+Updated: 2026-08-12. Sprint 033B supplies the durable named operating assignment below. Historical sprint sections remain evidence of their original boundaries.
+
+## Sprint 033B named operating assignment
+
+- Phillip Norman Rankin, Director of Aprec8 Pty Ltd, is accountable business, support, privacy and incident owner.
+- Randell Rankin is platform, migration, release and recovery operator.
+- Phillip Norman Rankin and Randell Rankin jointly approve rollback and restoration decisions.
+- Historical evidence using `Philip Rankin` in this ownership context remains unchanged and refers to the same Aprec8 owner; new records use `Phillip Norman Rankin`.
+- The monitored privacy/incident address remains `equineprecisionperformance@hotmail.com`; no new public channel or SLA is created.
+- The internal four-business-hour incident target uses Monday-Friday 09:00-17:00 Australia/Brisbane (UTC+10, weekends excluded, public holidays not modelled); containment starts at detection. This is not a public SLA.
+- Support values are refused when they are standalone Australian `+61` mobile forms, labelled plausible phone numbers, PEM private-key markers, AWS `AKIA`, Stripe live `sk_live_`/`rk_live_`, GitHub `ghp_`/`github_pat_`, other credential/token/signed-query, private-contact or unredacted shapes. Narrow near-miss/arbitrary-prose controls remain accepted; the artifact reference must use the sanitized `redacted:` form and rejected values are not mutated, persisted or echoed.
+- Internal recovery objectives are at most 24 hours of covered operational-record data loss and restoration within one business day after a recovery decision, subject to provider availability and verified compatibility.
+- Rehearse quarterly, before first sensitive-data launch, and after a material schema or Storage recovery change.
+- The complete operating procedure and explicit local/provider limitations are in `docs/OPERATIONAL_OWNERSHIP_INCIDENT_AND_RESTORATION_033B.md`.
 
 ## Production identity
 
@@ -11,24 +32,26 @@ Date: 2026-08-05. Owner names are intentionally left as roles until durably assi
 
 ## Monitoring
 
-Operations owner daily checks `/`, `/pricing`, `/disclaimer`, one hero asset, `/api/health`, and anonymous `/admin`/`/portal` redirection. Weekly checks compare canonical URL, robots exclusions, sitemap public-only routes, all five aliases, Vercel Ready state and recent error signals. After releases, provider incidents or support reports, repeat the full set with a cache-busting query and capture timestamp, URL, status, deployment ID and privacy-safe screenshot/log excerpt.
+Randell Rankin performs the platform checks: daily `/`, `/pricing`, `/disclaimer`, one hero asset, `/api/health`, and anonymous `/admin`/`/portal` redirection. Weekly checks compare canonical URL, robots exclusions, sitemap public-only routes, all five aliases, Vercel Ready state and recent error signals. After releases, provider incidents or support reports, repeat the full set with a cache-busting query and capture timestamp, URL, status, deployment ID and privacy-safe screenshot/log excerpt. Phillip Norman Rankin owns the resulting business/support/privacy decision.
 
 ## Severity and triage
 
-- **P0:** suspected disclosure, cross-stable access, credential exposure or destructive integrity loss. Stop access/activity, preserve minimal evidence, notify security/privacy and platform owners immediately; do not copy protected data into tickets.
-- **P1:** public outage, broken sign-in/protected-route boundary, materially incorrect public claims, or release-wide regression. Verify aliases and deployment; decide rollback promptly.
-- **P2:** degraded route/asset or bounded workflow failure with safe fallback. Reproduce, record scope, assign product/platform owner.
-- **P3:** cosmetic/documentation issue. Record and schedule normally.
+- **P0:** suspected disclosure, cross-stable access, credential exposure or destructive integrity loss. Phillip Norman Rankin is accountable; Randell Rankin begins approved technical containment; preserve minimal evidence and do not copy protected data into tickets.
+- **P1:** public outage, broken sign-in/protected-route boundary, materially incorrect public claims, or release-wide regression. Phillip Norman Rankin is accountable; Randell Rankin verifies source, aliases and bindings and prepares the rollback decision.
+- **P2:** degraded route/asset or bounded workflow failure with safe fallback. Phillip Norman Rankin owns the support outcome; Randell Rankin reproduces and schedules the bounded platform correction.
+- **P3:** cosmetic/documentation issue. Phillip Norman Rankin owns triage; Randell Rankin schedules release handling where needed.
 
 Evidence must use synthetic identifiers or redaction. Never place credentials, tokens, clinical records, customer uploads or personal contact data in ordinary tickets/chat.
 
 ## Rollback
 
-Rollback is appropriate for a release-caused P0/P1 regression only after the release/platform owner proves an exact compatible deployment and binding state. Sprint 036L superseded the prior alias-only rollback assumption: current accepted routing is `dpl_4bjHgm4KL3DBo7wmbVPW4VJUk2Sf` and current Production bindings target the approved Supabase project. Do not assign the older `dpl_EUJyBLQp7okgbPwtBU6nmMH88L6A` deployment or restore the historical old-project bindings independently. A governed rollback must treat the five aliases and three bindings as one compatibility decision, preserve protected values in process memory, independently reread all aliases and binding classes, and re-run public/protected/API/disabled-commerce safety. DNS and Stripe remain outside this outline.
+Rollback is appropriate for a release-caused P0/P1 regression only after Randell Rankin proves an exact compatible source, deployment and binding state and both Randell Rankin and Phillip Norman Rankin approve the rollback decision. Sprint 036L superseded the prior alias-only rollback assumption: current accepted routing is `dpl_4bjHgm4KL3DBo7wmbVPW4VJUk2Sf` and current Production bindings target the approved Supabase project. Do not assign the older `dpl_EUJyBLQp7okgbPwtBU6nmMH88L6A` deployment or restore the historical old-project bindings independently. A governed rollback must treat the application source, five aliases and three bindings as one compatibility decision, preserve protected values in process memory, independently reread all aliases and binding classes, and re-run public/protected/API/disabled-commerce safety. DNS and Stripe remain outside this outline.
+
+The rollback comparison uses exact unique identity sets rather than counts: the five aliases listed above and binding classes `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`. Missing, extra, duplicate or wrong identities fail closed; binding values remain protected and unreported.
 
 ## Support and access
 
-Support owner records route, time, browser/device, expected/actual behavior, reproducibility and a redacted artifact; classifies severity; and escalates access/security/privacy cases without requesting raw protected data. Product owner owns workflow defects; platform owner owns hosting/build/provider incidents; security/privacy owners own access or data concerns.
+Phillip Norman Rankin owns support intake and records route, time, browser/device, expected/actual behavior, reproducibility and a redacted artifact; he classifies severity and owns access/security/privacy escalation without requesting raw protected data. Randell Rankin owns hosting, build, migration, release and recovery execution.
 
 User onboarding/offboarding and membership/horse assignment must use existing admin and role contracts. The authorized access owner verifies requester authority, applies least privilege, records the change, and confirms revoked users no longer access protected routes. No manual database bypass or RLS weakening is permitted.
 
@@ -96,10 +119,12 @@ The single exact-source candidate `dpl_4bjHgm4KL3DBo7wmbVPW4VJUk2Sf` passed immu
 
 ## Governance and unresolved duties
 
-- Privacy owner must define data-subject request, retention/deletion, breach notification and evidence-upload procedures before those capabilities are operationally accepted.
-- Platform owner owns provider-account recovery, MFA, credential rotation and least-privilege access; secrets stay in provider secret stores.
+- Phillip Norman Rankin owns verified privacy access/correction requests, the 30-calendar-day internal completion target, refusal/delay decisions and incident escalation. Evidence-upload activation and legal/customer acceptance remain open.
+- Randell Rankin owns provider-account recovery, MFA, credential rotation and least-privilege platform operation; secrets stay in provider secret stores. Private provider access and recovery verification remain unproven.
 - Content/business owner approves public claims, pricing and onboarding; domain/veterinary owner approves formulas, thresholds, terminology, knowledge content and disclaimers. Every change requires versioned source authority, review and regression proof before release.
-- Vercel release rollback is verified. Supabase/database and private-storage backup/restore policy and restore rehearsal remain unproven and require platform/privacy ownership.
+- Vercel release rollback remains recorded. Sprint 033B proves only a separate database/Storage synthetic same-process logical rehearsal with zero temporary residue. Provider-native backup availability, hosted database/Storage restoration and Production duration remain unproven.
+- Synthetic Storage packages require exact manifest/payload `contentType`, restore a separate sanitized metadata ledger and reread it; missing or changed metadata fails closed.
+- A generated key Buffer is owned immediately and zeroed even when IV validation or collision fails before return. This makes no claim that all native/runtime copies are erased.
 
 ## Prohibited assumptions
 
@@ -122,3 +147,7 @@ The 64 verified-safe files remain at the approved non-Git destination with 64/64
 Retain the safe archive, accepted vault set, its private manifest and the unaccepted path-length-limited first attempt until a separately approved retention or cleanup action. Do not restore outside the encrypted volume, initialise Git in the vault, share/sync the vault, or delete any recovery material by inference. Cleanup of the unaccepted attempt remains specifically withheld.
 
 Exact containment, retirement and final reconciliation results are in `planning/reviews/034D-stage-2-containment-preservation-and-disposition-plan.md`. Sprint 035Q remains a safe, live-remote-backed alternate lineage, not accepted canonical product history. Do not merge, cherry-pick, rebase, replay or adopt it without a later Architect decision. The pre-existing divergent remote 029F branch is not the protected local 029F history preserved in the private bundle.
+
+## Sprint 036M private recovery window
+
+Use the numbered 90-minute sequence in `docs/PRE_PUBLIC_LAUNCH_CREDENTIAL_IDENTITY_AND_DELIVERY_036M.md`. Keep the trainer outside the window until local, paired-key, Production, identity and trainer-path credential gates pass. Exactly one normal message and one normal verification are allowed. Record only sanitized ordinals, dispositions, counts, booleans and Brisbane timestamps; protected values stay in a non-transcribed ConsoleHost or signed-in provider interface.

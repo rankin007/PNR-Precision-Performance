@@ -7,6 +7,8 @@ Contract version: `sprint-025-authority-partial-v1`
 Formula version: `biochemistry-score-v1`
 Lookup source: `Reading Tables v1.csv`, version `v1`
 
+Sprint 025B review package: `docs/SPRINT_025B_VERSIONED_DOMAIN_AUTHORITY_PACKAGE.md`, package `sprint-025B-authority-v1`, status `owner-input-required`. It builds on but does not supersede this accepted partial structural contract. Sprint 025C remains blocked until a later package version contains complete named, dated product/domain and veterinary decisions.
+
 This record separates established software behavior from health-adjacent decisions that have not been supplied. An unresolved item is unavailable in the product; fixture values are never approval.
 
 ## Authority matrix

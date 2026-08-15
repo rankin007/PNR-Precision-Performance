@@ -8,9 +8,9 @@ function Test-CandidateMigrationLedger {
   $migrations = @($files | Where-Object Name -Match '^\d{4}_.+\.sql$' | Sort-Object { [int]$_.Name.Substring(0,4) }, Name)
   $groups = $migrations | Group-Object { $_.Name.Substring(0,4) }
   if ($groups | Where-Object Count -ne 1) { throw 'Candidate repository migration chain contains a duplicate version.' }
-  $expected = 1..23 | ForEach-Object { '{0:D4}' -f $_ }
+  $expected = 1..25 | ForEach-Object { '{0:D4}' -f $_ }
   $actual = $migrations | ForEach-Object { $_.Name.Substring(0,4) }
-  if (Compare-Object $expected $actual) { throw 'Candidate repository migration versions must be exactly 0001 through 0023.' }
+  if (Compare-Object $expected $actual) { throw 'Candidate repository migration versions must be exactly 0001 through 0025.' }
   $candidate = @($migrations | Where-Object Name -EQ '0018_test_evidence_upload_and_storage.sql')
   if ($candidate.Count -ne 1) { throw 'Candidate repository chain requires exact 0018_test_evidence_upload_and_storage.sql.' }
   $bytes = [IO.File]::ReadAllBytes($candidate[0].FullName)
@@ -74,5 +74,32 @@ function Test-CandidateMigrationLedger {
     'trainer_enquiry_retention_status','trainer-enquiry-abuse-cleanup-hourly','5 * * * *',
     'revoke all on function','to service_role','Sprint 029O'
   )) { if ($retentionSql -notmatch [regex]::Escape($marker)) { throw "Candidate 0023 missing identity marker: $marker" } }
-  [pscustomobject]@{ Migrations=$migrations; Candidate=$parserCorrection[0]; Head=$retentionCorrection[0]; Diagnostic='Candidate repository migration chain is aligned through 0023; no applied or remote status was inspected.' }
+  $scoringMigration = @($migrations | Where-Object Name -EQ '0024_versioned_four_loss_biochemistry_scoring.sql')
+  if ($scoringMigration.Count -ne 1) { throw 'Candidate repository chain requires exact 0024_versioned_four_loss_biochemistry_scoring.sql.' }
+  $scoringBytes = [IO.File]::ReadAllBytes($scoringMigration[0].FullName)
+  if ($scoringBytes.Length -ge 3 -and $scoringBytes[0] -eq 0xEF -and $scoringBytes[1] -eq 0xBB -and $scoringBytes[2] -eq 0xBF) { throw 'Candidate 0024 must be UTF-8 without BOM.' }
+  $scoringSql = [Text.UTF8Encoding]::new($false,$true).GetString($scoringBytes)
+  foreach ($marker in @(
+    'Sprint 025C - versioned four-loss biochemistry scoring','validate_biochemistry_v2_scored_snapshot',
+    "formula_version = 'biochemistry-score-v2'",'HORSE Energy Loss Version 3 no urea or age.xlsx',
+    'on conflict (lookup_type, exact_reading, source_version) do update'
+  )) { if ($scoringSql -notmatch [regex]::Escape($marker)) { throw "Candidate 0024 missing identity marker: $marker" } }
+  $trendMigration = @($migrations | Where-Object Name -EQ '0025_user_trend_view_preferences.sql')
+  if ($trendMigration.Count -ne 1) { throw 'Candidate repository chain requires exact 0025_user_trend_view_preferences.sql.' }
+  $trendBytes = [IO.File]::ReadAllBytes($trendMigration[0].FullName)
+  if ($trendBytes.Length -ge 3 -and $trendBytes[0] -eq 0xEF -and $trendBytes[1] -eq 0xBB -and $trendBytes[2] -eq 0xBF) { throw 'Candidate 0025 must be UTF-8 without BOM.' }
+  $trendSql = [Text.UTF8Encoding]::new($false,$true).GetString($trendBytes)
+  foreach ($marker in @(
+    'Sprint 028B - self-only saved longitudinal trend view preferences','user_trend_view_preferences',
+    'set_default_biochemistry_trend_preference','enable row level security',
+    'idx_user_trend_view_preferences_one_default','to authenticated'
+  )) { if ($trendSql -notmatch [regex]::Escape($marker)) { throw "Candidate 0025 missing identity marker: $marker" } }
+  [pscustomobject]@{
+    Migrations=$migrations
+    Candidate=$parserCorrection[0]
+    Head=$trendMigration[0]
+    LocalOnlyVersions=@('0024','0025')
+    RemoteStatusInspected=$false
+    Diagnostic='Candidate repository migration chain is aligned locally through 0025; migrations 0024 and 0025 are local-only; no applied or remote status was inspected.'
+  }
 }

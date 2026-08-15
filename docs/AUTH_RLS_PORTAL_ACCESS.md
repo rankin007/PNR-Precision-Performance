@@ -1,3 +1,11 @@
+## Sprint 036K Excluded Identity Disposition
+
+The two excluded Supabase Auth identities remain protected, ordinal-bound targets. A mutation requires an exact Auth ID plus protected email-authority match; enumeration order, visible directory position, count or a partial identifier supplies no authority.
+
+Before either identity can be classified obsolete, a migration-hash-bound manifest through migrations `0001`-`0025` must report every direct and indirect user/profile/trainer/owner/staff/access, horse-assignment, operational/history/biochemistry/evidence-upload, attempt/hold/audit and Storage-object dependency as exact zero with supported ownership. Unknown, non-owned, nonzero or unsupported state means `unresolved-retained-blocking`; Sprint 036K does not delete history to manufacture zero.
+
+Deletion is Auth-last. The installed Admin global-sign-out contract needs that target user's valid JWT, not an Auth ID, so the protected procedure must establish a normal target session, revoke it globally, independently prove refresh and session reuse denied, then perform at most one exact-ID Auth terminal deletion for that ordinal and independently prove `getUserById` absence. Dependency, fixture and session mutations have their own bounded ledgers and do not consume or expand the Auth mutation ceiling.
+
 # Auth, RLS, And Portal Access Evidence
 
 Sprint 004 verified and hardened the current auth, role, and portal access implementation from local source evidence. Secret values, tokens, passwords, private keys, connection strings, and credential fragments were not printed or stored.
@@ -205,3 +213,21 @@ The one exact-source Ready candidate reached five/five through independently ver
 # Sprint 021AH Application-Proof Completion
 
 Migration 0017 is applied once and replaces only the exact authenticated soft-delete RPC with valid `IS TRUE`/`IS NOT TRUE` null-safe authorization. The genuine direct authorization matrix passed 17/17 and the unchanged rendered lifecycle passed 48/48. Final Auth/application/Storage state is `0/0/0`, ledger is `0001`–`0017`, and the RPC boundary is authorization-complete for the proven matrix.
+
+## Sprint 021AI managed role and Owner journeys
+
+`/data-entry/access` is an authenticated management surface for an active Administrator or Trainer only. It uses the signed-in Supabase server client and existing RLS. It does not use the service role or a global directory.
+
+An Administrator remains responsible for identity, primary role, membership and the first scoped relationship. A Trainer can manage horse access only for a horse they already manage and an active profile already visible in their signed-in RLS scope. The Product offers exactly `veterinarian` and `stable_hand` (`Stable Staff`).
+
+Migration 0012 remains the final database mutation authority, but its helper is intentionally broader because it also accepts `consultant`. The 021AI server action therefore rebuilds the actor's current scoped snapshot and reselects the submitted horse, profile and exact Product role before mutation. Consultant, forged, unknown, inactive, suspended, self, mismatched-role, wrong-horse and cross-stable submissions receive one generic unavailable outcome and no visible success.
+
+Assignments use the existing horse-specific `read` lifecycle. Revocation ends one exact current visible assignment. Managed Veterinarians and Stable Staff retain assigned-horse read access and own-comment-only writes; they do not gain horse, test, reading, score, assignment or other-comment mutation authority.
+
+Owner horse detail and reports remain under the portal guard and user-scoped RLS. Horse-detail latest values are stored `hydration_score` and stored `health_score` presented as Hydration Score and Biochemistry Trend Score. Blocked or unscored states show `Not scored`; no value is recalculated. Formula/source versions stay visible, the reports query hint is reselected from accessible horses, and saved views remain self-owned chart configuration only.
+
+This is local Product and synthetic evidence. It does not establish remote activation, Production acceptance, representative Owner comprehension or Product-wide Done.
+
+## Sprint 036M identity and opaque-key compatibility
+
+Opaque application keys use `apikey`; an authenticated user's JWT remains in `Authorization`. Browser, server, middleware, admin and PKCE callback clients share the same compatibility fetch without moving privileged keys into the browser. Identity deletion still requires private exact match, the pinned 25-migration/50-dependency zero-owned manifest, global session invalidation, Auth-last deletion and independent absence. Duplicate, partial, unresolved or non-owned cases remain unchanged and blocking.

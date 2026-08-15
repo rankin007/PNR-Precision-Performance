@@ -4,6 +4,13 @@
 
 This is a non-secret operational register despite its requested filename. It records delivery/operator authentication classes and sanitized verification only. Trainer sign-in, trainer account lifecycle, participant access and application authentication are separately governed and are not Sprint 034C cleanup targets.
 
+## Sprint 033B named operational accountability
+
+- Phillip Norman Rankin is the named business, support, privacy and incident owner for the local operational procedure.
+- Randell Rankin is the named repository/platform custodian and migration, release and recovery operator for the local operational procedure.
+- Rollback and restoration require joint approval from Phillip Norman Rankin and Randell Rankin.
+- These named assignments do not verify provider access, MFA, recovery paths or any `ambiguous-retain` item below. All existing sanitized verification states and dispositions remain unchanged.
+
 ## Classification rules
 
 - `required-current`: current delivery depends on the access class and no safe removal is proposed.
@@ -42,3 +49,15 @@ The following checks require the authorized human operator to authenticate priva
 5. Stripe and Google: confirm current operator ownership, MFA and recovery only if those control planes remain operationally required.
 
 Until these checks are completed and recorded in sanitized form, all affected items remain unchanged. No external mutation is justified by the current evidence.
+
+## Sprint 036K seven-class pre-public-launch boundary
+
+Sprint 036K narrows credential work to exactly seven non-public classes: `SUPABASE_SERVICE_ROLE_KEY`, `CRON_SECRET`, `ENQUIRY_ABUSE_HMAC_SECRET`, `PUBLIC_ENQUIRY_SMTP_PASS`, `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET` and `RAILWAY_API_TOKEN`. Public configuration and provider-issued Vercel OIDC remain excluded.
+
+Each class needs a complete consumer inventory that includes still-addressable immutable and old deployments, a provider-native creation and installation path, a replacement runtime probe, and an independent provider-native predecessor invalidation oracle. Vercel environment-row absence is not revocation evidence. An unsupported or incomplete mechanism remains `blocked-retained`; do not infer rotation or absence from source, a working replacement, or a failed application request.
+
+Compensation is permitted only before predecessor invalidation: remove the replacement and restore the complete affected binding and caller set. Once predecessor invalidation is independently proven, never restore that predecessor. Record only class, disposition, counts, booleans and sanitized timing; never record a credential value or fragment.
+
+## Sprint 036M opaque-key recovery
+
+Supabase publishable and secret keys migrate as one pair while JWT signing and user sessions remain unchanged. Seal each key's provenance before mutation. Compensation may delete only `created-this-sprint` keys; a `pre-existing-selected` key is never deleted. Deactivate legacy `anon` and `service_role` only after exact-source browser/user/admin probes and fixed-alias readback, then prove both predecessors rejected through independent provider/runtime evidence.

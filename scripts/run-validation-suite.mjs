@@ -103,13 +103,21 @@ export function commandPlan(mode, commands = platformCommands()) {
       ["provider-authority-reader-036p", node, ["scripts/test-provider-authority-reader-036P.mjs"]],
       ["provider-authority-transport-036p", node, ["scripts/test-provider-authority-transport-036P.mjs"]],
     ],
+    "provider-authority-036q": [
+      ["provider-authority-completion-036q", node, ["scripts/test-provider-authority-completion-036Q.mjs"]],
+      ["provider-authority-transport-036q", node, ["scripts/test-provider-authority-transport-036Q.mjs"]],
+    ],
+    "provider-authority-036r": [
+      ["provider-authority-resend-domain-036r", node, ["scripts/test-provider-authority-resend-domain-036R.mjs"]],
+      ["provider-authority-transport-036r", node, ["scripts/test-provider-authority-transport-036R.mjs"]],
+    ],
     "supabase-self": SUPABASE_SELF_TESTS.map((path) => [`self:${path}`, node, [path]]),
     static: [
       ["encoding", node, ["scripts/validate-text-encoding.mjs"]],
       ...STATIC_VALIDATORS.map((path) => [`static:${path}`, ps, ["-NoProfile", "-ExecutionPolicy", "Bypass", "-File", path]]),
     ],
   };
-  const components = [...groups.json, ...groups.domain, ...groups.roles, ...groups["prelaunch-036n"], ...groups["provider-authority-036o"], ...groups["provider-authority-036p"], ...groups["supabase-self"], ...groups.static];
+  const components = [...groups.json, ...groups.domain, ...groups.roles, ...groups["prelaunch-036n"], ...groups["provider-authority-036o"], ...groups["provider-authority-036p"], ...groups["provider-authority-036q"], ...groups["provider-authority-036r"], ...groups["supabase-self"], ...groups.static];
   const quality = [
     ["lint", npmCommand, [...npmPrefix, "run", "lint"]],
     ["typecheck", npmCommand, [...npmPrefix, "run", "typecheck"]],

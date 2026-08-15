@@ -30,7 +30,6 @@ const baseValues = {
   phSaliva: "6.4",
   phUrine: "6.6",
   conductivityRawMeterValue: "10",
-  ureaReading: "2.5",
   notes: "",
 };
 
@@ -41,11 +40,10 @@ assertInvalid(EMPTY_BIOCHEMISTRY_CAPTURE_VALUES, [
   "phSaliva",
   "phUrine",
   "conductivityRawMeterValue",
-  "ureaReading",
 ]);
 
 assertInvalid({ ...baseValues, carbsReading: "abc" }, ["carbsReading"]);
-assertInvalid({ ...baseValues, ureaReading: "Infinity" }, ["ureaReading"]);
+assertInvalid({ ...baseValues, conductivityRawMeterValue: "Infinity" }, ["conductivityRawMeterValue"]);
 assertInvalid({ ...baseValues, notes: "x".repeat(BIOCHEMISTRY_NOTES_LIMIT + 1) }, ["notes"]);
 
 const zeroAndDecimal = validateBiochemistryCaptureValues({

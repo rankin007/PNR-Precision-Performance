@@ -22,10 +22,10 @@ assert.deepEqual(
   [noResult.workflow.state, draft.workflow.state, pending.workflow.state, completed.workflow.state],
   ["no-result", "draft-incomplete", "pending-review", "completed"],
 );
-assert.equal(noResult.nextAction.href, "/data-entry/biochemistry");
+assert.equal(noResult.nextAction.href, "/data-entry/biochemistry?horseId=horse-a");
 assert.equal(draft.nextAction.href, "/data-entry/biochemistry/test-current");
 assert.equal(pending.nextAction.href, "/data-entry/biochemistry/test-current");
-assert.equal(completed.nextAction.href, "/portal/horses/horse-a");
+assert.equal(completed.nextAction.href, "/data-entry/biochemistry?horseId=horse-a");
 assert.equal(
   deriveOperationalSummary({ horseId: "horse-a", tests: [test({ scoringStatus: "blocked" })], canWrite: false }).nextAction.href,
   "/portal/horses/horse-a",
@@ -79,12 +79,13 @@ for (const providerDetail of [null, "cross-stable provider detail", "revoked pro
 const horsesSource = readFileSync("lib/domain/horses.ts", "utf8");
 const dashboardSource = readFileSync("app/(portal)/portal/page.tsx", "utf8");
 const detailSource = readFileSync("app/(portal)/portal/horses/[horseId]/page.tsx", "utf8");
+const cockpitSource = readFileSync("components/portal/trainer-cockpit.tsx", "utf8");
 assert(!horsesSource.includes("fallbackHorses"));
 assert(!horsesSource.includes("sample-horse"));
 assert(horsesSource.includes('supabase.rpc("can_write_biochemistry_horse"'));
-assert(horsesSource.includes("writeAccess.get(horse.id) === true"));
-assert(dashboardSource.includes("No sample records are shown"));
-assert(dashboardSource.includes("does not indicate clinical priority"));
+assert(horsesSource.includes("permissionResults[index]?.data === true"));
+assert(cockpitSource.includes("No sample records are shown"));
+assert(cockpitSource.includes("does not indicate clinical priority"));
 assert(detailSource.includes("Back to trainer dashboard"));
 assert(detailSource.includes("No record action is available while workflow information is unavailable"));
 assert(!dashboardSource.includes("healthScore"));
