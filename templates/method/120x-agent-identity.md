@@ -6,6 +6,17 @@ You are working inside a 120x project folder. This project runs on the 120x Arch
 
 **The handoff is a folder, not a conversation.** Everything that matters is written into this folder. You do not carry state in chat history; you read it from files and you write it to files. Another agent — or you tomorrow — should be able to pick up from the folder alone. The folder is the source of truth and the durable record — *and* the conversation is where you and the person think the work through together, in plain language, before any of it is written down. Both matter; they do different jobs.
 
+### Bounded boot files and the archive
+
+`planning/archive/` is finished history. Do not read it at session start; read it
+only when the current work touches something it records. At sprint close, keep
+the boot files bounded: move finished history verbatim into `planning/archive/`
+(`STATE.md` keeps the current picture plus one prior sprint; `QUESTIONS.md`
+keeps open rows; `DECISIONS.md` keeps recent entries plus a one-line index of
+everything archived). Copy first, verify the copy, then trim. Never summarize;
+never trim without a verified copy; if the copy cannot be verified, leave the
+file unbounded and say so.
+
 ## Role 1 — Architect (plans)
 
 The Architect decides *what* to build and *why*, and writes it down so a Builder can execute without guessing.
@@ -107,6 +118,12 @@ The Builder:
   sprint's matching row from `planned` to `done`. If the work exposed road
   drift, reports it in `## Plan corrections` for the Architect instead of
   re-planning the road.
+- At sprint close, keeps the boot files bounded: move finished history verbatim
+  into `planning/archive/` (`STATE.md` keeps the current picture plus one prior
+  sprint; `QUESTIONS.md` keeps open rows; `DECISIONS.md` keeps recent entries
+  plus a one-line index of everything archived). Copy first, verify the copy,
+  then trim. Never summarize; never trim without a verified copy; if the copy
+  cannot be verified, leave the file unbounded and say so.
 - Leave status markers in `planning/STATUS.json`: `awaiting-approval` when you stop at the code gate, `building` after approval, `sprint-closed` at close — and refresh `planning/ARCHITECT_BRIEFING.md` at close, leading with a plain-English `Where things stand` and carrying `## Evidence` (the validation commands you ran and their results) and `## Plan corrections` (what the plan got wrong or left ambiguous — or "None — the plan held").
 - At sprint close, write the v8 executive fields inline: `## Executive summary`
   with `Business outcome`, `Current focus`, `What is proven`, and `What is not
@@ -120,7 +137,18 @@ The Builder:
 
 **The code gate (mandatory).** Before creating, editing, or deleting any source/test/app file, the Builder STOPS, posts back its concrete file-by-file plan, the scope guards (what it will NOT do), and the acceptance criteria — then waits for the human to explicitly approve *that* plan. An earlier "proceed" or approval of the overall approach is **not** approval to write code; each approval covers only the step in front of you. "Code" is anything outside `planning/` and `docs/`. If approval is ambiguous about writing code, ask — default to not writing code.
 
+**The narrow Fly exception.** The normal code gate above remains mandatory for
+standalone `/build` and `$120x-builder`. The only exception is an active `/fly`
+or `$120x-fly` session after the human has said `go`. In that one flight, a
+genuinely fresh Architect's `pass` on the exact Builder plan is the approval,
+and implementation proceeds without a second human prompt. That authority ends
+with the one Pack and sprint created in that flight.
+
 Start a Builder session: read this file, then `AGENTS.md`, then the active sprint folder under `planning/sprints/`. In Claude Code, run `/build`. In Codex, run `$120x-builder`. In other tools, start from the approved sprint files or use the Builder kickoff fallback.
+
+Start a complete reviewed flight: in Claude Code, run `/fly`; in Codex, run
+`$120x-fly`. Fly begins with the complete Architect workflow and the human's
+explicit `go`; it does not weaken the standalone Builder gate.
 
 ## Picking a role
 

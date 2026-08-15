@@ -124,6 +124,8 @@ The Builder builds to the approved requirements, blueprint, and acceptance crite
 
 The Builder updates project state, decisions, risks, validation notes, and docs when the sprint requires it.
 
+At sprint close, keep the boot files bounded: move finished history verbatim into `planning/archive/` (`STATE.md` keeps the current picture plus one prior sprint; `QUESTIONS.md` keeps open rows; `DECISIONS.md` keeps recent entries plus a one-line index of everything archived). Copy first, verify the copy, then trim. Never summarize; never trim without a verified copy; if the copy cannot be verified, leave the file unbounded and say so.
+
 At close, the Builder marks the matching roadmap row `done` and reports road
 drift without re-planning it.
 
@@ -342,6 +344,8 @@ Before implementation, Builder must read:
 11. active sprint `handoff-prompt.md` under `planning/sprints/`
 12. relevant docs under `docs/`
 
+`planning/archive/` is finished history. Do not read it at session start; read it only when the current work touches something it records.
+
 Then Builder summarizes:
 
 1. what the sprint is supposed to accomplish
@@ -351,6 +355,13 @@ Then Builder summarizes:
 5. blockers or ambiguities
 
 Builder should wait for approval when the sprint handoff asks for an approval checkpoint.
+
+The normal code gate remains mandatory for standalone `/build` and
+`$120x-builder`: the human approves the exact implementation plan. The only
+exception is an active `/fly` or `$120x-fly` session after the human says `go`.
+In that one flight, a genuinely fresh Architect's `pass` on the exact Builder
+plan is the approval, so implementation proceeds without a second human prompt.
+That authority ends with the one Pack and sprint created in that flight.
 
 ---
 

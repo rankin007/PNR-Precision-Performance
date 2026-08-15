@@ -66,12 +66,20 @@ When creating Builder prompts, instruct the Builder to:
 - read `planning/RISKS.md`
 - read `planning/QUESTIONS.md`
 - read the active sprint files
+- know that `planning/archive/` is finished history. Do not read it at session
+  start; read it only when the current work touches something it records.
 - summarize the implementation plan before making changes
 - wait for approval before implementation
 - at sprint close, write or refresh `planning/ARCHITECT_BRIEFING.md` per `docs/ARCHITECT_BRIEFING_SPEC.md` so you stay grounded at the next sprint start
 - at sprint close, change the matching `planning/ROADMAP.md` row from
   `planned` to `done`; report road drift in Plan corrections without
   re-planning it
+- at sprint close, keep the boot files bounded: move finished history verbatim
+  into `planning/archive/` (`STATE.md` keeps the current picture plus one
+  prior sprint; `QUESTIONS.md` keeps open rows; `DECISIONS.md` keeps recent
+  entries plus a one-line index of everything archived). Copy first, verify
+  the copy, then trim. Never summarize; never trim without a verified copy;
+  if the copy cannot be verified, leave the file unbounded and say so
 - at sprint close, write the v8 executive fields inline: `## Executive summary`
   with `Business outcome`, `Current focus`, `What is proven`, and `What is not
   live`; `## Readiness signals` with two to four rows whose status is exactly

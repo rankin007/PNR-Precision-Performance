@@ -45,6 +45,7 @@ Production code lives in the existing project around this planning layer. The Bu
 - Sprint work: `planning/sprints/`
 - Sprint-close briefing: `planning/ARCHITECT_BRIEFING.md`
 - Design and messaging authority: `docs/DESIGN_AND_MESSAGING_AUTHORITY.md`
+- Detailed Done delivery roadmap: `delivery_road_map.md`
 
 ---
 
@@ -113,6 +114,7 @@ This is a hard project rule.
 - Do not store secrets, API keys, passwords, tokens, or private credentials.
 - Update planning/docs/tests when the sprint requires it.
 - At sprint close, refresh `planning/ARCHITECT_BRIEFING.md` using `docs/ARCHITECT_BRIEFING_SPEC.md`.
+- At sprint close, update `delivery_road_map.md` with the exact outcome, close date, evidence link, acceptance-matrix changes, current position, remaining estimate and revision-log entry; reconcile its state with `planning/ROADMAP.md`, `planning/STATE.md`, `planning/STATUS.json` and the Final Product Acceptance Matrix.
 - Do not commit unless asked.
 
 ## Evidence-Proportional Execution Standard

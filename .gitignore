@@ -26,4 +26,6 @@ supabase/.temp-old-link/
 desktop.ini
 /.release-main/
 /.claude/
+/.codex_work/
+/supabase/.branches/
 /planning/reviews/021M-supabase-support-escalation.md
