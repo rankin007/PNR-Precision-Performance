@@ -351,3 +351,15 @@ Use the existing Vercel automation bypass only in protected process memory; do n
 | Date | Decision | Evidence | Consequence |
 |---|---|---|---|
 | 2026-08-14 | Close Sprint 036P as `protected-provider-authority-readback-blocked-clean`; target not met. | Exact focused 180/180 plus retained 1603/1603 equals 1783/1783; fresh critical inspection 3/3 passed; the accepted-source graph is complete; durable provider history is four read-only requests and zero writes/mutations/business effects/residue/trainer actions. | Preserve accepted Sprint 036L unchanged. Keep all seven capability rows `unknown-blocking`; require fresh corrective Architect authority for an exact visible protected five-provider session before any credential, deployment, identity or trainer action. |
+
+## Sprint 036Q closeout decision - 2026-08-14
+
+| Date | Decision | Evidence | Consequence |
+|---|---|---|---|
+| 2026-08-14 | Close Sprint 036Q as `protected-five-provider-authority-blocked-clean`; target not met. | Focused `110/110` plus retained `1783/1783` equals `1893/1893`; same-Architect final diff PASS; CapabilityGate returned `PRE_EXISTING_RESEND_IDENTITY_REQUIRED` before the protected session; Sprint/cumulative reads are `0/4` and writes/mutations/business effects/residue/trainer actions are `0/0/0/0/0`. | Preserve accepted Sprint 036L unchanged. Keep 036R planned but do not execute credential, identity or real-delivery work until fresh Architect authority supplies a complete independently bound five-provider record. Product Done remains false. |
+
+## Sprint 036R closeout decision - 2026-08-14
+
+| Date | Decision | Evidence | Consequence |
+|---|---|---|---|
+| 2026-08-14 | Close Sprint 036R as `resend-domain-bound-five-provider-authority-blocked-clean`; target not met and no retry authorized. | Focused `100/100`, retained `1893/1893`, combined `1993/1993`, fresh final inspection PASS. The fourth attempt reached only the first masked Vercel prompt; credentials/provider frames/provider/DNS reads/durable sessions were `0/0/0/0/0`, cumulative reads remained four and all action/residue counters remained zero. | Preserve accepted Sprint 036L unchanged, keep 036S gated/unplanned and Product Done false. Any next correction needs separate authority for protected provisioning of a pre-existing Vercel credential or a proven safe signed-in read-only alternative; token creation remains outside 036R. |

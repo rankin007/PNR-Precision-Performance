@@ -1,0 +1,1270 @@
+{
+  "sprint": "030B",
+  "captureCount": 5,
+  "renderer": "local Chromium CDP full-page capture",
+  "expectedRunCount": 13,
+  "expectedImageCount": 5,
+  "runs": [
+    {
+      "name": "approved-pricing-mobile-official-full-page",
+      "mode": "pricing",
+      "evidenceMode": "official-full-page",
+      "scalePercent": 100,
+      "viewportCss": {
+        "width": 414,
+        "height": 896
+      },
+      "textResize": null,
+      "measuredAt": "2026-08-12T04:00:00.000Z",
+      "namedViewport": {
+        "width": 414,
+        "height": 896
+      },
+      "windowInnerWidth": 414,
+      "windowInnerHeight": 896,
+      "documentClientWidth": 399,
+      "bodyClientWidth": 399,
+      "effectiveClientViewportWidth": 399,
+      "effectiveClientViewportRule": "Smallest relevant nonzero document/body client width; the named viewport and window.innerWidth are telemetry only and never the pass boundary.",
+      "documentScrollWidth": 399,
+      "bodyScrollWidth": 399,
+      "maximumMaterialRightEdge": 399,
+      "overflowElements": [],
+      "intentionalLocalScrollContainers": [],
+      "requiredSections": {
+        "expected": [
+          "[data-evidence-section=\"pricing\"]"
+        ],
+        "present": [
+          "[data-evidence-section=\"pricing\"]"
+        ],
+        "missing": []
+      },
+      "interactiveTargets": {
+        "rule": "Visible enabled interactive controls are applicable; hidden inputs are explicitly excluded. The union of a control and its effective visible label is measured as the labelled hit area. Every applicable target must be at least 44x44 CSS pixels.",
+        "hiddenInputsExcluded": 0,
+        "applicableCount": 4,
+        "below44Count": 0,
+        "items": [
+          {
+            "selector": "a",
+            "accessibleName": "Precision Performance",
+            "width": 251.48,
+            "height": 44,
+            "applicable": true,
+            "pass": true,
+            "labelledHitArea": false,
+            "hasFocusTreatment": true
+          },
+          {
+            "selector": "a",
+            "accessibleName": "Back to home",
+            "width": 99.52,
+            "height": 44,
+            "applicable": true,
+            "pass": true,
+            "labelledHitArea": false,
+            "hasFocusTreatment": true
+          },
+          {
+            "selector": "a",
+            "accessibleName": "Check stable-trial enquiry availability",
+            "width": 317,
+            "height": 48,
+            "applicable": true,
+            "pass": true,
+            "labelledHitArea": false,
+            "hasFocusTreatment": true
+          },
+          {
+            "selector": "a",
+            "accessibleName": "Read the information disclaimer",
+            "width": 317,
+            "height": 48,
+            "applicable": true,
+            "pass": true,
+            "labelledHitArea": false,
+            "hasFocusTreatment": true
+          }
+        ]
+      },
+      "accessibility": {
+        "missingLabels": [],
+        "missingFocusTreatment": [],
+        "missingStatusSemantics": [],
+        "colourOnlyStates": [],
+        "statusCount": 0,
+        "rule": "Labels, focus treatment, status semantics and non-colour textual meaning are required."
+      },
+      "pass": true,
+      "failures": [],
+      "screenshot": {
+        "file": "01-mobile-pricing-414x896.png",
+        "fullPage": true,
+        "width": 414,
+        "height": 4825,
+        "bytes": 305935,
+        "nonblank": true
+      }
+    },
+    {
+      "name": "disclaimer-commercial-boundary-mobile-official-full-page",
+      "mode": "disclaimer",
+      "evidenceMode": "official-full-page",
+      "scalePercent": 100,
+      "viewportCss": {
+        "width": 414,
+        "height": 896
+      },
+      "textResize": null,
+      "measuredAt": "2026-08-12T04:00:00.000Z",
+      "namedViewport": {
+        "width": 414,
+        "height": 896
+      },
+      "windowInnerWidth": 414,
+      "windowInnerHeight": 896,
+      "documentClientWidth": 399,
+      "bodyClientWidth": 399,
+      "effectiveClientViewportWidth": 399,
+      "effectiveClientViewportRule": "Smallest relevant nonzero document/body client width; the named viewport and window.innerWidth are telemetry only and never the pass boundary.",
+      "documentScrollWidth": 399,
+      "bodyScrollWidth": 399,
+      "maximumMaterialRightEdge": 399,
+      "overflowElements": [],
+      "intentionalLocalScrollContainers": [],
+      "requiredSections": {
+        "expected": [
+          "[data-evidence-section=\"disclaimer\"]"
+        ],
+        "present": [
+          "[data-evidence-section=\"disclaimer\"]"
+        ],
+        "missing": []
+      },
+      "interactiveTargets": {
+        "rule": "Visible enabled interactive controls are applicable; hidden inputs are explicitly excluded. The union of a control and its effective visible label is measured as the labelled hit area. Every applicable target must be at least 44x44 CSS pixels.",
+        "hiddenInputsExcluded": 0,
+        "applicableCount": 4,
+        "below44Count": 0,
+        "items": [
+          {
+            "selector": "a",
+            "accessibleName": "Pricing page",
+            "width": 98.48,
+            "height": 44,
+            "applicable": true,
+            "pass": true,
+            "labelledHitArea": false,
+            "hasFocusTreatment": true
+          },
+          {
+            "selector": "a",
+            "accessibleName": "Privacy notice",
+            "width": 108.59,
+            "height": 44,
+            "applicable": true,
+            "pass": true,
+            "labelledHitArea": false,
+            "hasFocusTreatment": true
+          },
+          {
+            "selector": "a",
+            "accessibleName": "View approved Pricing",
+            "width": 309,
+            "height": 48,
+            "applicable": true,
+            "pass": true,
+            "labelledHitArea": false,
+            "hasFocusTreatment": true
+          },
+          {
+            "selector": "a",
+            "accessibleName": "Return to Precision Performance",
+            "width": 309,
+            "height": 48,
+            "applicable": true,
+            "pass": true,
+            "labelledHitArea": false,
+            "hasFocusTreatment": true
+          }
+        ]
+      },
+      "accessibility": {
+        "missingLabels": [],
+        "missingFocusTreatment": [],
+        "missingStatusSemantics": [],
+        "colourOnlyStates": [],
+        "statusCount": 0,
+        "rule": "Labels, focus treatment, status semantics and non-colour textual meaning are required."
+      },
+      "pass": true,
+      "failures": [],
+      "screenshot": {
+        "file": "02-mobile-disclaimer-414x896.png",
+        "fullPage": true,
+        "width": 414,
+        "height": 1574,
+        "bytes": 71889,
+        "nonblank": true
+      }
+    },
+    {
+      "name": "shop-detail-disabled-mobile-official-full-page",
+      "mode": "shop-detail",
+      "evidenceMode": "official-full-page",
+      "scalePercent": 100,
+      "viewportCss": {
+        "width": 414,
+        "height": 896
+      },
+      "textResize": null,
+      "measuredAt": "2026-08-12T04:00:00.000Z",
+      "namedViewport": {
+        "width": 414,
+        "height": 896
+      },
+      "windowInnerWidth": 414,
+      "windowInnerHeight": 896,
+      "documentClientWidth": 399,
+      "bodyClientWidth": 399,
+      "effectiveClientViewportWidth": 399,
+      "effectiveClientViewportRule": "Smallest relevant nonzero document/body client width; the named viewport and window.innerWidth are telemetry only and never the pass boundary.",
+      "documentScrollWidth": 399,
+      "bodyScrollWidth": 399,
+      "maximumMaterialRightEdge": 399,
+      "overflowElements": [],
+      "intentionalLocalScrollContainers": [],
+      "requiredSections": {
+        "expected": [
+          "[data-evidence-section=\"shop\"]",
+          "[data-evidence-section=\"detail\"]"
+        ],
+        "present": [
+          "[data-evidence-section=\"shop\"]",
+          "[data-evidence-section=\"detail\"]"
+        ],
+        "missing": []
+      },
+      "interactiveTargets": {
+        "rule": "Visible enabled interactive controls are applicable; hidden inputs are explicitly excluded. The union of a control and its effective visible label is measured as the labelled hit area. Every applicable target must be at least 44x44 CSS pixels.",
+        "hiddenInputsExcluded": 0,
+        "applicableCount": 2,
+        "below44Count": 0,
+        "items": [
+          {
+            "selector": "a",
+            "accessibleName": "View approved Pricing",
+            "width": 196.48,
+            "height": 48,
+            "applicable": true,
+            "pass": true,
+            "labelledHitArea": false,
+            "hasFocusTreatment": true
+          },
+          {
+            "selector": "a",
+            "accessibleName": "View approved Pricing",
+            "width": 196.48,
+            "height": 48,
+            "applicable": true,
+            "pass": true,
+            "labelledHitArea": false,
+            "hasFocusTreatment": true
+          }
+        ]
+      },
+      "accessibility": {
+        "missingLabels": [],
+        "missingFocusTreatment": [],
+        "missingStatusSemantics": [],
+        "colourOnlyStates": [],
+        "statusCount": 0,
+        "rule": "Labels, focus treatment, status semantics and non-colour textual meaning are required."
+      },
+      "pass": true,
+      "failures": [],
+      "screenshot": {
+        "file": "03-mobile-shop-detail-414x896.png",
+        "fullPage": true,
+        "width": 414,
+        "height": 1792,
+        "bytes": 86222,
+        "nonblank": true
+      }
+    },
+    {
+      "name": "admin-authority-history-mobile-official-full-page",
+      "mode": "admin",
+      "evidenceMode": "official-full-page",
+      "scalePercent": 100,
+      "viewportCss": {
+        "width": 414,
+        "height": 896
+      },
+      "textResize": null,
+      "measuredAt": "2026-08-12T04:00:00.000Z",
+      "namedViewport": {
+        "width": 414,
+        "height": 896
+      },
+      "windowInnerWidth": 414,
+      "windowInnerHeight": 896,
+      "documentClientWidth": 399,
+      "bodyClientWidth": 399,
+      "effectiveClientViewportWidth": 399,
+      "effectiveClientViewportRule": "Smallest relevant nonzero document/body client width; the named viewport and window.innerWidth are telemetry only and never the pass boundary.",
+      "documentScrollWidth": 399,
+      "bodyScrollWidth": 399,
+      "maximumMaterialRightEdge": 399,
+      "overflowElements": [],
+      "intentionalLocalScrollContainers": [],
+      "requiredSections": {
+        "expected": [
+          "[data-evidence-section=\"admin\"]"
+        ],
+        "present": [
+          "[data-evidence-section=\"admin\"]"
+        ],
+        "missing": []
+      },
+      "interactiveTargets": {
+        "rule": "Visible enabled interactive controls are applicable; hidden inputs are explicitly excluded. The union of a control and its effective visible label is measured as the labelled hit area. Every applicable target must be at least 44x44 CSS pixels.",
+        "hiddenInputsExcluded": 0,
+        "applicableCount": 0,
+        "below44Count": 0,
+        "items": []
+      },
+      "accessibility": {
+        "missingLabels": [],
+        "missingFocusTreatment": [],
+        "missingStatusSemantics": [],
+        "colourOnlyStates": [],
+        "statusCount": 0,
+        "rule": "Labels, focus treatment, status semantics and non-colour textual meaning are required."
+      },
+      "pass": true,
+      "failures": [],
+      "screenshot": {
+        "file": "04-mobile-admin-commerce-414x896.png",
+        "fullPage": true,
+        "width": 414,
+        "height": 1713,
+        "bytes": 105717,
+        "nonblank": true
+      }
+    },
+    {
+      "name": "commercial-authority-overview-desktop-official-full-page",
+      "mode": "desktop",
+      "evidenceMode": "official-full-page",
+      "scalePercent": 100,
+      "viewportCss": {
+        "width": 1440,
+        "height": 900
+      },
+      "textResize": null,
+      "measuredAt": "2026-08-12T04:00:00.000Z",
+      "namedViewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "windowInnerWidth": 1440,
+      "windowInnerHeight": 900,
+      "documentClientWidth": 1425,
+      "bodyClientWidth": 1425,
+      "effectiveClientViewportWidth": 1425,
+      "effectiveClientViewportRule": "Smallest relevant nonzero document/body client width; the named viewport and window.innerWidth are telemetry only and never the pass boundary.",
+      "documentScrollWidth": 1425,
+      "bodyScrollWidth": 1425,
+      "maximumMaterialRightEdge": 1425,
+      "overflowElements": [],
+      "intentionalLocalScrollContainers": [],
+      "requiredSections": {
+        "expected": [
+          "[data-evidence-section=\"pricing\"]",
+          "[data-evidence-section=\"disclaimer\"]",
+          "[data-evidence-section=\"shop\"]",
+          "[data-evidence-section=\"detail\"]",
+          "[data-evidence-section=\"admin\"]"
+        ],
+        "present": [
+          "[data-evidence-section=\"pricing\"]",
+          "[data-evidence-section=\"disclaimer\"]",
+          "[data-evidence-section=\"shop\"]",
+          "[data-evidence-section=\"detail\"]",
+          "[data-evidence-section=\"admin\"]"
+        ],
+        "missing": []
+      },
+      "interactiveTargets": {
+        "rule": "Visible enabled interactive controls are applicable; hidden inputs are explicitly excluded. The union of a control and its effective visible label is measured as the labelled hit area. Every applicable target must be at least 44x44 CSS pixels.",
+        "hiddenInputsExcluded": 0,
+        "applicableCount": 10,
+        "below44Count": 0,
+        "items": [
+          {
+            "selector": "a",
+            "accessibleName": "Precision Performance",
+            "width": 260.08,
+            "height": 44,
+            "applicable": true,
+            "pass": true,
+            "labelledHitArea": false,
+            "hasFocusTreatment": true
+          },
+          {
+            "selector": "a",
+            "accessibleName": "Back to home",
+            "width": 99.52,
+            "height": 44,
+            "applicable": true,
+            "pass": true,
+            "labelledHitArea": false,
+            "hasFocusTreatment": true
+          },
+          {
+            "selector": "a",
+            "accessibleName": "Check stable-trial enquiry availability",
+            "width": 292.84,
+            "height": 48,
+            "applicable": true,
+            "pass": true,
+            "labelledHitArea": false,
+            "hasFocusTreatment": true
+          },
+          {
+            "selector": "a",
+            "accessibleName": "Read the information disclaimer",
+            "width": 261.39,
+            "height": 48,
+            "applicable": true,
+            "pass": true,
+            "labelledHitArea": false,
+            "hasFocusTreatment": true
+          },
+          {
+            "selector": "a",
+            "accessibleName": "Pricing page",
+            "width": 98.48,
+            "height": 44,
+            "applicable": true,
+            "pass": true,
+            "labelledHitArea": false,
+            "hasFocusTreatment": true
+          },
+          {
+            "selector": "a",
+            "accessibleName": "Privacy notice",
+            "width": 108.59,
+            "height": 44,
+            "applicable": true,
+            "pass": true,
+            "labelledHitArea": false,
+            "hasFocusTreatment": true
+          },
+          {
+            "selector": "a",
+            "accessibleName": "View approved Pricing",
+            "width": 196.48,
+            "height": 48,
+            "applicable": true,
+            "pass": true,
+            "labelledHitArea": false,
+            "hasFocusTreatment": true
+          },
+          {
+            "selector": "a",
+            "accessibleName": "Return to Precision Performance",
+            "width": 263.8,
+            "height": 48,
+            "applicable": true,
+            "pass": true,
+            "labelledHitArea": false,
+            "hasFocusTreatment": true
+          },
+          {
+            "selector": "a",
+            "accessibleName": "View approved Pricing",
+            "width": 196.48,
+            "height": 48,
+            "applicable": true,
+            "pass": true,
+            "labelledHitArea": false,
+            "hasFocusTreatment": true
+          },
+          {
+            "selector": "a",
+            "accessibleName": "View approved Pricing",
+            "width": 196.48,
+            "height": 48,
+            "applicable": true,
+            "pass": true,
+            "labelledHitArea": false,
+            "hasFocusTreatment": true
+          }
+        ]
+      },
+      "accessibility": {
+        "missingLabels": [],
+        "missingFocusTreatment": [],
+        "missingStatusSemantics": [],
+        "colourOnlyStates": [],
+        "statusCount": 0,
+        "rule": "Labels, focus treatment, status semantics and non-colour textual meaning are required."
+      },
+      "pass": true,
+      "failures": [],
+      "screenshot": {
+        "file": "05-desktop-commercial-authority-1440x900.png",
+        "fullPage": true,
+        "width": 1440,
+        "height": 7185,
+        "bytes": 629165,
+        "nonblank": true
+      }
+    },
+    {
+      "name": "approved-pricing-mobile-resize-text-200-percent",
+      "mode": "pricing",
+      "evidenceMode": "resize-text-200-percent",
+      "scalePercent": 200,
+      "viewportCss": {
+        "width": 414,
+        "height": 896
+      },
+      "textResize": {
+        "method": "Runtime-only document root text basis set to 200%; no Product stylesheet or class override.",
+        "root": {
+          "beforePx": 16,
+          "afterPx": 32,
+          "ratio": 2
+        },
+        "body": {
+          "beforePx": 16,
+          "afterPx": 32,
+          "ratio": 2
+        },
+        "samples": [
+          {
+            "selector": "[data-evidence-section=\"pricing\"]",
+            "presentBefore": true,
+            "presentAfter": true,
+            "beforePx": 16,
+            "afterPx": 32,
+            "ratio": 2
+          }
+        ],
+        "pass": true
+      },
+      "measuredAt": "2026-08-12T04:00:00.000Z",
+      "namedViewport": {
+        "width": 414,
+        "height": 896
+      },
+      "windowInnerWidth": 414,
+      "windowInnerHeight": 896,
+      "documentClientWidth": 399,
+      "bodyClientWidth": 399,
+      "effectiveClientViewportWidth": 399,
+      "effectiveClientViewportRule": "Smallest relevant nonzero document/body client width; the named viewport and window.innerWidth are telemetry only and never the pass boundary.",
+      "documentScrollWidth": 399,
+      "bodyScrollWidth": 399,
+      "maximumMaterialRightEdge": 399,
+      "overflowElements": [],
+      "intentionalLocalScrollContainers": [],
+      "requiredSections": {
+        "expected": [
+          "[data-evidence-section=\"pricing\"]"
+        ],
+        "present": [
+          "[data-evidence-section=\"pricing\"]"
+        ],
+        "missing": []
+      },
+      "interactiveTargets": {
+        "rule": "Visible enabled interactive controls are applicable; hidden inputs are explicitly excluded. The union of a control and its effective visible label is measured as the labelled hit area. Every applicable target must be at least 44x44 CSS pixels.",
+        "hiddenInputsExcluded": 0,
+        "applicableCount": 4,
+        "below44Count": 0,
+        "items": [
+          {
+            "selector": "a",
+            "accessibleName": "Precision Performance",
+            "width": 103.97,
+            "height": 88,
+            "applicable": true,
+            "pass": true,
+            "labelledHitArea": false,
+            "hasFocusTreatment": true
+          },
+          {
+            "selector": "a",
+            "accessibleName": "Back to home",
+            "width": 199.03,
+            "height": 88,
+            "applicable": true,
+            "pass": true,
+            "labelledHitArea": false,
+            "hasFocusTreatment": true
+          },
+          {
+            "selector": "a",
+            "accessibleName": "Check stable-trial enquiry availability",
+            "width": 237,
+            "height": 248,
+            "applicable": true,
+            "pass": true,
+            "labelledHitArea": false,
+            "hasFocusTreatment": true
+          },
+          {
+            "selector": "a",
+            "accessibleName": "Read the information disclaimer",
+            "width": 237,
+            "height": 170,
+            "applicable": true,
+            "pass": true,
+            "labelledHitArea": false,
+            "hasFocusTreatment": true
+          }
+        ]
+      },
+      "accessibility": {
+        "missingLabels": [],
+        "missingFocusTreatment": [],
+        "missingStatusSemantics": [],
+        "colourOnlyStates": [],
+        "statusCount": 0,
+        "rule": "Labels, focus treatment, status semantics and non-colour textual meaning are required."
+      },
+      "pass": true,
+      "failures": [],
+      "screenshot": null
+    },
+    {
+      "name": "disclaimer-commercial-boundary-mobile-resize-text-200-percent",
+      "mode": "disclaimer",
+      "evidenceMode": "resize-text-200-percent",
+      "scalePercent": 200,
+      "viewportCss": {
+        "width": 414,
+        "height": 896
+      },
+      "textResize": {
+        "method": "Runtime-only document root text basis set to 200%; no Product stylesheet or class override.",
+        "root": {
+          "beforePx": 16,
+          "afterPx": 32,
+          "ratio": 2
+        },
+        "body": {
+          "beforePx": 16,
+          "afterPx": 32,
+          "ratio": 2
+        },
+        "samples": [
+          {
+            "selector": "[data-evidence-section=\"disclaimer\"]",
+            "presentBefore": true,
+            "presentAfter": true,
+            "beforePx": 16,
+            "afterPx": 32,
+            "ratio": 2
+          }
+        ],
+        "pass": true
+      },
+      "measuredAt": "2026-08-12T04:00:00.000Z",
+      "namedViewport": {
+        "width": 414,
+        "height": 896
+      },
+      "windowInnerWidth": 414,
+      "windowInnerHeight": 896,
+      "documentClientWidth": 399,
+      "bodyClientWidth": 399,
+      "effectiveClientViewportWidth": 399,
+      "effectiveClientViewportRule": "Smallest relevant nonzero document/body client width; the named viewport and window.innerWidth are telemetry only and never the pass boundary.",
+      "documentScrollWidth": 399,
+      "bodyScrollWidth": 399,
+      "maximumMaterialRightEdge": 399,
+      "overflowElements": [],
+      "intentionalLocalScrollContainers": [],
+      "requiredSections": {
+        "expected": [
+          "[data-evidence-section=\"disclaimer\"]"
+        ],
+        "present": [
+          "[data-evidence-section=\"disclaimer\"]"
+        ],
+        "missing": []
+      },
+      "interactiveTargets": {
+        "rule": "Visible enabled interactive controls are applicable; hidden inputs are explicitly excluded. The union of a control and its effective visible label is measured as the labelled hit area. Every applicable target must be at least 44x44 CSS pixels.",
+        "hiddenInputsExcluded": 0,
+        "applicableCount": 4,
+        "below44Count": 0,
+        "items": [
+          {
+            "selector": "a",
+            "accessibleName": "Pricing page",
+            "width": 196.95,
+            "height": 88,
+            "applicable": true,
+            "pass": true,
+            "labelledHitArea": false,
+            "hasFocusTreatment": true
+          },
+          {
+            "selector": "a",
+            "accessibleName": "Privacy notice",
+            "width": 217.17,
+            "height": 88,
+            "applicable": true,
+            "pass": true,
+            "labelledHitArea": false,
+            "hasFocusTreatment": true
+          },
+          {
+            "selector": "a",
+            "accessibleName": "View approved Pricing",
+            "width": 221,
+            "height": 168,
+            "applicable": true,
+            "pass": true,
+            "labelledHitArea": false,
+            "hasFocusTreatment": true
+          },
+          {
+            "selector": "a",
+            "accessibleName": "Return to Precision Performance",
+            "width": 221,
+            "height": 170,
+            "applicable": true,
+            "pass": true,
+            "labelledHitArea": false,
+            "hasFocusTreatment": true
+          }
+        ]
+      },
+      "accessibility": {
+        "missingLabels": [],
+        "missingFocusTreatment": [],
+        "missingStatusSemantics": [],
+        "colourOnlyStates": [],
+        "statusCount": 0,
+        "rule": "Labels, focus treatment, status semantics and non-colour textual meaning are required."
+      },
+      "pass": true,
+      "failures": [],
+      "screenshot": null
+    },
+    {
+      "name": "shop-detail-disabled-mobile-resize-text-200-percent",
+      "mode": "shop-detail",
+      "evidenceMode": "resize-text-200-percent",
+      "scalePercent": 200,
+      "viewportCss": {
+        "width": 414,
+        "height": 896
+      },
+      "textResize": {
+        "method": "Runtime-only document root text basis set to 200%; no Product stylesheet or class override.",
+        "root": {
+          "beforePx": 16,
+          "afterPx": 32,
+          "ratio": 2
+        },
+        "body": {
+          "beforePx": 16,
+          "afterPx": 32,
+          "ratio": 2
+        },
+        "samples": [
+          {
+            "selector": "[data-evidence-section=\"shop\"]",
+            "presentBefore": true,
+            "presentAfter": true,
+            "beforePx": 16,
+            "afterPx": 32,
+            "ratio": 2
+          },
+          {
+            "selector": "[data-evidence-section=\"detail\"]",
+            "presentBefore": true,
+            "presentAfter": true,
+            "beforePx": 16,
+            "afterPx": 32,
+            "ratio": 2
+          }
+        ],
+        "pass": true
+      },
+      "measuredAt": "2026-08-12T04:00:00.000Z",
+      "namedViewport": {
+        "width": 414,
+        "height": 896
+      },
+      "windowInnerWidth": 414,
+      "windowInnerHeight": 896,
+      "documentClientWidth": 399,
+      "bodyClientWidth": 399,
+      "effectiveClientViewportWidth": 399,
+      "effectiveClientViewportRule": "Smallest relevant nonzero document/body client width; the named viewport and window.innerWidth are telemetry only and never the pass boundary.",
+      "documentScrollWidth": 399,
+      "bodyScrollWidth": 399,
+      "maximumMaterialRightEdge": 399,
+      "overflowElements": [],
+      "intentionalLocalScrollContainers": [],
+      "requiredSections": {
+        "expected": [
+          "[data-evidence-section=\"shop\"]",
+          "[data-evidence-section=\"detail\"]"
+        ],
+        "present": [
+          "[data-evidence-section=\"shop\"]",
+          "[data-evidence-section=\"detail\"]"
+        ],
+        "missing": []
+      },
+      "interactiveTargets": {
+        "rule": "Visible enabled interactive controls are applicable; hidden inputs are explicitly excluded. The union of a control and its effective visible label is measured as the labelled hit area. Every applicable target must be at least 44x44 CSS pixels.",
+        "hiddenInputsExcluded": 0,
+        "applicableCount": 2,
+        "below44Count": 0,
+        "items": [
+          {
+            "selector": "a",
+            "accessibleName": "View approved Pricing",
+            "width": 221.33,
+            "height": 168,
+            "applicable": true,
+            "pass": true,
+            "labelledHitArea": false,
+            "hasFocusTreatment": true
+          },
+          {
+            "selector": "a",
+            "accessibleName": "View approved Pricing",
+            "width": 221.33,
+            "height": 168,
+            "applicable": true,
+            "pass": true,
+            "labelledHitArea": false,
+            "hasFocusTreatment": true
+          }
+        ]
+      },
+      "accessibility": {
+        "missingLabels": [],
+        "missingFocusTreatment": [],
+        "missingStatusSemantics": [],
+        "colourOnlyStates": [],
+        "statusCount": 0,
+        "rule": "Labels, focus treatment, status semantics and non-colour textual meaning are required."
+      },
+      "pass": true,
+      "failures": [],
+      "screenshot": null
+    },
+    {
+      "name": "admin-authority-history-mobile-resize-text-200-percent",
+      "mode": "admin",
+      "evidenceMode": "resize-text-200-percent",
+      "scalePercent": 200,
+      "viewportCss": {
+        "width": 414,
+        "height": 896
+      },
+      "textResize": {
+        "method": "Runtime-only document root text basis set to 200%; no Product stylesheet or class override.",
+        "root": {
+          "beforePx": 16,
+          "afterPx": 32,
+          "ratio": 2
+        },
+        "body": {
+          "beforePx": 16,
+          "afterPx": 32,
+          "ratio": 2
+        },
+        "samples": [
+          {
+            "selector": "[data-evidence-section=\"admin\"]",
+            "presentBefore": true,
+            "presentAfter": true,
+            "beforePx": 16,
+            "afterPx": 32,
+            "ratio": 2
+          }
+        ],
+        "pass": true
+      },
+      "measuredAt": "2026-08-12T04:00:00.000Z",
+      "namedViewport": {
+        "width": 414,
+        "height": 896
+      },
+      "windowInnerWidth": 414,
+      "windowInnerHeight": 896,
+      "documentClientWidth": 399,
+      "bodyClientWidth": 399,
+      "effectiveClientViewportWidth": 399,
+      "effectiveClientViewportRule": "Smallest relevant nonzero document/body client width; the named viewport and window.innerWidth are telemetry only and never the pass boundary.",
+      "documentScrollWidth": 399,
+      "bodyScrollWidth": 399,
+      "maximumMaterialRightEdge": 399,
+      "overflowElements": [],
+      "intentionalLocalScrollContainers": [],
+      "requiredSections": {
+        "expected": [
+          "[data-evidence-section=\"admin\"]"
+        ],
+        "present": [
+          "[data-evidence-section=\"admin\"]"
+        ],
+        "missing": []
+      },
+      "interactiveTargets": {
+        "rule": "Visible enabled interactive controls are applicable; hidden inputs are explicitly excluded. The union of a control and its effective visible label is measured as the labelled hit area. Every applicable target must be at least 44x44 CSS pixels.",
+        "hiddenInputsExcluded": 0,
+        "applicableCount": 0,
+        "below44Count": 0,
+        "items": []
+      },
+      "accessibility": {
+        "missingLabels": [],
+        "missingFocusTreatment": [],
+        "missingStatusSemantics": [],
+        "colourOnlyStates": [],
+        "statusCount": 0,
+        "rule": "Labels, focus treatment, status semantics and non-colour textual meaning are required."
+      },
+      "pass": true,
+      "failures": [],
+      "screenshot": null
+    },
+    {
+      "name": "approved-pricing-mobile-reflow-320-css-pixels",
+      "mode": "pricing",
+      "evidenceMode": "reflow-320-css-pixels",
+      "scalePercent": 100,
+      "viewportCss": {
+        "width": 320,
+        "height": 896
+      },
+      "textResize": null,
+      "measuredAt": "2026-08-12T04:00:00.000Z",
+      "namedViewport": {
+        "width": 320,
+        "height": 896
+      },
+      "windowInnerWidth": 320,
+      "windowInnerHeight": 896,
+      "documentClientWidth": 305,
+      "bodyClientWidth": 305,
+      "effectiveClientViewportWidth": 305,
+      "effectiveClientViewportRule": "Smallest relevant nonzero document/body client width; the named viewport and window.innerWidth are telemetry only and never the pass boundary.",
+      "documentScrollWidth": 305,
+      "bodyScrollWidth": 305,
+      "maximumMaterialRightEdge": 305,
+      "overflowElements": [],
+      "intentionalLocalScrollContainers": [],
+      "requiredSections": {
+        "expected": [
+          "[data-evidence-section=\"pricing\"]"
+        ],
+        "present": [
+          "[data-evidence-section=\"pricing\"]"
+        ],
+        "missing": []
+      },
+      "interactiveTargets": {
+        "rule": "Visible enabled interactive controls are applicable; hidden inputs are explicitly excluded. The union of a control and its effective visible label is measured as the labelled hit area. Every applicable target must be at least 44x44 CSS pixels.",
+        "hiddenInputsExcluded": 0,
+        "applicableCount": 4,
+        "below44Count": 0,
+        "items": [
+          {
+            "selector": "a",
+            "accessibleName": "Precision Performance",
+            "width": 157.48,
+            "height": 44,
+            "applicable": true,
+            "pass": true,
+            "labelledHitArea": false,
+            "hasFocusTreatment": true
+          },
+          {
+            "selector": "a",
+            "accessibleName": "Back to home",
+            "width": 99.52,
+            "height": 44,
+            "applicable": true,
+            "pass": true,
+            "labelledHitArea": false,
+            "hasFocusTreatment": true
+          },
+          {
+            "selector": "a",
+            "accessibleName": "Check stable-trial enquiry availability",
+            "width": 223,
+            "height": 64,
+            "applicable": true,
+            "pass": true,
+            "labelledHitArea": false,
+            "hasFocusTreatment": true
+          },
+          {
+            "selector": "a",
+            "accessibleName": "Read the information disclaimer",
+            "width": 223,
+            "height": 66,
+            "applicable": true,
+            "pass": true,
+            "labelledHitArea": false,
+            "hasFocusTreatment": true
+          }
+        ]
+      },
+      "accessibility": {
+        "missingLabels": [],
+        "missingFocusTreatment": [],
+        "missingStatusSemantics": [],
+        "colourOnlyStates": [],
+        "statusCount": 0,
+        "rule": "Labels, focus treatment, status semantics and non-colour textual meaning are required."
+      },
+      "pass": true,
+      "failures": [],
+      "screenshot": null
+    },
+    {
+      "name": "disclaimer-commercial-boundary-mobile-reflow-320-css-pixels",
+      "mode": "disclaimer",
+      "evidenceMode": "reflow-320-css-pixels",
+      "scalePercent": 100,
+      "viewportCss": {
+        "width": 320,
+        "height": 896
+      },
+      "textResize": null,
+      "measuredAt": "2026-08-12T04:00:00.000Z",
+      "namedViewport": {
+        "width": 320,
+        "height": 896
+      },
+      "windowInnerWidth": 320,
+      "windowInnerHeight": 896,
+      "documentClientWidth": 305,
+      "bodyClientWidth": 305,
+      "effectiveClientViewportWidth": 305,
+      "effectiveClientViewportRule": "Smallest relevant nonzero document/body client width; the named viewport and window.innerWidth are telemetry only and never the pass boundary.",
+      "documentScrollWidth": 305,
+      "bodyScrollWidth": 305,
+      "maximumMaterialRightEdge": 305,
+      "overflowElements": [],
+      "intentionalLocalScrollContainers": [],
+      "requiredSections": {
+        "expected": [
+          "[data-evidence-section=\"disclaimer\"]"
+        ],
+        "present": [
+          "[data-evidence-section=\"disclaimer\"]"
+        ],
+        "missing": []
+      },
+      "interactiveTargets": {
+        "rule": "Visible enabled interactive controls are applicable; hidden inputs are explicitly excluded. The union of a control and its effective visible label is measured as the labelled hit area. Every applicable target must be at least 44x44 CSS pixels.",
+        "hiddenInputsExcluded": 0,
+        "applicableCount": 4,
+        "below44Count": 0,
+        "items": [
+          {
+            "selector": "a",
+            "accessibleName": "Pricing page",
+            "width": 98.48,
+            "height": 44,
+            "applicable": true,
+            "pass": true,
+            "labelledHitArea": false,
+            "hasFocusTreatment": true
+          },
+          {
+            "selector": "a",
+            "accessibleName": "Privacy notice",
+            "width": 108.59,
+            "height": 44,
+            "applicable": true,
+            "pass": true,
+            "labelledHitArea": false,
+            "hasFocusTreatment": true
+          },
+          {
+            "selector": "a",
+            "accessibleName": "View approved Pricing",
+            "width": 215,
+            "height": 48,
+            "applicable": true,
+            "pass": true,
+            "labelledHitArea": false,
+            "hasFocusTreatment": true
+          },
+          {
+            "selector": "a",
+            "accessibleName": "Return to Precision Performance",
+            "width": 215,
+            "height": 66,
+            "applicable": true,
+            "pass": true,
+            "labelledHitArea": false,
+            "hasFocusTreatment": true
+          }
+        ]
+      },
+      "accessibility": {
+        "missingLabels": [],
+        "missingFocusTreatment": [],
+        "missingStatusSemantics": [],
+        "colourOnlyStates": [],
+        "statusCount": 0,
+        "rule": "Labels, focus treatment, status semantics and non-colour textual meaning are required."
+      },
+      "pass": true,
+      "failures": [],
+      "screenshot": null
+    },
+    {
+      "name": "shop-detail-disabled-mobile-reflow-320-css-pixels",
+      "mode": "shop-detail",
+      "evidenceMode": "reflow-320-css-pixels",
+      "scalePercent": 100,
+      "viewportCss": {
+        "width": 320,
+        "height": 896
+      },
+      "textResize": null,
+      "measuredAt": "2026-08-12T04:00:00.000Z",
+      "namedViewport": {
+        "width": 320,
+        "height": 896
+      },
+      "windowInnerWidth": 320,
+      "windowInnerHeight": 896,
+      "documentClientWidth": 305,
+      "bodyClientWidth": 305,
+      "effectiveClientViewportWidth": 305,
+      "effectiveClientViewportRule": "Smallest relevant nonzero document/body client width; the named viewport and window.innerWidth are telemetry only and never the pass boundary.",
+      "documentScrollWidth": 305,
+      "bodyScrollWidth": 305,
+      "maximumMaterialRightEdge": 305,
+      "overflowElements": [],
+      "intentionalLocalScrollContainers": [],
+      "requiredSections": {
+        "expected": [
+          "[data-evidence-section=\"shop\"]",
+          "[data-evidence-section=\"detail\"]"
+        ],
+        "present": [
+          "[data-evidence-section=\"shop\"]",
+          "[data-evidence-section=\"detail\"]"
+        ],
+        "missing": []
+      },
+      "interactiveTargets": {
+        "rule": "Visible enabled interactive controls are applicable; hidden inputs are explicitly excluded. The union of a control and its effective visible label is measured as the labelled hit area. Every applicable target must be at least 44x44 CSS pixels.",
+        "hiddenInputsExcluded": 0,
+        "applicableCount": 2,
+        "below44Count": 0,
+        "items": [
+          {
+            "selector": "a",
+            "accessibleName": "View approved Pricing",
+            "width": 196.48,
+            "height": 48,
+            "applicable": true,
+            "pass": true,
+            "labelledHitArea": false,
+            "hasFocusTreatment": true
+          },
+          {
+            "selector": "a",
+            "accessibleName": "View approved Pricing",
+            "width": 196.48,
+            "height": 48,
+            "applicable": true,
+            "pass": true,
+            "labelledHitArea": false,
+            "hasFocusTreatment": true
+          }
+        ]
+      },
+      "accessibility": {
+        "missingLabels": [],
+        "missingFocusTreatment": [],
+        "missingStatusSemantics": [],
+        "colourOnlyStates": [],
+        "statusCount": 0,
+        "rule": "Labels, focus treatment, status semantics and non-colour textual meaning are required."
+      },
+      "pass": true,
+      "failures": [],
+      "screenshot": null
+    },
+    {
+      "name": "admin-authority-history-mobile-reflow-320-css-pixels",
+      "mode": "admin",
+      "evidenceMode": "reflow-320-css-pixels",
+      "scalePercent": 100,
+      "viewportCss": {
+        "width": 320,
+        "height": 896
+      },
+      "textResize": null,
+      "measuredAt": "2026-08-12T04:00:00.000Z",
+      "namedViewport": {
+        "width": 320,
+        "height": 896
+      },
+      "windowInnerWidth": 320,
+      "windowInnerHeight": 896,
+      "documentClientWidth": 305,
+      "bodyClientWidth": 305,
+      "effectiveClientViewportWidth": 305,
+      "effectiveClientViewportRule": "Smallest relevant nonzero document/body client width; the named viewport and window.innerWidth are telemetry only and never the pass boundary.",
+      "documentScrollWidth": 305,
+      "bodyScrollWidth": 305,
+      "maximumMaterialRightEdge": 305,
+      "overflowElements": [],
+      "intentionalLocalScrollContainers": [],
+      "requiredSections": {
+        "expected": [
+          "[data-evidence-section=\"admin\"]"
+        ],
+        "present": [
+          "[data-evidence-section=\"admin\"]"
+        ],
+        "missing": []
+      },
+      "interactiveTargets": {
+        "rule": "Visible enabled interactive controls are applicable; hidden inputs are explicitly excluded. The union of a control and its effective visible label is measured as the labelled hit area. Every applicable target must be at least 44x44 CSS pixels.",
+        "hiddenInputsExcluded": 0,
+        "applicableCount": 0,
+        "below44Count": 0,
+        "items": []
+      },
+      "accessibility": {
+        "missingLabels": [],
+        "missingFocusTreatment": [],
+        "missingStatusSemantics": [],
+        "colourOnlyStates": [],
+        "statusCount": 0,
+        "rule": "Labels, focus treatment, status semantics and non-colour textual meaning are required."
+      },
+      "pass": true,
+      "failures": [],
+      "screenshot": null
+    }
+  ]
+}

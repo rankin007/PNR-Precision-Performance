@@ -1,0 +1,49 @@
+{
+  "sprint": "036K",
+  "outcome": "prelaunch-readiness-blocked-clean",
+  "asOf": "2026-08-12",
+  "capabilityGate": {
+    "mode": "local-projection-only",
+    "providerCommands": 0,
+    "providerLogins": 0,
+    "providerReads": 0,
+    "providerWrites": 0,
+    "protectedOutput": false
+  },
+  "credentialClasses": [
+    {"class": "SUPABASE_SERVICE_ROLE_KEY", "disposition": "blocked-retained", "reason": "individual-create-and-revoke-oracle-unsupported"},
+    {"class": "CRON_SECRET", "disposition": "blocked-retained", "reason": "complete-consumer-and-predecessor-oracle-unproven"},
+    {"class": "ENQUIRY_ABUSE_HMAC_SECRET", "disposition": "blocked-retained", "reason": "complete-consumer-and-predecessor-oracle-unproven"},
+    {"class": "PUBLIC_ENQUIRY_SMTP_PASS", "disposition": "blocked-retained", "reason": "provider-native-create-and-revoke-oracle-unproven"},
+    {"class": "STRIPE_SECRET_KEY", "disposition": "blocked-retained", "reason": "provider-native-create-and-revoke-oracle-unproven"},
+    {"class": "STRIPE_WEBHOOK_SECRET", "disposition": "blocked-retained", "reason": "provider-native-create-and-revoke-oracle-unproven"},
+    {"class": "RAILWAY_API_TOKEN", "disposition": "blocked-retained", "reason": "provider-native-create-and-revoke-oracle-unproven"}
+  ],
+  "identities": [
+    {"ordinal": 1, "disposition": "unresolved-retained-blocking", "authTerminalMutations": 0},
+    {"ordinal": 2, "disposition": "unresolved-retained-blocking", "authTerminalMutations": 0}
+  ],
+  "phaseLanding": [
+    {"phase": 0, "name": "baseline", "state": "unchanged-blocking"},
+    {"phase": 1, "name": "replacement-preparation", "state": "not-started"},
+    {"phase": 2, "name": "install-probe", "state": "not-started"},
+    {"phase": 3, "name": "predecessor-invalidation", "state": "not-started"},
+    {"phase": 4, "name": "conditional-redeploy", "state": "not-started"},
+    {"phase": 5, "name": "identity-disposition", "state": "not-started"},
+    {"phase": 6, "name": "trainer-rehearsal", "state": "not-started"},
+    {"phase": 7, "name": "final-readback", "state": "unchanged-blocking"}
+  ],
+  "ceilings": {
+    "identitySessionDependencyFixtureWrites": 0,
+    "trainerMessages": 0,
+    "trainerVerifications": 0,
+    "deployments": 0,
+    "aliasWrites": 0,
+    "compensationWrites": 0
+  },
+  "finalArithmetic": {
+    "stagedFiles": 0,
+    "externalMutations": 0,
+    "externalResidue": 0
+  }
+}

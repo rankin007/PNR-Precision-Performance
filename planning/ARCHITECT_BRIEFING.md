@@ -1,96 +1,92 @@
 # Architect Briefing
 
-Version: v10 - Sprint 036P protected provider authority readback blocked-clean closeout
+Version: v12 - Sprint 036R Resend domain-bound five-provider authority blocked-clean closeout
 
 ## Executive summary
 
-**Business outcome:** Sprint 036P completed the accepted-source graph and delivered an inspected privacy-safe five-provider reader, then closed `protected-provider-authority-readback-blocked-clean`; target not met.
+**Business outcome:** Sprint 036R closed `resend-domain-bound-five-provider-authority-blocked-clean`; target not met.
 
-**Current focus:** Fresh corrective Architect authority for one exact visible protected five-provider session and independent lifecycle/predecessor oracles.
+**Current focus:** No 036R retry is authorized. Any corrective work needs separate Architect authority for a pre-existing Vercel management credential or a proven safe signed-in read-only alternative.
 
-**What is proven:** Exact `60+80+40=180`, retained `1603`, combined `1783`; final inspection 3/3 PASS; the 124-file source graph is complete; seven exact 15-field rows are all unknown-blocking; provider reads/writes/mutations/business effects/residue/trainer actions are `4/0/0/0/0/0`.
+**What is proven:** Domain `60/60`, transport `40/40`, focused `100/100`, retained `1893/1893`, combined `1993/1993`; fresh final inspection PASS; protected attempt cleanup; Sprint provider/DNS reads `0/0`; cumulative provider reads `4`; all write/action/residue counters zero.
 
-**What is not live:** Complete five-provider authority, credential closure, identity disposition, real-trainer delivery, public enquiry, representative acceptance, Production completion and Product-wide Done remain open. Accepted Sprint 036L is unchanged.
+**What is not live:** Exact five-provider authority, seven-class credential closure, excluded-identity disposition, real-trainer delivery, public enquiry, representative acceptance, Production completion and Product-wide Done remain open. Accepted Sprint 036L is unchanged.
 
 ## Readiness signals
 
 | Signal | Status | Evidence |
 |---|---|---|
-| Local source/fixture safety | passed | Bounded 121-file graph, fixture-authority refusal and exact 120/120 focused proof |
-| Provider authority completeness | attention | No provider read; all seven rows are `unknown-blocking` |
-| Trainer/identity work | attention | Contact, message, verification, identity and graph actions remain not started |
-| Product/launch readiness | attention | No acceptance-matrix ID changed; mandatory Done gaps remain |
+| Local domain/transport controls | passed | Focused `100/100`; wrapper SelfTest `100`; CapabilityGate zero-read PASS |
+| Five-provider authority | attention | Attempt stopped at the first masked Vercel prompt with `PRE_EXISTING_VERCEL_MANAGEMENT_CREDENTIAL_UNAVAILABLE` |
+| External safety | passed | Sprint provider/DNS reads `0/0`; credentials handled/provider frames `0/0`; actions/residue `0` |
+| Product/launch readiness | attention | No matrix ID changed; accepted 036L remains live; Product Done is false |
 
 ## Where things stand
 
-Sprint 036O is closed, but its target is unmet. The source graph is deliberately incomplete at one exact missing import, and provider-native authority was unavailable without weakening the protected-output boundary. Accepted Sprint 036L remains the last durable live authority.
+The nested visible-console route passed its local guards and reached only the masked Vercel credential prompt. The user had no pre-existing credential, entered nothing, stopped with Ctrl+C and closed the window; Builder verified owned processes and temporary residue at zero. The local child handshake is not a provider request, and no final child envelope landed, so the durable sessions array remains empty.
 
 ## Current status
 
-Closed `provider-authority-discovery-blocked-clean`; implementation/evidence and exact 16-file closeout are complete. Publication is intentionally left to the root agent after landing/readback.
+Sprint 036R is closed on its exact clean fallback after fresh final inspection PASS and exact twelve-file closeout. Target false; protected process attempts one at the prompt boundary, durable sessions zero, Sprint provider/DNS reads zero, cumulative provider reads four. Sprint 036S remains gated and unplanned.
 
 ## Since last sprint
 
-- Replaced caller-asserted capability rows with module-private branded fallback rows.
-- Bound source discovery to accepted Git object `bfeb0b23c339b819f5dbcd4fe28d61c7a4dd9570` and recorded the exact unresolved edge.
-- Made provider projections fixture-only and ReadOnlyDiscovery a fixed no-input refusal.
-- Added dated official-source provenance, exact access-alternative results and full 14-field seven-row evidence.
+- Replaced the invalid Resend CLI-profile identity premise with strict unique domain/detail/public-DNS authority.
+- Added strict documented raw-record/TTL handling, exact DNS tuple equality and a five-read DNS ceiling.
+- Added a current-HEAD protected wrapper with prompt-paused active deadline, strict history/console guards, private child transport and atomic three-artifact evidence.
+- Repaired two bounded review rounds and passed the final implementation/evidence inspection.
+- Proved the nested process route, then stopped at the missing pre-existing Vercel credential before any credential frame or provider request.
 
 ## Architecture / file map
 
-- `scripts/provider-authority-discovery-036O.mjs`: bounded accepted-object graph and branded fallback manifest.
-- `scripts/provider-authority-projections-036O.mjs`: fixture-only provider-shape projections and authority refusal.
-- `scripts/Invoke-ProviderAuthorityDiscovery036O.ps1`: SelfTest and fixed capability/read-only refusal.
-- `docs/PROVIDER_AUTHORITY_AND_TRAINER_PATH_036O.md`: official-source, access-alternative and manual-action record.
-- `evidence/professional-engineering/036O-provider-authority-and-trainer-path-discovery/`: sanitized ledger, proof and AC report.
+- `scripts/provider-authority-resend-domain-036R.mjs`: strict Resend domain/DNS projection.
+- `scripts/provider-authority-reader-036P.mjs`: retained composed five-provider reader with the approved 036R operation.
+- `scripts/Invoke-ProviderAuthorityCompletion036R.ps1`: canonical guard, protected transport, local gates and atomic evidence regeneration.
+- `scripts/test-provider-authority-resend-domain-036R.mjs` and `scripts/test-provider-authority-transport-036R.mjs`: exact `60+40` focused proof.
+- `docs/RESEND_DOMAIN_BOUND_FIVE_PROVIDER_AUTHORITY_036R.md`: final operator boundary and no-retry record.
+- `evidence/professional-engineering/036R-resend-domain-bound-five-provider-authority-completion/`: canonical sanitized ledger, evidence and sole AC report.
 
 ## Decisions
 
-- Close only as `provider-authority-discovery-blocked-clean`; do not claim the target, launch readiness or Product Done.
-- Keep all seven rows `unknown-blocking`; local source presence/absence and fixtures cannot mint provider authority.
-- Preserve accepted Sprint 036L unchanged and make no provider/trainer action.
-- Require fresh corrective Architect authority before any protected reader or lifecycle work.
+- Close only as `resend-domain-bound-five-provider-authority-blocked-clean`; do not infer provider completeness, launch readiness or Done.
+- Distinguish the started protected process/local handshake from a durable provider session: no provider frame or final envelope means sessions remain zero.
+- Treat the absent pre-existing Vercel management credential as the exact blocker; do not create a token, install/login or retry 036R.
+- Preserve accepted 036L and keep 036S gated/unplanned.
 
 ## Risks / watch-items
 
-- The accepted object contains one missing local import, so the transitive source graph is not complete.
-- Provider documentation is mutable; current Resend examples already differ from the reduced local fixtures.
-- A connector, CLI or signed-in page alone cannot satisfy exhaustive five-provider, pagination and zero-output proof.
-- Product-wide Done remains false despite strong local controls.
+- Local transport and domain logic do not establish current provider authority without protected provider reads.
+- The official Account Tokens surface cannot reveal an existing token; creating one is a new credential action outside 036R.
+- A future signed-in alternative must prove exact scope, exhaustive reads and privacy-safe output before use.
+- Credential/identity/trainer, representative acceptance, Production completion and Product Done remain open.
 
 ## Open questions for the Architect
 
-- What executable protected reader can bind all five exact authorities without durable protected output?
-- How will the missing accepted-object import be resolved or explicitly governed before source completeness is claimed?
-- Which independent predecessor rejection/absence oracle applies to each of the seven classes?
-- What later private sequence governs identity disposition and one real-trainer message/verification only after authority is complete?
+- Will a future separately reviewed sprint provision an already-existing Vercel management credential through a protected channel, or prove a safe signed-in read-only alternative?
+- Can that authority complete the exact Vercel, Supabase, Resend, Stripe and Railway read matrix within the retained ceilings?
+- Which independent predecessor rejection/absence oracle and replacement/install/readback sequence governs each credential class only after provider authority passes?
+- What later private sequence governs the excluded identities and real trainer without weakening privacy or rollback?
 
 ## Evidence
 
-- `node scripts/run-validation-suite.mjs provider-authority-036o`: `120/120` PASS.
-- Retained exact suites: `1483/1483`; combined `1603/1603`.
-- Typecheck, lint, build 29, JSON, static/encoding, syntax, privacy, scope, staged and conflict gates pass.
-- Fresh critical inspection 3/3 PASS.
-- External ledger: provider reads/actions/mutations/residue/trainer actions `0/0/0/0/0`.
+- Fresh final implementation/evidence inspection: PASS.
+- Focused registered plan: domain `60/60`, transport `40/40`, total `100/100`.
+- Retained `1893/1893`; combined `1993/1993`. Post-attempt execution reran `1884` retained assertions and used the approved unchanged prior-green nine-check Sprint 031B proof because `playwright-core` is absent from package and lock.
+- SelfTest `100` and CapabilityGate exit `0`, with provider/DNS/action/residue counters zero.
+- JSON `7`, static/encoding `1440`, JavaScript syntax, PowerShell AST `0`, durable privacy `0`, typecheck, zero-warning lint, Production build `29`, diff/scope/lock/migration/Product/staged/conflict and evidence-link gates pass.
 
 ## Plan corrections
 
-Inspection 1 required branded opaque authority results, exact outcomes, an executable bounded source graph and fallback-only provider refusal. Inspection 2 required durable official-source/version/date provenance, exact alternative-access results and all 14 fields for every row. Both corrections remained within approved scope and passed fresh review/inspection.
+Two bounded implementation repair rounds strengthened strict raw-row/TTL decoding, tracking-row exclusion, behavior-first DNS/transport proof and child-active deadline pausing. Three visible history-bound attempts then refused before provider work; the passed alternate nested-process plan reached the masked Vercel prompt but found no pre-existing credential. Supporting-tool substitutions were limited to an unchanged prior-green nine-check browser proof and direct real-Node/native-npm execution for Windows shim failures; no Product or dependency scope changed.
 
 ## Validation / test status
 
-**Tests:** 1603 passing, 0 failing. Focused 120 and retained 1483 pass; proportional quality, JSON, static/encoding, syntax, privacy and closeout readback also pass.
+**Tests:** 1993 passing, 0 failing by the accepted focused-plus-retained evidence chain. Focused `100`; retained `1893` comprises `1884` rerun assertions plus the documented unchanged nine-check browser substitute. All required quality, privacy, scope and closeout gates pass.
 
 ## Recommended next Architect action
 
-**Do:** Create a fresh corrective authority only if it can define an executable protected five-provider reader, missing-edge governance and independent lifecycle/predecessor oracles without weakening privacy or zero-mutation boundaries.
+**Do:** Create no automatic 036S execution. If the owner requests further recovery, define a separately reviewed corrective authority for an existing Vercel management credential or a proven safe signed-in read-only alternative, then re-establish the five-provider prerequisite before any later credential or trainer work.
 
-**Owner:** Fresh Architect with platform/security, exact provider-account, privacy/business and trainer owners available only for later protected steps.
+**Owner:** Fresh Architect with Phillip, Randell, security/platform and exact provider-account owners; trainer involvement remains later.
 
-**Decision:** Until that authority passes review, perform no provider, credential, identity, deployment, message, verification or trainer action; keep 029R conditional and Product Done false.
-
-## Sprint 036P closeout authority
-
-Sprint 036P is closed `protected-provider-authority-readback-blocked-clean`, target not met. The corrected 124-file accepted-source graph and executable protected reader passed fresh critical inspection 3/3. Durable provider history is four read-only requests with zero writes, mutations, business effects, residue or trainer actions. Exact five-provider authority and all seven credential capability dispositions remain incomplete. Accepted Sprint 036L remains the last durable live authority; no launch readiness or Product Done claim is made.
-
-**Recommended next Architect action:** create a corrective authority only when the exact Supabase project, Resend team and Stripe/Railway read access can be bound inside one visible non-transcribed protected session and every required provider page can be exhausted without durable protected output.
+**Decision:** Until that authority passes, do not retry 036R, create a token, install/login, access providers, rotate credentials, change identities, contact the trainer or claim Product Done.

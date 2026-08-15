@@ -1,0 +1,61 @@
+{
+  "capture": {
+    "pageTitle": "Sprint 035R synthetic evidence",
+    "path": "/data-entry/biochemistry",
+    "horseId": "synthetic-alpha",
+    "note": "Synthetic context checked."
+  },
+  "mobile": {
+    "viewport": {
+      "innerWidth": 414,
+      "innerHeight": 896,
+      "devicePixelRatio": 1
+    },
+    "document": {
+      "clientWidth": 414,
+      "scrollWidth": 414,
+      "hasHorizontalOverflow": false
+    },
+    "textarea": {
+      "width": 340,
+      "height": 146
+    },
+    "reviewButton": {
+      "width": 111.9375,
+      "height": 44
+    }
+  },
+  "review": {
+    "initiallyChecked": false,
+    "checkbox": {
+      "width": 20,
+      "height": 20
+    },
+    "submitButton": {
+      "width": 112.703125,
+      "height": 46
+    },
+    "blockedError": "Review and confirm the note, or edit it before submission.",
+    "errorRole": "alert",
+    "submittingStateObserved": false
+  },
+  "desktop": {
+    "viewport": {
+      "innerWidth": 1440,
+      "innerHeight": 900,
+      "devicePixelRatio": 1
+    },
+    "document": {
+      "clientWidth": 1425,
+      "scrollWidth": 1425,
+      "hasHorizontalOverflow": false
+    },
+    "textarea": {
+      "width": 702,
+      "height": 146
+    }
+  },
+  "network": {
+    "nonReadRequests": []
+  }
+}

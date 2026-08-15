@@ -287,3 +287,19 @@ The unchanged cross-stable denial case cannot be genuinely executed with only on
 - TEST provenance, documentation fixtures, installed CLIs, connector presence and caller labels must never mint LIVE provider success or durable target state.
 - All seven classes remain `unknown-blocking`. Credential, deployment, identity and trainer work must not start without fresh corrective Architect authority and independent lifecycle/predecessor oracles.
 - Accepted Sprint 036L remains the last durable live authority. Launch readiness, representative acceptance, Production completion and Product Done are false/open.
+
+## Sprint 036Q retained risks - 2026-08-14
+
+- Current-HEAD protected transport, local tests and evidence reconciliation do not establish current provider authority when the protected session never opened.
+- The missing pre-existing independently bound Resend team identity remains the first blocking prerequisite; installation, login, token possession, caller labels, fixtures and screenshots cannot substitute.
+- Durable provider history remains four Sprint 036P read-only requests. Sprint 036Q added zero reads and zero writes, mutations, business effects, residue or trainer actions.
+- Credential lifecycle, predecessor rejection, excluded identities, trainer delivery, representative acceptance and Production completion remain open. Sprint 036R must not execute before fresh Architect authority completes five-provider authority.
+- Accepted Sprint 036L remains the last durable live authority. Public enquiry, launch readiness and Product Done remain false/open.
+
+## Sprint 036R retained risks - 2026-08-14
+
+- Local domain/DNS logic, protected transport and a local child handshake do not establish current provider authority without credential release and provider-native reads.
+- No pre-existing Vercel management credential is available. The official Account Tokens surface cannot reveal an existing token, and creating one is a new credential action outside Sprint 036R.
+- A future signed-in alternative could be incomplete, over-broad or expose protected output; it needs separate Architect authority, exact scope/pagination proof and the same zero-mutation/privacy boundaries.
+- Durable provider history remains four Sprint 036P reads. Sprint 036R added provider/DNS reads `0/0`, durable sessions `0` and all action/residue/trainer counters zero.
+- Credential lifecycle, predecessor rejection, excluded identities, real-trainer delivery, public enquiry, representative acceptance, Production completion and Product Done remain open. Accepted Sprint 036L remains live; 036S is gated/unplanned.

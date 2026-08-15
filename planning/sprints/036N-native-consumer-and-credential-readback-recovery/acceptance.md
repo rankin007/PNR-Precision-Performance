@@ -1,0 +1,46 @@
+# Sprint 036N Acceptance - Native Consumer and Credential Readback Recovery
+
+Status values at closeout: `PASS`, `FALLBACK`, `NOT STARTED`, or `FAIL`.
+
+| ID | Acceptance criterion | Status | Evidence |
+|---|---|---|---|
+| AC-01 | Canonical CWD/Git root, branch, HEAD, dirty baseline, staged zero, and conflicts zero are proved before work and reread at closeout. | PASS | Canonical guard and final Git readback pass; staged/conflicts 0/0. |
+| AC-02 | Lean authority is written directly into the four sprint files; no Architect Pack is invented or applied. | PASS | Four-file lean authority retained; architectPack null. |
+| AC-03 | The same Architect returns PASS on the exact Builder plan before implementation. | PASS | PLAN-001..005 resolved; final plan PASS. |
+| AC-04 | Current official Supabase, Vercel, SMTP-provider, Stripe, and Railway lifecycle/readback authority is recorded without relying on stale assumptions. | PASS | Current documented provider shapes and refusal boundaries recorded. |
+| AC-05 | The repository consumer manifest covers all seven classes and is bound to exact source authority. | PASS | Seven allowlisted classes and pinned source contract covered locally. |
+| AC-06 | Vercel deployment and environment inventory paginates to exhaustion and refuses missing, duplicate, cross-project, or unknown rows. | FALLBACK | Native provider execution/readback unavailable; truthful blocked-clean fallback. |
+| AC-07 | Supabase Edge Functions, database webhooks, `pg_net`, Cron, and integrations are inventoried or proved absent through native authority. | FALLBACK | Native provider execution/readback unavailable; truthful blocked-clean fallback. |
+| AC-08 | A frozen pre-mutation baseline identifies exact current aliases, three binding classes, accepted 036L source, consumers, and predecessor-bearing deployments. | FALLBACK | Native provider execution/readback unavailable; truthful blocked-clean fallback. |
+| AC-09 | One exact-source primary and one exact-source rollback deployment are Ready, exact-project, independently addressable, and current-key compatible before irreversible action. | NOT STARTED | Live deployment, binding, probe, credential, predecessor or disposition action did not start. |
+| AC-10 | Replacement bindings cover every exact current target while URL, JWT signing, sessions, and unrelated bindings remain unchanged. | NOT STARTED | Live deployment, binding, probe, credential, predecessor or disposition action did not start. |
+| AC-11 | Public, authenticated-user, and server-admin probes pass with zero commerce, enquiry, email, Cron, webhook, Railway, or payment business effect. | NOT STARTED | Live deployment, binding, probe, credential, predecessor or disposition action did not start. |
+| AC-12 | The fixed five aliases move in exact order to the primary and all five are independently reread; rollback remains independently addressable. | NOT STARTED | Live deployment, binding, probe, credential, predecessor or disposition action did not start. |
+| AC-13 | Every predecessor-bearing deployment is exact-ID absent or provider-natively proved incapable of accepting the predecessor. | NOT STARTED | Live deployment, binding, probe, credential, predecessor or disposition action did not start. |
+| AC-14 | The rollback deployment is proved source-exact, Ready, current-key compatible, and excluded from deletion. | NOT STARTED | Live deployment, binding, probe, credential, predecessor or disposition action did not start. |
+| AC-15 | `SUPABASE_SERVICE_ROLE_KEY` has one truthful terminal disposition backed by native lifecycle and predecessor rejection/absence without JWT/session rotation. | NOT STARTED | Live deployment, binding, probe, credential, predecessor or disposition action did not start. |
+| AC-16 | `CRON_SECRET` has one truthful terminal disposition and every addressable route/job consumer is covered. | NOT STARTED | Live deployment, binding, probe, credential, predecessor or disposition action did not start. |
+| AC-17 | `ENQUIRY_ABUSE_HMAC_SECRET` has one truthful terminal disposition and every addressable enquiry consumer is covered. | NOT STARTED | Live deployment, binding, probe, credential, predecessor or disposition action did not start. |
+| AC-18 | `PUBLIC_ENQUIRY_SMTP_PASS` has one truthful terminal disposition backed by provider lifecycle and authentication-only/no-send proof. | NOT STARTED | Live deployment, binding, probe, credential, predecessor or disposition action did not start. |
+| AC-19 | `STRIPE_SECRET_KEY` has one truthful terminal disposition while commerce remains disabled and no payment action occurs. | NOT STARTED | Live deployment, binding, probe, credential, predecessor or disposition action did not start. |
+| AC-20 | `STRIPE_WEBHOOK_SECRET` has one truthful terminal disposition with no webhook event, endpoint activation, or delivery. | NOT STARTED | Live deployment, binding, probe, credential, predecessor or disposition action did not start. |
+| AC-21 | `RAILWAY_API_TOKEN` has one truthful terminal disposition backed by exact account/project lifecycle and harmless authentication proof. | NOT STARTED | Live deployment, binding, probe, credential, predecessor or disposition action did not start. |
+| AC-22 | Exactly seven allowlisted terminal dispositions are recorded; unknown, public, OIDC, provider-wide, or historical classes are refused. | NOT STARTED | Live deployment, binding, probe, credential, predecessor or disposition action did not start. |
+| AC-23 | Any blocked class with uncertain Auth, trainer, portal, rehearsal, or routing reachability prevents downstream trainer authority. | PASS | Blocked-clean prevents downstream trainer authority. |
+| AC-24 | Operator confirmation, screenshot, Vercel absence, or source inspection alone cannot satisfy provider revocation/absence. | PASS | No manual or self-attested success accepted. |
+| AC-25 | Protected values never enter chat, argv, environment, clipboard, temp files, repository, evidence, logs, or raw output. | PASS | Live/protected entry removed; private actions zero. |
+| AC-26 | Every mutation is pre-latched; mutate-then-throw, timeout, and ambiguity require independent readback and never guessed compensation. | PASS | Private phase-specific mutation/latch/refusal contract passes; mutations zero. |
+| AC-27 | Deployment deletion uses an exact frozen allowlist and excludes primary, rollback, current aliased, foreign, and unknown deployments. | PASS | Frozen N<=50 and dependent-state-gated deletion contract passes. |
+| AC-28 | Pre-irreversible failure restores aliases/bindings and removes only exact-owned replacements; post-attempt predecessor restoration is impossible. | PASS | Exact-owned compensation and irreversible refusal pass locally. |
+| AC-29 | Business-effect counters for payment, email, enquiry, Cron, webhook, Railway mutation, trainer message, and verification remain zero. | PASS | Every business-effect counter is zero. |
+| AC-30 | Final readback proves exact source, project, primary, rollback, aliases, bindings, consumers, and seven dispositions. | FALLBACK | Native provider execution/readback unavailable; truthful blocked-clean fallback. |
+| AC-31 | Exact-owned temporary exports, replacement artifacts, processes, and provider residue are absent or truthfully classified. | PASS | No export/process/provider action; residue zero. |
+| AC-32 | Focused adversarial tests cover pagination, ownership, source, alias, predecessor survival, per-provider false positives, latches, compensation, privacy, and deletion safety. | PASS | Focused 70+80+30 = 180/180. |
+| AC-33 | The full Sprint 036M counted proof is retained unless a reviewed Builder plan states and proves revised exact arithmetic. | PASS | Retained 1303/1303; combined 1483/1483. |
+| AC-34 | JSON, static/encoding, typecheck, zero-warning lint, production build, syntax, and registered validation gates pass. | PASS | Final Architect independently verified all named gates. |
+| AC-35 | Exact file scope, lockfile, migrations, RLS, roles, permissions, DNS, email policy, commerce, enquiry, dependencies, staged state, and conflicts remain protected. | PASS | Lock F776..., migration diff 0, staged/conflicts 0/0; no Product change. |
+| AC-36 | Sanitized evidence records exact counts, latches, dispositions, mutations, compensation, readbacks, residue, and limitations without protected values. | PASS | Sanitized evidence records fallback and 0/0/0/0. |
+| AC-37 | The same Architect returns PASS on the complete implementation/evidence diff before closeout. | PASS | Final same-Architect diff PASS. |
+| AC-38 | Any fallback preserves accepted Sprint 036L behavior or records an exact blocked-material state without claiming launch/trainer readiness. | PASS | Accepted 036L unchanged; no launch/trainer/Product Done claim. |
+| AC-39 | Acceptance, review, state, status, decisions, risks, questions, matrix, DoD, roadmap, schedule, lifecycle, evidence index, briefing, deferred scope, and delivery roadmap are synchronized after PASS. | PASS | Approved 16-file closeout synchronized. |
+| AC-40 | Final disk/Git/provider readback proves truthful target/fallback, zero staged/unauthorized mutation/residue, no false Product Done claim, and no commit/push/PR. | PASS | Target false; external/private/mutation/residue 0/0/0/0; no publication. |

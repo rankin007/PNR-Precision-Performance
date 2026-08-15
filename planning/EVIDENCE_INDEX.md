@@ -186,3 +186,18 @@ Historical packs, sprint files and reviews remain in place and retain their orig
 - `evidence/professional-engineering/036P-protected-provider-authority-readback/SPRINT-036P-REPORT.md` - sole mutable AC-01..40 disposition authority and blocked-clean result.
 - `evidence/professional-engineering/036P-protected-provider-authority-readback/evidence.md` - accepted-source, focused/retained, reader/transport and provider-read proof.
 - `evidence/professional-engineering/036P-protected-provider-authority-readback/external-ledger.json` - sanitized canonical four-read, zero-write/mutation/residue provider ledger and seven 15-field rows.
+
+## Sprint 036Q - protected five-provider authority completion
+
+- `planning/reviews/036Q-protected-five-provider-authority-completion.md` - same-Architect plan and final implementation/evidence diff PASS, exact fallback and final AC grouping.
+- `evidence/professional-engineering/036Q-protected-five-provider-authority-completion/SPRINT-036Q-REPORT.md` - sole mutable AC-01..40 disposition authority, `1893/1893` proof and blocked-clean result.
+- `evidence/professional-engineering/036Q-protected-five-provider-authority-completion/evidence.md` - accepted-source, focused/retained, capability fallback, session and cumulative counter proof.
+- `evidence/professional-engineering/036Q-protected-five-provider-authority-completion/external-ledger.json` - sanitized canonical zero-session, zero-current-read, four-cumulative-read and zero-action ledger with seven 15-field rows.
+
+## Sprint 036R - Resend domain-bound five-provider authority completion
+
+- `planning/reviews/036R-resend-domain-bound-five-provider-authority-completion.md` - fresh final inspection PASS, exact fallback, AC-38 through AC-40 closeout disposition and remaining no-retry boundary.
+- `evidence/professional-engineering/036R-resend-domain-bound-five-provider-authority-completion/SPRINT-036R-REPORT.md` - sole mutable AC-01..40 implementation disposition authority, `1993/1993` evidence chain and blocked-clean result.
+- `evidence/professional-engineering/036R-resend-domain-bound-five-provider-authority-completion/evidence.md` - accepted-source, focused/retained, provider history, session and manual-action projection.
+- `evidence/professional-engineering/036R-resend-domain-bound-five-provider-authority-completion/external-ledger.json` - sanitized attempt4 process/handshake/prompt truth, credentials/provider frames/reads/sessions/actions/residue zero and cumulative provider reads four.
+- `docs/RESEND_DOMAIN_BOUND_FIVE_PROVIDER_AUTHORITY_036R.md` - official-contract, strict Resend domain/DNS, protected transport, final no-retry and future-authority boundary.

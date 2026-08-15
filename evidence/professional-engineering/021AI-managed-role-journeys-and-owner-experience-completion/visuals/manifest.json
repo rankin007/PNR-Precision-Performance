@@ -1,0 +1,78 @@
+{
+  "sprint": "021AI",
+  "source": "shared Product components with synthetic local data only",
+  "renderer": "local Chromium CDP full-page capture",
+  "viewportNote": "Mobile PNGs are full-page captures rendered at a named 414 x 896 CSS viewport; PNG height truthfully follows complete content. Effective client width is separately audited in geometry.json.",
+  "captureCount": 5,
+  "views": [
+    {
+      "file": "01-mobile-trainer-managed-access-414x896.png",
+      "mode": "access",
+      "viewport": "414x896",
+      "effectiveClientWidth": 399,
+      "dimensions": "414x1440",
+      "bytes": 77390,
+      "fullPage": true,
+      "nonblank": true,
+      "sections": [
+        "#assign-access-heading"
+      ]
+    },
+    {
+      "file": "02-mobile-managed-role-permissions-414x896.png",
+      "mode": "permissions",
+      "viewport": "414x896",
+      "effectiveClientWidth": 399,
+      "dimensions": "414x1022",
+      "bytes": 61089,
+      "fullPage": true,
+      "nonblank": true,
+      "sections": [
+        "#assign-access-heading"
+      ]
+    },
+    {
+      "file": "03-mobile-owner-latest-result-414x896.png",
+      "mode": "owner",
+      "viewport": "414x896",
+      "effectiveClientWidth": 399,
+      "dimensions": "414x1097",
+      "bytes": 53587,
+      "fullPage": true,
+      "nonblank": true,
+      "sections": [
+        "a[href=\"/?mode=trends\"]"
+      ]
+    },
+    {
+      "file": "04-mobile-owner-exact-horse-trends-414x896.png",
+      "mode": "trends",
+      "viewport": "414x896",
+      "effectiveClientWidth": 399,
+      "dimensions": "414x3124",
+      "bytes": 150658,
+      "fullPage": true,
+      "nonblank": true,
+      "sections": [
+        "#trend-controls"
+      ]
+    },
+    {
+      "file": "05-desktop-managed-access-owner-overview-1440x900.png",
+      "mode": "desktop",
+      "viewport": "1440x900",
+      "effectiveClientWidth": 1425,
+      "dimensions": "1440x4913",
+      "bytes": 343974,
+      "fullPage": true,
+      "nonblank": true,
+      "sections": [
+        "#assign-access-heading",
+        "a[href=\"/?mode=trends\"]",
+        "#trend-controls"
+      ]
+    }
+  ],
+  "geometry": "geometry.json",
+  "privacy": "Synthetic data only; no real identity, horse, stable, email, note, credential, token, provider identifier or confidential record."
+}

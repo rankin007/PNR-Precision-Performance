@@ -1,0 +1,1745 @@
+{
+  "sprint": "021AI",
+  "captureCount": 5,
+  "renderer": "local Chromium CDP full-page capture",
+  "expectedRunCount": 13,
+  "expectedImageCount": 5,
+  "runs": [
+    {
+      "name": "trainer-managed-access-mobile-official-full-page",
+      "mode": "access",
+      "evidenceMode": "official-full-page",
+      "scalePercent": 100,
+      "viewportCss": {
+        "width": 414,
+        "height": 896
+      },
+      "textResize": null,
+      "measuredAt": "2026-08-11T04:00:00.000Z",
+      "namedViewport": {
+        "width": 414,
+        "height": 896
+      },
+      "windowInnerWidth": 414,
+      "windowInnerHeight": 896,
+      "documentClientWidth": 399,
+      "bodyClientWidth": 399,
+      "effectiveClientViewportWidth": 399,
+      "effectiveClientViewportRule": "Smallest relevant nonzero document/body client width; the named viewport and window.innerWidth are telemetry only and never the pass boundary.",
+      "documentScrollWidth": 399,
+      "bodyScrollWidth": 399,
+      "maximumMaterialRightEdge": 399,
+      "overflowElements": [],
+      "intentionalLocalScrollContainers": [],
+      "requiredSections": {
+        "expected": [
+          "#assign-access-heading"
+        ],
+        "present": [
+          "#assign-access-heading"
+        ],
+        "missing": []
+      },
+      "interactiveTargets": {
+        "rule": "Visible enabled interactive controls are applicable; hidden inputs are explicitly excluded. The union of a control and its effective visible label is measured as the labelled hit area. Every applicable target must be at least 44x44 CSS pixels.",
+        "hiddenInputsExcluded": 5,
+        "applicableCount": 6,
+        "below44Count": 0,
+        "items": [
+          {
+            "selector": "select[name=\"memberProfileId\"]",
+            "accessibleName": "PersonChoose a scoped personVeterinary Reviewer ? VeterinarianStable Support ? Stable Staff",
+            "width": 333,
+            "height": 72,
+            "applicable": true,
+            "pass": true,
+            "labelledHitArea": true,
+            "hasFocusTreatment": true
+          },
+          {
+            "selector": "select[name=\"horseId\"]",
+            "accessibleName": "HorseChoose a managed horseExample Horse",
+            "width": 333,
+            "height": 72,
+            "applicable": true,
+            "pass": true,
+            "labelledHitArea": true,
+            "hasFocusTreatment": true
+          },
+          {
+            "selector": "select[name=\"roleCode\"]",
+            "accessibleName": "Access roleChoose the person's roleVeterinarianStable Staff",
+            "width": 333,
+            "height": 72,
+            "applicable": true,
+            "pass": true,
+            "labelledHitArea": true,
+            "hasFocusTreatment": true
+          },
+          {
+            "selector": "button",
+            "accessibleName": "Assign read access",
+            "width": 333,
+            "height": 44,
+            "applicable": true,
+            "pass": true,
+            "labelledHitArea": false,
+            "hasFocusTreatment": true
+          },
+          {
+            "selector": "button",
+            "accessibleName": "End access",
+            "width": 301,
+            "height": 44,
+            "applicable": true,
+            "pass": true,
+            "labelledHitArea": false,
+            "hasFocusTreatment": true
+          },
+          {
+            "selector": "button",
+            "accessibleName": "End access",
+            "width": 301,
+            "height": 44,
+            "applicable": true,
+            "pass": true,
+            "labelledHitArea": false,
+            "hasFocusTreatment": true
+          }
+        ]
+      },
+      "accessibility": {
+        "missingLabels": [],
+        "missingFocusTreatment": [],
+        "missingStatusSemantics": [],
+        "colourOnlyStates": [],
+        "statusCount": 1,
+        "rule": "Labels, focus treatment, status semantics and non-colour textual meaning are required."
+      },
+      "pass": true,
+      "failures": [],
+      "screenshot": {
+        "file": "01-mobile-trainer-managed-access-414x896.png",
+        "fullPage": true,
+        "width": 414,
+        "height": 1440,
+        "bytes": 77390,
+        "nonblank": true
+      }
+    },
+    {
+      "name": "managed-role-permissions-mobile-official-full-page",
+      "mode": "permissions",
+      "evidenceMode": "official-full-page",
+      "scalePercent": 100,
+      "viewportCss": {
+        "width": 414,
+        "height": 896
+      },
+      "textResize": null,
+      "measuredAt": "2026-08-11T04:00:00.000Z",
+      "namedViewport": {
+        "width": 414,
+        "height": 896
+      },
+      "windowInnerWidth": 414,
+      "windowInnerHeight": 896,
+      "documentClientWidth": 399,
+      "bodyClientWidth": 399,
+      "effectiveClientViewportWidth": 399,
+      "effectiveClientViewportRule": "Smallest relevant nonzero document/body client width; the named viewport and window.innerWidth are telemetry only and never the pass boundary.",
+      "documentScrollWidth": 399,
+      "bodyScrollWidth": 399,
+      "maximumMaterialRightEdge": 399,
+      "overflowElements": [],
+      "intentionalLocalScrollContainers": [],
+      "requiredSections": {
+        "expected": [
+          "#assign-access-heading"
+        ],
+        "present": [
+          "#assign-access-heading"
+        ],
+        "missing": []
+      },
+      "interactiveTargets": {
+        "rule": "Visible enabled interactive controls are applicable; hidden inputs are explicitly excluded. The union of a control and its effective visible label is measured as the labelled hit area. Every applicable target must be at least 44x44 CSS pixels.",
+        "hiddenInputsExcluded": 0,
+        "applicableCount": 0,
+        "below44Count": 0,
+        "items": []
+      },
+      "accessibility": {
+        "missingLabels": [],
+        "missingFocusTreatment": [],
+        "missingStatusSemantics": [],
+        "colourOnlyStates": [],
+        "statusCount": 0,
+        "rule": "Labels, focus treatment, status semantics and non-colour textual meaning are required."
+      },
+      "pass": true,
+      "failures": [],
+      "screenshot": {
+        "file": "02-mobile-managed-role-permissions-414x896.png",
+        "fullPage": true,
+        "width": 414,
+        "height": 1022,
+        "bytes": 61089,
+        "nonblank": true
+      }
+    },
+    {
+      "name": "owner-latest-result-mobile-official-full-page",
+      "mode": "owner",
+      "evidenceMode": "official-full-page",
+      "scalePercent": 100,
+      "viewportCss": {
+        "width": 414,
+        "height": 896
+      },
+      "textResize": null,
+      "measuredAt": "2026-08-11T04:00:00.000Z",
+      "namedViewport": {
+        "width": 414,
+        "height": 896
+      },
+      "windowInnerWidth": 414,
+      "windowInnerHeight": 896,
+      "documentClientWidth": 399,
+      "bodyClientWidth": 399,
+      "effectiveClientViewportWidth": 399,
+      "effectiveClientViewportRule": "Smallest relevant nonzero document/body client width; the named viewport and window.innerWidth are telemetry only and never the pass boundary.",
+      "documentScrollWidth": 399,
+      "bodyScrollWidth": 399,
+      "maximumMaterialRightEdge": 399,
+      "overflowElements": [],
+      "intentionalLocalScrollContainers": [],
+      "requiredSections": {
+        "expected": [
+          "a[href=\"/?mode=trends\"]"
+        ],
+        "present": [
+          "a[href=\"/?mode=trends\"]"
+        ],
+        "missing": []
+      },
+      "interactiveTargets": {
+        "rule": "Visible enabled interactive controls are applicable; hidden inputs are explicitly excluded. The union of a control and its effective visible label is measured as the labelled hit area. Every applicable target must be at least 44x44 CSS pixels.",
+        "hiddenInputsExcluded": 0,
+        "applicableCount": 1,
+        "below44Count": 0,
+        "items": [
+          {
+            "selector": "a",
+            "accessibleName": "View trends",
+            "width": 325,
+            "height": 44,
+            "applicable": true,
+            "pass": true,
+            "labelledHitArea": false,
+            "hasFocusTreatment": true
+          }
+        ]
+      },
+      "accessibility": {
+        "missingLabels": [],
+        "missingFocusTreatment": [],
+        "missingStatusSemantics": [],
+        "colourOnlyStates": [],
+        "statusCount": 0,
+        "rule": "Labels, focus treatment, status semantics and non-colour textual meaning are required."
+      },
+      "pass": true,
+      "failures": [],
+      "screenshot": {
+        "file": "03-mobile-owner-latest-result-414x896.png",
+        "fullPage": true,
+        "width": 414,
+        "height": 1097,
+        "bytes": 53587,
+        "nonblank": true
+      }
+    },
+    {
+      "name": "owner-exact-horse-trends-mobile-official-full-page",
+      "mode": "trends",
+      "evidenceMode": "official-full-page",
+      "scalePercent": 100,
+      "viewportCss": {
+        "width": 414,
+        "height": 896
+      },
+      "textResize": null,
+      "measuredAt": "2026-08-11T04:00:00.000Z",
+      "namedViewport": {
+        "width": 414,
+        "height": 896
+      },
+      "windowInnerWidth": 414,
+      "windowInnerHeight": 896,
+      "documentClientWidth": 399,
+      "bodyClientWidth": 399,
+      "effectiveClientViewportWidth": 399,
+      "effectiveClientViewportRule": "Smallest relevant nonzero document/body client width; the named viewport and window.innerWidth are telemetry only and never the pass boundary.",
+      "documentScrollWidth": 399,
+      "bodyScrollWidth": 399,
+      "maximumMaterialRightEdge": 399,
+      "overflowElements": [],
+      "intentionalLocalScrollContainers": [
+        {
+          "selector": "div",
+          "overflowX": "auto",
+          "clientWidth": 341,
+          "scrollWidth": 640,
+          "left": 29,
+          "right": 370,
+          "exemptDescendantCount": 17,
+          "boundedByEffectiveClientViewport": true
+        },
+        {
+          "selector": "div",
+          "overflowX": "auto",
+          "clientWidth": 341,
+          "scrollWidth": 640,
+          "left": 29,
+          "right": 370,
+          "exemptDescendantCount": 19,
+          "boundedByEffectiveClientViewport": true
+        },
+        {
+          "selector": "div",
+          "overflowX": "auto",
+          "clientWidth": 333,
+          "scrollWidth": 1040,
+          "left": 33,
+          "right": 366,
+          "exemptDescendantCount": 43,
+          "boundedByEffectiveClientViewport": true
+        }
+      ],
+      "requiredSections": {
+        "expected": [
+          "#trend-controls"
+        ],
+        "present": [
+          "#trend-controls"
+        ],
+        "missing": []
+      },
+      "interactiveTargets": {
+        "rule": "Visible enabled interactive controls are applicable; hidden inputs are explicitly excluded. The union of a control and its effective visible label is measured as the labelled hit area. Every applicable target must be at least 44x44 CSS pixels.",
+        "hiddenInputsExcluded": 7,
+        "applicableCount": 13,
+        "below44Count": 0,
+        "items": [
+          {
+            "selector": "select[name=\"horseId\"]",
+            "accessibleName": "Accessible horseChoose a horseExample Horse ??? Example Stable",
+            "width": 333,
+            "height": 72,
+            "applicable": true,
+            "pass": true,
+            "labelledHitArea": true,
+            "hasFocusTreatment": true
+          },
+          {
+            "selector": "select[name=\"range\"]",
+            "accessibleName": "Date windowLast 30 daysLast 90 daysLast 365 days",
+            "width": 333,
+            "height": 72,
+            "applicable": true,
+            "pass": true,
+            "labelledHitArea": true,
+            "hasFocusTreatment": true
+          },
+          {
+            "selector": "select[name=\"time\"]",
+            "accessibleName": "Recorded timeAMPMAM + PMAll recorded times",
+            "width": 333,
+            "height": 72,
+            "applicable": true,
+            "pass": true,
+            "labelledHitArea": true,
+            "hasFocusTreatment": true
+          },
+          {
+            "selector": "select[name=\"scoreView\"]",
+            "accessibleName": "Score chartHiddenHydration ScoreBiochemistry Trend ScoreBoth scores",
+            "width": 333,
+            "height": 72,
+            "applicable": true,
+            "pass": true,
+            "labelledHitArea": true,
+            "hasFocusTreatment": true
+          },
+          {
+            "selector": "select[name=\"phView\"]",
+            "accessibleName": "pH chartHiddenUrine pHSaliva pHBoth pH readings",
+            "width": 333,
+            "height": 72,
+            "applicable": true,
+            "pass": true,
+            "labelledHitArea": true,
+            "hasFocusTreatment": true
+          },
+          {
+            "selector": "input[name=\"carbohydrate\"]",
+            "accessibleName": "Carbohydrate",
+            "width": 307,
+            "height": 44,
+            "applicable": true,
+            "pass": true,
+            "labelledHitArea": true,
+            "hasFocusTreatment": true
+          },
+          {
+            "selector": "input[name=\"conductivity\"]",
+            "accessibleName": "Raw Conductivity",
+            "width": 307,
+            "height": 44,
+            "applicable": true,
+            "pass": true,
+            "labelledHitArea": true,
+            "hasFocusTreatment": true
+          },
+          {
+            "selector": "button",
+            "accessibleName": "Update trends",
+            "width": 333,
+            "height": 44,
+            "applicable": true,
+            "pass": true,
+            "labelledHitArea": false,
+            "hasFocusTreatment": true
+          },
+          {
+            "selector": "input[name=\"label\"]",
+            "accessibleName": "View label",
+            "width": 333,
+            "height": 72,
+            "applicable": true,
+            "pass": true,
+            "labelledHitArea": true,
+            "hasFocusTreatment": true
+          },
+          {
+            "selector": "button",
+            "accessibleName": "Save current view",
+            "width": 333,
+            "height": 44,
+            "applicable": true,
+            "pass": true,
+            "labelledHitArea": false,
+            "hasFocusTreatment": true
+          },
+          {
+            "selector": "div",
+            "accessibleName": "Scrollable Stored score history",
+            "width": 341,
+            "height": 263.88,
+            "applicable": true,
+            "pass": true,
+            "labelledHitArea": false,
+            "hasFocusTreatment": true
+          },
+          {
+            "selector": "div",
+            "accessibleName": "Scrollable pH reading history",
+            "width": 341,
+            "height": 263.88,
+            "applicable": true,
+            "pass": true,
+            "labelledHitArea": false,
+            "hasFocusTreatment": true
+          },
+          {
+            "selector": "div",
+            "accessibleName": "Scrollable accessible biochemistry history table",
+            "width": 333,
+            "height": 335,
+            "applicable": true,
+            "pass": true,
+            "labelledHitArea": false,
+            "hasFocusTreatment": true
+          }
+        ]
+      },
+      "accessibility": {
+        "missingLabels": [],
+        "missingFocusTreatment": [],
+        "missingStatusSemantics": [],
+        "colourOnlyStates": [],
+        "statusCount": 1,
+        "rule": "Labels, focus treatment, status semantics and non-colour textual meaning are required."
+      },
+      "pass": true,
+      "failures": [],
+      "screenshot": {
+        "file": "04-mobile-owner-exact-horse-trends-414x896.png",
+        "fullPage": true,
+        "width": 414,
+        "height": 3124,
+        "bytes": 150658,
+        "nonblank": true
+      }
+    },
+    {
+      "name": "managed-access-owner-overview-desktop-official-full-page",
+      "mode": "desktop",
+      "evidenceMode": "official-full-page",
+      "scalePercent": 100,
+      "viewportCss": {
+        "width": 1440,
+        "height": 900
+      },
+      "textResize": null,
+      "measuredAt": "2026-08-11T04:00:00.000Z",
+      "namedViewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "windowInnerWidth": 1440,
+      "windowInnerHeight": 900,
+      "documentClientWidth": 1425,
+      "bodyClientWidth": 1425,
+      "effectiveClientViewportWidth": 1425,
+      "effectiveClientViewportRule": "Smallest relevant nonzero document/body client width; the named viewport and window.innerWidth are telemetry only and never the pass boundary.",
+      "documentScrollWidth": 1425,
+      "bodyScrollWidth": 1425,
+      "maximumMaterialRightEdge": 1425,
+      "overflowElements": [],
+      "intentionalLocalScrollContainers": [],
+      "requiredSections": {
+        "expected": [
+          "#assign-access-heading",
+          "a[href=\"/?mode=trends\"]",
+          "#trend-controls"
+        ],
+        "present": [
+          "#assign-access-heading",
+          "a[href=\"/?mode=trends\"]",
+          "#trend-controls"
+        ],
+        "missing": []
+      },
+      "interactiveTargets": {
+        "rule": "Visible enabled interactive controls are applicable; hidden inputs are explicitly excluded. The union of a control and its effective visible label is measured as the labelled hit area. Every applicable target must be at least 44x44 CSS pixels.",
+        "hiddenInputsExcluded": 12,
+        "applicableCount": 20,
+        "below44Count": 0,
+        "items": [
+          {
+            "selector": "select[name=\"memberProfileId\"]",
+            "accessibleName": "PersonChoose a scoped personVeterinary Reviewer ? VeterinarianStable Support ? Stable Staff",
+            "width": 442.33,
+            "height": 72,
+            "applicable": true,
+            "pass": true,
+            "labelledHitArea": true,
+            "hasFocusTreatment": true
+          },
+          {
+            "selector": "select[name=\"horseId\"]",
+            "accessibleName": "HorseChoose a managed horseExample Horse",
+            "width": 442.33,
+            "height": 72,
+            "applicable": true,
+            "pass": true,
+            "labelledHitArea": true,
+            "hasFocusTreatment": true
+          },
+          {
+            "selector": "select[name=\"roleCode\"]",
+            "accessibleName": "Access roleChoose the person's roleVeterinarianStable Staff",
+            "width": 442.34,
+            "height": 72,
+            "applicable": true,
+            "pass": true,
+            "labelledHitArea": true,
+            "hasFocusTreatment": true
+          },
+          {
+            "selector": "button",
+            "accessibleName": "Assign read access",
+            "width": 1359,
+            "height": 44,
+            "applicable": true,
+            "pass": true,
+            "labelledHitArea": false,
+            "hasFocusTreatment": true
+          },
+          {
+            "selector": "button",
+            "accessibleName": "End access",
+            "width": 1327,
+            "height": 44,
+            "applicable": true,
+            "pass": true,
+            "labelledHitArea": false,
+            "hasFocusTreatment": true
+          },
+          {
+            "selector": "button",
+            "accessibleName": "End access",
+            "width": 1327,
+            "height": 44,
+            "applicable": true,
+            "pass": true,
+            "labelledHitArea": false,
+            "hasFocusTreatment": true
+          },
+          {
+            "selector": "a",
+            "accessibleName": "View trends",
+            "width": 1335,
+            "height": 44,
+            "applicable": true,
+            "pass": true,
+            "labelledHitArea": false,
+            "hasFocusTreatment": true
+          },
+          {
+            "selector": "select[name=\"horseId\"]",
+            "accessibleName": "Accessible horseChoose a horseExample Horse ??? Example Stable",
+            "width": 671.5,
+            "height": 72,
+            "applicable": true,
+            "pass": true,
+            "labelledHitArea": true,
+            "hasFocusTreatment": true
+          },
+          {
+            "selector": "select[name=\"range\"]",
+            "accessibleName": "Date windowLast 30 daysLast 90 daysLast 365 days",
+            "width": 671.5,
+            "height": 72,
+            "applicable": true,
+            "pass": true,
+            "labelledHitArea": true,
+            "hasFocusTreatment": true
+          },
+          {
+            "selector": "select[name=\"time\"]",
+            "accessibleName": "Recorded timeAMPMAM + PMAll recorded times",
+            "width": 671.5,
+            "height": 72,
+            "applicable": true,
+            "pass": true,
+            "labelledHitArea": true,
+            "hasFocusTreatment": true
+          },
+          {
+            "selector": "select[name=\"scoreView\"]",
+            "accessibleName": "Score chartHiddenHydration ScoreBiochemistry Trend ScoreBoth scores",
+            "width": 671.5,
+            "height": 72,
+            "applicable": true,
+            "pass": true,
+            "labelledHitArea": true,
+            "hasFocusTreatment": true
+          },
+          {
+            "selector": "select[name=\"phView\"]",
+            "accessibleName": "pH chartHiddenUrine pHSaliva pHBoth pH readings",
+            "width": 671.5,
+            "height": 141,
+            "applicable": true,
+            "pass": true,
+            "labelledHitArea": true,
+            "hasFocusTreatment": true
+          },
+          {
+            "selector": "input[name=\"carbohydrate\"]",
+            "accessibleName": "Carbohydrate",
+            "width": 645.5,
+            "height": 44,
+            "applicable": true,
+            "pass": true,
+            "labelledHitArea": true,
+            "hasFocusTreatment": true
+          },
+          {
+            "selector": "input[name=\"conductivity\"]",
+            "accessibleName": "Raw Conductivity",
+            "width": 645.5,
+            "height": 44,
+            "applicable": true,
+            "pass": true,
+            "labelledHitArea": true,
+            "hasFocusTreatment": true
+          },
+          {
+            "selector": "button",
+            "accessibleName": "Update trends",
+            "width": 122.48,
+            "height": 44,
+            "applicable": true,
+            "pass": true,
+            "labelledHitArea": false,
+            "hasFocusTreatment": true
+          },
+          {
+            "selector": "input[name=\"label\"]",
+            "accessibleName": "View label",
+            "width": 1203.48,
+            "height": 72,
+            "applicable": true,
+            "pass": true,
+            "labelledHitArea": true,
+            "hasFocusTreatment": true
+          },
+          {
+            "selector": "button",
+            "accessibleName": "Save current view",
+            "width": 143.52,
+            "height": 44,
+            "applicable": true,
+            "pass": true,
+            "labelledHitArea": false,
+            "hasFocusTreatment": true
+          },
+          {
+            "selector": "div",
+            "accessibleName": "Scrollable Stored score history",
+            "width": 1367,
+            "height": 531.61,
+            "applicable": true,
+            "pass": true,
+            "labelledHitArea": false,
+            "hasFocusTreatment": true
+          },
+          {
+            "selector": "div",
+            "accessibleName": "Scrollable pH reading history",
+            "width": 1367,
+            "height": 531.61,
+            "applicable": true,
+            "pass": true,
+            "labelledHitArea": false,
+            "hasFocusTreatment": true
+          },
+          {
+            "selector": "div",
+            "accessibleName": "Scrollable accessible biochemistry history table",
+            "width": 1359,
+            "height": 240,
+            "applicable": true,
+            "pass": true,
+            "labelledHitArea": false,
+            "hasFocusTreatment": true
+          }
+        ]
+      },
+      "accessibility": {
+        "missingLabels": [],
+        "missingFocusTreatment": [],
+        "missingStatusSemantics": [],
+        "colourOnlyStates": [],
+        "statusCount": 2,
+        "rule": "Labels, focus treatment, status semantics and non-colour textual meaning are required."
+      },
+      "pass": true,
+      "failures": [],
+      "screenshot": {
+        "file": "05-desktop-managed-access-owner-overview-1440x900.png",
+        "fullPage": true,
+        "width": 1440,
+        "height": 4913,
+        "bytes": 343974,
+        "nonblank": true
+      }
+    },
+    {
+      "name": "trainer-managed-access-mobile-resize-text-200-percent",
+      "mode": "access",
+      "evidenceMode": "resize-text-200-percent",
+      "scalePercent": 200,
+      "viewportCss": {
+        "width": 414,
+        "height": 896
+      },
+      "textResize": {
+        "method": "Runtime-only document root text basis set to 200%; no Product stylesheet or class override.",
+        "root": {
+          "beforePx": 16,
+          "afterPx": 32,
+          "ratio": 2
+        },
+        "body": {
+          "beforePx": 16,
+          "afterPx": 32,
+          "ratio": 2
+        },
+        "samples": [
+          {
+            "selector": "#assign-access-heading",
+            "presentBefore": true,
+            "presentAfter": true,
+            "beforePx": 24,
+            "afterPx": 48,
+            "ratio": 2
+          }
+        ],
+        "pass": true
+      },
+      "measuredAt": "2026-08-11T04:00:00.000Z",
+      "namedViewport": {
+        "width": 414,
+        "height": 896
+      },
+      "windowInnerWidth": 414,
+      "windowInnerHeight": 896,
+      "documentClientWidth": 399,
+      "bodyClientWidth": 399,
+      "effectiveClientViewportWidth": 399,
+      "effectiveClientViewportRule": "Smallest relevant nonzero document/body client width; the named viewport and window.innerWidth are telemetry only and never the pass boundary.",
+      "documentScrollWidth": 399,
+      "bodyScrollWidth": 399,
+      "maximumMaterialRightEdge": 399,
+      "overflowElements": [],
+      "intentionalLocalScrollContainers": [],
+      "requiredSections": {
+        "expected": [
+          "#assign-access-heading"
+        ],
+        "present": [
+          "#assign-access-heading"
+        ],
+        "missing": []
+      },
+      "interactiveTargets": {
+        "rule": "Visible enabled interactive controls are applicable; hidden inputs are explicitly excluded. The union of a control and its effective visible label is measured as the labelled hit area. Every applicable target must be at least 44x44 CSS pixels.",
+        "hiddenInputsExcluded": 5,
+        "applicableCount": 6,
+        "below44Count": 0,
+        "items": [
+          {
+            "selector": "select[name=\"memberProfileId\"]",
+            "accessibleName": "PersonChoose a scoped personVeterinary Reviewer ? VeterinarianStable Support ? Stable Staff",
+            "width": 269,
+            "height": 144,
+            "applicable": true,
+            "pass": true,
+            "labelledHitArea": true,
+            "hasFocusTreatment": true
+          },
+          {
+            "selector": "select[name=\"horseId\"]",
+            "accessibleName": "HorseChoose a managed horseExample Horse",
+            "width": 269,
+            "height": 144,
+            "applicable": true,
+            "pass": true,
+            "labelledHitArea": true,
+            "hasFocusTreatment": true
+          },
+          {
+            "selector": "select[name=\"roleCode\"]",
+            "accessibleName": "Access roleChoose the person's roleVeterinarianStable Staff",
+            "width": 269,
+            "height": 144,
+            "applicable": true,
+            "pass": true,
+            "labelledHitArea": true,
+            "hasFocusTreatment": true
+          },
+          {
+            "selector": "button",
+            "accessibleName": "Assign read access",
+            "width": 269,
+            "height": 112,
+            "applicable": true,
+            "pass": true,
+            "labelledHitArea": false,
+            "hasFocusTreatment": true
+          },
+          {
+            "selector": "button",
+            "accessibleName": "End access",
+            "width": 205,
+            "height": 88,
+            "applicable": true,
+            "pass": true,
+            "labelledHitArea": false,
+            "hasFocusTreatment": true
+          },
+          {
+            "selector": "button",
+            "accessibleName": "End access",
+            "width": 205,
+            "height": 88,
+            "applicable": true,
+            "pass": true,
+            "labelledHitArea": false,
+            "hasFocusTreatment": true
+          }
+        ]
+      },
+      "accessibility": {
+        "missingLabels": [],
+        "missingFocusTreatment": [],
+        "missingStatusSemantics": [],
+        "colourOnlyStates": [],
+        "statusCount": 1,
+        "rule": "Labels, focus treatment, status semantics and non-colour textual meaning are required."
+      },
+      "pass": true,
+      "failures": [],
+      "screenshot": null
+    },
+    {
+      "name": "managed-role-permissions-mobile-resize-text-200-percent",
+      "mode": "permissions",
+      "evidenceMode": "resize-text-200-percent",
+      "scalePercent": 200,
+      "viewportCss": {
+        "width": 414,
+        "height": 896
+      },
+      "textResize": {
+        "method": "Runtime-only document root text basis set to 200%; no Product stylesheet or class override.",
+        "root": {
+          "beforePx": 16,
+          "afterPx": 32,
+          "ratio": 2
+        },
+        "body": {
+          "beforePx": 16,
+          "afterPx": 32,
+          "ratio": 2
+        },
+        "samples": [
+          {
+            "selector": "#assign-access-heading",
+            "presentBefore": true,
+            "presentAfter": true,
+            "beforePx": 24,
+            "afterPx": 48,
+            "ratio": 2
+          }
+        ],
+        "pass": true
+      },
+      "measuredAt": "2026-08-11T04:00:00.000Z",
+      "namedViewport": {
+        "width": 414,
+        "height": 896
+      },
+      "windowInnerWidth": 414,
+      "windowInnerHeight": 896,
+      "documentClientWidth": 399,
+      "bodyClientWidth": 399,
+      "effectiveClientViewportWidth": 399,
+      "effectiveClientViewportRule": "Smallest relevant nonzero document/body client width; the named viewport and window.innerWidth are telemetry only and never the pass boundary.",
+      "documentScrollWidth": 399,
+      "bodyScrollWidth": 399,
+      "maximumMaterialRightEdge": 399,
+      "overflowElements": [],
+      "intentionalLocalScrollContainers": [],
+      "requiredSections": {
+        "expected": [
+          "#assign-access-heading"
+        ],
+        "present": [
+          "#assign-access-heading"
+        ],
+        "missing": []
+      },
+      "interactiveTargets": {
+        "rule": "Visible enabled interactive controls are applicable; hidden inputs are explicitly excluded. The union of a control and its effective visible label is measured as the labelled hit area. Every applicable target must be at least 44x44 CSS pixels.",
+        "hiddenInputsExcluded": 0,
+        "applicableCount": 0,
+        "below44Count": 0,
+        "items": []
+      },
+      "accessibility": {
+        "missingLabels": [],
+        "missingFocusTreatment": [],
+        "missingStatusSemantics": [],
+        "colourOnlyStates": [],
+        "statusCount": 0,
+        "rule": "Labels, focus treatment, status semantics and non-colour textual meaning are required."
+      },
+      "pass": true,
+      "failures": [],
+      "screenshot": null
+    },
+    {
+      "name": "owner-latest-result-mobile-resize-text-200-percent",
+      "mode": "owner",
+      "evidenceMode": "resize-text-200-percent",
+      "scalePercent": 200,
+      "viewportCss": {
+        "width": 414,
+        "height": 896
+      },
+      "textResize": {
+        "method": "Runtime-only document root text basis set to 200%; no Product stylesheet or class override.",
+        "root": {
+          "beforePx": 16,
+          "afterPx": 32,
+          "ratio": 2
+        },
+        "body": {
+          "beforePx": 16,
+          "afterPx": 32,
+          "ratio": 2
+        },
+        "samples": [
+          {
+            "selector": "a[href=\"/?mode=trends\"]",
+            "presentBefore": true,
+            "presentAfter": true,
+            "beforePx": 14,
+            "afterPx": 28,
+            "ratio": 2
+          }
+        ],
+        "pass": true
+      },
+      "measuredAt": "2026-08-11T04:00:00.000Z",
+      "namedViewport": {
+        "width": 414,
+        "height": 896
+      },
+      "windowInnerWidth": 414,
+      "windowInnerHeight": 896,
+      "documentClientWidth": 399,
+      "bodyClientWidth": 399,
+      "effectiveClientViewportWidth": 399,
+      "effectiveClientViewportRule": "Smallest relevant nonzero document/body client width; the named viewport and window.innerWidth are telemetry only and never the pass boundary.",
+      "documentScrollWidth": 399,
+      "bodyScrollWidth": 399,
+      "maximumMaterialRightEdge": 399,
+      "overflowElements": [],
+      "intentionalLocalScrollContainers": [],
+      "requiredSections": {
+        "expected": [
+          "a[href=\"/?mode=trends\"]"
+        ],
+        "present": [
+          "a[href=\"/?mode=trends\"]"
+        ],
+        "missing": []
+      },
+      "interactiveTargets": {
+        "rule": "Visible enabled interactive controls are applicable; hidden inputs are explicitly excluded. The union of a control and its effective visible label is measured as the labelled hit area. Every applicable target must be at least 44x44 CSS pixels.",
+        "hiddenInputsExcluded": 0,
+        "applicableCount": 1,
+        "below44Count": 0,
+        "items": [
+          {
+            "selector": "a",
+            "accessibleName": "View trends",
+            "width": 253,
+            "height": 88,
+            "applicable": true,
+            "pass": true,
+            "labelledHitArea": false,
+            "hasFocusTreatment": true
+          }
+        ]
+      },
+      "accessibility": {
+        "missingLabels": [],
+        "missingFocusTreatment": [],
+        "missingStatusSemantics": [],
+        "colourOnlyStates": [],
+        "statusCount": 0,
+        "rule": "Labels, focus treatment, status semantics and non-colour textual meaning are required."
+      },
+      "pass": true,
+      "failures": [],
+      "screenshot": null
+    },
+    {
+      "name": "owner-exact-horse-trends-mobile-resize-text-200-percent",
+      "mode": "trends",
+      "evidenceMode": "resize-text-200-percent",
+      "scalePercent": 200,
+      "viewportCss": {
+        "width": 414,
+        "height": 896
+      },
+      "textResize": {
+        "method": "Runtime-only document root text basis set to 200%; no Product stylesheet or class override.",
+        "root": {
+          "beforePx": 16,
+          "afterPx": 32,
+          "ratio": 2
+        },
+        "body": {
+          "beforePx": 16,
+          "afterPx": 32,
+          "ratio": 2
+        },
+        "samples": [
+          {
+            "selector": "#trend-controls",
+            "presentBefore": true,
+            "presentAfter": true,
+            "beforePx": 24,
+            "afterPx": 48,
+            "ratio": 2
+          }
+        ],
+        "pass": true
+      },
+      "measuredAt": "2026-08-11T04:00:00.000Z",
+      "namedViewport": {
+        "width": 414,
+        "height": 896
+      },
+      "windowInnerWidth": 414,
+      "windowInnerHeight": 896,
+      "documentClientWidth": 399,
+      "bodyClientWidth": 399,
+      "effectiveClientViewportWidth": 399,
+      "effectiveClientViewportRule": "Smallest relevant nonzero document/body client width; the named viewport and window.innerWidth are telemetry only and never the pass boundary.",
+      "documentScrollWidth": 399,
+      "bodyScrollWidth": 399,
+      "maximumMaterialRightEdge": 399,
+      "overflowElements": [],
+      "intentionalLocalScrollContainers": [
+        {
+          "selector": "div",
+          "overflowX": "auto",
+          "clientWidth": 285,
+          "scrollWidth": 640,
+          "left": 57,
+          "right": 342,
+          "exemptDescendantCount": 17,
+          "boundedByEffectiveClientViewport": true
+        },
+        {
+          "selector": "div",
+          "overflowX": "auto",
+          "clientWidth": 285,
+          "scrollWidth": 640,
+          "left": 57,
+          "right": 342,
+          "exemptDescendantCount": 19,
+          "boundedByEffectiveClientViewport": true
+        },
+        {
+          "selector": "div",
+          "overflowX": "auto",
+          "clientWidth": 269,
+          "scrollWidth": 1670,
+          "left": 65,
+          "right": 334,
+          "exemptDescendantCount": 43,
+          "boundedByEffectiveClientViewport": true
+        }
+      ],
+      "requiredSections": {
+        "expected": [
+          "#trend-controls"
+        ],
+        "present": [
+          "#trend-controls"
+        ],
+        "missing": []
+      },
+      "interactiveTargets": {
+        "rule": "Visible enabled interactive controls are applicable; hidden inputs are explicitly excluded. The union of a control and its effective visible label is measured as the labelled hit area. Every applicable target must be at least 44x44 CSS pixels.",
+        "hiddenInputsExcluded": 7,
+        "applicableCount": 13,
+        "below44Count": 0,
+        "items": [
+          {
+            "selector": "select[name=\"horseId\"]",
+            "accessibleName": "Accessible horseChoose a horseExample Horse ??? Example Stable",
+            "width": 269,
+            "height": 144,
+            "applicable": true,
+            "pass": true,
+            "labelledHitArea": true,
+            "hasFocusTreatment": true
+          },
+          {
+            "selector": "select[name=\"range\"]",
+            "accessibleName": "Date windowLast 30 daysLast 90 daysLast 365 days",
+            "width": 269,
+            "height": 144,
+            "applicable": true,
+            "pass": true,
+            "labelledHitArea": true,
+            "hasFocusTreatment": true
+          },
+          {
+            "selector": "select[name=\"time\"]",
+            "accessibleName": "Recorded timeAMPMAM + PMAll recorded times",
+            "width": 269,
+            "height": 144,
+            "applicable": true,
+            "pass": true,
+            "labelledHitArea": true,
+            "hasFocusTreatment": true
+          },
+          {
+            "selector": "select[name=\"scoreView\"]",
+            "accessibleName": "Score chartHiddenHydration ScoreBiochemistry Trend ScoreBoth scores",
+            "width": 269,
+            "height": 144,
+            "applicable": true,
+            "pass": true,
+            "labelledHitArea": true,
+            "hasFocusTreatment": true
+          },
+          {
+            "selector": "select[name=\"phView\"]",
+            "accessibleName": "pH chartHiddenUrine pHSaliva pHBoth pH readings",
+            "width": 269,
+            "height": 144,
+            "applicable": true,
+            "pass": true,
+            "labelledHitArea": true,
+            "hasFocusTreatment": true
+          },
+          {
+            "selector": "input[name=\"carbohydrate\"]",
+            "accessibleName": "Carbohydrate",
+            "width": 219,
+            "height": 88,
+            "applicable": true,
+            "pass": true,
+            "labelledHitArea": true,
+            "hasFocusTreatment": true
+          },
+          {
+            "selector": "input[name=\"conductivity\"]",
+            "accessibleName": "Raw Conductivity",
+            "width": 219,
+            "height": 88,
+            "applicable": true,
+            "pass": true,
+            "labelledHitArea": true,
+            "hasFocusTreatment": true
+          },
+          {
+            "selector": "button",
+            "accessibleName": "Update trends",
+            "width": 269,
+            "height": 88,
+            "applicable": true,
+            "pass": true,
+            "labelledHitArea": false,
+            "hasFocusTreatment": true
+          },
+          {
+            "selector": "input[name=\"label\"]",
+            "accessibleName": "View label",
+            "width": 269,
+            "height": 144,
+            "applicable": true,
+            "pass": true,
+            "labelledHitArea": true,
+            "hasFocusTreatment": true
+          },
+          {
+            "selector": "button",
+            "accessibleName": "Save current view",
+            "width": 269,
+            "height": 112,
+            "applicable": true,
+            "pass": true,
+            "labelledHitArea": false,
+            "hasFocusTreatment": true
+          },
+          {
+            "selector": "div",
+            "accessibleName": "Scrollable Stored score history",
+            "width": 285,
+            "height": 263.88,
+            "applicable": true,
+            "pass": true,
+            "labelledHitArea": false,
+            "hasFocusTreatment": true
+          },
+          {
+            "selector": "div",
+            "accessibleName": "Scrollable pH reading history",
+            "width": 285,
+            "height": 263.88,
+            "applicable": true,
+            "pass": true,
+            "labelledHitArea": false,
+            "hasFocusTreatment": true
+          },
+          {
+            "selector": "div",
+            "accessibleName": "Scrollable accessible biochemistry history table",
+            "width": 269,
+            "height": 651,
+            "applicable": true,
+            "pass": true,
+            "labelledHitArea": false,
+            "hasFocusTreatment": true
+          }
+        ]
+      },
+      "accessibility": {
+        "missingLabels": [],
+        "missingFocusTreatment": [],
+        "missingStatusSemantics": [],
+        "colourOnlyStates": [],
+        "statusCount": 1,
+        "rule": "Labels, focus treatment, status semantics and non-colour textual meaning are required."
+      },
+      "pass": true,
+      "failures": [],
+      "screenshot": null
+    },
+    {
+      "name": "trainer-managed-access-mobile-reflow-320-css-pixels",
+      "mode": "access",
+      "evidenceMode": "reflow-320-css-pixels",
+      "scalePercent": 100,
+      "viewportCss": {
+        "width": 320,
+        "height": 896
+      },
+      "textResize": null,
+      "measuredAt": "2026-08-11T04:00:00.000Z",
+      "namedViewport": {
+        "width": 320,
+        "height": 896
+      },
+      "windowInnerWidth": 320,
+      "windowInnerHeight": 896,
+      "documentClientWidth": 305,
+      "bodyClientWidth": 305,
+      "effectiveClientViewportWidth": 305,
+      "effectiveClientViewportRule": "Smallest relevant nonzero document/body client width; the named viewport and window.innerWidth are telemetry only and never the pass boundary.",
+      "documentScrollWidth": 305,
+      "bodyScrollWidth": 305,
+      "maximumMaterialRightEdge": 305,
+      "overflowElements": [],
+      "intentionalLocalScrollContainers": [],
+      "requiredSections": {
+        "expected": [
+          "#assign-access-heading"
+        ],
+        "present": [
+          "#assign-access-heading"
+        ],
+        "missing": []
+      },
+      "interactiveTargets": {
+        "rule": "Visible enabled interactive controls are applicable; hidden inputs are explicitly excluded. The union of a control and its effective visible label is measured as the labelled hit area. Every applicable target must be at least 44x44 CSS pixels.",
+        "hiddenInputsExcluded": 5,
+        "applicableCount": 6,
+        "below44Count": 0,
+        "items": [
+          {
+            "selector": "select[name=\"memberProfileId\"]",
+            "accessibleName": "PersonChoose a scoped personVeterinary Reviewer ? VeterinarianStable Support ? Stable Staff",
+            "width": 239,
+            "height": 72,
+            "applicable": true,
+            "pass": true,
+            "labelledHitArea": true,
+            "hasFocusTreatment": true
+          },
+          {
+            "selector": "select[name=\"horseId\"]",
+            "accessibleName": "HorseChoose a managed horseExample Horse",
+            "width": 239,
+            "height": 72,
+            "applicable": true,
+            "pass": true,
+            "labelledHitArea": true,
+            "hasFocusTreatment": true
+          },
+          {
+            "selector": "select[name=\"roleCode\"]",
+            "accessibleName": "Access roleChoose the person's roleVeterinarianStable Staff",
+            "width": 239,
+            "height": 72,
+            "applicable": true,
+            "pass": true,
+            "labelledHitArea": true,
+            "hasFocusTreatment": true
+          },
+          {
+            "selector": "button",
+            "accessibleName": "Assign read access",
+            "width": 239,
+            "height": 44,
+            "applicable": true,
+            "pass": true,
+            "labelledHitArea": false,
+            "hasFocusTreatment": true
+          },
+          {
+            "selector": "button",
+            "accessibleName": "End access",
+            "width": 207,
+            "height": 44,
+            "applicable": true,
+            "pass": true,
+            "labelledHitArea": false,
+            "hasFocusTreatment": true
+          },
+          {
+            "selector": "button",
+            "accessibleName": "End access",
+            "width": 207,
+            "height": 44,
+            "applicable": true,
+            "pass": true,
+            "labelledHitArea": false,
+            "hasFocusTreatment": true
+          }
+        ]
+      },
+      "accessibility": {
+        "missingLabels": [],
+        "missingFocusTreatment": [],
+        "missingStatusSemantics": [],
+        "colourOnlyStates": [],
+        "statusCount": 1,
+        "rule": "Labels, focus treatment, status semantics and non-colour textual meaning are required."
+      },
+      "pass": true,
+      "failures": [],
+      "screenshot": null
+    },
+    {
+      "name": "managed-role-permissions-mobile-reflow-320-css-pixels",
+      "mode": "permissions",
+      "evidenceMode": "reflow-320-css-pixels",
+      "scalePercent": 100,
+      "viewportCss": {
+        "width": 320,
+        "height": 896
+      },
+      "textResize": null,
+      "measuredAt": "2026-08-11T04:00:00.000Z",
+      "namedViewport": {
+        "width": 320,
+        "height": 896
+      },
+      "windowInnerWidth": 320,
+      "windowInnerHeight": 896,
+      "documentClientWidth": 305,
+      "bodyClientWidth": 305,
+      "effectiveClientViewportWidth": 305,
+      "effectiveClientViewportRule": "Smallest relevant nonzero document/body client width; the named viewport and window.innerWidth are telemetry only and never the pass boundary.",
+      "documentScrollWidth": 305,
+      "bodyScrollWidth": 305,
+      "maximumMaterialRightEdge": 305,
+      "overflowElements": [],
+      "intentionalLocalScrollContainers": [],
+      "requiredSections": {
+        "expected": [
+          "#assign-access-heading"
+        ],
+        "present": [
+          "#assign-access-heading"
+        ],
+        "missing": []
+      },
+      "interactiveTargets": {
+        "rule": "Visible enabled interactive controls are applicable; hidden inputs are explicitly excluded. The union of a control and its effective visible label is measured as the labelled hit area. Every applicable target must be at least 44x44 CSS pixels.",
+        "hiddenInputsExcluded": 0,
+        "applicableCount": 0,
+        "below44Count": 0,
+        "items": []
+      },
+      "accessibility": {
+        "missingLabels": [],
+        "missingFocusTreatment": [],
+        "missingStatusSemantics": [],
+        "colourOnlyStates": [],
+        "statusCount": 0,
+        "rule": "Labels, focus treatment, status semantics and non-colour textual meaning are required."
+      },
+      "pass": true,
+      "failures": [],
+      "screenshot": null
+    },
+    {
+      "name": "owner-latest-result-mobile-reflow-320-css-pixels",
+      "mode": "owner",
+      "evidenceMode": "reflow-320-css-pixels",
+      "scalePercent": 100,
+      "viewportCss": {
+        "width": 320,
+        "height": 896
+      },
+      "textResize": null,
+      "measuredAt": "2026-08-11T04:00:00.000Z",
+      "namedViewport": {
+        "width": 320,
+        "height": 896
+      },
+      "windowInnerWidth": 320,
+      "windowInnerHeight": 896,
+      "documentClientWidth": 305,
+      "bodyClientWidth": 305,
+      "effectiveClientViewportWidth": 305,
+      "effectiveClientViewportRule": "Smallest relevant nonzero document/body client width; the named viewport and window.innerWidth are telemetry only and never the pass boundary.",
+      "documentScrollWidth": 305,
+      "bodyScrollWidth": 305,
+      "maximumMaterialRightEdge": 305,
+      "overflowElements": [],
+      "intentionalLocalScrollContainers": [],
+      "requiredSections": {
+        "expected": [
+          "a[href=\"/?mode=trends\"]"
+        ],
+        "present": [
+          "a[href=\"/?mode=trends\"]"
+        ],
+        "missing": []
+      },
+      "interactiveTargets": {
+        "rule": "Visible enabled interactive controls are applicable; hidden inputs are explicitly excluded. The union of a control and its effective visible label is measured as the labelled hit area. Every applicable target must be at least 44x44 CSS pixels.",
+        "hiddenInputsExcluded": 0,
+        "applicableCount": 1,
+        "below44Count": 0,
+        "items": [
+          {
+            "selector": "a",
+            "accessibleName": "View trends",
+            "width": 231,
+            "height": 44,
+            "applicable": true,
+            "pass": true,
+            "labelledHitArea": false,
+            "hasFocusTreatment": true
+          }
+        ]
+      },
+      "accessibility": {
+        "missingLabels": [],
+        "missingFocusTreatment": [],
+        "missingStatusSemantics": [],
+        "colourOnlyStates": [],
+        "statusCount": 0,
+        "rule": "Labels, focus treatment, status semantics and non-colour textual meaning are required."
+      },
+      "pass": true,
+      "failures": [],
+      "screenshot": null
+    },
+    {
+      "name": "owner-exact-horse-trends-mobile-reflow-320-css-pixels",
+      "mode": "trends",
+      "evidenceMode": "reflow-320-css-pixels",
+      "scalePercent": 100,
+      "viewportCss": {
+        "width": 320,
+        "height": 896
+      },
+      "textResize": null,
+      "measuredAt": "2026-08-11T04:00:00.000Z",
+      "namedViewport": {
+        "width": 320,
+        "height": 896
+      },
+      "windowInnerWidth": 320,
+      "windowInnerHeight": 896,
+      "documentClientWidth": 305,
+      "bodyClientWidth": 305,
+      "effectiveClientViewportWidth": 305,
+      "effectiveClientViewportRule": "Smallest relevant nonzero document/body client width; the named viewport and window.innerWidth are telemetry only and never the pass boundary.",
+      "documentScrollWidth": 305,
+      "bodyScrollWidth": 305,
+      "maximumMaterialRightEdge": 305,
+      "overflowElements": [],
+      "intentionalLocalScrollContainers": [
+        {
+          "selector": "div",
+          "overflowX": "auto",
+          "clientWidth": 247,
+          "scrollWidth": 640,
+          "left": 29,
+          "right": 276,
+          "exemptDescendantCount": 17,
+          "boundedByEffectiveClientViewport": true
+        },
+        {
+          "selector": "div",
+          "overflowX": "auto",
+          "clientWidth": 247,
+          "scrollWidth": 640,
+          "left": 29,
+          "right": 276,
+          "exemptDescendantCount": 19,
+          "boundedByEffectiveClientViewport": true
+        },
+        {
+          "selector": "div",
+          "overflowX": "auto",
+          "clientWidth": 239,
+          "scrollWidth": 1040,
+          "left": 33,
+          "right": 272,
+          "exemptDescendantCount": 43,
+          "boundedByEffectiveClientViewport": true
+        }
+      ],
+      "requiredSections": {
+        "expected": [
+          "#trend-controls"
+        ],
+        "present": [
+          "#trend-controls"
+        ],
+        "missing": []
+      },
+      "interactiveTargets": {
+        "rule": "Visible enabled interactive controls are applicable; hidden inputs are explicitly excluded. The union of a control and its effective visible label is measured as the labelled hit area. Every applicable target must be at least 44x44 CSS pixels.",
+        "hiddenInputsExcluded": 7,
+        "applicableCount": 13,
+        "below44Count": 0,
+        "items": [
+          {
+            "selector": "select[name=\"horseId\"]",
+            "accessibleName": "Accessible horseChoose a horseExample Horse ??? Example Stable",
+            "width": 239,
+            "height": 72,
+            "applicable": true,
+            "pass": true,
+            "labelledHitArea": true,
+            "hasFocusTreatment": true
+          },
+          {
+            "selector": "select[name=\"range\"]",
+            "accessibleName": "Date windowLast 30 daysLast 90 daysLast 365 days",
+            "width": 239,
+            "height": 72,
+            "applicable": true,
+            "pass": true,
+            "labelledHitArea": true,
+            "hasFocusTreatment": true
+          },
+          {
+            "selector": "select[name=\"time\"]",
+            "accessibleName": "Recorded timeAMPMAM + PMAll recorded times",
+            "width": 239,
+            "height": 72,
+            "applicable": true,
+            "pass": true,
+            "labelledHitArea": true,
+            "hasFocusTreatment": true
+          },
+          {
+            "selector": "select[name=\"scoreView\"]",
+            "accessibleName": "Score chartHiddenHydration ScoreBiochemistry Trend ScoreBoth scores",
+            "width": 239,
+            "height": 72,
+            "applicable": true,
+            "pass": true,
+            "labelledHitArea": true,
+            "hasFocusTreatment": true
+          },
+          {
+            "selector": "select[name=\"phView\"]",
+            "accessibleName": "pH chartHiddenUrine pHSaliva pHBoth pH readings",
+            "width": 239,
+            "height": 72,
+            "applicable": true,
+            "pass": true,
+            "labelledHitArea": true,
+            "hasFocusTreatment": true
+          },
+          {
+            "selector": "input[name=\"carbohydrate\"]",
+            "accessibleName": "Carbohydrate",
+            "width": 213,
+            "height": 44,
+            "applicable": true,
+            "pass": true,
+            "labelledHitArea": true,
+            "hasFocusTreatment": true
+          },
+          {
+            "selector": "input[name=\"conductivity\"]",
+            "accessibleName": "Raw Conductivity",
+            "width": 213,
+            "height": 44,
+            "applicable": true,
+            "pass": true,
+            "labelledHitArea": true,
+            "hasFocusTreatment": true
+          },
+          {
+            "selector": "button",
+            "accessibleName": "Update trends",
+            "width": 239,
+            "height": 44,
+            "applicable": true,
+            "pass": true,
+            "labelledHitArea": false,
+            "hasFocusTreatment": true
+          },
+          {
+            "selector": "input[name=\"label\"]",
+            "accessibleName": "View label",
+            "width": 239,
+            "height": 72,
+            "applicable": true,
+            "pass": true,
+            "labelledHitArea": true,
+            "hasFocusTreatment": true
+          },
+          {
+            "selector": "button",
+            "accessibleName": "Save current view",
+            "width": 239,
+            "height": 44,
+            "applicable": true,
+            "pass": true,
+            "labelledHitArea": false,
+            "hasFocusTreatment": true
+          },
+          {
+            "selector": "div",
+            "accessibleName": "Scrollable Stored score history",
+            "width": 247,
+            "height": 263.88,
+            "applicable": true,
+            "pass": true,
+            "labelledHitArea": false,
+            "hasFocusTreatment": true
+          },
+          {
+            "selector": "div",
+            "accessibleName": "Scrollable pH reading history",
+            "width": 247,
+            "height": 263.88,
+            "applicable": true,
+            "pass": true,
+            "labelledHitArea": false,
+            "hasFocusTreatment": true
+          },
+          {
+            "selector": "div",
+            "accessibleName": "Scrollable accessible biochemistry history table",
+            "width": 239,
+            "height": 335,
+            "applicable": true,
+            "pass": true,
+            "labelledHitArea": false,
+            "hasFocusTreatment": true
+          }
+        ]
+      },
+      "accessibility": {
+        "missingLabels": [],
+        "missingFocusTreatment": [],
+        "missingStatusSemantics": [],
+        "colourOnlyStates": [],
+        "statusCount": 1,
+        "rule": "Labels, focus treatment, status semantics and non-colour textual meaning are required."
+      },
+      "pass": true,
+      "failures": [],
+      "screenshot": null
+    }
+  ]
+}

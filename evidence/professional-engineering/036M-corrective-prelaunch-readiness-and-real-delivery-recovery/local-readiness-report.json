@@ -1,0 +1,38 @@
+{
+  "sprint": "036M",
+  "checkpoint": "closed-prelaunch-recovery-blocked-clean",
+  "readyForArchitectDiffReview": false,
+  "readyForProtectedWindow": false,
+  "requiredNextGate": "fresh-corrective-native-readback-architecture",
+  "tests": {
+    "focusedPassed": 360,
+    "focusedTotal": 360,
+    "retainedPassed": 943,
+    "retainedTotal": 943,
+    "countedPassed": 1303,
+    "countedTotal": 1303,
+    "uncountedMigrationLedgerPassed": 42
+  },
+  "quality": {
+    "typescript": "pass",
+    "eslintWarnings": 0,
+    "eslintErrors": 0,
+    "productionBuild": "pass",
+    "staticPages": 29,
+    "powershellAst": "pass",
+    "json": "pass"
+  },
+  "external": {
+  "repairRound": {
+    "preCallLatches": "pass",
+    "partialTrainerCleanup": "pass",
+    "manualSuccessAuthority": "removed",
+    "stderrNoLeak": "pass",
+    "nativeConsumerClosure": "blocked-clean"
+  },
+    "protectedWindowStarted": false,
+    "protectedValuesRead": 0,
+    "mutations": 0,
+    "residue": 0
+  }
+}

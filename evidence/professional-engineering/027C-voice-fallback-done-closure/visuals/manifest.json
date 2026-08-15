@@ -1,0 +1,40 @@
+{
+  "sprint": "027C-voice-fallback-done-closure",
+  "capturedOn": "2026-08-11",
+  "source": "Existing Sprint 035R local synthetic evidence harness",
+  "dataClass": "synthetic-only",
+  "audioUsed": false,
+  "testSubmitted": false,
+  "externalMutationCount": 0,
+  "views": [
+    {
+      "file": "01-mobile-capture-notes-414x896.png",
+      "width": 414,
+      "height": 896,
+      "sha256": "FBC27E9534CD3F2FCD80E903404B9740BF3697912DEA6DCEA0B0470C640F7A6C",
+      "proves": "Typed notes, editable textarea and bounded optional device-keyboard dictation guidance"
+    },
+    {
+      "file": "02-mobile-review-unchecked-414x896.png",
+      "width": 414,
+      "height": 896,
+      "sha256": "D51D398875420798349CFF90C1E0666BF00A27A675F70DBFB92DA9CF11D8A685",
+      "proves": "Exact synthetic note and initially unchecked review confirmation"
+    },
+    {
+      "file": "03-mobile-review-blocked-414x896.png",
+      "width": 414,
+      "height": 896,
+      "sha256": "44E2BE984E74A308D43814521B9ADF35E6EAC9A0E6C106FC96AAFCAB7CD3E364",
+      "proves": "Accessible correction message after unconfirmed submit, with no submission"
+    },
+    {
+      "file": "04-desktop-capture-notes-1440x900.png",
+      "width": 1440,
+      "height": 900,
+      "sha256": "6A787519E022244C1BC4C190875090201578673D405AE51FFE91B4059FFD59CD",
+      "proves": "Readable desktop notes layout without horizontal overflow"
+    }
+  ],
+  "geometry": "geometry.json"
+}

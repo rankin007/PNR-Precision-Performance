@@ -1,0 +1,42 @@
+{
+  "sprint": "036M",
+  "state": "closed-prelaunch-recovery-blocked-clean",
+  "protectedOutput": false,
+  "externalWindowStarted": false,
+  "externalMutations": 0,
+  "externalResidue": 0,
+  "candidateDeployments": 0,
+  "aliasAssignments": 0,
+  "messages": 0,
+  "verifications": 0,
+  "identityAuthDeletes": 0,
+  "keyProvenance": {
+    "publishable": "unresolved-private",
+    "secret": "unresolved-private",
+    "sprintCreatedDeletes": 0,
+    "preExistingSelectedDeletes": 0
+  },
+  "trainerGraph": {
+    "replacementCreates": 0,
+    "replacementCleanupDeletes": 0,
+    "priorGraphRetirementDeletes": 0,
+    "maximum": 24,
+    "independentAbsences": 0
+  },
+  "assertions": {
+    "focused": 360,
+    "retained": 943,
+    "total": 1303,
+    "passed": true
+  },
+  "protectedWindow": {
+    "implemented": true,
+    "localGatesPending": false,
+    "started": false,
+    "controllerChildrenStarted": 0,
+    "protectedValuesRead": 0,
+    "temporaryExportsCreated": 0,
+    "redirectedRefusalPassed": true,
+    "stderrCapturedSanitized": true
+  }
+}

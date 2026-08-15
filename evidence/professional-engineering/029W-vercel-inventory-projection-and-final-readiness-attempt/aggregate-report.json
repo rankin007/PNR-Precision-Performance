@@ -1,0 +1,56 @@
+{
+  "sprint": "029W",
+  "date": "2026-08-07",
+  "outcome": "final-readiness-blocked-material",
+  "flightClass": "critical",
+  "firstFailingGate": "bounded-read-only-vercel-inventory-projector-boundary",
+  "failureCode": "INVENTORY_PROJECTOR_REFUSED",
+  "acceptedInventoryCount": 0,
+  "externalMutationCount": 0,
+  "dashboardVisitCount": 0,
+  "dashboardMutationCount": 0,
+  "credentialCreationCount": 0,
+  "secretTransferCount": 0,
+  "environmentMutationCount": 0,
+  "deploymentInvocationCount": 0,
+  "httpRequestCount": 0,
+  "emailCount": 0,
+  "enquirySubmissionCount": 0,
+  "aliasCommandCount": 0,
+  "aliasMovementCount": 0,
+  "compensationActionCount": 0,
+  "ownedExternalResidueCount": 0,
+  "tests": {
+    "inventoryProjection": 57,
+    "controller": 54,
+    "providerProjection": 16,
+    "aliasIsolation": 26,
+    "total": 153,
+    "failed": 0
+  },
+  "review": {
+    "planDecision": "2/3-pass",
+    "codeDecision": "3/3-pass",
+    "resolvedPlanFindings": 3,
+    "resolvedCodeFindings": 3,
+    "unresolvedFindings": 0
+  },
+  "git": {
+    "startingAndFinalHead": "d822c027c58ad88ec7472e35986e7a33d6a3d6c9",
+    "branch": "codex/029W-vercel-inventory-projection-and-final-readiness-attempt",
+    "stagedCount": 0,
+    "published": false
+  },
+  "productionTruth": {
+    "lastAcceptedDeployment": "dpl_4bjHgm4KL3DBo7wmbVPW4VJUk2Sf",
+    "lastAcceptedAliasCount": 5,
+    "reprovedBy029W": false,
+    "changedBy029W": false
+  },
+  "finalProductAcceptanceMatrixChangedIds": [],
+  "next": [
+    "025B-domain-authority",
+    "035R-trainer-visible-workflow"
+  ],
+  "userActionRequired": false
+}

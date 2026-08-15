@@ -1,0 +1,81 @@
+{
+  "sprint": "030B",
+  "source": "shared Product components with synthetic local data only",
+  "renderer": "local Chromium CDP full-page capture",
+  "viewportNote": "Mobile PNGs are full-page captures rendered at a named 414 x 896 CSS viewport; PNG height truthfully follows complete content. Effective client width is separately audited in geometry.json.",
+  "captureCount": 5,
+  "views": [
+    {
+      "file": "01-mobile-pricing-414x896.png",
+      "mode": "pricing",
+      "viewport": "414x896",
+      "effectiveClientWidth": 399,
+      "dimensions": "414x4825",
+      "bytes": 305935,
+      "fullPage": true,
+      "nonblank": true,
+      "sections": [
+        "[data-evidence-section=\"pricing\"]"
+      ]
+    },
+    {
+      "file": "02-mobile-disclaimer-414x896.png",
+      "mode": "disclaimer",
+      "viewport": "414x896",
+      "effectiveClientWidth": 399,
+      "dimensions": "414x1574",
+      "bytes": 71889,
+      "fullPage": true,
+      "nonblank": true,
+      "sections": [
+        "[data-evidence-section=\"disclaimer\"]"
+      ]
+    },
+    {
+      "file": "03-mobile-shop-detail-414x896.png",
+      "mode": "shop-detail",
+      "viewport": "414x896",
+      "effectiveClientWidth": 399,
+      "dimensions": "414x1792",
+      "bytes": 86222,
+      "fullPage": true,
+      "nonblank": true,
+      "sections": [
+        "[data-evidence-section=\"shop\"]",
+        "[data-evidence-section=\"detail\"]"
+      ]
+    },
+    {
+      "file": "04-mobile-admin-commerce-414x896.png",
+      "mode": "admin",
+      "viewport": "414x896",
+      "effectiveClientWidth": 399,
+      "dimensions": "414x1713",
+      "bytes": 105717,
+      "fullPage": true,
+      "nonblank": true,
+      "sections": [
+        "[data-evidence-section=\"admin\"]"
+      ]
+    },
+    {
+      "file": "05-desktop-commercial-authority-1440x900.png",
+      "mode": "desktop",
+      "viewport": "1440x900",
+      "effectiveClientWidth": 1425,
+      "dimensions": "1440x7185",
+      "bytes": 629165,
+      "fullPage": true,
+      "nonblank": true,
+      "sections": [
+        "[data-evidence-section=\"pricing\"]",
+        "[data-evidence-section=\"disclaimer\"]",
+        "[data-evidence-section=\"shop\"]",
+        "[data-evidence-section=\"detail\"]",
+        "[data-evidence-section=\"admin\"]"
+      ]
+    }
+  ],
+  "geometry": "geometry.json",
+  "privacy": "Synthetic data only; no real customer, order, payment, checkout, identity, email, credential, token, provider identifier or confidential record. Raw synthetic sentinel identifiers are removed by the Product projector before renderable props."
+}

@@ -1,0 +1,757 @@
+{
+    "sprint":  "036R-resend-domain-bound-five-provider-authority-completion",
+    "state":  "resend-domain-bound-five-provider-authority-blocked-clean",
+    "targetMet":  false,
+    "outcome":  "resend-domain-bound-five-provider-authority-blocked-clean",
+    "source":  {
+                   "gitObject":  "bfeb0b23c339b819f5dbcd4fe28d61c7a4dd9570",
+                   "managerPath":  "components/ops/test-evidence-manager.tsx",
+                   "managerBlob":  "65d74be5a3f701ae9133bf353348b3253f36feef",
+                   "fileCount":  124,
+                   "graphHash":  "36edbef5584b8edbc4363c5425bd66e645a202a90b90caeee8b2223fd0948d6b",
+                   "complete":  true,
+                   "unresolvedImports":  0
+               },
+    "focused":  {
+                    "domainAuthority":  60,
+                    "transport":  40,
+                    "total":  100
+                },
+    "retained":  1893,
+    "combined":  1993,
+    "baseline":  {
+                     "providerReads":  4,
+                     "writes":  0,
+                     "mutations":  0,
+                     "businessEffects":  0,
+                     "residue":  0,
+                     "trainerActions":  0,
+                     "dnsReads":  0
+                 },
+    "provider":  {
+                     "requests":  4,
+                     "writes":  0,
+                     "mutations":  0,
+                     "businessEffects":  0,
+                     "residue":  0,
+                     "dnsReads":  0
+                 },
+    "trainerActions":  0,
+    "authorities":  [
+                        {
+                            "provider":  "vercel",
+                            "status":  "partial-read",
+                            "exactBinding":  true,
+                            "paginationComplete":  false,
+                            "evidence":  "one-team-one-project-20-deployments-next-cursor"
+                        },
+                        {
+                            "provider":  "supabase",
+                            "status":  "blocked-ambiguous",
+                            "exactBinding":  false,
+                            "paginationComplete":  false,
+                            "evidence":  "two-active-healthy-candidates"
+                        },
+                        {
+                            "provider":  "resend",
+                            "status":  "not-read-protected-access-required",
+                            "exactBinding":  false,
+                            "paginationComplete":  false,
+                            "evidence":  "domain-bound-read-not-started-before-fresh-inspection"
+                        },
+                        {
+                            "provider":  "stripe",
+                            "status":  "not-read-protected-access-required",
+                            "exactBinding":  false,
+                            "paginationComplete":  false,
+                            "evidence":  "cli-present-process-credential-absent"
+                        },
+                        {
+                            "provider":  "railway",
+                            "status":  "not-read-protected-access-required",
+                            "exactBinding":  false,
+                            "paginationComplete":  false,
+                            "evidence":  "cli-present-process-credential-absent"
+                        }
+                    ],
+    "capabilityRows":  [
+                           {
+                               "class":  "SUPABASE_SERVICE_ROLE_KEY",
+                               "authority":  "supabase",
+                               "sourceConsumers":  [
+                                                       "app/(admin)/admin/commerce/page.tsx",
+                                                       "app/(admin)/admin/memberships/actions.ts",
+                                                       "app/(admin)/admin/memberships/page.tsx",
+                                                       "app/(admin)/admin/users/actions.ts",
+                                                       "app/(admin)/admin/users/page.tsx",
+                                                       "app/(admin)/layout.tsx",
+                                                       "app/(ops)/data-entry/access/actions.ts",
+                                                       "app/(ops)/data-entry/actions.ts",
+                                                       "app/(ops)/data-entry/biochemistry/[testId]/page.tsx",
+                                                       "app/(ops)/data-entry/biochemistry/actions.ts",
+                                                       "app/(ops)/data-entry/biochemistry/evidence-actions.ts",
+                                                       "app/(ops)/data-entry/biochemistry/page.tsx",
+                                                       "app/(ops)/data-entry/feeding/page.tsx",
+                                                       "app/(ops)/data-entry/page.tsx",
+                                                       "app/(ops)/data-entry/submissions/[submissionId]/page.tsx",
+                                                       "app/(ops)/data-entry/submissions/page.tsx",
+                                                       "app/(ops)/data-entry/track/page.tsx",
+                                                       "app/(ops)/layout.tsx",
+                                                       "app/(portal)/layout.tsx",
+                                                       "app/(portal)/portal/horses/[horseId]/page.tsx",
+                                                       "app/(portal)/portal/horses/page.tsx",
+                                                       "app/(portal)/portal/page.tsx",
+                                                       "app/api/health/route.ts",
+                                                       "app/api/internal/evidence/reconcile/route.ts",
+                                                       "app/api/setup/status/route.ts",
+                                                       "app/api/stripe/webhook/route.ts",
+                                                       "app/auth/actions.ts",
+                                                       "app/auth/callback/route.ts",
+                                                       "app/internal/manual-preview-session/actions.ts",
+                                                       "app/internal/manual-preview-session/page.tsx",
+                                                       "app/sign-in/page.tsx",
+                                                       "components/auth/sign-in-form.tsx",
+                                                       "components/layout/app-shell.tsx",
+                                                       "components/ops/biochemistry-capture-workflow.tsx",
+                                                       "components/ops/test-evidence-manager.tsx",
+                                                       "components/ops/test-evidence-upload.tsx",
+                                                       "lib/auth/app-context.ts",
+                                                       "lib/auth/bootstrap.ts",
+                                                       "lib/auth/roles.ts",
+                                                       "lib/auth/session.ts",
+                                                       "lib/domain/food-menus.ts",
+                                                       "lib/domain/horses.ts",
+                                                       "lib/domain/operations.ts",
+                                                       "lib/domain/products.ts",
+                                                       "lib/evidence/server/repository.ts",
+                                                       "lib/runtime/platform-status.ts",
+                                                       "lib/stripe/commerce.ts",
+                                                       "lib/supabase/admin.ts",
+                                                       "lib/supabase/client.ts",
+                                                       "lib/supabase/env.ts",
+                                                       "lib/supabase/middleware.ts",
+                                                       "lib/supabase/server.ts",
+                                                       "middleware.ts"
+                                                   ],
+                               "sourceComplete":  true,
+                               "providerConsumers":  0,
+                               "paginationComplete":  false,
+                               "reachability":  "unknown-blocking",
+                               "replacement":  "modern-secret-key",
+                               "installTargets":  [
+                                                      "vercel-environments"
+                                                  ],
+                               "readback":  "read-only-admin",
+                               "predecessorAction":  "individual-disable",
+                               "predecessorOracle":  "old-key-auth-rejection",
+                               "coupling":  "legacy-coupling-refused",
+                               "manualUiRequired":  false,
+                               "laterMutation":  "blocked"
+                           },
+                           {
+                               "class":  "CRON_SECRET",
+                               "authority":  "vercel",
+                               "sourceConsumers":  [
+                                                       "app/api/internal/evidence/reconcile/route.ts"
+                                                   ],
+                               "sourceComplete":  true,
+                               "providerConsumers":  0,
+                               "paginationComplete":  false,
+                               "reachability":  "unknown-blocking",
+                               "replacement":  "generated-secret",
+                               "installTargets":  [
+                                                      "vercel-environments",
+                                                      "cron-routes"
+                                                  ],
+                               "readback":  "no-business-status",
+                               "predecessorAction":  "deployment-retirement",
+                               "predecessorOracle":  "old-route-auth-rejection",
+                               "coupling":  "reconcile-route-blocks-without-oracle",
+                               "manualUiRequired":  false,
+                               "laterMutation":  "blocked"
+                           },
+                           {
+                               "class":  "ENQUIRY_ABUSE_HMAC_SECRET",
+                               "authority":  "vercel",
+                               "sourceConsumers":  [
+
+                                                   ],
+                               "sourceComplete":  true,
+                               "providerConsumers":  0,
+                               "paginationComplete":  false,
+                               "reachability":  "unknown-blocking",
+                               "replacement":  "generated-secret",
+                               "installTargets":  [
+                                                      "vercel-environments",
+                                                      "enquiry-consumers"
+                                                  ],
+                               "readback":  "deterministic-signature",
+                               "predecessorAction":  "deployment-retirement",
+                               "predecessorOracle":  "old-deployment-incapability",
+                               "coupling":  "unknown-caller-blocks",
+                               "manualUiRequired":  false,
+                               "laterMutation":  "blocked"
+                           },
+                           {
+                               "class":  "PUBLIC_ENQUIRY_SMTP_PASS",
+                               "authority":  "resend",
+                               "sourceConsumers":  [
+
+                                                   ],
+                               "sourceComplete":  true,
+                               "providerConsumers":  0,
+                               "paginationComplete":  false,
+                               "reachability":  "unknown-blocking",
+                               "replacement":  "resend-sending-key",
+                               "installTargets":  [
+                                                      "vercel-environments"
+                                                  ],
+                               "readback":  "smtp-verify-no-send",
+                               "predecessorAction":  "delete-exact-key",
+                               "predecessorOracle":  "old-key-auth-rejection",
+                               "coupling":  "exact-team-required",
+                               "manualUiRequired":  true,
+                               "laterMutation":  "blocked"
+                           },
+                           {
+                               "class":  "STRIPE_SECRET_KEY",
+                               "authority":  "stripe",
+                               "sourceConsumers":  [
+                                                       "app/api/health/route.ts",
+                                                       "app/api/setup/status/route.ts",
+                                                       "app/api/stripe/webhook/route.ts",
+                                                       "lib/runtime/platform-status.ts",
+                                                       "lib/stripe/env.ts",
+                                                       "lib/stripe/server.ts"
+                                                   ],
+                               "sourceComplete":  true,
+                               "providerConsumers":  0,
+                               "paginationComplete":  false,
+                               "reachability":  "unknown-blocking",
+                               "replacement":  "stripe-restricted-key",
+                               "installTargets":  [
+                                                      "vercel-environments"
+                                                  ],
+                               "readback":  "account-metadata",
+                               "predecessorAction":  "expire-exact-key",
+                               "predecessorOracle":  "old-key-auth-rejection",
+                               "coupling":  "mode-bound",
+                               "manualUiRequired":  true,
+                               "laterMutation":  "blocked"
+                           },
+                           {
+                               "class":  "STRIPE_WEBHOOK_SECRET",
+                               "authority":  "stripe",
+                               "sourceConsumers":  [
+                                                       "app/api/health/route.ts",
+                                                       "app/api/setup/status/route.ts",
+                                                       "app/api/stripe/webhook/route.ts",
+                                                       "lib/runtime/platform-status.ts",
+                                                       "lib/stripe/env.ts",
+                                                       "lib/stripe/server.ts"
+                                                   ],
+                               "sourceComplete":  true,
+                               "providerConsumers":  0,
+                               "paginationComplete":  false,
+                               "reachability":  "unknown-blocking",
+                               "replacement":  "stripe-endpoint-roll",
+                               "installTargets":  [
+                                                      "vercel-environments"
+                                                  ],
+                               "readback":  "endpoint-metadata",
+                               "predecessorAction":  "roll-exact-endpoint",
+                               "predecessorOracle":  "non-business-oracle-required",
+                               "coupling":  "delivery-forbidden",
+                               "manualUiRequired":  true,
+                               "laterMutation":  "blocked"
+                           },
+                           {
+                               "class":  "RAILWAY_API_TOKEN",
+                               "authority":  "railway",
+                               "sourceConsumers":  [
+                                                       "app/api/health/route.ts",
+                                                       "app/api/setup/status/route.ts",
+                                                       "lib/runtime/platform-status.ts"
+                                                   ],
+                               "sourceComplete":  true,
+                               "providerConsumers":  0,
+                               "paginationComplete":  false,
+                               "reachability":  "unknown-blocking",
+                               "replacement":  "railway-token",
+                               "installTargets":  [
+                                                      "vercel-environments"
+                                                  ],
+                               "readback":  "project-metadata",
+                               "predecessorAction":  "revoke-exact-token",
+                               "predecessorOracle":  "old-token-auth-rejection",
+                               "coupling":  "token-type-bound",
+                               "manualUiRequired":  true,
+                               "laterMutation":  "blocked"
+                           }
+                       ],
+    "officialContracts":  [
+                              {
+                                  "provider":  "vercel",
+                                  "retrievedAt":  "2026-08-14",
+                                  "source":  "https://vercel.com/docs/rest-api",
+                                  "contract":  "fixed project, deployment, environment, alias, integration and webhook reads"
+                              },
+                              {
+                                  "provider":  "supabase",
+                                  "retrievedAt":  "2026-08-14",
+                                  "source":  "https://supabase.com/docs/reference/api/introduction",
+                                  "contract":  "management metadata plus reveal-disabled keys, functions and fixed read-only SQL"
+                              },
+                              {
+                                  "provider":  "resend",
+                                  "retrievedAt":  "2026-08-14",
+                                  "source":  "https://resend.com/docs/api-reference/domains/get-domain",
+                                  "contract":  "fixed retained apex; unique verified sending-enabled domain ID; allowed SPF/DKIM DNS equality; cursor-exhausted domain and key metadata"
+                              },
+                              {
+                                  "provider":  "stripe",
+                                  "retrievedAt":  "2026-08-14",
+                                  "source":  "https://docs.stripe.com/api/webhook_endpoints/list",
+                                  "contract":  "exact account/mode plus cursor-exhausted webhook reads"
+                              },
+                              {
+                                  "provider":  "railway",
+                                  "retrievedAt":  "2026-08-14",
+                                  "source":  "https://docs.railway.com/integrations/api",
+                                  "contract":  "fixed read-only GraphQL with token-type-specific header"
+                              }
+                          ],
+    "alternativesChecked":  [
+                                {
+                                    "provider":  "vercel",
+                                    "api":  "four-read-partial",
+                                    "connector":  "available",
+                                    "cli":  "50.42.0",
+                                    "signedInSession":  "not-used",
+                                    "result":  "pagination-incomplete"
+                                },
+                                {
+                                    "provider":  "supabase",
+                                    "api":  "connected-project-list",
+                                    "connector":  "available",
+                                    "cli":  "absent",
+                                    "signedInSession":  "not-used",
+                                    "result":  "exact-project-ambiguous"
+                                },
+                                {
+                                    "provider":  "resend",
+                                    "api":  "not-called; fixed domain/key read path implemented locally",
+                                    "connector":  "not-used",
+                                    "cli":  "whoami rejected as identity",
+                                    "signedInSession":  "not-used",
+                                    "result":  "fresh-inspection-required-before-protected-session"
+                                },
+                                {
+                                    "provider":  "stripe",
+                                    "api":  "not-called",
+                                    "connector":  "absent",
+                                    "cli":  "1.40.3",
+                                    "signedInSession":  "not-used",
+                                    "result":  "protected-access-required"
+                                },
+                                {
+                                    "provider":  "railway",
+                                    "api":  "not-called",
+                                    "connector":  "absent",
+                                    "cli":  "4.36.1",
+                                    "signedInSession":  "not-used",
+                                    "result":  "protected-access-required"
+                                }
+                            ],
+    "manualAction":  {
+                         "required":  true,
+                         "code":  "PRE_EXISTING_VERCEL_MANAGEMENT_CREDENTIAL_UNAVAILABLE",
+                         "instructionDocument":  "docs/RESEND_DOMAIN_BOUND_FIVE_PROVIDER_AUTHORITY_036R.md",
+                         "blockedReason":  "pre-existing-vercel-management-credential-unavailable-at-first-masked-prompt",
+                         "evidenceChecked":  "three prior pre-read refusals counters0; alternate nested wrapper passed local history/console/canonical guards; protected child process started and returned local Vercel need-authority handshake; first masked vercel management credential prompt reached; no value entered; no credential/provider frame released; no provider or DNS request; Ctrl+C and full window close; owned processes0 temp0 evidence-siblings0; durable sessions remains empty because no final child envelope landed",
+                         "alternativesExhausted":  [
+                                                       "codex-Start-Process-headless",
+                                                       "user-fresh-visible-console-current-invocation-refused-by-any-history-predicate",
+                                                       "reused-or-multiline-current-host-produced-noncanonical-history-row",
+                                                       "interactive-history-method-retry-limit-reached",
+                                                       "nested-absolute-protected-attempt-reached-first-masked-prompt-no-existing-credential",
+                                                       "official-Vercel-Account-Tokens-cannot-reveal-an-existing-token",
+                                                       "creating-a-new-Vercel-token-is-outside-Sprint-036R"
+                                                   ],
+                         "alternateProcessProof":  {
+                                                       "wrapperInvoked":  true,
+                                                       "command":  "powershell.exe -NoProfile -ExecutionPolicy Bypass -File \"C:\\Users\\rrank\\OneDrive\\PNR Precision Performance Canonical\\scripts\\Invoke-ProviderAuthorityCompletion036R.ps1\" -Mode ProtectedReadOnly",
+                                                       "innerHistoryCount":  0,
+                                                       "host":  "ConsoleHost",
+                                                       "userInteractive":  true,
+                                                       "inputRedirected":  false,
+                                                       "outputRedirected":  false,
+                                                       "canonicalGuardCompatible":  true,
+                                                       "argvProtectedValues":  0,
+                                                       "environmentProtectedValues":  0,
+                                                       "protectedModeEntered":  true,
+                                                       "localChildStarted":  true,
+                                                       "localNeedAuthorityHandshake":  true,
+                                                       "maskedPromptReached":  "vercel management credential",
+                                                       "credentialRequested":  true,
+                                                       "credentialSupplied":  false,
+                                                       "credentialHandled":  false,
+                                                       "providerFrameReleased":  false,
+                                                       "providerReads":  0,
+                                                       "dnsReads":  0,
+                                                       "durableSessionRecorded":  false,
+                                                       "cleanupVerified":  true
+                                                   },
+                         "attempts":  [
+                                          {
+                                              "kind":  "codex-headless",
+                                              "providerReads":  0,
+                                              "dnsReads":  0,
+                                              "credentials":  0,
+                                              "sessionConsumed":  false,
+                                              "cleanup":  "owned-pids-absent"
+                                          },
+                                          {
+                                              "kind":  "user-visible-history-refusal",
+                                              "providerReads":  0,
+                                              "dnsReads":  0,
+                                              "credentials":  0,
+                                              "sessionConsumed":  false,
+                                              "refusal":  "FRESH_NONTRANSCRIBED_WINDOW_REQUIRED"
+                                          },
+                                          {
+                                              "kind":  "user-visible-noncanonical-history-row",
+                                              "providerReads":  0,
+                                              "dnsReads":  0,
+                                              "credentials":  0,
+                                              "sessionConsumed":  false,
+                                              "refusal":  "FRESH_NONTRANSCRIBED_WINDOW_REQUIRED-line48-tokenCount-not3"
+                                          },
+                                          {
+                                              "kind":  "user-nested-protected-first-masked-prompt",
+                                              "protectedProcessStarted":  true,
+                                              "localChildStarted":  true,
+                                              "localHandshakeOnly":  true,
+                                              "promptReached":  "vercel management credential",
+                                              "credentialRequested":  true,
+                                              "credentialSupplied":  false,
+                                              "credentialsHandled":  0,
+                                              "providerFrameReleased":  false,
+                                              "providerReads":  0,
+                                              "dnsReads":  0,
+                                              "sessionConsumed":  false,
+                                              "durableSessionRecorded":  false,
+                                              "outcome":  "resend-domain-bound-five-provider-authority-blocked-clean",
+                                              "reason":  "PRE_EXISTING_VERCEL_MANAGEMENT_CREDENTIAL_UNAVAILABLE",
+                                              "termination":  "user-Ctrl+C-and-full-window-close-no-retry",
+                                              "cleanup":  "owned-processes0-temp0-evidence-siblings0"
+                                          }
+                                      ],
+                         "laterOwnerAction":  "attempt concluded after local child handshake at the first masked Vercel prompt; durable sessions remains empty because no final child envelope landed; do not retry now; future work requires separately authorized provisioning of a pre-existing Vercel management credential or a proven safe signed-in read-only alternative; creating a new token is outside Sprint 036R",
+                         "steps":  [
+                                       "do-not-retry-Sprint-036R",
+                                       "keep-current-fallback-and-zero-action-ledger",
+                                       "future-work-requires-separate-explicit-authorization",
+                                       "future-owner-may-provision-pre-existing-Vercel-management-credential",
+                                       "or-future-owner-may-authorize-proven-safe-signed-in-read-only-alternative",
+                                       "creating-new-token-remains-outside-Sprint-036R"
+                                   ],
+                         "builderWillVerify":  [
+                                                   "canonical-three-evidence-artifacts-atomically-regenerated",
+                                                   "protected-process-versus-durable-session-distinction",
+                                                   "provider0-dns0-credentials-handled0",
+                                                   "zero-writes-mutations-business-effects-trainer-actions-residue",
+                                                   "owned-processes-and-temporary-residue0",
+                                                   "focused100-retained1893-combined1993-and-all-quality-gates"
+                                               ],
+                         "credentialAlternativesChecked":  {
+                                                               "officialAccountTokensExistingTokenReveal":  "unavailable",
+                                                               "createNewToken":  "outside-sprint-authority",
+                                                               "safeSignedInAlternative":  "future-explicit-authorization-required"
+                                                           }
+                     },
+    "sessions":  [
+
+                 ],
+    "acceptance":  [
+                       {
+                           "id":  "AC-01",
+                           "status":  "pass",
+                           "evidence":  "canonical-root-branch-head-dirty-preserved-staged0-conflicts0"
+                       },
+                       {
+                           "id":  "AC-02",
+                           "status":  "pass",
+                           "evidence":  "pack-dry-run-apply-readback-exact"
+                       },
+                       {
+                           "id":  "AC-03",
+                           "status":  "pass",
+                           "evidence":  "fresh-critical-plan-review-pass"
+                       },
+                       {
+                           "id":  "AC-04",
+                           "status":  "pass",
+                           "evidence":  "approved-12-path-ledger-11-touched-conditional-retained-test-untouched"
+                       },
+                       {
+                           "id":  "AC-05",
+                           "status":  "pass",
+                           "evidence":  "accepted-source-and-closed-036p-036q-evidence-files-unchanged"
+                       },
+                       {
+                           "id":  "AC-06",
+                           "status":  "pass",
+                           "evidence":  "current-official-resend-contracts-recorded-2026-08-14"
+                       },
+                       {
+                           "id":  "AC-07",
+                           "status":  "pass",
+                           "evidence":  "whoami-profile-token-caller-label-and-key-rows-refused-as-identity"
+                       },
+                       {
+                           "id":  "AC-08",
+                           "status":  "pass",
+                           "evidence":  "expected-domain-fixed-from-retained-029p-and-production"
+                       },
+                       {
+                           "id":  "AC-09",
+                           "status":  "fallback",
+                           "evidence":  "not-reached-after-pre-read-Vercel-credential-stop-providerReads0-dnsReads0"
+                       },
+                       {
+                           "id":  "AC-10",
+                           "status":  "fallback",
+                           "evidence":  "not-reached-after-pre-read-Vercel-credential-stop-providerReads0-dnsReads0"
+                       },
+                       {
+                           "id":  "AC-11",
+                           "status":  "fallback",
+                           "evidence":  "not-reached-after-pre-read-Vercel-credential-stop-providerReads0-dnsReads0"
+                       },
+                       {
+                           "id":  "AC-12",
+                           "status":  "fallback",
+                           "evidence":  "not-reached-after-pre-read-Vercel-credential-stop-providerReads0-dnsReads0"
+                       },
+                       {
+                           "id":  "AC-13",
+                           "status":  "fallback",
+                           "evidence":  "first-masked-Vercel-prompt-reached-pre-existing-management-credential-unavailable-credential-not-supplied-provider-frame-not-released-providerReads0"
+                       },
+                       {
+                           "id":  "AC-14",
+                           "status":  "fallback",
+                           "evidence":  "not-reached-after-pre-read-Vercel-credential-stop-providerReads0-dnsReads0"
+                       },
+                       {
+                           "id":  "AC-15",
+                           "status":  "fallback",
+                           "evidence":  "not-reached-after-pre-read-Vercel-credential-stop-providerReads0-dnsReads0"
+                       },
+                       {
+                           "id":  "AC-16",
+                           "status":  "fallback",
+                           "evidence":  "not-reached-after-pre-read-Vercel-credential-stop-providerReads0-dnsReads0"
+                       },
+                       {
+                           "id":  "AC-17",
+                           "status":  "pass",
+                           "evidence":  "wrong-authority-cursor-duplicate-drift-request25-and-byte-ceilings-fail-closed"
+                       },
+                       {
+                           "id":  "AC-18",
+                           "status":  "pass",
+                           "evidence":  "seven-ordered-sanitized-capability-rows-retained"
+                       },
+                       {
+                           "id":  "AC-19",
+                           "status":  "pass",
+                           "evidence":  "target-derived-internally-only"
+                       },
+                       {
+                           "id":  "AC-20",
+                           "status":  "pass",
+                           "evidence":  "process-local-test-provenance-cannot-mint-live-or-canonical-persistence"
+                       },
+                       {
+                           "id":  "AC-21",
+                           "status":  "pass",
+                           "evidence":  "strict-current-invocation-history-token-gate-visible-parent-private-child-active-budget-prompts-paused-silent-child-reaped"
+                       },
+                       {
+                           "id":  "AC-22",
+                           "status":  "pass",
+                           "evidence":  "provider-material-just-in-time-and-cleared-local-proof"
+                       },
+                       {
+                           "id":  "AC-23",
+                           "status":  "pass",
+                           "evidence":  "protected-values-excluded-from-prohibited-surfaces"
+                       },
+                       {
+                           "id":  "AC-24",
+                           "status":  "pass",
+                           "evidence":  "case-sensitive-taint-reflection-timeout-and-cleanup-local-proof"
+                       },
+                       {
+                           "id":  "AC-25",
+                           "status":  "pass",
+                           "evidence":  "before-after-markdown-faults-and-startup-repair-production-core-proof"
+                       },
+                       {
+                           "id":  "AC-26",
+                           "status":  "pass",
+                           "evidence":  "target-19-to-24-fallback-prefix-1-to-24-dns0-to5-rules-enforced"
+                       },
+                       {
+                           "id":  "AC-27",
+                           "status":  "pass",
+                           "evidence":  "writes0-mutations0-effects0-reveal0-persistence0"
+                       },
+                       {
+                           "id":  "AC-28",
+                           "status":  "pass",
+                           "evidence":  "product-schema-migration-security-dependency-lock-changes0"
+                       },
+                       {
+                           "id":  "AC-29",
+                           "status":  "pass",
+                           "evidence":  "identity-auth-session-trainer-message-verification-graph-storage-actions0"
+                       },
+                       {
+                           "id":  "AC-30",
+                           "status":  "pass",
+                           "evidence":  "manual-last-resort-nested-process-reached-first-masked-prompt-stopped-no-retry-cleanup-verified"
+                       },
+                       {
+                           "id":  "AC-31",
+                           "status":  "pass",
+                           "evidence":  "PRE_EXISTING_VERCEL_MANAGEMENT_CREDENTIAL_UNAVAILABLE-official-Account-Tokens-cannot-reveal-existing-token-new-token-outside-sprint-future-authorized-provisioning-or-safe-signed-in-alternative"
+                       },
+                       {
+                           "id":  "AC-32",
+                           "status":  "pass",
+                           "evidence":  "domain-60-of-60-tracking-inclusive-official-shapes-ttl-auto-strict-not-projected"
+                       },
+                       {
+                           "id":  "AC-33",
+                           "status":  "pass",
+                           "evidence":  "transport-40-of-40-including-strict-history-behavior-focused-100-of-100"
+                       },
+                       {
+                           "id":  "AC-34",
+                           "status":  "pass",
+                           "evidence":  "focused100; retained1884-rerun-plus-031B9-substitute-prior-green-unchanged-harness-package-lock=1893; combined1993"
+                       },
+                       {
+                           "id":  "AC-35",
+                           "status":  "pass",
+                           "evidence":  "json7-static-encoding1440-js-syntax5-ps-ast0-durable-privacy0-lint-zero-warning-typecheck-build29-diff-pass"
+                       },
+                       {
+                           "id":  "AC-36",
+                           "status":  "pass",
+                           "evidence":  "exact11-scope-lock-status0-migration-delta0-two-pre-existing-local-only-preserved-ProductDoneFalse-staged0-conflicts0-accepted036L0-closed036P-Q0-process-temp0"
+                       },
+                       {
+                           "id":  "AC-37",
+                           "status":  "pass",
+                           "evidence":  "protected-process-started-local-handshake-only-durable-sessions0-providerReads0-dnsReads0-credentialsHandled0-zero-actions-and-residue"
+                       },
+                       {
+                           "id":  "AC-38",
+                           "status":  "pending",
+                           "evidence":  "fresh-inspection-and-closeout-not-yet-complete"
+                       },
+                       {
+                           "id":  "AC-39",
+                           "status":  "pending",
+                           "evidence":  "fresh-inspection-and-closeout-not-yet-complete"
+                       },
+                       {
+                           "id":  "AC-40",
+                           "status":  "pending",
+                           "evidence":  "fresh-inspection-and-closeout-not-yet-complete"
+                       }
+                   ],
+    "implementation":  {
+                           "status":  "protected-attempt-blocked-clean-pre-existing-vercel-management-credential-unavailable",
+                           "sameArchitectPlan":  "pass",
+                           "sameArchitectDiff":  "pass",
+                           "historyRepairArchitectDiff":  "pass",
+                           "manualHostInstructionArchitectPlan":  "pass",
+                           "alternateProcessArchitectPlan":  "pass",
+                           "providerRequestsThisSprint":  0,
+                           "writes":  0,
+                           "mutations":  0,
+                           "businessEffects":  0,
+                           "residue":  0,
+                           "trainerActions":  0,
+                           "dnsReadsThisSprint":  0,
+                           "protectedAttemptProcessStarted":  true,
+                           "localChildStarted":  true,
+                           "localHandshakeFrames":  1,
+                           "maskedCredentialPrompts":  1,
+                           "credentialsSupplied":  0,
+                           "credentialsHandled":  0,
+                           "providerFramesReleased":  0,
+                           "durableSessions":  0,
+                           "cleanupVerified":  true,
+                           "postAttemptVerification":  {
+                                                           "focusedDomain":  60,
+                                                           "focusedTransport":  40,
+                                                           "focusedTotal":  100,
+                                                           "retainedRerunAssertions":  1884,
+                                                           "retainedSubstituteAssertions":  9,
+                                                           "retainedTotal":  1893,
+                                                           "combinedTotal":  1993,
+                                                           "retainedSubstitution":  {
+                                                                                        "gate":  "protected-preview-transport-031B",
+                                                                                        "reason":  "playwright-core-absent-from-package-and-lock",
+                                                                                        "originalTool":  "unavailable",
+                                                                                        "substitute":  "retained-prior-green-proof-plus-unchanged-harness-package-lock-and-all-other-registered-retained-tests-rerun",
+                                                                                        "harnessSha256":  "8aa794a54e4911a98de921bbb11eaba973719798809be363dbad8e1664edcd49",
+                                                                                        "packageSha256":  "2528d14e60842e38cffbee161517fb23e4bf16d9c4bc643c0a282a40c297b284",
+                                                                                        "lockSha256":  "f7760377c159a0a5f4e5f35cdd6008c37326fbdf2672f87b732d61884ac6737a",
+                                                                                        "scopeExpanded":  false,
+                                                                                        "dependencyInstalled":  false
+                                                                                    },
+                                                           "npmShimSubstitution":  {
+                                                                                       "reason":  "npm-injected-node.ps1-not-valid-Diagnostics-Process-executable",
+                                                                                       "substitute":  "same-registered-plan-direct-real-node-plus-native-PowerShell-npm-quality-gates",
+                                                                                       "wrapperOrTestEdited":  false
+                                                                                   },
+                                                           "selfTest":  "pass-100-provider0-dns0-actions0",
+                                                           "capabilityGate":  "pass-exit0-provider0-dns0-actions0",
+                                                           "json":  "pass-7",
+                                                           "static":  "pass",
+                                                           "encoding":  1440,
+                                                           "javascriptSyntax":  5,
+                                                           "powershellAstErrors":  0,
+                                                           "durablePrivacyHits":  0,
+                                                           "lint":  "pass-zero-warning",
+                                                           "typecheck":  "pass",
+                                                           "build":  "pass-29-pages",
+                                                           "diff":  "pass",
+                                                           "scopePaths":  11,
+                                                           "lockStatus":  0,
+                                                           "migrationDelta":  0,
+                                                           "preExistingLocalOnlyMigrations":  2,
+                                                           "productDone":  false,
+                                                           "staged":  0,
+                                                           "conflicts":  0,
+                                                           "ownedProcesses":  0,
+                                                           "ownedTemporaryResidue":  0
+                                                       }
+                       },
+    "resendAuthority":  {
+                            "expectedDomain":  "precisionperformance.com.au",
+                            "source":  "retained-029P-and-accepted-Production-authority",
+                            "identityBasis":  "unique-verified-sending-enabled-domain-id-plus-exact-public-dns",
+                            "whoamiIdentityAccepted":  false,
+                            "maxDnsReads":  5,
+                            "matched":  false,
+                            "selectedTuples":  0
+                        }
+}

@@ -1,0 +1,23 @@
+{
+  "sprint": "033B",
+  "rehearsalClass": "synthetic-same-process-logical-only",
+  "databaseAndStorageSeparate": true,
+  "algorithm": "aes-256-gcm",
+  "ivBytes": 12,
+  "scenarioCount": 17,
+  "passedScenarioCount": 17,
+  "failedScenarioCount": 0,
+  "successScenarioCount": 1,
+  "controlledFailureScenarioCount": 16,
+  "tableCount": 3,
+  "rowCount": 3,
+  "objectCount": 2,
+  "elapsedMs": 161.0666,
+  "insideLocalRtoCeiling": true,
+  "cleanupResidueCount": 0,
+  "externalMutationCount": 0,
+  "providerNativeRestoreProven": false,
+  "productionRestoreProven": false,
+  "keyPersistedOrReported": false,
+  "ivPersistedOrReported": false
+}

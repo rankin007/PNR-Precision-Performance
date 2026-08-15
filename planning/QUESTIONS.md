@@ -209,3 +209,26 @@ No user action is required for this blocked-clean closeout. A fresh corrective A
 - Only after those authorities pass, which private sequence governs the two excluded identities and one real trainer's normal message and verification.
 
 Until then, no credential, deployment, identity, message, verification or trainer action is authorized.
+
+## Forward inputs after Sprint 036Q close
+
+No user action was required for the Sprint 036Q blocked-clean closeout. Sprint 036R later executed and closed on its domain-bound fallback; the following were the historical prerequisites carried into that sprint:
+
+- Which already-authenticated, non-mutating mechanism independently binds the exact Resend team without protected output or new credential persistence.
+- How all required Vercel, Supabase, Resend, Stripe and Railway pages will be exhausted within the 24-new/28-cumulative request ceilings.
+- Which independent lifecycle and predecessor-rejection oracles govern each of the seven credential classes after authority completeness.
+- Only after those authorities pass, which private sequence governs the two excluded identities and one real trainer's normal message and verification.
+
+Until then, no provider, credential, deployment, identity, message, verification or trainer action is authorized.
+
+## Forward inputs after Sprint 036R close
+
+No current user action or Sprint 036R retry is authorized. If the owner requests a future correction, a fresh Architect must decide:
+
+- Whether a pre-existing Vercel management credential can be provisioned through an approved protected channel without chat, argv, environment, clipboard or durable storage.
+- Otherwise, whether a safe signed-in read-only alternative can be proven to bind the exact Vercel team/project and exhaust the fixed read matrix without protected output or mutation.
+- How the full Vercel, Supabase, Resend, Stripe and Railway authority record will complete within the existing request, DNS, byte and action ceilings.
+- Which independent lifecycle/predecessor rejection oracles govern all seven credential classes only after provider authority passes.
+- Which later separately authorized private sequence governs excluded identities and real-trainer delivery.
+
+Until a separate Pack passes review, do not create a token, install/login, access providers, rotate credentials, change identities, contact the trainer or execute 036S.

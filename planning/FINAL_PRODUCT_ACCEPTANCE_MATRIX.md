@@ -108,3 +108,11 @@ No matrix criterion changes. Sprint 036O closes `provider-authority-discovery-bl
 ## Sprint 036P reconciliation
 
 No matrix criterion changes. Sprint 036P closes `protected-provider-authority-readback-blocked-clean` with exact `1783/1783`, fresh critical inspection 3/3, a complete 124-file accepted-source graph and durable provider reads/writes/mutations/business effects/residue/trainer actions of `4/0/0/0/0/0`. Exact five-provider authority remains incomplete and every credential capability row remains `unknown-blocking`. Credential closure, excluded identities, trainer delivery, representative acceptance, Production completion and Product Done remain open; accepted Sprint 036L is unchanged.
+
+## Sprint 036Q reconciliation
+
+No matrix criterion changes. Sprint 036Q closes `protected-five-provider-authority-blocked-clean` with exact `110/110` focused plus `1783/1783` retained equals `1893/1893`, same-Architect final diff PASS, zero protected sessions, Sprint/cumulative provider reads `0/4` and writes/mutations/business effects/residue/trainer actions `0/0/0/0/0`. Exact five-provider authority remains incomplete because no pre-existing independently bound Resend team identity was available. Credential closure, excluded identities, trainer delivery, representative acceptance, Production completion and Product Done remain open; accepted Sprint 036L is unchanged.
+
+## Sprint 036R reconciliation
+
+No matrix criterion changes. Sprint 036R closes `resend-domain-bound-five-provider-authority-blocked-clean` with exact focused `100/100`, retained `1893/1893`, combined `1993/1993` and fresh final inspection PASS. The protected wrapper/child and local Vercel handshake reached one masked credential prompt, but no pre-existing Vercel management credential was available; credentials handled, provider frames, Sprint provider reads, DNS reads and durable sessions were all zero, cumulative reads remained four and all actions/residue/trainer counters remained zero. Exact five-provider authority, credential closure, excluded identities, real-trainer delivery, representative acceptance, Production completion and Product Done remain open. Accepted Sprint 036L is unchanged, 036S is gated/unplanned and any correction requires separate authority for a pre-existing credential or proven safe signed-in read-only alternative.
