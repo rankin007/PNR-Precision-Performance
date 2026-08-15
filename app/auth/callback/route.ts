@@ -3,6 +3,7 @@ import type { NextRequest } from "next/server";
 import { createServerClient } from "@supabase/ssr";
 import { normalizeAppRedirectPath } from "@/lib/auth/access";
 import { bootstrapAuthenticatedUser } from "@/lib/auth/bootstrap";
+import { createSupabaseApiKeyFetch } from "@/lib/supabase/api-key-fetch";
 import { hasSupabaseEnv, supabaseEnv } from "@/lib/supabase/env";
 
 export async function GET(request: NextRequest) {
@@ -27,6 +28,7 @@ export async function GET(request: NextRequest) {
 
   if (code) {
     const supabase = createServerClient(supabaseEnv.url!, supabaseEnv.anonKey!, {
+      global: { fetch: createSupabaseApiKeyFetch(supabaseEnv.anonKey!) },
       cookies: {
         getAll() {
           return request.cookies.getAll();

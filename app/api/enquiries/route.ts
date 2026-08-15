@@ -1,13 +1,18 @@
 import { NextResponse } from "next/server";
 import { ENQUIRY_BODY_LIMIT_BYTES, parseEnquiryPayload, requestOriginIsSameHost } from "@/lib/enquiries/contract";
+import { publicEnquirySubmissionIsEnabled } from "@/lib/enquiries/env";
 import { submitEnquiry } from "@/lib/enquiries/server";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 const genericInvalid = { result: "invalid", message: "Review the enquiry details and try again." };
+const genericUnavailable = { result: "unavailable", message: "Online enquiries are temporarily unavailable. Please try again later." };
 
 export async function POST(request: Request) {
+  if (!publicEnquirySubmissionIsEnabled()) {
+    return NextResponse.json(genericUnavailable, { status: 503 });
+  }
   if (!request.headers.get("content-type")?.toLowerCase().startsWith("application/json")) {
     return NextResponse.json(genericInvalid, { status: 415 });
   }
@@ -41,6 +46,6 @@ export async function POST(request: Request) {
   const networkIdentifier = (request.headers.get("x-vercel-forwarded-for") ?? request.headers.get("x-forwarded-for") ?? "").split(",", 1)[0].trim();
   const outcome = await submitEnquiry(parsed.value, networkIdentifier);
   if (outcome.result === "limited") return NextResponse.json({ result: "limited", message: "Please wait before trying again." }, { status: 429 });
-  if (outcome.result !== "received") return NextResponse.json({ result: "unavailable", message: "Online enquiries are temporarily unavailable. Please try again later." }, { status: 503 });
+  if (outcome.result !== "received") return NextResponse.json(genericUnavailable, { status: 503 });
   return NextResponse.json({ result: "received", message: "Enquiry received", reference: outcome.reference });
 }

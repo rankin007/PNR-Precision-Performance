@@ -4449,3 +4449,3614 @@ revoke all on function public.soft_delete_biochemistry_comment(uuid, uuid) from 
 grant execute on function public.soft_delete_biochemistry_comment(uuid, uuid) to authenticated;
 
 -- <<< END 0017_valid_null_safe_authenticated_biochemistry_comment_soft_delete.sql
+
+-- >>> BEGIN 0018_test_evidence_upload_and_storage.sql
+-- Candidate only: Sprint 023E does not apply this migration.
+-- Inventory gate MUST precede all mutation/backfill/constraint replacement.
+do $$
+declare discrepancies bigint;
+begin
+  select count(*) into discrepancies
+  from public.biochemistry_test_uploads u
+  left join public.biochemistry_tests t on t.id = u.test_id
+  left join public.horses h on h.id = u.horse_id
+  where t.id is null or h.id is null or t.horse_id <> u.horse_id or t.stable_id is null
+     or u.size_bytes < 1 or u.size_bytes > 5242880
+     or (u.deleted_at is null) <> (u.deleted_by_user_id is null)
+     or u.file_category not in ('pdf','csv','png','jpg','jpeg','photo')
+     or (u.file_category = 'photo' and not (
+       (lower(u.file_name) ~ '\.(jpe?g)$' and lower(u.content_type) = 'image/jpeg') or
+       (lower(u.file_name) ~ '\.png$' and lower(u.content_type) = 'image/png')));
+  if discrepancies <> 0 then
+    raise exception 'test evidence legacy inventory requires governed remediation';
+  end if;
+  if exists (select 1 from public.biochemistry_test_uploads group by storage_path having count(*) > 1) then
+    raise exception 'test evidence legacy storage path collision';
+  end if;
+end $$;
+
+alter table public.biochemistry_tests
+  add constraint biochemistry_tests_id_horse_stable_uq unique (id, horse_id, stable_id);
+
+alter table public.biochemistry_test_uploads
+  add column stable_id uuid,
+  add column object_id uuid default gen_random_uuid(),
+  add column bucket_id text,
+  add column object_key text,
+  add column display_name text,
+  add column extension text,
+  add column declared_mime text,
+  add column detected_mime text,
+  add column sha256_hex text,
+  add column state text,
+  add column prior_state text,
+  add column reason_code text,
+  add column version_group_id uuid,
+  add column version_no integer,
+  add column replaces_id uuid references public.biochemistry_test_uploads(id) on delete restrict,
+  add column replaced_by_id uuid references public.biochemistry_test_uploads(id) on delete restrict,
+  add column acknowledgement_at timestamptz,
+  add column available_at timestamptz,
+  add column restore_until timestamptz,
+  add column purge_eligible_at timestamptz,
+  add column reconciliation_attempts smallint not null default 0,
+  add column reconciled_at timestamptz,
+  add column scanner_name text,
+  add column scanner_version text,
+  add column scan_outcome text,
+  add column sanitiser_name text,
+  add column sanitiser_version text,
+  add column sanitisation_outcome text;
+
+update public.biochemistry_test_uploads u set
+  stable_id = t.stable_id,
+  object_id = coalesce(u.object_id, gen_random_uuid()),
+  display_name = u.file_name,
+  extension = lower(substring(u.file_name from '\.([A-Za-z0-9]+)$')),
+  declared_mime = lower(u.content_type),
+  file_category = case
+    when lower(u.file_name) ~ '\.(jpe?g)$' and lower(u.content_type)='image/jpeg' then 'jpeg'
+    when lower(u.file_name) ~ '\.png$' and lower(u.content_type)='image/png' then 'png'
+    when lower(u.file_name) ~ '\.pdf$' and lower(u.content_type)='application/pdf' then 'pdf'
+    when lower(u.file_name) ~ '\.csv$' and lower(u.content_type) in ('text/csv','application/csv') then 'csv'
+  end,
+  state = case when u.deleted_at is null then 'legacy_unverified' else 'soft_deleted' end,
+  prior_state = case when u.deleted_at is not null then 'legacy_unverified' end,
+  reason_code = 'legacy_backfill_unverified',
+  version_group_id = u.id,
+  version_no = 1,
+  restore_until = case when u.deleted_at is not null then u.deleted_at + interval '30 days' end,
+  purge_eligible_at = case when u.deleted_at is not null then u.deleted_at + interval '30 days' end
+from public.biochemistry_tests t where t.id = u.test_id;
+
+alter table public.biochemistry_test_uploads
+  drop constraint biochemistry_test_uploads_file_category_check,
+  drop constraint biochemistry_test_uploads_size_bytes_check,
+  alter column stable_id set not null,
+  alter column object_id set not null,
+  alter column display_name set not null,
+  alter column extension set not null,
+  alter column declared_mime set not null,
+  alter column state set default 'initiated', alter column state set not null,
+  alter column version_group_id set not null,
+  alter column version_no set default 1, alter column version_no set not null,
+  add constraint uploads_object_id_uq unique (object_id),
+  add constraint uploads_test_horse_stable_fk foreign key (test_id,horse_id,stable_id)
+    references public.biochemistry_tests(id,horse_id,stable_id) on delete cascade,
+  add constraint uploads_category_check check (file_category in ('jpeg','png','pdf','csv')),
+  add constraint uploads_size_check check (size_bytes between 1 and 5242880),
+  add constraint uploads_state_check check (state in ('initiated','upload_pending','uploaded_unverified','legacy_unverified','validation_failed','scan_pending','sanitisation_pending','available','blocked','failed','soft_deleted','restore_pending','purge_pending','purged','object_missing')),
+  add constraint uploads_object_pair_check check ((bucket_id is null) = (object_key is null)),
+  add constraint uploads_hash_check check (sha256_hex is null or sha256_hex ~ '^[0-9a-f]{64}$'),
+  add constraint uploads_available_check check (state <> 'available' or (bucket_id is not null and object_key is not null and detected_mime is not null and sha256_hex is not null and available_at is not null and scan_outcome='clean' and sanitisation_outcome='passed')),
+  add constraint uploads_deleted_state_check check (state not in ('soft_deleted','restore_pending','purge_pending','purged') or deleted_at is not null),
+  add constraint uploads_version_positive_check check (version_no > 0),
+  add constraint uploads_not_self_replace_check check (replaces_id is null or replaces_id <> id),
+  add constraint uploads_not_self_replaced_by_check check (replaced_by_id is null or replaced_by_id <> id);
+
+create unique index uploads_object_key_uq on public.biochemistry_test_uploads(bucket_id,object_key) where object_key is not null;
+create unique index uploads_version_uq on public.biochemistry_test_uploads(version_group_id,version_no);
+create index uploads_scope_state_ix on public.biochemistry_test_uploads(stable_id,horse_id,test_id,state);
+create index uploads_reconcile_ix on public.biochemistry_test_uploads(state,created_at);
+
+create table public.evidence_csv_registry (
+  id uuid primary key default gen_random_uuid(), source_name text not null,
+  template_id text not null, version text not null, ordered_schema jsonb not null,
+  formula_policy text not null, enabled boolean not null default false,
+  approved_by_user_id uuid references public.users(id) on delete set null,
+  approved_at timestamptz, unique(source_name,template_id,version)
+);
+alter table public.biochemistry_test_uploads add column csv_registry_id uuid references public.evidence_csv_registry(id) on delete restrict;
+
+create table public.evidence_upload_attempts (
+  id uuid primary key default gen_random_uuid(), idempotency_key_hash text not null,
+  user_id uuid not null references public.users(id) on delete cascade,
+  test_id uuid not null, horse_id uuid not null, stable_id uuid not null,
+  upload_id uuid not null references public.biochemistry_test_uploads(id) on delete cascade,
+  bucket_id text not null, object_key text not null, declared_name text not null,
+  declared_mime text not null, declared_bytes integer not null check (declared_bytes between 1 and 5242880),
+  reserved_bytes integer not null check (reserved_bytes=declared_bytes),
+  state text not null check (state in ('active','completed','cancelled','expired','failed')),
+  created_at timestamptz not null default now(), expires_at timestamptz not null,
+  unique(user_id,idempotency_key_hash), unique(bucket_id,object_key),
+  foreign key(test_id,horse_id,stable_id) references public.biochemistry_tests(id,horse_id,stable_id) on delete cascade
+);
+
+create table public.evidence_holds (
+  id uuid primary key default gen_random_uuid(),
+  upload_id uuid not null references public.biochemistry_test_uploads(id) on delete cascade,
+  reason_code text not null, owner_user_id uuid not null references public.users(id) on delete restrict,
+  starts_at timestamptz not null default now(), review_at timestamptz not null,
+  released_at timestamptz, released_by_user_id uuid references public.users(id) on delete restrict,
+  check ((released_at is null) = (released_by_user_id is null))
+);
+
+create table public.evidence_audit_events (
+  id uuid primary key default gen_random_uuid(),
+  upload_id uuid references public.biochemistry_test_uploads(id) on delete set null,
+  stable_id uuid references public.stables(id) on delete set null,
+  horse_id uuid references public.horses(id) on delete set null,
+  test_id uuid references public.biochemistry_tests(id) on delete set null,
+  event_type text not null, actor_user_id uuid references public.users(id) on delete set null,
+  role_snapshot text, outcome text not null, reason_code text,
+  occurred_at timestamptz not null default now(), correlation_id uuid
+);
+
+create or replace function public.validate_evidence_lineage() returns trigger language plpgsql security invoker as $$
+declare predecessor public.biochemistry_test_uploads;
+begin
+  if tg_op='UPDATE' and (new.object_id<>old.object_id or new.version_group_id<>old.version_group_id or new.version_no<>old.version_no or new.test_id<>old.test_id) then
+    raise exception 'immutable evidence identity';
+  end if;
+  if new.replaces_id is not null then
+    select * into predecessor from public.biochemistry_test_uploads where id=new.replaces_id;
+    if predecessor.id is null or predecessor.test_id<>new.test_id or predecessor.version_group_id<>new.version_group_id or predecessor.version_no>=new.version_no or predecessor.replaced_by_id is not null then
+      raise exception 'invalid evidence lineage';
+    end if;
+    if exists (with recursive chain as (select id,replaces_id from public.biochemistry_test_uploads where id=new.replaces_id union all select u.id,u.replaces_id from public.biochemistry_test_uploads u join chain c on u.id=c.replaces_id) select 1 from chain where id=new.id) then
+      raise exception 'cyclic evidence lineage';
+    end if;
+  end if;
+  return new;
+end $$;
+create trigger evidence_lineage_guard before insert or update on public.biochemistry_test_uploads for each row execute function public.validate_evidence_lineage();
+
+create or replace function public.lock_evidence_test(p_test_id uuid) returns void language sql security invoker as $$ select pg_advisory_xact_lock(hashtextextended(p_test_id::text, 23)); $$;
+
+alter table public.evidence_upload_attempts enable row level security;
+alter table public.evidence_csv_registry enable row level security;
+alter table public.evidence_holds enable row level security;
+alter table public.evidence_audit_events enable row level security;
+revoke all on public.evidence_upload_attempts, public.evidence_csv_registry, public.evidence_holds, public.evidence_audit_events from anon, authenticated;
+revoke insert, update, delete on public.biochemistry_test_uploads from anon, authenticated;
+grant select on public.biochemistry_test_uploads to authenticated;
+
+-- Storage policies are intentionally candidate SQL only; bucket creation/application is Sprint 023F.
+-- An authenticated INSERT policy must join storage.objects.name to one live actor-owned evidence_upload_attempt.
+
+-- <<< END 0018_test_evidence_upload_and_storage.sql
+
+-- >>> BEGIN 0019_test_evidence_remote_contract_completion.sql
+-- Sprint 023J candidate only. Apply only after the separately governed clean-commit gate.
+-- Completes the additive 0018 contract without asserting remote application.
+
+insert into public.permissions(code,name,description,scope)
+values ('evidence.purge','Purge test evidence','Separately designated governed evidence purge permission.','evidence')
+on conflict (code) do nothing;
+
+insert into storage.buckets(id,name,public,file_size_limit,allowed_mime_types)
+values ('test-evidence','test-evidence',false,5242880,array['image/jpeg','image/png','application/pdf']::text[]);
+
+create or replace function public.can_insert_test_evidence_object(target_name text)
+returns boolean
+language sql stable security definer
+set search_path = pg_catalog, public
+as $$
+  select exists (
+    select 1
+    from public.evidence_upload_attempts a
+    join public.users u on u.id=a.user_id
+    join public.member_profiles mp on mp.user_id=u.id
+    where u.auth_user_id=auth.uid()
+      and u.status='active'
+      and mp.is_active
+      and a.bucket_id='test-evidence'
+      and a.object_key=target_name
+      and a.state='active'
+      and a.expires_at>pg_catalog.now()
+      and public.can_write_biochemistry_horse(a.horse_id) is true
+  );
+$$;
+revoke all on function public.can_insert_test_evidence_object(text) from public, anon;
+grant execute on function public.can_insert_test_evidence_object(text) to authenticated;
+
+create policy "test_evidence_exact_intent_insert"
+on storage.objects for insert to authenticated
+with check (
+  bucket_id='test-evidence'
+  and public.can_insert_test_evidence_object(name) is true
+);
+
+create or replace function public.initiate_test_evidence_upload(
+  p_test_id uuid,
+  p_declared_name text,
+  p_declared_mime text,
+  p_declared_bytes integer,
+  p_idempotency_key text,
+  p_acknowledgement boolean,
+  p_replaces_id uuid default null
+)
+returns table(attempt_id uuid,upload_id uuid,bucket_id text,object_key text,expires_at timestamptz)
+language plpgsql volatile security definer
+set search_path = pg_catalog, public
+as $$
+declare
+  actor public.users%rowtype;
+  target public.biochemistry_tests%rowtype;
+  predecessor public.biochemistry_test_uploads%rowtype;
+  normal_name text;
+  normal_mime text;
+  normal_category text;
+  normal_extension text;
+  idem_hash text;
+  occupied_count bigint;
+  occupied_bytes bigint;
+  new_upload_id uuid:=gen_random_uuid();
+  new_attempt_id uuid:=gen_random_uuid();
+  new_object_key text:='v1/'||gen_random_uuid()::text||'/'||gen_random_uuid()::text;
+  new_expiry timestamptz:=pg_catalog.now()+interval '24 hours';
+begin
+  if p_acknowledgement is not true or p_declared_bytes not between 1 and 5242880
+     or p_idempotency_key is null or length(p_idempotency_key) not between 16 and 200 then
+    raise exception 'evidence request unavailable';
+  end if;
+
+  normal_name:=left(regexp_replace(split_part(replace(p_declared_name,E'\\','/'),'/',-1),'[[:cntrl:]]','','g'),160);
+  normal_mime:=lower(trim(p_declared_mime));
+  normal_extension:=lower(substring(normal_name from '\\.([A-Za-z0-9]+)$'));
+  normal_category:=case
+    when normal_extension in ('jpg','jpeg') and normal_mime='image/jpeg' then 'jpeg'
+    when normal_extension='png' and normal_mime='image/png' then 'png'
+    when normal_extension='pdf' and normal_mime='application/pdf' then 'pdf'
+  end;
+  if normal_name='' or normal_category is null or normal_extension='csv' or normal_mime in ('text/csv','application/csv') then
+    raise exception 'evidence request unavailable';
+  end if;
+
+  select u.* into actor from public.users u
+  join public.member_profiles mp on mp.user_id=u.id and mp.is_active
+  where u.auth_user_id=auth.uid() and u.status='active';
+  select * into target from public.biochemistry_tests
+  where id=p_test_id and deleted_at is null for update;
+  if actor.id is null or target.id is null or target.stable_id is null
+     or public.can_write_biochemistry_horse(target.horse_id) is not true then
+    raise exception 'evidence request unavailable';
+  end if;
+  perform pg_advisory_xact_lock(hashtextextended(target.id::text,23));
+
+  idem_hash:=encode(digest(p_idempotency_key,'sha256'),'hex');
+  return query select a.id,a.upload_id,a.bucket_id,a.object_key,a.expires_at
+    from public.evidence_upload_attempts a
+    where a.user_id=actor.id and a.idempotency_key_hash=idem_hash and a.state='active' and a.expires_at>pg_catalog.now();
+  if found then return; end if;
+
+  if p_replaces_id is not null then
+    select * into predecessor from public.biochemistry_test_uploads
+    where id=p_replaces_id and test_id=target.id and state='available' and replaced_by_id is null for update;
+    if predecessor.id is null then raise exception 'evidence request unavailable'; end if;
+    if exists(select 1 from public.evidence_upload_attempts a join public.biochemistry_test_uploads u on u.id=a.upload_id
+      where u.replaces_id=predecessor.id and a.state='active' and a.expires_at>pg_catalog.now()) then
+      raise exception 'evidence request unavailable';
+    end if;
+  else
+    select count(*),coalesce(sum(size_bytes),0) into occupied_count,occupied_bytes
+    from public.biochemistry_test_uploads
+    where test_id=target.id and state in ('upload_pending','uploaded_unverified','legacy_unverified','scan_pending','sanitisation_pending','available','blocked','soft_deleted','restore_pending','purge_pending','object_missing')
+      and not(state='soft_deleted' and replaced_by_id is not null);
+    if occupied_count+1>10 or occupied_bytes+p_declared_bytes>31457280 then
+      raise exception 'evidence request unavailable';
+    end if;
+  end if;
+
+  insert into public.biochemistry_test_uploads(
+    id,test_id,horse_id,stable_id,file_name,file_category,content_type,size_bytes,storage_path,
+    uploaded_by_user_id,object_id,bucket_id,object_key,display_name,extension,declared_mime,state,
+    version_group_id,version_no,replaces_id,acknowledgement_at,reason_code
+  ) values (
+    new_upload_id,target.id,target.horse_id,target.stable_id,normal_name,normal_category,normal_mime,p_declared_bytes,new_object_key,
+    actor.id,gen_random_uuid(),'test-evidence',new_object_key,normal_name,normal_extension,normal_mime,'upload_pending',
+    coalesce(predecessor.version_group_id,new_upload_id),coalesce(predecessor.version_no+1,1),predecessor.id,pg_catalog.now(),'awaiting_direct_transfer'
+  );
+  insert into public.evidence_upload_attempts(id,idempotency_key_hash,user_id,test_id,horse_id,stable_id,upload_id,bucket_id,object_key,declared_name,declared_mime,declared_bytes,reserved_bytes,state,expires_at)
+  values(new_attempt_id,idem_hash,actor.id,target.id,target.horse_id,target.stable_id,new_upload_id,'test-evidence',new_object_key,normal_name,normal_mime,p_declared_bytes,p_declared_bytes,'active',new_expiry);
+  insert into public.evidence_audit_events(upload_id,stable_id,horse_id,test_id,event_type,actor_user_id,role_snapshot,outcome,reason_code,correlation_id)
+  values(new_upload_id,target.stable_id,target.horse_id,target.id,'upload_initiated',actor.id,actor.primary_role_code,'accepted','awaiting_direct_transfer',new_attempt_id);
+  return query select new_attempt_id,new_upload_id,'test-evidence'::text,new_object_key,new_expiry;
+end $$;
+
+revoke all on function public.initiate_test_evidence_upload(uuid,text,text,integer,text,boolean,uuid) from public, anon;
+grant execute on function public.initiate_test_evidence_upload(uuid,text,text,integer,text,boolean,uuid) to authenticated;
+
+create or replace function public.mutate_test_evidence_lifecycle(p_operation text,p_upload_id uuid,p_test_id uuid)
+returns boolean
+language plpgsql volatile security definer
+set search_path = pg_catalog, public, storage
+as $$
+declare
+  actor public.users%rowtype;
+  upload public.biochemistry_test_uploads%rowtype;
+  attempt public.evidence_upload_attempts%rowtype;
+  object_row storage.objects%rowtype;
+  actor_role text;
+begin
+  if p_operation not in ('finalise','cancel','soft_delete','request_restore','restore','create_hold','release_hold','purge') then
+    raise exception 'evidence request unavailable';
+  end if;
+  select u.* into actor from public.users u join public.member_profiles mp on mp.user_id=u.id and mp.is_active
+    where u.auth_user_id=auth.uid() and u.status='active';
+  select * into upload from public.biochemistry_test_uploads where id=p_upload_id and test_id=p_test_id for update;
+  if actor.id is null or upload.id is null or public.can_write_biochemistry_horse(upload.horse_id) is not true then
+    raise exception 'evidence request unavailable';
+  end if;
+  actor_role:=actor.primary_role_code;
+  perform pg_advisory_xact_lock(hashtextextended(upload.test_id::text,23));
+
+  if p_operation='finalise' then
+    select * into attempt from public.evidence_upload_attempts where upload_id=upload.id and user_id=actor.id and state='active' and expires_at>pg_catalog.now() for update;
+    select * into object_row from storage.objects where bucket_id=upload.bucket_id and name=upload.object_key;
+    if attempt.id is null or upload.state<>'upload_pending' or object_row.id is null
+       or coalesce((object_row.metadata->>'size')::bigint,-1)<>upload.size_bytes
+       or lower(coalesce(object_row.metadata->>'mimetype',''))<>upload.declared_mime then
+      raise exception 'evidence request unavailable';
+    end if;
+    update public.biochemistry_test_uploads set state='blocked',prior_state='uploaded_unverified',reason_code='safety_services_unavailable',reconciled_at=pg_catalog.now() where id=upload.id;
+    update public.evidence_upload_attempts set state='completed' where id=attempt.id;
+  elsif p_operation='cancel' then
+    if upload.state<>'upload_pending' then raise exception 'evidence request unavailable'; end if;
+    if exists(select 1 from storage.objects where bucket_id=upload.bucket_id and name=upload.object_key) then raise exception 'evidence request unavailable'; end if;
+    update public.biochemistry_test_uploads set state='failed',reason_code='cancelled_before_transfer' where id=upload.id;
+    update public.evidence_upload_attempts set state='cancelled' where upload_id=upload.id and state='active';
+  elsif p_operation='soft_delete' then
+    if upload.state not in ('available','blocked','legacy_unverified','object_missing') then raise exception 'evidence request unavailable'; end if;
+    update public.biochemistry_test_uploads set prior_state=state,state='soft_deleted',deleted_at=pg_catalog.now(),deleted_by_user_id=actor.id,restore_until=pg_catalog.now()+interval '30 days',purge_eligible_at=pg_catalog.now()+interval '30 days',reason_code='user_soft_delete' where id=upload.id;
+  elsif p_operation='request_restore' then
+    if upload.state<>'soft_deleted' or upload.restore_until<=pg_catalog.now() then raise exception 'evidence request unavailable'; end if;
+    update public.biochemistry_test_uploads set state='restore_pending',reason_code='restore_requested' where id=upload.id;
+  elsif p_operation='restore' then
+    if actor_role<>'administrator' or upload.state<>'restore_pending' or upload.replaced_by_id is not null then raise exception 'evidence request unavailable'; end if;
+    update public.biochemistry_test_uploads set state=case when prior_state='available' then 'blocked' else coalesce(prior_state,'legacy_unverified') end,deleted_at=null,deleted_by_user_id=null,restore_until=null,purge_eligible_at=null,reason_code='restored_unavailable' where id=upload.id;
+  elsif p_operation='create_hold' then
+    if actor_role<>'administrator' then raise exception 'evidence request unavailable'; end if;
+    insert into public.evidence_holds(upload_id,reason_code,owner_user_id,review_at) values(upload.id,'governance_hold',actor.id,pg_catalog.now()+interval '30 days');
+  elsif p_operation='release_hold' then
+    if actor_role<>'administrator' then raise exception 'evidence request unavailable'; end if;
+    update public.evidence_holds set released_at=pg_catalog.now(),released_by_user_id=actor.id where upload_id=upload.id and released_at is null;
+  elsif p_operation='purge' then
+    if public.has_permission('evidence.purge') is not true
+       or upload.state not in ('soft_deleted','purge_pending')
+       or upload.purge_eligible_at is null or upload.purge_eligible_at>pg_catalog.now()
+       or exists(select 1 from public.evidence_holds where upload_id=upload.id and released_at is null) then
+      raise exception 'evidence request unavailable';
+    end if;
+    if upload.state='soft_deleted' then
+      update public.biochemistry_test_uploads set state='purge_pending',reason_code='storage_delete_pending' where id=upload.id;
+    end if;
+  end if;
+  insert into public.evidence_audit_events(upload_id,stable_id,horse_id,test_id,event_type,actor_user_id,role_snapshot,outcome,reason_code)
+  values(upload.id,upload.stable_id,upload.horse_id,upload.test_id,p_operation,actor.id,actor_role,'accepted','opaque');
+  return true;
+end $$;
+
+revoke all on function public.mutate_test_evidence_lifecycle(text,uuid,uuid) from public, anon;
+grant execute on function public.mutate_test_evidence_lifecycle(text,uuid,uuid) to authenticated;
+
+create or replace function public.complete_test_evidence_purge(p_upload_id uuid,p_test_id uuid)
+returns boolean
+language plpgsql volatile security definer
+set search_path = pg_catalog, public, storage
+as $$
+declare upload public.biochemistry_test_uploads%rowtype;
+begin
+  select * into upload from public.biochemistry_test_uploads where id=p_upload_id and test_id=p_test_id for update;
+  if upload.id is null then raise exception 'evidence request unavailable'; end if;
+  if upload.state='purged' then return true; end if;
+  if upload.state<>'purge_pending'
+     or exists(select 1 from storage.objects where bucket_id=upload.bucket_id and name=upload.object_key) then
+    raise exception 'evidence request unavailable';
+  end if;
+  update public.biochemistry_test_uploads set
+    state='purged',file_name='purged',display_name='purged',storage_path='purged',
+    bucket_id=null,object_key=null,sha256_hex=null,detected_mime=null,content_type='application/octet-stream',
+    reason_code='governed_purge_complete',reconciled_at=pg_catalog.now()
+  where id=upload.id;
+  insert into public.evidence_audit_events(upload_id,stable_id,horse_id,test_id,event_type,role_snapshot,outcome,reason_code)
+  values(upload.id,upload.stable_id,upload.horse_id,upload.test_id,'purge_complete','system','completed','object_absence_verified');
+  return true;
+end $$;
+
+revoke all on function public.complete_test_evidence_purge(uuid,uuid) from public, anon, authenticated;
+grant execute on function public.complete_test_evidence_purge(uuid,uuid) to service_role;
+
+create or replace function public.reconcile_test_evidence_batch(p_limit integer default 25)
+returns table(attempt_id uuid,upload_id uuid,test_id uuid,bucket_id text,object_key text)
+language plpgsql volatile security definer
+set search_path = pg_catalog, public, storage
+as $$
+declare candidate record;
+begin
+  if p_limit not between 1 and 50 then raise exception 'invalid batch'; end if;
+  if not pg_try_advisory_xact_lock(23019001) then return; end if;
+  for candidate in
+    select a.id,a.upload_id,a.test_id,a.bucket_id,a.object_key from public.evidence_upload_attempts a
+    join public.biochemistry_test_uploads u on u.id=a.upload_id
+    where a.state='active' and a.expires_at<=pg_catalog.now()
+      and u.state in ('upload_pending','blocked')
+      and (u.reconciled_at is null or u.reconciled_at<pg_catalog.now()-interval '1 minute')
+      and (u.state<>'blocked' or u.reason_code='expired_object_compensation_pending')
+    order by a.expires_at for update skip locked limit p_limit
+  loop
+    update public.biochemistry_test_uploads set state='blocked',reason_code='expired_object_compensation_pending',reconciliation_attempts=reconciliation_attempts+1,reconciled_at=pg_catalog.now() where id=candidate.upload_id;
+    insert into public.evidence_audit_events(upload_id,event_type,outcome,reason_code,correlation_id)
+    values(candidate.upload_id,'reconcile_claimed','pending','storage_compensation_required',candidate.id);
+    attempt_id:=candidate.id; upload_id:=candidate.upload_id; test_id:=candidate.test_id;
+    bucket_id:=candidate.bucket_id; object_key:=candidate.object_key; return next;
+  end loop;
+end $$;
+
+revoke all on function public.reconcile_test_evidence_batch(integer) from public, anon, authenticated;
+grant execute on function public.reconcile_test_evidence_batch(integer) to service_role;
+
+create or replace function public.complete_test_evidence_compensation(p_attempt_id uuid,p_upload_id uuid)
+returns boolean
+language plpgsql volatile security definer
+set search_path = pg_catalog, public, storage
+as $$
+declare attempt public.evidence_upload_attempts%rowtype;
+declare upload public.biochemistry_test_uploads%rowtype;
+begin
+  select * into attempt from public.evidence_upload_attempts where id=p_attempt_id and upload_id=p_upload_id for update;
+  select * into upload from public.biochemistry_test_uploads where id=p_upload_id for update;
+  if attempt.id is null or upload.id is null then raise exception 'evidence request unavailable'; end if;
+  if attempt.state='expired' and upload.state='failed' then return true; end if;
+  if attempt.state<>'active' or attempt.expires_at>pg_catalog.now()
+     or upload.state<>'blocked' or upload.reason_code<>'expired_object_compensation_pending'
+     or exists(select 1 from storage.objects where bucket_id=attempt.bucket_id and name=attempt.object_key) then
+    raise exception 'evidence request unavailable';
+  end if;
+  update public.evidence_upload_attempts set state='expired' where id=attempt.id;
+  update public.biochemistry_test_uploads set state='failed',reason_code='expired_object_compensated',reconciled_at=pg_catalog.now() where id=upload.id;
+  insert into public.evidence_audit_events(upload_id,stable_id,horse_id,test_id,event_type,role_snapshot,outcome,reason_code,correlation_id)
+  values(upload.id,upload.stable_id,upload.horse_id,upload.test_id,'reconcile_complete','system','completed','object_absence_verified',attempt.id);
+  return true;
+end $$;
+
+revoke all on function public.complete_test_evidence_compensation(uuid,uuid) from public, anon, authenticated;
+grant execute on function public.complete_test_evidence_compensation(uuid,uuid) to service_role;
+
+comment on function public.initiate_test_evidence_upload(uuid,text,text,integer,text,boolean,uuid) is 'Sprint 023J candidate repository contract; remote application is separately governed.';
+comment on function public.mutate_test_evidence_lifecycle(text,uuid,uuid) is 'Fail-closed lifecycle; finalisation remains unavailable while safety adapters are absent.';
+comment on function public.complete_test_evidence_purge(uuid,uuid) is 'Service-role completion only after Storage API deletion and database-confirmed object absence.';
+comment on function public.reconcile_test_evidence_batch(integer) is 'Claims bounded retryable Storage compensation work with overlap lock; does not delete object rows.';
+comment on function public.complete_test_evidence_compensation(uuid,uuid) is 'Finalises expired metadata only after server Storage deletion and database-confirmed object absence.';
+
+-- <<< END 0019_test_evidence_remote_contract_completion.sql
+
+-- >>> BEGIN 0020_schema_qualified_pgcrypto_initiation.sql
+-- Sprint 023O additive correction: preserve the restricted function search path
+-- and make the approved pgcrypto dependency explicit.
+do $$
+begin
+  if not exists (
+    select 1
+    from pg_catalog.pg_extension e
+    join pg_catalog.pg_namespace n on n.oid=e.extnamespace
+    where e.extname='pgcrypto' and n.nspname='extensions'
+  ) or pg_catalog.to_regprocedure('extensions.digest(text,text)') is null then
+    raise exception 'required pgcrypto dependency unavailable';
+  end if;
+end $$;
+
+create or replace function public.initiate_test_evidence_upload(
+  p_test_id uuid,
+  p_declared_name text,
+  p_declared_mime text,
+  p_declared_bytes integer,
+  p_idempotency_key text,
+  p_acknowledgement boolean,
+  p_replaces_id uuid default null
+)
+returns table(attempt_id uuid,upload_id uuid,bucket_id text,object_key text,expires_at timestamptz)
+language plpgsql volatile security definer
+set search_path = pg_catalog, public
+as $$
+declare
+  actor public.users%rowtype;
+  target public.biochemistry_tests%rowtype;
+  predecessor public.biochemistry_test_uploads%rowtype;
+  normal_name text;
+  normal_mime text;
+  normal_category text;
+  normal_extension text;
+  idem_hash text;
+  occupied_count bigint;
+  occupied_bytes bigint;
+  new_upload_id uuid:=gen_random_uuid();
+  new_attempt_id uuid:=gen_random_uuid();
+  new_object_key text:='v1/'||gen_random_uuid()::text||'/'||gen_random_uuid()::text;
+  new_expiry timestamptz:=pg_catalog.now()+interval '24 hours';
+begin
+  if p_acknowledgement is not true or p_declared_bytes not between 1 and 5242880
+     or p_idempotency_key is null or length(p_idempotency_key) not between 16 and 200 then
+    raise exception 'evidence request unavailable';
+  end if;
+
+  normal_name:=left(regexp_replace(split_part(replace(p_declared_name,E'\\','/'),'/',-1),'[[:cntrl:]]','','g'),160);
+  normal_mime:=lower(trim(p_declared_mime));
+  normal_extension:=lower(substring(normal_name from '\\.([A-Za-z0-9]+)$'));
+  normal_category:=case
+    when normal_extension in ('jpg','jpeg') and normal_mime='image/jpeg' then 'jpeg'
+    when normal_extension='png' and normal_mime='image/png' then 'png'
+    when normal_extension='pdf' and normal_mime='application/pdf' then 'pdf'
+  end;
+  if normal_name='' or normal_category is null or normal_extension='csv' or normal_mime in ('text/csv','application/csv') then
+    raise exception 'evidence request unavailable';
+  end if;
+
+  select u.* into actor from public.users u
+  join public.member_profiles mp on mp.user_id=u.id and mp.is_active
+  where u.auth_user_id=auth.uid() and u.status='active';
+  select * into target from public.biochemistry_tests
+  where id=p_test_id and deleted_at is null for update;
+  if actor.id is null or target.id is null or target.stable_id is null
+     or public.can_write_biochemistry_horse(target.horse_id) is not true then
+    raise exception 'evidence request unavailable';
+  end if;
+  perform pg_advisory_xact_lock(hashtextextended(target.id::text,23));
+
+  idem_hash:=encode(extensions.digest(p_idempotency_key,'sha256'),'hex');
+  return query select a.id,a.upload_id,a.bucket_id,a.object_key,a.expires_at
+    from public.evidence_upload_attempts a
+    where a.user_id=actor.id and a.idempotency_key_hash=idem_hash and a.state='active' and a.expires_at>pg_catalog.now();
+  if found then return; end if;
+
+  if p_replaces_id is not null then
+    select * into predecessor from public.biochemistry_test_uploads
+    where id=p_replaces_id and test_id=target.id and state='available' and replaced_by_id is null for update;
+    if predecessor.id is null then raise exception 'evidence request unavailable'; end if;
+    if exists(select 1 from public.evidence_upload_attempts a join public.biochemistry_test_uploads u on u.id=a.upload_id
+      where u.replaces_id=predecessor.id and a.state='active' and a.expires_at>pg_catalog.now()) then
+      raise exception 'evidence request unavailable';
+    end if;
+  else
+    select count(*),coalesce(sum(size_bytes),0) into occupied_count,occupied_bytes
+    from public.biochemistry_test_uploads
+    where test_id=target.id and state in ('upload_pending','uploaded_unverified','legacy_unverified','scan_pending','sanitisation_pending','available','blocked','soft_deleted','restore_pending','purge_pending','object_missing')
+      and not(state='soft_deleted' and replaced_by_id is not null);
+    if occupied_count+1>10 or occupied_bytes+p_declared_bytes>31457280 then
+      raise exception 'evidence request unavailable';
+    end if;
+  end if;
+
+  insert into public.biochemistry_test_uploads(
+    id,test_id,horse_id,stable_id,file_name,file_category,content_type,size_bytes,storage_path,
+    uploaded_by_user_id,object_id,bucket_id,object_key,display_name,extension,declared_mime,state,
+    version_group_id,version_no,replaces_id,acknowledgement_at,reason_code
+  ) values (
+    new_upload_id,target.id,target.horse_id,target.stable_id,normal_name,normal_category,normal_mime,p_declared_bytes,new_object_key,
+    actor.id,gen_random_uuid(),'test-evidence',new_object_key,normal_name,normal_extension,normal_mime,'upload_pending',
+    coalesce(predecessor.version_group_id,new_upload_id),coalesce(predecessor.version_no+1,1),predecessor.id,pg_catalog.now(),'awaiting_direct_transfer'
+  );
+  insert into public.evidence_upload_attempts(id,idempotency_key_hash,user_id,test_id,horse_id,stable_id,upload_id,bucket_id,object_key,declared_name,declared_mime,declared_bytes,reserved_bytes,state,expires_at)
+  values(new_attempt_id,idem_hash,actor.id,target.id,target.horse_id,target.stable_id,new_upload_id,'test-evidence',new_object_key,normal_name,normal_mime,p_declared_bytes,p_declared_bytes,'active',new_expiry);
+  insert into public.evidence_audit_events(upload_id,stable_id,horse_id,test_id,event_type,actor_user_id,role_snapshot,outcome,reason_code,correlation_id)
+  values(new_upload_id,target.stable_id,target.horse_id,target.id,'upload_initiated',actor.id,actor.primary_role_code,'accepted','awaiting_direct_transfer',new_attempt_id);
+  return query select new_attempt_id,new_upload_id,'test-evidence'::text,new_object_key,new_expiry;
+end $$;
+
+revoke all on function public.initiate_test_evidence_upload(uuid,text,text,integer,text,boolean,uuid) from public, anon;
+grant execute on function public.initiate_test_evidence_upload(uuid,text,text,integer,text,boolean,uuid) to authenticated;
+
+comment on function public.initiate_test_evidence_upload(uuid,text,text,integer,text,boolean,uuid) is
+  'Sprint 023O additive pgcrypto resolution; governed initiation remains fail closed and remote proof is separately governed.';
+
+-- <<< END 0020_schema_qualified_pgcrypto_initiation.sql
+
+-- >>> BEGIN 0021_postgresql_filename_extension_parser_correction.sql
+-- Sprint 023O additive correction: preserve the restricted function search path
+-- and make the approved pgcrypto dependency explicit.
+do $$
+begin
+  if not exists (
+    select 1
+    from pg_catalog.pg_extension e
+    join pg_catalog.pg_namespace n on n.oid=e.extnamespace
+    where e.extname='pgcrypto' and n.nspname='extensions'
+  ) or pg_catalog.to_regprocedure('extensions.digest(text,text)') is null then
+    raise exception 'required pgcrypto dependency unavailable';
+  end if;
+end $$;
+
+create or replace function public.initiate_test_evidence_upload(
+  p_test_id uuid,
+  p_declared_name text,
+  p_declared_mime text,
+  p_declared_bytes integer,
+  p_idempotency_key text,
+  p_acknowledgement boolean,
+  p_replaces_id uuid default null
+)
+returns table(attempt_id uuid,upload_id uuid,bucket_id text,object_key text,expires_at timestamptz)
+language plpgsql volatile security definer
+set search_path = pg_catalog, public
+as $$
+declare
+  actor public.users%rowtype;
+  target public.biochemistry_tests%rowtype;
+  predecessor public.biochemistry_test_uploads%rowtype;
+  normal_name text;
+  normal_mime text;
+  normal_category text;
+  normal_extension text;
+  idem_hash text;
+  occupied_count bigint;
+  occupied_bytes bigint;
+  new_upload_id uuid:=gen_random_uuid();
+  new_attempt_id uuid:=gen_random_uuid();
+  new_object_key text:='v1/'||gen_random_uuid()::text||'/'||gen_random_uuid()::text;
+  new_expiry timestamptz:=pg_catalog.now()+interval '24 hours';
+begin
+  if p_acknowledgement is not true or p_declared_bytes not between 1 and 5242880
+     or p_idempotency_key is null or length(p_idempotency_key) not between 16 and 200 then
+    raise exception 'evidence request unavailable';
+  end if;
+
+  normal_name:=left(regexp_replace(split_part(replace(p_declared_name,E'\\','/'),'/',-1),'[[:cntrl:]]','','g'),160);
+  normal_mime:=lower(trim(p_declared_mime));
+  normal_extension:=lower(substring(normal_name from '\.([A-Za-z0-9]+)$'));
+  normal_category:=case
+    when normal_extension in ('jpg','jpeg') and normal_mime='image/jpeg' then 'jpeg'
+    when normal_extension='png' and normal_mime='image/png' then 'png'
+    when normal_extension='pdf' and normal_mime='application/pdf' then 'pdf'
+  end;
+  if normal_name='' or normal_category is null or normal_extension='csv' or normal_mime in ('text/csv','application/csv') then
+    raise exception 'evidence request unavailable';
+  end if;
+
+  select u.* into actor from public.users u
+  join public.member_profiles mp on mp.user_id=u.id and mp.is_active
+  where u.auth_user_id=auth.uid() and u.status='active';
+  select * into target from public.biochemistry_tests
+  where id=p_test_id and deleted_at is null for update;
+  if actor.id is null or target.id is null or target.stable_id is null
+     or public.can_write_biochemistry_horse(target.horse_id) is not true then
+    raise exception 'evidence request unavailable';
+  end if;
+  perform pg_advisory_xact_lock(hashtextextended(target.id::text,23));
+
+  idem_hash:=encode(extensions.digest(p_idempotency_key,'sha256'),'hex');
+  return query select a.id,a.upload_id,a.bucket_id,a.object_key,a.expires_at
+    from public.evidence_upload_attempts a
+    where a.user_id=actor.id and a.idempotency_key_hash=idem_hash and a.state='active' and a.expires_at>pg_catalog.now();
+  if found then return; end if;
+
+  if p_replaces_id is not null then
+    select * into predecessor from public.biochemistry_test_uploads
+    where id=p_replaces_id and test_id=target.id and state='available' and replaced_by_id is null for update;
+    if predecessor.id is null then raise exception 'evidence request unavailable'; end if;
+    if exists(select 1 from public.evidence_upload_attempts a join public.biochemistry_test_uploads u on u.id=a.upload_id
+      where u.replaces_id=predecessor.id and a.state='active' and a.expires_at>pg_catalog.now()) then
+      raise exception 'evidence request unavailable';
+    end if;
+  else
+    select count(*),coalesce(sum(size_bytes),0) into occupied_count,occupied_bytes
+    from public.biochemistry_test_uploads
+    where test_id=target.id and state in ('upload_pending','uploaded_unverified','legacy_unverified','scan_pending','sanitisation_pending','available','blocked','soft_deleted','restore_pending','purge_pending','object_missing')
+      and not(state='soft_deleted' and replaced_by_id is not null);
+    if occupied_count+1>10 or occupied_bytes+p_declared_bytes>31457280 then
+      raise exception 'evidence request unavailable';
+    end if;
+  end if;
+
+  insert into public.biochemistry_test_uploads(
+    id,test_id,horse_id,stable_id,file_name,file_category,content_type,size_bytes,storage_path,
+    uploaded_by_user_id,object_id,bucket_id,object_key,display_name,extension,declared_mime,state,
+    version_group_id,version_no,replaces_id,acknowledgement_at,reason_code
+  ) values (
+    new_upload_id,target.id,target.horse_id,target.stable_id,normal_name,normal_category,normal_mime,p_declared_bytes,new_object_key,
+    actor.id,gen_random_uuid(),'test-evidence',new_object_key,normal_name,normal_extension,normal_mime,'upload_pending',
+    coalesce(predecessor.version_group_id,new_upload_id),coalesce(predecessor.version_no+1,1),predecessor.id,pg_catalog.now(),'awaiting_direct_transfer'
+  );
+  insert into public.evidence_upload_attempts(id,idempotency_key_hash,user_id,test_id,horse_id,stable_id,upload_id,bucket_id,object_key,declared_name,declared_mime,declared_bytes,reserved_bytes,state,expires_at)
+  values(new_attempt_id,idem_hash,actor.id,target.id,target.horse_id,target.stable_id,new_upload_id,'test-evidence',new_object_key,normal_name,normal_mime,p_declared_bytes,p_declared_bytes,'active',new_expiry);
+  insert into public.evidence_audit_events(upload_id,stable_id,horse_id,test_id,event_type,actor_user_id,role_snapshot,outcome,reason_code,correlation_id)
+  values(new_upload_id,target.stable_id,target.horse_id,target.id,'upload_initiated',actor.id,actor.primary_role_code,'accepted','awaiting_direct_transfer',new_attempt_id);
+  return query select new_attempt_id,new_upload_id,'test-evidence'::text,new_object_key,new_expiry;
+end $$;
+
+revoke all on function public.initiate_test_evidence_upload(uuid,text,text,integer,text,boolean,uuid) from public, anon;
+grant execute on function public.initiate_test_evidence_upload(uuid,text,text,integer,text,boolean,uuid) to authenticated;
+
+comment on function public.initiate_test_evidence_upload(uuid,text,text,integer,text,boolean,uuid) is
+  'Sprint 023P additive PostgreSQL filename extension parser correction; governed initiation remains fail closed and remote proof is separately governed.';
+
+-- <<< END 0021_postgresql_filename_extension_parser_correction.sql
+
+-- >>> BEGIN 0022_public_trainer_enquiries.sql
+-- Sprint 029N: private, service-role-only public trainer enquiries.
+
+create table public.trainer_enquiry_abuse_buckets (
+  bucket_hash text primary key,
+  window_started_at timestamptz not null,
+  accepted_count smallint not null default 0,
+  expires_at timestamptz not null,
+  constraint trainer_enquiry_bucket_hash_check check (bucket_hash ~ '^[0-9a-f]{64}$'),
+  constraint trainer_enquiry_bucket_count_check check (accepted_count between 0 and 5),
+  constraint trainer_enquiry_bucket_expiry_check check (expires_at = window_started_at + interval '24 hours')
+);
+
+create table public.trainer_enquiries (
+  id uuid primary key default gen_random_uuid(),
+  public_reference text not null unique,
+  idempotency_hash text not null unique,
+  abuse_bucket_hash text not null references public.trainer_enquiry_abuse_buckets(bucket_hash) on delete restrict,
+  trainer_name text not null,
+  stable_name text not null,
+  stable_address text,
+  phone text not null,
+  email text not null,
+  horse_volume integer not null,
+  referred_by text,
+  notice_version text not null,
+  notice_acknowledged_at timestamptz not null,
+  provider_class text not null,
+  notification_status text not null default 'pending',
+  notification_attempts smallint not null default 0,
+  notification_claim_token uuid,
+  notification_claim_expires_at timestamptz,
+  notification_next_attempt_at timestamptz,
+  notification_last_attempt_at timestamptz,
+  notification_error_class text,
+  created_at timestamptz not null,
+  expires_at timestamptz not null,
+  constraint trainer_enquiry_reference_check check (public_reference ~ '^PP-[A-F0-9]{16}$'),
+  constraint trainer_enquiry_idempotency_hash_check check (idempotency_hash ~ '^[0-9a-f]{64}$'),
+  constraint trainer_enquiry_trainer_name_check check (char_length(trainer_name) between 2 and 120 and trainer_name !~ '[[:cntrl:]]'),
+  constraint trainer_enquiry_stable_name_check check (char_length(stable_name) between 2 and 160 and stable_name !~ '[[:cntrl:]]'),
+  constraint trainer_enquiry_stable_address_check check (stable_address is null or (char_length(stable_address) between 1 and 500 and stable_address !~ '[[:cntrl:]]')),
+  constraint trainer_enquiry_phone_check check (char_length(phone) between 6 and 40 and phone !~ '[[:cntrl:]]'),
+  constraint trainer_enquiry_email_check check (char_length(email) between 3 and 254 and email !~ '[[:cntrl:]]' and position('@' in email) > 1),
+  constraint trainer_enquiry_horse_volume_check check (horse_volume between 1 and 9999),
+  constraint trainer_enquiry_referred_by_check check (referred_by is null or (char_length(referred_by) between 1 and 160 and referred_by !~ '[[:cntrl:]]')),
+  constraint trainer_enquiry_notice_version_check check (char_length(notice_version) between 1 and 40 and notice_version !~ '[[:cntrl:]]'),
+  constraint trainer_enquiry_provider_class_check check (provider_class in ('google_workspace','microsoft_365','amazon_ses','resend','postmark','mailgun','sendgrid')),
+  constraint trainer_enquiry_notification_status_check check (notification_status in ('pending','attempting','retryable','sent','delivery_unknown')),
+  constraint trainer_enquiry_notification_attempts_check check (notification_attempts between 0 and 3),
+  constraint trainer_enquiry_claim_pair_check check ((notification_claim_token is null) = (notification_claim_expires_at is null)),
+  constraint trainer_enquiry_error_class_check check (notification_error_class is null or notification_error_class in ('connection','authentication','pre_envelope','ambiguous','unexpected')),
+  constraint trainer_enquiry_expiry_check check (expires_at = created_at + interval '90 days')
+);
+
+create index trainer_enquiries_expiry_ix on public.trainer_enquiries(expires_at);
+create index trainer_enquiries_notification_ix on public.trainer_enquiries(notification_status, notification_next_attempt_at, created_at);
+create index trainer_enquiry_abuse_expiry_ix on public.trainer_enquiry_abuse_buckets(expires_at);
+
+alter table public.trainer_enquiries enable row level security;
+alter table public.trainer_enquiry_abuse_buckets enable row level security;
+
+revoke all on table public.trainer_enquiries from public, anon, authenticated;
+revoke all on table public.trainer_enquiry_abuse_buckets from public, anon, authenticated;
+grant select, insert, update, delete on table public.trainer_enquiries to service_role;
+grant select, insert, update, delete on table public.trainer_enquiry_abuse_buckets to service_role;
+
+create or replace function public.accept_trainer_enquiry(
+  p_public_reference text,
+  p_idempotency_hash text,
+  p_abuse_bucket_hash text,
+  p_window_started_at timestamptz,
+  p_trainer_name text,
+  p_stable_name text,
+  p_stable_address text,
+  p_phone text,
+  p_email text,
+  p_horse_volume integer,
+  p_referred_by text,
+  p_notice_version text,
+  p_provider_class text
+)
+returns table(public_reference text, created_new boolean, notification_status text)
+language plpgsql volatile security definer
+set search_path = pg_catalog, public
+as $$
+declare
+  v_now timestamptz := pg_catalog.now();
+  v_count integer;
+begin
+  perform pg_catalog.pg_advisory_xact_lock(pg_catalog.hashtextextended(p_idempotency_hash, 29022));
+
+  return query
+    select e.public_reference, false, e.notification_status
+    from public.trainer_enquiries e
+    where e.idempotency_hash = p_idempotency_hash;
+  if found then return; end if;
+
+  insert into public.trainer_enquiry_abuse_buckets(bucket_hash, window_started_at, accepted_count, expires_at)
+  values(p_abuse_bucket_hash, p_window_started_at, 1, p_window_started_at + interval '24 hours')
+  on conflict(bucket_hash) do update
+    set accepted_count = public.trainer_enquiry_abuse_buckets.accepted_count + 1
+    where public.trainer_enquiry_abuse_buckets.accepted_count < 5
+      and public.trainer_enquiry_abuse_buckets.expires_at > v_now;
+  get diagnostics v_count = row_count;
+  if v_count <> 1 then
+    raise exception using errcode = 'P0001', message = 'enquiry_limit';
+  end if;
+
+  insert into public.trainer_enquiries(
+    public_reference, idempotency_hash, abuse_bucket_hash,
+    trainer_name, stable_name, stable_address, phone, email, horse_volume, referred_by,
+    notice_version, notice_acknowledged_at, provider_class,
+    notification_status, created_at, expires_at
+  ) values (
+    p_public_reference, p_idempotency_hash, p_abuse_bucket_hash,
+    p_trainer_name, p_stable_name, nullif(p_stable_address, ''), p_phone, p_email, p_horse_volume, nullif(p_referred_by, ''),
+    p_notice_version, v_now, p_provider_class,
+    'pending', v_now, v_now + interval '90 days'
+  );
+
+  return query select p_public_reference, true, 'pending'::text;
+end
+$$;
+
+create or replace function public.claim_trainer_enquiry_notification(p_public_reference text)
+returns table(
+  public_reference text, claim_token uuid, trainer_name text, stable_name text,
+  stable_address text, phone text, email text, horse_volume integer, referred_by text,
+  created_at timestamptz, provider_class text, notification_attempts smallint
+)
+language plpgsql volatile security definer
+set search_path = pg_catalog, public
+as $$
+declare
+  v_now timestamptz := pg_catalog.now();
+  v_token uuid := gen_random_uuid();
+begin
+  update public.trainer_enquiries e set
+    notification_status = 'attempting',
+    notification_attempts = e.notification_attempts + 1,
+    notification_claim_token = v_token,
+    notification_claim_expires_at = v_now + interval '10 minutes',
+    notification_last_attempt_at = v_now,
+    notification_error_class = null
+  where e.public_reference = p_public_reference
+    and e.notification_attempts < 3
+    and (
+      e.notification_status = 'pending'
+      or (e.notification_status = 'retryable' and coalesce(e.notification_next_attempt_at, v_now) <= v_now)
+    )
+  returning e.public_reference, v_token, e.trainer_name, e.stable_name,
+    e.stable_address, e.phone, e.email, e.horse_volume, e.referred_by,
+    e.created_at, e.provider_class, e.notification_attempts
+  into public_reference, claim_token, trainer_name, stable_name,
+    stable_address, phone, email, horse_volume, referred_by,
+    created_at, provider_class, notification_attempts;
+  if found then return next; end if;
+end
+$$;
+
+create or replace function public.claim_trainer_enquiry_retry_batch(p_limit integer default 10)
+returns table(
+  public_reference text, claim_token uuid, trainer_name text, stable_name text,
+  stable_address text, phone text, email text, horse_volume integer, referred_by text,
+  created_at timestamptz, provider_class text, notification_attempts smallint
+)
+language plpgsql volatile security definer
+set search_path = pg_catalog, public
+as $$
+declare
+  v_row record;
+begin
+  if p_limit not between 1 and 25 then raise exception 'invalid batch'; end if;
+  for v_row in
+    select e.public_reference
+    from public.trainer_enquiries e
+    where e.notification_status = 'retryable'
+      and e.notification_attempts < 3
+      and coalesce(e.notification_next_attempt_at, pg_catalog.now()) <= pg_catalog.now()
+    order by e.notification_next_attempt_at nulls first, e.created_at
+    for update skip locked limit p_limit
+  loop
+    return query select * from public.claim_trainer_enquiry_notification(v_row.public_reference);
+  end loop;
+end
+$$;
+
+create or replace function public.complete_trainer_enquiry_notification(
+  p_public_reference text,
+  p_claim_token uuid,
+  p_outcome text,
+  p_error_class text default null
+)
+returns boolean
+language plpgsql volatile security definer
+set search_path = pg_catalog, public
+as $$
+declare
+  v_count integer;
+  v_delay interval;
+begin
+  if p_outcome not in ('sent','retryable','delivery_unknown') then raise exception 'invalid outcome'; end if;
+  if p_error_class is not null and p_error_class not in ('connection','authentication','pre_envelope','ambiguous','unexpected') then raise exception 'invalid error class'; end if;
+  v_delay := case
+    when p_outcome = 'retryable' then interval '5 minutes' * power(2, greatest(0, (
+      select e.notification_attempts - 1 from public.trainer_enquiries e where e.public_reference = p_public_reference
+    )))
+    else null
+  end;
+  update public.trainer_enquiries e set
+    notification_status = case when p_outcome = 'retryable' and e.notification_attempts >= 3 then 'delivery_unknown' else p_outcome end,
+    notification_next_attempt_at = case when p_outcome = 'retryable' and e.notification_attempts < 3 then pg_catalog.now() + v_delay else null end,
+    notification_claim_token = null,
+    notification_claim_expires_at = null,
+    notification_error_class = p_error_class
+  where e.public_reference = p_public_reference
+    and e.notification_status = 'attempting'
+    and e.notification_claim_token = p_claim_token;
+  get diagnostics v_count = row_count;
+  return v_count = 1;
+end
+$$;
+
+create or replace function public.maintain_trainer_enquiries(p_limit integer default 100)
+returns table(stale_unknown integer, enquiries_deleted integer, buckets_deleted integer)
+language plpgsql volatile security definer
+set search_path = pg_catalog, public
+as $$
+declare v_stale integer; v_enquiries integer; v_buckets integer;
+begin
+  if p_limit not between 1 and 500 then raise exception 'invalid batch'; end if;
+  with changed as (
+    update public.trainer_enquiries e set
+      notification_status = 'delivery_unknown',
+      notification_claim_token = null,
+      notification_claim_expires_at = null,
+      notification_next_attempt_at = null,
+      notification_error_class = 'ambiguous'
+    where e.id in (
+      select id from public.trainer_enquiries
+      where notification_status = 'attempting' and notification_claim_expires_at <= pg_catalog.now()
+      order by notification_claim_expires_at for update skip locked limit p_limit
+    ) returning 1
+  ) select count(*) into v_stale from changed;
+  with removed as (
+    delete from public.trainer_enquiries e where e.id in (
+      select id from public.trainer_enquiries where expires_at <= pg_catalog.now()
+      order by expires_at for update skip locked limit p_limit
+    ) returning 1
+  ) select count(*) into v_enquiries from removed;
+  with removed as (
+    delete from public.trainer_enquiry_abuse_buckets b where b.bucket_hash in (
+      select bucket_hash from public.trainer_enquiry_abuse_buckets
+      where expires_at <= pg_catalog.now()
+        and not exists(select 1 from public.trainer_enquiries e where e.abuse_bucket_hash = b.bucket_hash)
+      order by expires_at for update skip locked limit p_limit
+    ) returning 1
+  ) select count(*) into v_buckets from removed;
+  return query select v_stale, v_enquiries, v_buckets;
+end
+$$;
+
+create or replace function public.trainer_enquiry_fixture_status(p_public_reference text)
+returns table(row_count integer, bucket_count integer, notification_status text, notification_attempts smallint)
+language sql stable security definer
+set search_path = pg_catalog, public
+as $$
+  select
+    count(e.id)::integer,
+    count(b.bucket_hash)::integer,
+    max(e.notification_status),
+    coalesce(max(e.notification_attempts), 0)::smallint
+  from public.trainer_enquiries e
+  left join public.trainer_enquiry_abuse_buckets b on b.bucket_hash = e.abuse_bucket_hash
+  where e.public_reference = p_public_reference;
+$$;
+
+create or replace function public.delete_trainer_enquiry_fixture(p_public_reference text)
+returns table(rows_deleted integer, buckets_deleted integer)
+language plpgsql volatile security definer
+set search_path = pg_catalog, public
+as $$
+declare v_bucket text; v_rows integer; v_buckets integer;
+begin
+  select e.abuse_bucket_hash into v_bucket from public.trainer_enquiries e where e.public_reference = p_public_reference for update;
+  delete from public.trainer_enquiries where public_reference = p_public_reference;
+  get diagnostics v_rows = row_count;
+  if v_bucket is not null then
+    delete from public.trainer_enquiry_abuse_buckets b
+    where b.bucket_hash = v_bucket and not exists(select 1 from public.trainer_enquiries e where e.abuse_bucket_hash = b.bucket_hash);
+    get diagnostics v_buckets = row_count;
+  else v_buckets := 0;
+  end if;
+  return query select v_rows, v_buckets;
+end
+$$;
+
+create or replace function public.prove_trainer_enquiry_rate_limit(
+  p_bucket_hash text,
+  p_idempotency_hash text,
+  p_public_reference text,
+  p_window_started_at timestamptz,
+  p_provider_class text
+)
+returns boolean
+language plpgsql volatile security definer
+set search_path = pg_catalog, public
+as $$
+declare v_limited boolean := false;
+begin
+  insert into public.trainer_enquiry_abuse_buckets(bucket_hash, window_started_at, accepted_count, expires_at)
+  values(p_bucket_hash, p_window_started_at, 5, p_window_started_at + interval '24 hours');
+  begin
+    perform * from public.accept_trainer_enquiry(
+      p_public_reference, p_idempotency_hash, p_bucket_hash, p_window_started_at,
+      'Sprint 029N Synthetic Trainer', 'Sprint 029N Synthetic Stable', null,
+      '+61 400 000 000', 'sprint-029n-rate@example.invalid', 1, null,
+      '2026-08-05', p_provider_class
+    );
+  exception when sqlstate 'P0001' then
+    v_limited := true;
+  end;
+  delete from public.trainer_enquiries where public_reference = p_public_reference;
+  delete from public.trainer_enquiry_abuse_buckets where bucket_hash = p_bucket_hash;
+  return v_limited
+    and not exists(select 1 from public.trainer_enquiries where public_reference = p_public_reference)
+    and not exists(select 1 from public.trainer_enquiry_abuse_buckets where bucket_hash = p_bucket_hash);
+end
+$$;
+
+create or replace function public.trainer_enquiry_schema_status()
+returns table(
+  enquiry_table_count integer, bucket_table_count integer, rls_table_count integer,
+  browser_policy_count integer, browser_grant_count integer, service_function_count integer,
+  enquiry_row_count integer
+)
+language sql stable security definer
+set search_path = pg_catalog, public
+as $$
+  select
+    (select count(*)::integer from pg_catalog.pg_class c join pg_catalog.pg_namespace n on n.oid=c.relnamespace where n.nspname='public' and c.relname='trainer_enquiries' and c.relkind='r'),
+    (select count(*)::integer from pg_catalog.pg_class c join pg_catalog.pg_namespace n on n.oid=c.relnamespace where n.nspname='public' and c.relname='trainer_enquiry_abuse_buckets' and c.relkind='r'),
+    (select count(*)::integer from pg_catalog.pg_class c join pg_catalog.pg_namespace n on n.oid=c.relnamespace where n.nspname='public' and c.relname in ('trainer_enquiries','trainer_enquiry_abuse_buckets') and c.relrowsecurity),
+    (select count(*)::integer from pg_catalog.pg_policies p where p.schemaname='public' and p.tablename in ('trainer_enquiries','trainer_enquiry_abuse_buckets')),
+    (select count(*)::integer from information_schema.role_table_grants g where g.table_schema='public' and g.table_name in ('trainer_enquiries','trainer_enquiry_abuse_buckets') and g.grantee in ('anon','authenticated','PUBLIC')),
+    (select count(*)::integer from pg_catalog.pg_proc p join pg_catalog.pg_namespace n on n.oid=p.pronamespace where n.nspname='public' and p.proname in ('accept_trainer_enquiry','claim_trainer_enquiry_notification','claim_trainer_enquiry_retry_batch','complete_trainer_enquiry_notification','maintain_trainer_enquiries','trainer_enquiry_fixture_status','delete_trainer_enquiry_fixture','prove_trainer_enquiry_rate_limit','trainer_enquiry_schema_status')),
+    (select count(*)::integer from public.trainer_enquiries);
+$$;
+
+revoke all on function public.accept_trainer_enquiry(text,text,text,timestamptz,text,text,text,text,text,integer,text,text,text) from public, anon, authenticated;
+revoke all on function public.claim_trainer_enquiry_notification(text) from public, anon, authenticated;
+revoke all on function public.claim_trainer_enquiry_retry_batch(integer) from public, anon, authenticated;
+revoke all on function public.complete_trainer_enquiry_notification(text,uuid,text,text) from public, anon, authenticated;
+revoke all on function public.maintain_trainer_enquiries(integer) from public, anon, authenticated;
+revoke all on function public.trainer_enquiry_fixture_status(text) from public, anon, authenticated;
+revoke all on function public.delete_trainer_enquiry_fixture(text) from public, anon, authenticated;
+revoke all on function public.prove_trainer_enquiry_rate_limit(text,text,text,timestamptz,text) from public, anon, authenticated;
+revoke all on function public.trainer_enquiry_schema_status() from public, anon, authenticated;
+
+grant execute on function public.accept_trainer_enquiry(text,text,text,timestamptz,text,text,text,text,text,integer,text,text,text) to service_role;
+grant execute on function public.claim_trainer_enquiry_notification(text) to service_role;
+grant execute on function public.claim_trainer_enquiry_retry_batch(integer) to service_role;
+grant execute on function public.complete_trainer_enquiry_notification(text,uuid,text,text) to service_role;
+grant execute on function public.maintain_trainer_enquiries(integer) to service_role;
+grant execute on function public.trainer_enquiry_fixture_status(text) to service_role;
+grant execute on function public.delete_trainer_enquiry_fixture(text) to service_role;
+grant execute on function public.prove_trainer_enquiry_rate_limit(text,text,text,timestamptz,text) to service_role;
+grant execute on function public.trainer_enquiry_schema_status() to service_role;
+
+comment on table public.trainer_enquiries is 'Sprint 029N private public-enquiry store; service role only; expires after 90 days.';
+comment on table public.trainer_enquiry_abuse_buckets is 'Sprint 029N HMAC-only abuse buckets; expires within 24 hours.';
+
+-- <<< END 0022_public_trainer_enquiries.sql
+
+-- >>> BEGIN 0023_public_trainer_enquiry_retention_correction.sql
+-- Sprint 029O: correct public trainer-enquiry abuse-hash retention without changing enquiry retention.
+
+create extension if not exists pg_cron;
+
+-- Refuse to proceed if the deterministic job name is already bound to anything else.
+do $$
+declare
+  v_count integer;
+  v_schedule text;
+  v_command text;
+  v_active boolean;
+begin
+  select count(*)::integer into v_count
+  from cron.job
+  where jobname = 'trainer-enquiry-abuse-cleanup-hourly';
+
+  if v_count > 1 then
+    raise exception 'trainer enquiry cleanup job conflict';
+  elsif v_count = 1 then
+    select schedule, command, active
+      into v_schedule, v_command, v_active
+    from cron.job
+    where jobname = 'trainer-enquiry-abuse-cleanup-hourly';
+
+    if v_schedule is distinct from '5 * * * *'
+       or v_command is distinct from 'select public.cleanup_trainer_enquiry_abuse_buckets(500);'
+       or v_active is distinct from true then
+      raise exception 'trainer enquiry cleanup job conflict';
+    end if;
+  end if;
+end
+$$;
+
+alter table public.trainer_enquiries
+  drop constraint trainer_enquiries_abuse_bucket_hash_fkey;
+alter table public.trainer_enquiries
+  alter column abuse_bucket_hash drop not null;
+alter table public.trainer_enquiries
+  add constraint trainer_enquiries_abuse_bucket_hash_fkey
+  foreign key (abuse_bucket_hash)
+  references public.trainer_enquiry_abuse_buckets(bucket_hash)
+  on delete set null;
+
+alter table public.trainer_enquiry_abuse_buckets
+  drop constraint trainer_enquiry_bucket_expiry_check;
+update public.trainer_enquiry_abuse_buckets
+set expires_at = window_started_at + interval '2 hours'
+where expires_at is distinct from window_started_at + interval '2 hours';
+alter table public.trainer_enquiry_abuse_buckets
+  add constraint trainer_enquiry_bucket_expiry_check
+  check (expires_at = window_started_at + interval '2 hours');
+
+create or replace function public.cleanup_trainer_enquiry_abuse_buckets(p_limit integer default 500)
+returns integer
+language plpgsql volatile security definer
+set search_path = pg_catalog, public
+as $$
+declare v_deleted integer;
+begin
+  if p_limit not between 1 and 500 then raise exception 'invalid batch'; end if;
+  with targets as (
+    select b.bucket_hash
+    from public.trainer_enquiry_abuse_buckets b
+    where b.expires_at <= pg_catalog.now()
+    order by b.expires_at, b.bucket_hash
+    for update skip locked
+    limit p_limit
+  ), removed as (
+    delete from public.trainer_enquiry_abuse_buckets b
+    using targets t
+    where b.bucket_hash = t.bucket_hash
+    returning 1
+  )
+  select count(*)::integer into v_deleted from removed;
+  return v_deleted;
+end
+$$;
+
+create or replace function public.accept_trainer_enquiry(
+  p_public_reference text,
+  p_idempotency_hash text,
+  p_abuse_bucket_hash text,
+  p_window_started_at timestamptz,
+  p_trainer_name text,
+  p_stable_name text,
+  p_stable_address text,
+  p_phone text,
+  p_email text,
+  p_horse_volume integer,
+  p_referred_by text,
+  p_notice_version text,
+  p_provider_class text
+)
+returns table(public_reference text, created_new boolean, notification_status text)
+language plpgsql volatile security definer
+set search_path = pg_catalog, public
+as $$
+declare
+  v_now timestamptz := pg_catalog.now();
+  v_count integer;
+begin
+  perform pg_catalog.pg_advisory_xact_lock(pg_catalog.hashtextextended(p_idempotency_hash, 29022));
+
+  return query
+    select e.public_reference, false, e.notification_status
+    from public.trainer_enquiries e
+    where e.idempotency_hash = p_idempotency_hash;
+  if found then return; end if;
+
+  perform public.cleanup_trainer_enquiry_abuse_buckets(25);
+
+  insert into public.trainer_enquiry_abuse_buckets(bucket_hash, window_started_at, accepted_count, expires_at)
+  values(p_abuse_bucket_hash, p_window_started_at, 1, p_window_started_at + interval '2 hours')
+  on conflict(bucket_hash) do update
+    set accepted_count = public.trainer_enquiry_abuse_buckets.accepted_count + 1
+    where public.trainer_enquiry_abuse_buckets.accepted_count < 5
+      and public.trainer_enquiry_abuse_buckets.expires_at > v_now;
+  get diagnostics v_count = row_count;
+  if v_count <> 1 then
+    raise exception using errcode = 'P0001', message = 'enquiry_limit';
+  end if;
+
+  insert into public.trainer_enquiries(
+    public_reference, idempotency_hash, abuse_bucket_hash,
+    trainer_name, stable_name, stable_address, phone, email, horse_volume, referred_by,
+    notice_version, notice_acknowledged_at, provider_class,
+    notification_status, created_at, expires_at
+  ) values (
+    p_public_reference, p_idempotency_hash, p_abuse_bucket_hash,
+    p_trainer_name, p_stable_name, nullif(p_stable_address, ''), p_phone, p_email, p_horse_volume, nullif(p_referred_by, ''),
+    p_notice_version, v_now, p_provider_class,
+    'pending', v_now, v_now + interval '90 days'
+  );
+
+  return query select p_public_reference, true, 'pending'::text;
+end
+$$;
+
+create or replace function public.maintain_trainer_enquiries(p_limit integer default 100)
+returns table(stale_unknown integer, enquiries_deleted integer, buckets_deleted integer)
+language plpgsql volatile security definer
+set search_path = pg_catalog, public
+as $$
+declare v_stale integer; v_enquiries integer; v_buckets integer;
+begin
+  if p_limit not between 1 and 500 then raise exception 'invalid batch'; end if;
+  with changed as (
+    update public.trainer_enquiries e set
+      notification_status = 'delivery_unknown',
+      notification_claim_token = null,
+      notification_claim_expires_at = null,
+      notification_next_attempt_at = null,
+      notification_error_class = 'ambiguous'
+    where e.id in (
+      select id from public.trainer_enquiries
+      where notification_status = 'attempting' and notification_claim_expires_at <= pg_catalog.now()
+      order by notification_claim_expires_at for update skip locked limit p_limit
+    ) returning 1
+  ) select count(*)::integer into v_stale from changed;
+  with removed as (
+    delete from public.trainer_enquiries e where e.id in (
+      select id from public.trainer_enquiries where expires_at <= pg_catalog.now()
+      order by expires_at for update skip locked limit p_limit
+    ) returning 1
+  ) select count(*)::integer into v_enquiries from removed;
+  select public.cleanup_trainer_enquiry_abuse_buckets(p_limit) into v_buckets;
+  return query select v_stale, v_enquiries, v_buckets;
+end
+$$;
+
+create or replace function public.trainer_enquiry_fixture_status(p_public_reference text)
+returns table(row_count integer, bucket_count integer, notification_status text, notification_attempts smallint)
+language sql stable security definer
+set search_path = pg_catalog, public
+as $$
+  select
+    count(e.id)::integer,
+    count(b.bucket_hash)::integer,
+    max(e.notification_status),
+    coalesce(max(e.notification_attempts), 0)::smallint
+  from public.trainer_enquiries e
+  left join public.trainer_enquiry_abuse_buckets b on b.bucket_hash = e.abuse_bucket_hash
+  where e.public_reference = p_public_reference;
+$$;
+
+create or replace function public.delete_trainer_enquiry_fixture(p_public_reference text)
+returns table(rows_deleted integer, buckets_deleted integer)
+language plpgsql volatile security definer
+set search_path = pg_catalog, public
+as $$
+declare v_bucket text; v_rows integer; v_buckets integer;
+begin
+  select e.abuse_bucket_hash into v_bucket
+  from public.trainer_enquiries e
+  where e.public_reference = p_public_reference
+  for update;
+  delete from public.trainer_enquiries where public_reference = p_public_reference;
+  get diagnostics v_rows = row_count;
+  if v_bucket is not null then
+    delete from public.trainer_enquiry_abuse_buckets b
+    where b.bucket_hash = v_bucket
+      and not exists(select 1 from public.trainer_enquiries e where e.abuse_bucket_hash = b.bucket_hash);
+    get diagnostics v_buckets = row_count;
+  else
+    v_buckets := 0;
+  end if;
+  return query select v_rows, v_buckets;
+end
+$$;
+
+create or replace function public.prove_trainer_enquiry_rate_limit(
+  p_bucket_hash text,
+  p_idempotency_hash text,
+  p_public_reference text,
+  p_window_started_at timestamptz,
+  p_provider_class text
+)
+returns boolean
+language plpgsql volatile security definer
+set search_path = pg_catalog, public
+as $$
+declare v_limited boolean := false;
+begin
+  insert into public.trainer_enquiry_abuse_buckets(bucket_hash, window_started_at, accepted_count, expires_at)
+  values(p_bucket_hash, p_window_started_at, 5, p_window_started_at + interval '2 hours');
+  begin
+    perform * from public.accept_trainer_enquiry(
+      p_public_reference, p_idempotency_hash, p_bucket_hash, p_window_started_at,
+      'Sprint 029O Synthetic Trainer', 'Sprint 029O Synthetic Stable', null,
+      '+61 400 000 000', 'sprint-029o-rate@example.invalid', 1, null,
+      '2026-08-05', p_provider_class
+    );
+  exception when sqlstate 'P0001' then
+    v_limited := true;
+  end;
+  delete from public.trainer_enquiries where public_reference = p_public_reference;
+  delete from public.trainer_enquiry_abuse_buckets where bucket_hash = p_bucket_hash;
+  return v_limited
+    and not exists(select 1 from public.trainer_enquiries where public_reference = p_public_reference)
+    and not exists(select 1 from public.trainer_enquiry_abuse_buckets where bucket_hash = p_bucket_hash);
+end
+$$;
+
+create or replace function public.prove_trainer_enquiry_retention()
+returns table(enquiry_retained integer, bucket_deleted integer, link_nulled integer, fixture_residue integer)
+language plpgsql volatile security definer
+set search_path = pg_catalog, public
+as $$
+declare
+  v_reference text := 'PP-' || pg_catalog.upper(pg_catalog.substring(pg_catalog.replace(gen_random_uuid()::text, '-', ''), 1, 16));
+  v_bucket_hash text := pg_catalog.replace(gen_random_uuid()::text, '-', '') || pg_catalog.replace(gen_random_uuid()::text, '-', '');
+  v_idempotency_hash text := pg_catalog.replace(gen_random_uuid()::text, '-', '') || pg_catalog.replace(gen_random_uuid()::text, '-', '');
+  v_enquiry_retained integer;
+  v_bucket_deleted integer;
+  v_link_nulled integer;
+  v_fixture_residue integer;
+begin
+  perform pg_catalog.pg_advisory_xact_lock(29023029);
+
+  insert into public.trainer_enquiry_abuse_buckets(bucket_hash, window_started_at, accepted_count, expires_at)
+  values(v_bucket_hash, '2000-01-01 00:00:00+00'::timestamptz, 1, '2000-01-01 02:00:00+00'::timestamptz);
+  insert into public.trainer_enquiries(
+    public_reference, idempotency_hash, abuse_bucket_hash,
+    trainer_name, stable_name, stable_address, phone, email, horse_volume, referred_by,
+    notice_version, notice_acknowledged_at, provider_class,
+    notification_status, created_at, expires_at
+  ) values (
+    v_reference, v_idempotency_hash, v_bucket_hash,
+    'Sprint 029O Retention Proof', 'Sprint 029O Synthetic Stable', null,
+    '+61 400 000 000', 'sprint-029o-retention@example.invalid', 1, null,
+    '2026-08-05', pg_catalog.now(), 'google_workspace',
+    'pending', pg_catalog.now(), pg_catalog.now() + interval '90 days'
+  );
+
+  perform public.cleanup_trainer_enquiry_abuse_buckets(500);
+
+  select count(*)::integer into v_enquiry_retained
+  from public.trainer_enquiries where public_reference = v_reference and expires_at > pg_catalog.now();
+  select (1 - count(*))::integer into v_bucket_deleted
+  from public.trainer_enquiry_abuse_buckets where bucket_hash = v_bucket_hash;
+  select count(*)::integer into v_link_nulled
+  from public.trainer_enquiries where public_reference = v_reference and abuse_bucket_hash is null;
+
+  delete from public.trainer_enquiries where public_reference = v_reference;
+  delete from public.trainer_enquiry_abuse_buckets where bucket_hash = v_bucket_hash;
+  select (
+    (select count(*) from public.trainer_enquiries where public_reference = v_reference) +
+    (select count(*) from public.trainer_enquiry_abuse_buckets where bucket_hash = v_bucket_hash)
+  )::integer into v_fixture_residue;
+
+  return query select v_enquiry_retained, v_bucket_deleted, v_link_nulled, v_fixture_residue;
+end
+$$;
+
+create or replace function public.trainer_enquiry_retention_status()
+returns table(
+  nullable_link_count integer,
+  set_null_fk_count integer,
+  two_hour_expiry_count integer,
+  bucket_row_count integer,
+  linked_enquiry_count integer,
+  unlinked_enquiry_count integer,
+  cleanup_job_count integer,
+  cleanup_job_active_count integer
+)
+language sql stable security definer
+set search_path = pg_catalog, public
+as $$
+  select
+    (select count(*)::integer
+      from pg_catalog.pg_attribute a
+      join pg_catalog.pg_class c on c.oid = a.attrelid
+      join pg_catalog.pg_namespace n on n.oid = c.relnamespace
+      where n.nspname = 'public' and c.relname = 'trainer_enquiries'
+        and a.attname = 'abuse_bucket_hash' and not a.attnotnull and not a.attisdropped),
+    (select count(*)::integer
+      from pg_catalog.pg_constraint c
+      join pg_catalog.pg_class t on t.oid = c.conrelid
+      join pg_catalog.pg_namespace n on n.oid = t.relnamespace
+      where n.nspname = 'public' and t.relname = 'trainer_enquiries'
+        and c.conname = 'trainer_enquiries_abuse_bucket_hash_fkey'
+        and c.contype = 'f'
+        and pg_catalog.pg_get_constraintdef(c.oid) like '%ON DELETE SET NULL%'),
+    (select count(*)::integer
+      from pg_catalog.pg_constraint c
+      join pg_catalog.pg_class t on t.oid = c.conrelid
+      join pg_catalog.pg_namespace n on n.oid = t.relnamespace
+      where n.nspname = 'public' and t.relname = 'trainer_enquiry_abuse_buckets'
+        and c.conname = 'trainer_enquiry_bucket_expiry_check'
+        and (pg_catalog.pg_get_constraintdef(c.oid) like '%2 hours%'
+          or pg_catalog.pg_get_constraintdef(c.oid) like '%02:00:00%')),
+    (select count(*)::integer from public.trainer_enquiry_abuse_buckets),
+    (select count(*)::integer from public.trainer_enquiries where abuse_bucket_hash is not null),
+    (select count(*)::integer from public.trainer_enquiries where abuse_bucket_hash is null),
+    (select count(*)::integer from cron.job
+      where jobname = 'trainer-enquiry-abuse-cleanup-hourly'
+        and schedule = '5 * * * *'
+        and command = 'select public.cleanup_trainer_enquiry_abuse_buckets(500);'),
+    (select count(*)::integer from cron.job
+      where jobname = 'trainer-enquiry-abuse-cleanup-hourly'
+        and schedule = '5 * * * *'
+        and command = 'select public.cleanup_trainer_enquiry_abuse_buckets(500);'
+        and active)
+$$;
+
+create or replace function public.trainer_enquiry_schema_status()
+returns table(
+  enquiry_table_count integer, bucket_table_count integer, rls_table_count integer,
+  browser_policy_count integer, browser_grant_count integer, service_function_count integer,
+  enquiry_row_count integer
+)
+language sql stable security definer
+set search_path = pg_catalog, public
+as $$
+  select
+    (select count(*)::integer from pg_catalog.pg_class c join pg_catalog.pg_namespace n on n.oid=c.relnamespace where n.nspname='public' and c.relname='trainer_enquiries' and c.relkind='r'),
+    (select count(*)::integer from pg_catalog.pg_class c join pg_catalog.pg_namespace n on n.oid=c.relnamespace where n.nspname='public' and c.relname='trainer_enquiry_abuse_buckets' and c.relkind='r'),
+    (select count(*)::integer from pg_catalog.pg_class c join pg_catalog.pg_namespace n on n.oid=c.relnamespace where n.nspname='public' and c.relname in ('trainer_enquiries','trainer_enquiry_abuse_buckets') and c.relrowsecurity),
+    (select count(*)::integer from pg_catalog.pg_policies p where p.schemaname='public' and p.tablename in ('trainer_enquiries','trainer_enquiry_abuse_buckets')),
+    (select count(*)::integer from information_schema.role_table_grants g where g.table_schema='public' and g.table_name in ('trainer_enquiries','trainer_enquiry_abuse_buckets') and g.grantee in ('anon','authenticated','PUBLIC')),
+    (select count(*)::integer from pg_catalog.pg_proc p join pg_catalog.pg_namespace n on n.oid=p.pronamespace where n.nspname='public' and p.proname in ('accept_trainer_enquiry','claim_trainer_enquiry_notification','claim_trainer_enquiry_retry_batch','complete_trainer_enquiry_notification','maintain_trainer_enquiries','trainer_enquiry_fixture_status','delete_trainer_enquiry_fixture','prove_trainer_enquiry_rate_limit','trainer_enquiry_schema_status','cleanup_trainer_enquiry_abuse_buckets','prove_trainer_enquiry_retention','trainer_enquiry_retention_status')),
+    (select count(*)::integer from public.trainer_enquiries);
+$$;
+
+revoke all on function public.cleanup_trainer_enquiry_abuse_buckets(integer) from public, anon, authenticated;
+revoke all on function public.accept_trainer_enquiry(text,text,text,timestamptz,text,text,text,text,text,integer,text,text,text) from public, anon, authenticated;
+revoke all on function public.maintain_trainer_enquiries(integer) from public, anon, authenticated;
+revoke all on function public.trainer_enquiry_fixture_status(text) from public, anon, authenticated;
+revoke all on function public.delete_trainer_enquiry_fixture(text) from public, anon, authenticated;
+revoke all on function public.prove_trainer_enquiry_rate_limit(text,text,text,timestamptz,text) from public, anon, authenticated;
+revoke all on function public.prove_trainer_enquiry_retention() from public, anon, authenticated;
+revoke all on function public.trainer_enquiry_retention_status() from public, anon, authenticated;
+revoke all on function public.trainer_enquiry_schema_status() from public, anon, authenticated;
+
+grant execute on function public.cleanup_trainer_enquiry_abuse_buckets(integer) to service_role;
+grant execute on function public.accept_trainer_enquiry(text,text,text,timestamptz,text,text,text,text,text,integer,text,text,text) to service_role;
+grant execute on function public.maintain_trainer_enquiries(integer) to service_role;
+grant execute on function public.trainer_enquiry_fixture_status(text) to service_role;
+grant execute on function public.delete_trainer_enquiry_fixture(text) to service_role;
+grant execute on function public.prove_trainer_enquiry_rate_limit(text,text,text,timestamptz,text) to service_role;
+grant execute on function public.prove_trainer_enquiry_retention() to service_role;
+grant execute on function public.trainer_enquiry_retention_status() to service_role;
+grant execute on function public.trainer_enquiry_schema_status() to service_role;
+
+do $$
+begin
+  if not exists (
+    select 1 from cron.job where jobname = 'trainer-enquiry-abuse-cleanup-hourly'
+  ) then
+    perform cron.schedule(
+      'trainer-enquiry-abuse-cleanup-hourly',
+      '5 * * * *',
+      'select public.cleanup_trainer_enquiry_abuse_buckets(500);'
+    );
+  end if;
+end
+$$;
+
+comment on table public.trainer_enquiries is 'Sprint 029O private public-enquiry store; service role only; expires after 90 days; abuse link is nullable.';
+comment on table public.trainer_enquiry_abuse_buckets is 'Sprint 029O HMAC-only abuse buckets; expire two hours after the one-hour window begins.';
+comment on function public.cleanup_trainer_enquiry_abuse_buckets(integer) is 'Bounded bucket-only privacy cleanup; never claims or sends notifications.';
+comment on function public.prove_trainer_enquiry_retention() is 'Sanitized self-cleaning service-only proof of bucket deletion, surviving enquiry and nulled link.';
+
+-- <<< END 0023_public_trainer_enquiry_retention_correction.sql
+
+-- >>> BEGIN 0024_versioned_four_loss_biochemistry_scoring.sql
+-- Sprint 025C - versioned four-loss biochemistry scoring.
+-- Generated deterministically from the accepted workbook; do not edit seed values by hand.
+
+alter table public.biochemistry_lookup_values
+  drop constraint if exists biochemistry_lookup_values_lookup_type_check;
+alter table public.biochemistry_lookup_values
+  add constraint biochemistry_lookup_values_lookup_type_check
+  check (lookup_type in ('carbs', 'ph_average', 'ph_urine', 'ph_saliva', 'salts', 'urea'));
+
+alter table public.biochemistry_tests
+  drop constraint if exists biochemistry_tests_ph_average_check,
+  drop constraint if exists biochemistry_tests_conductivity_converted_c_value_check,
+  drop constraint if exists biochemistry_tests_versioned_reading_shape_check,
+  drop constraint if exists biochemistry_tests_versioned_scored_snapshot_check;
+
+alter table public.biochemistry_tests
+  alter column ph_average drop not null,
+  alter column urea_reading drop not null,
+  add column if not exists carbs_lookup_reading numeric(12,4),
+  add column if not exists ph_urine_lookup_value_id uuid references public.biochemistry_lookup_values(id) on delete restrict,
+  add column if not exists ph_urine_lookup_reading numeric(12,4),
+  add column if not exists ph_urine_loss_fraction numeric(10,6),
+  add column if not exists ph_saliva_lookup_value_id uuid references public.biochemistry_lookup_values(id) on delete restrict,
+  add column if not exists ph_saliva_lookup_reading numeric(12,4),
+  add column if not exists ph_saliva_loss_fraction numeric(10,6),
+  add column if not exists conductivity_lookup_c_value numeric(12,4);
+
+alter table public.biochemistry_tests
+  add constraint biochemistry_tests_versioned_reading_shape_check check (
+    (formula_version = 'biochemistry-score-v1'
+      and ph_average is not null
+      and urea_reading is not null
+      and conductivity_converted_c_value = (conductivity_raw_meter_value * 1.43))
+    or
+    (formula_version = 'biochemistry-score-v2'
+      and lookup_source_version = 'v3'
+      and lookup_source_document = 'HORSE Energy Loss Version 3 no urea or age.xlsx'
+      and ph_average is null
+      and urea_reading is null
+      and ph_average_lookup_value_id is null
+      and ph_average_loss_fraction is null
+      and urea_lookup_value_id is null
+      and urea_loss_fraction is null
+      and carbs_reading between 0 and 15
+      and ph_saliva between 4.80 and 9.00
+      and ph_urine between 4.80 and 9.00
+      and conductivity_raw_meter_value between 0 and 99
+      and conductivity_converted_c_value = least(round(conductivity_raw_meter_value * 1.43, 2), 80.00)
+      and (carbs_lookup_reading is null or carbs_lookup_reading <= carbs_reading)
+      and (ph_urine_lookup_reading is null or ph_urine_lookup_reading <= ph_urine)
+      and (ph_saliva_lookup_reading is null or ph_saliva_lookup_reading <= ph_saliva)
+      and (conductivity_lookup_c_value is null or (conductivity_lookup_c_value <= conductivity_converted_c_value and conductivity_lookup_c_value <= 80.00)))
+  );
+
+alter table public.biochemistry_tests
+  add constraint biochemistry_tests_versioned_scored_snapshot_check check (
+    scoring_status <> 'scored'
+    or (formula_version = 'biochemistry-score-v1'
+      and carbs_lookup_value_id is not null
+      and ph_average_lookup_value_id is not null
+      and salts_lookup_value_id is not null
+      and urea_lookup_value_id is not null
+      and carbs_loss_fraction is not null
+      and ph_average_loss_fraction is not null
+      and salts_loss_fraction is not null
+      and urea_loss_fraction is not null
+      and hydration_score is not null
+      and health_score is not null)
+    or (formula_version = 'biochemistry-score-v2'
+      and carbs_lookup_value_id is not null
+      and ph_urine_lookup_value_id is not null
+      and ph_saliva_lookup_value_id is not null
+      and salts_lookup_value_id is not null
+      and carbs_lookup_reading is not null
+      and ph_urine_lookup_reading is not null
+      and ph_saliva_lookup_reading is not null
+      and conductivity_lookup_c_value is not null
+      and carbs_loss_fraction between 0 and 1
+      and ph_urine_loss_fraction between 0 and 1
+      and ph_saliva_loss_fraction between 0 and 1
+      and salts_loss_fraction between 0 and 1
+      and hydration_score_energy_loss is not null
+      and hydration_score is not null
+      and health_score_energy_loss is not null
+      and health_score is not null
+      and hydration_score_energy_loss between 0 and 1
+      and hydration_score between 0 and 1
+      and health_score_energy_loss between 0 and 1
+      and health_score between 0 and 1
+      and scoring_blockers = '[]'::jsonb
+      and hydration_score_energy_loss = round((carbs_loss_fraction + salts_loss_fraction) / 2, 6)
+      and hydration_score = round(1 - hydration_score_energy_loss, 6)
+      and health_score_energy_loss = round((carbs_loss_fraction + ph_urine_loss_fraction + ph_saliva_loss_fraction + salts_loss_fraction) / 4, 6)
+      and health_score = round(1 - health_score_energy_loss, 6))
+  );
+
+create or replace function public.validate_biochemistry_v2_scored_snapshot()
+returns trigger
+language plpgsql
+set search_path = pg_catalog, public
+as $$
+begin
+  if new.formula_version <> 'biochemistry-score-v2' or new.scoring_status <> 'scored' then
+    return new;
+  end if;
+
+  if not exists (select 1 from public.biochemistry_lookup_values where id = new.carbs_lookup_value_id and lookup_type = 'carbs' and exact_reading = new.carbs_lookup_reading and loss_fraction = new.carbs_loss_fraction and source_document = 'HORSE Energy Loss Version 3 no urea or age.xlsx' and source_version = 'v3') then
+    raise exception 'Invalid v2 Carbohydrate lookup snapshot' using errcode = '23514';
+  end if;
+  if not exists (select 1 from public.biochemistry_lookup_values where id = new.ph_urine_lookup_value_id and lookup_type = 'ph_urine' and exact_reading = new.ph_urine_lookup_reading and loss_fraction = new.ph_urine_loss_fraction and source_document = 'HORSE Energy Loss Version 3 no urea or age.xlsx' and source_version = 'v3') then
+    raise exception 'Invalid v2 Urine pH lookup snapshot' using errcode = '23514';
+  end if;
+  if not exists (select 1 from public.biochemistry_lookup_values where id = new.ph_saliva_lookup_value_id and lookup_type = 'ph_saliva' and exact_reading = new.ph_saliva_lookup_reading and loss_fraction = new.ph_saliva_loss_fraction and source_document = 'HORSE Energy Loss Version 3 no urea or age.xlsx' and source_version = 'v3') then
+    raise exception 'Invalid v2 Saliva pH lookup snapshot' using errcode = '23514';
+  end if;
+  if not exists (select 1 from public.biochemistry_lookup_values where id = new.salts_lookup_value_id and lookup_type = 'salts' and exact_reading = new.conductivity_lookup_c_value and loss_fraction = new.salts_loss_fraction and source_document = 'HORSE Energy Loss Version 3 no urea or age.xlsx' and source_version = 'v3') then
+    raise exception 'Invalid v2 Salts lookup snapshot' using errcode = '23514';
+  end if;
+
+  return new;
+end
+$$;
+
+drop trigger if exists biochemistry_tests_validate_v2_scored_snapshot on public.biochemistry_tests;
+create trigger biochemistry_tests_validate_v2_scored_snapshot
+before insert or update on public.biochemistry_tests
+for each row execute function public.validate_biochemistry_v2_scored_snapshot();
+
+insert into public.biochemistry_lookup_values (
+  lookup_type, exact_reading, exact_reading_text, loss_fraction, loss_percent_text,
+  increment_fraction, increment_percent_text, source_document, source_version, source_row_number
+)
+values
+  ('carbs', 0.0000, '0', 0.960000, '96.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 14),
+  ('carbs', 0.1000, '0.1', 0.960000, '96.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 15),
+  ('carbs', 0.2000, '0.2', 0.960000, '96.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 16),
+  ('carbs', 0.3000, '0.3', 0.960000, '96.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 17),
+  ('carbs', 0.4000, '0.4', 0.960000, '96.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 18),
+  ('carbs', 0.5000, '0.5', 0.960000, '96.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 19),
+  ('carbs', 0.6000, '0.6', 0.960000, '96.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 20),
+  ('carbs', 0.7000, '0.7', 0.960000, '96.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 21),
+  ('carbs', 0.8000, '0.8', 0.960000, '96.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 22),
+  ('carbs', 0.9000, '0.9', 0.960000, '96.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 23),
+  ('carbs', 1.0000, '1', 0.960000, '96.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 24),
+  ('carbs', 1.1000, '1.1', 0.960000, '96.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 25),
+  ('carbs', 1.2000, '1.2', 0.960000, '96.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 26),
+  ('carbs', 1.3000, '1.3', 0.960000, '96.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 27),
+  ('carbs', 1.4000, '1.4', 0.960000, '96.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 28),
+  ('carbs', 1.5000, '1.5', 0.960000, '96.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 29),
+  ('carbs', 1.6000, '1.6', 0.960000, '96.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 30),
+  ('carbs', 1.7000, '1.7', 0.960000, '96.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 31),
+  ('carbs', 1.8000, '1.8', 0.960000, '96.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 32),
+  ('carbs', 1.9000, '1.9', 0.960000, '96.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 33),
+  ('carbs', 2.0000, '2', 0.960000, '96.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 34),
+  ('carbs', 2.1000, '2.1', 0.923333, '92.333300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 35),
+  ('carbs', 2.2000, '2.2', 0.886667, '88.666700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 36),
+  ('carbs', 2.3000, '2.3', 0.850000, '85.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 37),
+  ('carbs', 2.4000, '2.4', 0.813333, '81.333300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 38),
+  ('carbs', 2.5000, '2.5', 0.776667, '77.666700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 39),
+  ('carbs', 2.6000, '2.6', 0.740000, '74.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 40),
+  ('carbs', 2.7000, '2.7', 0.657778, '65.777800%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 41),
+  ('carbs', 2.8000, '2.8', 0.575556, '57.555600%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 42),
+  ('carbs', 2.9000, '2.9', 0.493333, '49.333300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 43),
+  ('carbs', 3.0000, '3', 0.411111, '41.111100%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 44),
+  ('carbs', 3.1000, '3.1', 0.328889, '32.888900%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 45),
+  ('carbs', 3.2000, '3.2', 0.246667, '24.666700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 46),
+  ('carbs', 3.3000, '3.3', 0.164444, '16.444400%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 47),
+  ('carbs', 3.4000, '3.4', 0.082222, '8.222200%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 48),
+  ('carbs', 3.5000, '3.5', 0.000000, '0.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 49),
+  ('carbs', 3.6000, '3.6', 0.008000, '0.800000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 50),
+  ('carbs', 3.7000, '3.7', 0.016000, '1.600000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 51),
+  ('carbs', 3.8000, '3.8', 0.024000, '2.400000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 52),
+  ('carbs', 3.9000, '3.9', 0.032000, '3.200000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 53),
+  ('carbs', 4.0000, '4', 0.040000, '4.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 54),
+  ('carbs', 4.1000, '4.1', 0.048000, '4.800000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 55),
+  ('carbs', 4.2000, '4.2', 0.056000, '5.600000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 56),
+  ('carbs', 4.3000, '4.3', 0.064000, '6.400000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 57),
+  ('carbs', 4.4000, '4.4', 0.072000, '7.200000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 58),
+  ('carbs', 4.5000, '4.5', 0.080000, '8.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 59),
+  ('carbs', 4.6000, '4.6', 0.088000, '8.800000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 60),
+  ('carbs', 4.7000, '4.7', 0.096000, '9.600000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 61),
+  ('carbs', 4.8000, '4.8', 0.104000, '10.400000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 62),
+  ('carbs', 4.9000, '4.9', 0.112000, '11.200000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 63),
+  ('carbs', 5.0000, '5', 0.120000, '12.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 64),
+  ('carbs', 5.1000, '5.1', 0.128000, '12.800000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 65),
+  ('carbs', 5.2000, '5.2', 0.136000, '13.600000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 66),
+  ('carbs', 5.3000, '5.3', 0.144000, '14.400000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 67),
+  ('carbs', 5.4000, '5.4', 0.152000, '15.200000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 68),
+  ('carbs', 5.5000, '5.5', 0.160000, '16.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 69),
+  ('carbs', 5.6000, '5.6', 0.168000, '16.800000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 70),
+  ('carbs', 5.7000, '5.7', 0.176000, '17.600000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 71),
+  ('carbs', 5.8000, '5.8', 0.184000, '18.400000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 72),
+  ('carbs', 5.9000, '5.9', 0.192000, '19.200000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 73),
+  ('carbs', 6.0000, '6', 0.200000, '20.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 74),
+  ('carbs', 6.1000, '6.1', 0.208000, '20.800000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 75),
+  ('carbs', 6.2000, '6.2', 0.216000, '21.600000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 76),
+  ('carbs', 6.3000, '6.3', 0.224000, '22.400000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 77),
+  ('carbs', 6.4000, '6.4', 0.232000, '23.200000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 78),
+  ('carbs', 6.5000, '6.5', 0.240000, '24.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 79),
+  ('carbs', 6.6000, '6.6', 0.248000, '24.800000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 80),
+  ('carbs', 6.7000, '6.7', 0.256000, '25.600000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 81),
+  ('carbs', 6.8000, '6.8', 0.264000, '26.400000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 82),
+  ('carbs', 6.9000, '6.9', 0.272000, '27.200000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 83),
+  ('carbs', 7.0000, '7', 0.280000, '28.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 84),
+  ('carbs', 7.1000, '7.1', 0.288000, '28.800000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 85),
+  ('carbs', 7.2000, '7.2', 0.296000, '29.600000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 86),
+  ('carbs', 7.3000, '7.3', 0.304000, '30.400000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 87),
+  ('carbs', 7.4000, '7.4', 0.312000, '31.200000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 88),
+  ('carbs', 7.5000, '7.5', 0.320000, '32.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 89),
+  ('carbs', 7.6000, '7.6', 0.328000, '32.800000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 90),
+  ('carbs', 7.7000, '7.7', 0.336000, '33.600000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 91),
+  ('carbs', 7.8000, '7.8', 0.344000, '34.400000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 92),
+  ('carbs', 7.9000, '7.9', 0.352000, '35.200000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 93),
+  ('carbs', 8.0000, '8', 0.360000, '36.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 94),
+  ('carbs', 8.1000, '8.1', 0.368000, '36.800000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 95),
+  ('carbs', 8.2000, '8.2', 0.376000, '37.600000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 96),
+  ('carbs', 8.3000, '8.3', 0.384000, '38.400000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 97),
+  ('carbs', 8.4000, '8.4', 0.392000, '39.200000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 98),
+  ('carbs', 8.5000, '8.5', 0.400000, '40.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 99),
+  ('carbs', 8.6000, '8.6', 0.408000, '40.800000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 100),
+  ('carbs', 8.7000, '8.7', 0.416000, '41.600000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 101),
+  ('carbs', 8.8000, '8.8', 0.424000, '42.400000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 102),
+  ('carbs', 8.9000, '8.9', 0.432000, '43.200000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 103),
+  ('carbs', 9.0000, '9', 0.440000, '44.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 104),
+  ('carbs', 9.1000, '9.1', 0.448000, '44.800000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 105),
+  ('carbs', 9.2000, '9.2', 0.456000, '45.600000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 106),
+  ('carbs', 9.3000, '9.3', 0.464000, '46.400000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 107),
+  ('carbs', 9.4000, '9.4', 0.472000, '47.200000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 108),
+  ('carbs', 9.5000, '9.5', 0.480000, '48.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 109),
+  ('carbs', 9.6000, '9.6', 0.488667, '48.866700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 110),
+  ('carbs', 9.7000, '9.7', 0.497333, '49.733300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 111),
+  ('carbs', 9.8000, '9.8', 0.506000, '50.600000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 112),
+  ('carbs', 9.9000, '9.9', 0.514667, '51.466700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 113),
+  ('carbs', 10.0000, '10', 0.523333, '52.333300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 114),
+  ('carbs', 10.1000, '10.1', 0.532000, '53.200000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 115),
+  ('carbs', 10.2000, '10.2', 0.540667, '54.066700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 116),
+  ('carbs', 10.3000, '10.3', 0.549333, '54.933300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 117),
+  ('carbs', 10.4000, '10.4', 0.558000, '55.800000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 118),
+  ('carbs', 10.5000, '10.5', 0.566667, '56.666700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 119),
+  ('carbs', 10.6000, '10.6', 0.575333, '57.533300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 120),
+  ('carbs', 10.7000, '10.7', 0.584000, '58.400000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 121),
+  ('carbs', 10.8000, '10.8', 0.592667, '59.266700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 122),
+  ('carbs', 10.9000, '10.9', 0.601333, '60.133300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 123),
+  ('carbs', 11.0000, '11', 0.610000, '61.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 124),
+  ('carbs', 11.1000, '11.1', 0.618667, '61.866700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 125),
+  ('carbs', 11.2000, '11.2', 0.627333, '62.733300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 126),
+  ('carbs', 11.3000, '11.3', 0.636000, '63.600000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 127),
+  ('carbs', 11.4000, '11.4', 0.644667, '64.466700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 128),
+  ('carbs', 11.5000, '11.5', 0.653333, '65.333300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 129),
+  ('carbs', 11.6000, '11.6', 0.662000, '66.200000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 130),
+  ('carbs', 11.7000, '11.7', 0.670667, '67.066700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 131),
+  ('carbs', 11.8000, '11.8', 0.679333, '67.933300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 132),
+  ('carbs', 11.9000, '11.9', 0.688000, '68.800000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 133),
+  ('carbs', 12.0000, '12', 0.696667, '69.666700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 134),
+  ('carbs', 12.1000, '12.1', 0.705333, '70.533300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 135),
+  ('carbs', 12.2000, '12.2', 0.714000, '71.400000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 136),
+  ('carbs', 12.3000, '12.3', 0.722667, '72.266700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 137),
+  ('carbs', 12.4000, '12.4', 0.731333, '73.133300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 138),
+  ('carbs', 12.5000, '12.5', 0.740000, '74.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 139),
+  ('carbs', 12.6000, '12.6', 0.748800, '74.880000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 140),
+  ('carbs', 12.7000, '12.7', 0.757600, '75.760000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 141),
+  ('carbs', 12.8000, '12.8', 0.766400, '76.640000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 142),
+  ('carbs', 12.9000, '12.9', 0.775200, '77.520000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 143),
+  ('carbs', 13.0000, '13', 0.784000, '78.400000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 144),
+  ('carbs', 13.1000, '13.1', 0.792800, '79.280000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 145),
+  ('carbs', 13.2000, '13.2', 0.801600, '80.160000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 146),
+  ('carbs', 13.3000, '13.3', 0.810400, '81.040000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 147),
+  ('carbs', 13.4000, '13.4', 0.819200, '81.920000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 148),
+  ('carbs', 13.5000, '13.5', 0.828000, '82.800000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 149),
+  ('carbs', 13.6000, '13.6', 0.836800, '83.680000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 150),
+  ('carbs', 13.7000, '13.7', 0.845600, '84.560000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 151),
+  ('carbs', 13.8000, '13.8', 0.854400, '85.440000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 152),
+  ('carbs', 13.9000, '13.9', 0.863200, '86.320000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 153),
+  ('carbs', 14.0000, '14', 0.872000, '87.200000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 154),
+  ('carbs', 14.1000, '14.1', 0.880800, '88.080000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 155),
+  ('carbs', 14.2000, '14.2', 0.889600, '88.960000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 156),
+  ('carbs', 14.3000, '14.3', 0.898400, '89.840000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 157),
+  ('carbs', 14.4000, '14.4', 0.907200, '90.720000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 158),
+  ('carbs', 14.5000, '14.5', 0.916000, '91.600000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 159),
+  ('carbs', 14.6000, '14.6', 0.924800, '92.480000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 160),
+  ('carbs', 14.7000, '14.7', 0.933600, '93.360000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 161),
+  ('carbs', 14.8000, '14.8', 0.942400, '94.240000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 162),
+  ('carbs', 14.9000, '14.9', 0.951200, '95.120000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 163),
+  ('carbs', 15.0000, '15', 0.960000, '96.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 164),
+  ('ph_urine', 4.8000, '4.8', 0.960000, '96.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 14),
+  ('ph_urine', 4.8100, '4.81', 0.955000, '95.500000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 15),
+  ('ph_urine', 4.8200, '4.82', 0.950000, '95.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 16),
+  ('ph_urine', 4.8300, '4.83', 0.945000, '94.500000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 17),
+  ('ph_urine', 4.8400, '4.84', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 18),
+  ('ph_urine', 4.8500, '4.85', 0.935000, '93.500000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 19),
+  ('ph_urine', 4.8600, '4.86', 0.930000, '93.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 20),
+  ('ph_urine', 4.8700, '4.87', 0.925000, '92.500000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 21),
+  ('ph_urine', 4.8800, '4.88', 0.920000, '92.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 22),
+  ('ph_urine', 4.8900, '4.89', 0.915000, '91.500000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 23),
+  ('ph_urine', 4.9000, '4.9', 0.910000, '91.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 24),
+  ('ph_urine', 4.9100, '4.91', 0.905000, '90.500000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 25),
+  ('ph_urine', 4.9200, '4.92', 0.900000, '90.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 26),
+  ('ph_urine', 4.9300, '4.93', 0.895000, '89.500000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 27),
+  ('ph_urine', 4.9400, '4.94', 0.890000, '89.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 28),
+  ('ph_urine', 4.9500, '4.95', 0.885000, '88.500000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 29),
+  ('ph_urine', 4.9600, '4.96', 0.880000, '88.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 30),
+  ('ph_urine', 4.9700, '4.97', 0.875000, '87.500000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 31),
+  ('ph_urine', 4.9800, '4.98', 0.870000, '87.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 32),
+  ('ph_urine', 4.9900, '4.99', 0.865000, '86.500000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 33),
+  ('ph_urine', 5.0000, '5', 0.860000, '86.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 34),
+  ('ph_urine', 5.0100, '5.01', 0.855000, '85.500000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 35),
+  ('ph_urine', 5.0200, '5.02', 0.850000, '85.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 36),
+  ('ph_urine', 5.0300, '5.03', 0.845000, '84.500000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 37),
+  ('ph_urine', 5.0400, '5.04', 0.840000, '84.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 38),
+  ('ph_urine', 5.0500, '5.05', 0.835000, '83.500000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 39),
+  ('ph_urine', 5.0600, '5.06', 0.830000, '83.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 40),
+  ('ph_urine', 5.0700, '5.07', 0.825000, '82.500000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 41),
+  ('ph_urine', 5.0800, '5.08', 0.820000, '82.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 42),
+  ('ph_urine', 5.0900, '5.09', 0.815000, '81.500000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 43),
+  ('ph_urine', 5.1000, '5.1', 0.810000, '81.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 44),
+  ('ph_urine', 5.1100, '5.11', 0.805000, '80.500000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 45),
+  ('ph_urine', 5.1200, '5.12', 0.800000, '80.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 46),
+  ('ph_urine', 5.1300, '5.13', 0.795000, '79.500000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 47),
+  ('ph_urine', 5.1400, '5.14', 0.790000, '79.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 48),
+  ('ph_urine', 5.1500, '5.15', 0.785000, '78.500000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 49),
+  ('ph_urine', 5.1600, '5.16', 0.780000, '78.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 50),
+  ('ph_urine', 5.1700, '5.17', 0.775000, '77.500000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 51),
+  ('ph_urine', 5.1800, '5.18', 0.770000, '77.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 52),
+  ('ph_urine', 5.1900, '5.19', 0.765000, '76.500000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 53),
+  ('ph_urine', 5.2000, '5.2', 0.760000, '76.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 54),
+  ('ph_urine', 5.2100, '5.21', 0.753667, '75.366700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 55),
+  ('ph_urine', 5.2200, '5.22', 0.747333, '74.733300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 56),
+  ('ph_urine', 5.2300, '5.23', 0.741000, '74.100000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 57),
+  ('ph_urine', 5.2400, '5.24', 0.734667, '73.466700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 58),
+  ('ph_urine', 5.2500, '5.25', 0.728333, '72.833300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 59),
+  ('ph_urine', 5.2600, '5.26', 0.722000, '72.200000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 60),
+  ('ph_urine', 5.2700, '5.27', 0.715667, '71.566700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 61),
+  ('ph_urine', 5.2800, '5.28', 0.709333, '70.933300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 62),
+  ('ph_urine', 5.2900, '5.29', 0.703000, '70.300000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 63),
+  ('ph_urine', 5.3000, '5.3', 0.696667, '69.666700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 64),
+  ('ph_urine', 5.3100, '5.31', 0.690333, '69.033300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 65),
+  ('ph_urine', 5.3200, '5.32', 0.684000, '68.400000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 66),
+  ('ph_urine', 5.3300, '5.33', 0.677667, '67.766700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 67),
+  ('ph_urine', 5.3400, '5.34', 0.671333, '67.133300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 68),
+  ('ph_urine', 5.3500, '5.35', 0.665000, '66.500000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 69),
+  ('ph_urine', 5.3600, '5.36', 0.658667, '65.866700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 70),
+  ('ph_urine', 5.3700, '5.37', 0.652333, '65.233300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 71),
+  ('ph_urine', 5.3800, '5.38', 0.646000, '64.600000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 72),
+  ('ph_urine', 5.3900, '5.39', 0.639667, '63.966700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 73),
+  ('ph_urine', 5.4000, '5.4', 0.633333, '63.333300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 74),
+  ('ph_urine', 5.4100, '5.41', 0.627000, '62.700000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 75),
+  ('ph_urine', 5.4200, '5.42', 0.620667, '62.066700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 76),
+  ('ph_urine', 5.4300, '5.43', 0.614333, '61.433300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 77),
+  ('ph_urine', 5.4400, '5.44', 0.608000, '60.800000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 78),
+  ('ph_urine', 5.4500, '5.45', 0.601667, '60.166700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 79),
+  ('ph_urine', 5.4600, '5.46', 0.595333, '59.533300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 80),
+  ('ph_urine', 5.4700, '5.47', 0.589000, '58.900000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 81),
+  ('ph_urine', 5.4800, '5.48', 0.582667, '58.266700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 82),
+  ('ph_urine', 5.4900, '5.49', 0.576333, '57.633300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 83),
+  ('ph_urine', 5.5000, '5.5', 0.570000, '57.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 84),
+  ('ph_urine', 5.5100, '5.51', 0.563667, '56.366700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 85),
+  ('ph_urine', 5.5200, '5.52', 0.557333, '55.733300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 86),
+  ('ph_urine', 5.5300, '5.53', 0.551000, '55.100000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 87),
+  ('ph_urine', 5.5400, '5.54', 0.544667, '54.466700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 88),
+  ('ph_urine', 5.5500, '5.55', 0.538333, '53.833300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 89),
+  ('ph_urine', 5.5600, '5.56', 0.532000, '53.200000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 90),
+  ('ph_urine', 5.5700, '5.57', 0.525667, '52.566700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 91),
+  ('ph_urine', 5.5800, '5.58', 0.519333, '51.933300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 92),
+  ('ph_urine', 5.5900, '5.59', 0.513000, '51.300000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 93),
+  ('ph_urine', 5.6000, '5.6', 0.506667, '50.666700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 94),
+  ('ph_urine', 5.6100, '5.61', 0.500333, '50.033300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 95),
+  ('ph_urine', 5.6200, '5.62', 0.494000, '49.400000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 96),
+  ('ph_urine', 5.6300, '5.63', 0.487667, '48.766700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 97),
+  ('ph_urine', 5.6400, '5.64', 0.481333, '48.133300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 98),
+  ('ph_urine', 5.6500, '5.65', 0.475000, '47.500000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 99),
+  ('ph_urine', 5.6600, '5.66', 0.468667, '46.866700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 100),
+  ('ph_urine', 5.6700, '5.67', 0.462333, '46.233300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 101),
+  ('ph_urine', 5.6800, '5.68', 0.456000, '45.600000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 102),
+  ('ph_urine', 5.6900, '5.69', 0.449667, '44.966700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 103),
+  ('ph_urine', 5.7000, '5.7', 0.443333, '44.333300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 104),
+  ('ph_urine', 5.7100, '5.71', 0.437000, '43.700000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 105),
+  ('ph_urine', 5.7200, '5.72', 0.430667, '43.066700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 106),
+  ('ph_urine', 5.7300, '5.73', 0.424333, '42.433300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 107),
+  ('ph_urine', 5.7400, '5.74', 0.418000, '41.800000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 108),
+  ('ph_urine', 5.7500, '5.75', 0.411667, '41.166700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 109),
+  ('ph_urine', 5.7600, '5.76', 0.405333, '40.533300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 110),
+  ('ph_urine', 5.7700, '5.77', 0.399000, '39.900000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 111),
+  ('ph_urine', 5.7800, '5.78', 0.392667, '39.266700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 112),
+  ('ph_urine', 5.7900, '5.79', 0.386333, '38.633300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 113),
+  ('ph_urine', 5.8000, '5.8', 0.380000, '38.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 114),
+  ('ph_urine', 5.8100, '5.81', 0.373667, '37.366700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 115),
+  ('ph_urine', 5.8200, '5.82', 0.367333, '36.733300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 116),
+  ('ph_urine', 5.8300, '5.83', 0.361000, '36.100000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 117),
+  ('ph_urine', 5.8400, '5.84', 0.354667, '35.466700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 118),
+  ('ph_urine', 5.8500, '5.85', 0.348333, '34.833300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 119),
+  ('ph_urine', 5.8600, '5.86', 0.342000, '34.200000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 120),
+  ('ph_urine', 5.8700, '5.87', 0.335667, '33.566700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 121),
+  ('ph_urine', 5.8800, '5.88', 0.329333, '32.933300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 122),
+  ('ph_urine', 5.8900, '5.89', 0.323000, '32.300000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 123),
+  ('ph_urine', 5.9000, '5.9', 0.316667, '31.666700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 124),
+  ('ph_urine', 5.9100, '5.91', 0.310333, '31.033300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 125),
+  ('ph_urine', 5.9200, '5.92', 0.304000, '30.400000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 126),
+  ('ph_urine', 5.9300, '5.93', 0.297667, '29.766700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 127),
+  ('ph_urine', 5.9400, '5.94', 0.291333, '29.133300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 128),
+  ('ph_urine', 5.9500, '5.95', 0.285000, '28.500000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 129),
+  ('ph_urine', 5.9600, '5.96', 0.278667, '27.866700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 130),
+  ('ph_urine', 5.9700, '5.97', 0.272333, '27.233300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 131),
+  ('ph_urine', 5.9800, '5.98', 0.266000, '26.600000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 132),
+  ('ph_urine', 5.9900, '5.99', 0.259667, '25.966700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 133),
+  ('ph_urine', 6.0000, '6', 0.253333, '25.333300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 134),
+  ('ph_urine', 6.0100, '6.01', 0.247000, '24.700000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 135),
+  ('ph_urine', 6.0200, '6.02', 0.240667, '24.066700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 136),
+  ('ph_urine', 6.0300, '6.03', 0.234333, '23.433300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 137),
+  ('ph_urine', 6.0400, '6.04', 0.228000, '22.800000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 138),
+  ('ph_urine', 6.0500, '6.05', 0.221667, '22.166700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 139),
+  ('ph_urine', 6.0600, '6.06', 0.215333, '21.533300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 140),
+  ('ph_urine', 6.0700, '6.07', 0.209000, '20.900000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 141),
+  ('ph_urine', 6.0800, '6.08', 0.202667, '20.266700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 142),
+  ('ph_urine', 6.0900, '6.09', 0.196333, '19.633300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 143),
+  ('ph_urine', 6.1000, '6.1', 0.190000, '19.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 144),
+  ('ph_urine', 6.1100, '6.11', 0.183667, '18.366700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 145),
+  ('ph_urine', 6.1200, '6.12', 0.177333, '17.733300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 146),
+  ('ph_urine', 6.1300, '6.13', 0.171000, '17.100000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 147),
+  ('ph_urine', 6.1400, '6.14', 0.164667, '16.466700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 148),
+  ('ph_urine', 6.1500, '6.15', 0.158333, '15.833300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 149),
+  ('ph_urine', 6.1600, '6.16', 0.152000, '15.200000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 150),
+  ('ph_urine', 6.1700, '6.17', 0.145667, '14.566700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 151),
+  ('ph_urine', 6.1800, '6.18', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 152),
+  ('ph_urine', 6.1900, '6.19', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 153),
+  ('ph_urine', 6.2000, '6.2', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 154),
+  ('ph_urine', 6.2100, '6.21', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 155),
+  ('ph_urine', 6.2200, '6.22', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 156),
+  ('ph_urine', 6.2300, '6.23', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 157),
+  ('ph_urine', 6.2400, '6.24', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 158),
+  ('ph_urine', 6.2500, '6.25', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 159),
+  ('ph_urine', 6.2600, '6.26', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 160),
+  ('ph_urine', 6.2700, '6.27', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 161),
+  ('ph_urine', 6.2800, '6.28', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 162),
+  ('ph_urine', 6.2900, '6.29', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 163),
+  ('ph_urine', 6.3000, '6.3', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 164),
+  ('ph_urine', 6.3100, '6.31', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 165),
+  ('ph_urine', 6.3200, '6.32', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 166),
+  ('ph_urine', 6.3300, '6.33', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 167),
+  ('ph_urine', 6.3400, '6.34', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 168),
+  ('ph_urine', 6.3500, '6.35', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 169),
+  ('ph_urine', 6.3600, '6.36', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 170),
+  ('ph_urine', 6.3700, '6.37', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 171),
+  ('ph_urine', 6.3800, '6.38', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 172),
+  ('ph_urine', 6.3900, '6.39', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 173),
+  ('ph_urine', 6.4000, '6.4', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 174),
+  ('ph_urine', 6.4100, '6.41', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 175),
+  ('ph_urine', 6.4200, '6.42', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 176),
+  ('ph_urine', 6.4300, '6.43', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 177),
+  ('ph_urine', 6.4400, '6.44', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 178),
+  ('ph_urine', 6.4500, '6.45', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 179),
+  ('ph_urine', 6.4600, '6.46', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 180),
+  ('ph_urine', 6.4700, '6.47', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 181),
+  ('ph_urine', 6.4800, '6.48', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 182),
+  ('ph_urine', 6.4900, '6.49', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 183),
+  ('ph_urine', 6.5000, '6.5', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 184),
+  ('ph_urine', 6.5100, '6.51', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 185),
+  ('ph_urine', 6.5200, '6.52', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 186),
+  ('ph_urine', 6.5300, '6.53', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 187),
+  ('ph_urine', 6.5400, '6.54', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 188),
+  ('ph_urine', 6.5500, '6.55', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 189),
+  ('ph_urine', 6.5600, '6.56', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 190),
+  ('ph_urine', 6.5700, '6.57', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 191),
+  ('ph_urine', 6.5800, '6.58', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 192),
+  ('ph_urine', 6.5900, '6.59', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 193),
+  ('ph_urine', 6.6000, '6.6', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 194),
+  ('ph_urine', 6.6100, '6.61', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 195),
+  ('ph_urine', 6.6200, '6.62', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 196),
+  ('ph_urine', 6.6300, '6.63', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 197),
+  ('ph_urine', 6.6400, '6.64', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 198),
+  ('ph_urine', 6.6500, '6.65', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 199),
+  ('ph_urine', 6.6600, '6.66', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 200),
+  ('ph_urine', 6.6700, '6.67', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 201),
+  ('ph_urine', 6.6800, '6.68', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 202),
+  ('ph_urine', 6.6900, '6.69', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 203),
+  ('ph_urine', 6.7000, '6.7', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 204),
+  ('ph_urine', 6.7100, '6.71', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 205),
+  ('ph_urine', 6.7200, '6.72', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 206),
+  ('ph_urine', 6.7300, '6.73', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 207),
+  ('ph_urine', 6.7400, '6.74', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 208),
+  ('ph_urine', 6.7500, '6.75', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 209),
+  ('ph_urine', 6.7600, '6.76', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 210),
+  ('ph_urine', 6.7700, '6.77', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 211),
+  ('ph_urine', 6.7800, '6.78', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 212),
+  ('ph_urine', 6.7900, '6.79', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 213),
+  ('ph_urine', 6.8000, '6.8', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 214),
+  ('ph_urine', 6.8100, '6.81', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 215),
+  ('ph_urine', 6.8200, '6.82', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 216),
+  ('ph_urine', 6.8300, '6.83', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 217),
+  ('ph_urine', 6.8400, '6.84', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 218),
+  ('ph_urine', 6.8500, '6.85', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 219),
+  ('ph_urine', 6.8600, '6.86', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 220),
+  ('ph_urine', 6.8700, '6.87', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 221),
+  ('ph_urine', 6.8800, '6.88', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 222),
+  ('ph_urine', 6.8900, '6.89', 0.139300, '13.930000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 223),
+  ('ph_urine', 6.9000, '6.9', 0.139300, '13.930000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 224),
+  ('ph_urine', 6.9100, '6.91', 0.139300, '13.930000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 225),
+  ('ph_urine', 6.9200, '6.92', 0.139300, '13.930000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 226),
+  ('ph_urine', 6.9300, '6.93', 0.139333, '13.933300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 227),
+  ('ph_urine', 6.9400, '6.94', 0.133000, '13.300000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 228),
+  ('ph_urine', 6.9500, '6.95', 0.126667, '12.666700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 229),
+  ('ph_urine', 6.9600, '6.96', 0.125000, '12.500000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 230),
+  ('ph_urine', 6.9700, '6.97', 0.120300, '12.030000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 231),
+  ('ph_urine', 6.9800, '6.98', 0.120300, '12.030000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 232),
+  ('ph_urine', 6.9900, '6.99', 0.120300, '12.030000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 233),
+  ('ph_urine', 7.0000, '7', 0.120300, '12.030000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 234),
+  ('ph_urine', 7.0100, '7.01', 0.120300, '12.030000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 235),
+  ('ph_urine', 7.0200, '7.02', 0.120300, '12.030000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 236),
+  ('ph_urine', 7.0300, '7.03', 0.120300, '12.030000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 237),
+  ('ph_urine', 7.0400, '7.04', 0.120333, '12.033300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 238),
+  ('ph_urine', 7.0500, '7.05', 0.114000, '11.400000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 239),
+  ('ph_urine', 7.0600, '7.06', 0.107667, '10.766700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 240),
+  ('ph_urine', 7.0700, '7.07', 0.107700, '10.770000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 241),
+  ('ph_urine', 7.0800, '7.08', 0.107700, '10.770000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 242),
+  ('ph_urine', 7.0900, '7.09', 0.107700, '10.770000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 243),
+  ('ph_urine', 7.1000, '7.1', 0.107700, '10.770000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 244),
+  ('ph_urine', 7.1100, '7.11', 0.107700, '10.770000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 245),
+  ('ph_urine', 7.1200, '7.12', 0.107700, '10.770000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 246),
+  ('ph_urine', 7.1300, '7.13', 0.107700, '10.770000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 247),
+  ('ph_urine', 7.1400, '7.14', 0.107700, '10.770000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 248),
+  ('ph_urine', 7.1500, '7.15', 0.107700, '10.770000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 249),
+  ('ph_urine', 7.1600, '7.16', 0.107700, '10.770000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 250),
+  ('ph_urine', 7.1700, '7.17', 0.107700, '10.770000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 251),
+  ('ph_urine', 7.1800, '7.18', 0.107667, '10.766700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 252),
+  ('ph_urine', 7.1900, '7.19', 0.101333, '10.133300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 253),
+  ('ph_urine', 7.2000, '7.2', 0.095000, '9.500000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 254),
+  ('ph_urine', 7.2100, '7.21', 0.088667, '8.866700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 255),
+  ('ph_urine', 7.2200, '7.22', 0.095000, '9.500000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 256),
+  ('ph_urine', 7.2300, '7.23', 0.088667, '8.866700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 257),
+  ('ph_urine', 7.2400, '7.24', 0.082333, '8.233300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 258),
+  ('ph_urine', 7.2500, '7.25', 0.076000, '7.600000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 259),
+  ('ph_urine', 7.2600, '7.26', 0.076000, '7.600000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 260),
+  ('ph_urine', 7.2700, '7.27', 0.076000, '7.600000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 261),
+  ('ph_urine', 7.2800, '7.28', 0.069667, '6.966700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 262),
+  ('ph_urine', 7.2900, '7.29', 0.063333, '6.333300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 263),
+  ('ph_urine', 7.3000, '7.3', 0.057000, '5.700000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 264),
+  ('ph_urine', 7.3100, '7.31', 0.050667, '5.066700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 265),
+  ('ph_urine', 7.3200, '7.32', 0.063333, '6.333300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 266),
+  ('ph_urine', 7.3300, '7.33', 0.057000, '5.700000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 267),
+  ('ph_urine', 7.3400, '7.34', 0.050667, '5.066700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 268),
+  ('ph_urine', 7.3500, '7.35', 0.050700, '5.070000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 269),
+  ('ph_urine', 7.3600, '7.36', 0.050700, '5.070000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 270),
+  ('ph_urine', 7.3700, '7.37', 0.050667, '5.066700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 271),
+  ('ph_urine', 7.3800, '7.38', 0.050700, '5.070000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 272),
+  ('ph_urine', 7.3900, '7.39', 0.044400, '4.440000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 273),
+  ('ph_urine', 7.4000, '7.4', 0.044367, '4.436700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 274),
+  ('ph_urine', 7.4100, '7.41', 0.044400, '4.440000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 275),
+  ('ph_urine', 7.4200, '7.42', 0.044400, '4.440000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 276),
+  ('ph_urine', 7.4300, '7.43', 0.044367, '4.436700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 277),
+  ('ph_urine', 7.4400, '7.44', 0.038033, '3.803300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 278),
+  ('ph_urine', 7.4500, '7.45', 0.031700, '3.170000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 279),
+  ('ph_urine', 7.4600, '7.46', 0.025367, '2.536700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 280),
+  ('ph_urine', 7.4700, '7.47', 0.019033, '1.903300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 281),
+  ('ph_urine', 7.4800, '7.48', 0.012700, '1.270000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 282),
+  ('ph_urine', 7.4900, '7.49', 0.006367, '0.636700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 283),
+  ('ph_urine', 7.5000, '7.5', 0.000033, '0.003300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 284),
+  ('ph_urine', 7.5100, '7.51', 0.000000, '0.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 285),
+  ('ph_urine', 7.5200, '7.52', 0.002785, '0.278500%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 286),
+  ('ph_urine', 7.5300, '7.53', 0.005570, '0.557000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 287),
+  ('ph_urine', 7.5400, '7.54', 0.008354, '0.835400%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 288),
+  ('ph_urine', 7.5500, '7.55', 0.011139, '1.113900%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 289),
+  ('ph_urine', 7.5600, '7.56', 0.013924, '1.392400%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 290),
+  ('ph_urine', 7.5700, '7.57', 0.016709, '1.670900%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 291),
+  ('ph_urine', 7.5800, '7.58', 0.019494, '1.949400%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 292),
+  ('ph_urine', 7.5900, '7.59', 0.022278, '2.227800%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 293),
+  ('ph_urine', 7.6000, '7.6', 0.025063, '2.506300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 294),
+  ('ph_urine', 7.6100, '7.61', 0.027848, '2.784800%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 295),
+  ('ph_urine', 7.6200, '7.62', 0.030633, '3.063300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 296),
+  ('ph_urine', 7.6300, '7.63', 0.033418, '3.341800%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 297),
+  ('ph_urine', 7.6400, '7.64', 0.036203, '3.620300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 298),
+  ('ph_urine', 7.6500, '7.65', 0.038987, '3.898700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 299),
+  ('ph_urine', 7.6600, '7.66', 0.041772, '4.177200%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 300),
+  ('ph_urine', 7.6700, '7.67', 0.044557, '4.455700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 301),
+  ('ph_urine', 7.6800, '7.68', 0.047342, '4.734200%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 302),
+  ('ph_urine', 7.6900, '7.69', 0.050127, '5.012700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 303),
+  ('ph_urine', 7.7000, '7.7', 0.052911, '5.291100%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 304),
+  ('ph_urine', 7.7100, '7.71', 0.055696, '5.569600%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 305),
+  ('ph_urine', 7.7200, '7.72', 0.058481, '5.848100%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 306),
+  ('ph_urine', 7.7300, '7.73', 0.061266, '6.126600%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 307),
+  ('ph_urine', 7.7400, '7.74', 0.064051, '6.405100%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 308),
+  ('ph_urine', 7.7500, '7.75', 0.066835, '6.683500%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 309),
+  ('ph_urine', 7.7600, '7.76', 0.069620, '6.962000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 310),
+  ('ph_urine', 7.7700, '7.77', 0.072405, '7.240500%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 311),
+  ('ph_urine', 7.7800, '7.78', 0.075190, '7.519000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 312),
+  ('ph_urine', 7.7900, '7.79', 0.077975, '7.797500%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 313),
+  ('ph_urine', 7.8000, '7.8', 0.080759, '8.075900%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 314),
+  ('ph_urine', 7.8100, '7.81', 0.083544, '8.354400%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 315),
+  ('ph_urine', 7.8200, '7.82', 0.086329, '8.632900%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 316),
+  ('ph_urine', 7.8300, '7.83', 0.089114, '8.911400%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 317),
+  ('ph_urine', 7.8400, '7.84', 0.091899, '9.189900%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 318),
+  ('ph_urine', 7.8500, '7.85', 0.094684, '9.468400%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 319),
+  ('ph_urine', 7.8600, '7.86', 0.097468, '9.746800%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 320),
+  ('ph_urine', 7.8700, '7.87', 0.100253, '10.025300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 321),
+  ('ph_urine', 7.8800, '7.88', 0.103038, '10.303800%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 322),
+  ('ph_urine', 7.8900, '7.89', 0.105823, '10.582300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 323),
+  ('ph_urine', 7.9000, '7.9', 0.108608, '10.860800%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 324),
+  ('ph_urine', 7.9100, '7.91', 0.111392, '11.139200%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 325),
+  ('ph_urine', 7.9200, '7.92', 0.114177, '11.417700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 326),
+  ('ph_urine', 7.9300, '7.93', 0.116962, '11.696200%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 327),
+  ('ph_urine', 7.9400, '7.94', 0.119747, '11.974700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 328),
+  ('ph_urine', 7.9500, '7.95', 0.122532, '12.253200%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 329),
+  ('ph_urine', 7.9600, '7.96', 0.125316, '12.531600%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 330),
+  ('ph_urine', 7.9700, '7.97', 0.128101, '12.810100%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 331),
+  ('ph_urine', 7.9800, '7.98', 0.130886, '13.088600%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 332),
+  ('ph_urine', 7.9900, '7.99', 0.133671, '13.367100%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 333),
+  ('ph_urine', 8.0000, '8', 0.136456, '13.645600%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 334),
+  ('ph_urine', 8.0100, '8.01', 0.139241, '13.924100%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 335),
+  ('ph_urine', 8.0200, '8.02', 0.142025, '14.202500%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 336),
+  ('ph_urine', 8.0300, '8.03', 0.144810, '14.481000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 337),
+  ('ph_urine', 8.0400, '8.04', 0.147595, '14.759500%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 338),
+  ('ph_urine', 8.0500, '8.05', 0.150380, '15.038000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 339),
+  ('ph_urine', 8.0600, '8.06', 0.153165, '15.316500%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 340),
+  ('ph_urine', 8.0700, '8.07', 0.155949, '15.594900%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 341),
+  ('ph_urine', 8.0800, '8.08', 0.158734, '15.873400%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 342),
+  ('ph_urine', 8.0900, '8.09', 0.161519, '16.151900%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 343),
+  ('ph_urine', 8.1000, '8.1', 0.164304, '16.430400%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 344),
+  ('ph_urine', 8.1100, '8.11', 0.167089, '16.708900%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 345),
+  ('ph_urine', 8.1200, '8.12', 0.169873, '16.987300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 346),
+  ('ph_urine', 8.1300, '8.13', 0.172658, '17.265800%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 347),
+  ('ph_urine', 8.1400, '8.14', 0.175443, '17.544300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 348),
+  ('ph_urine', 8.1500, '8.15', 0.178228, '17.822800%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 349),
+  ('ph_urine', 8.1600, '8.16', 0.181013, '18.101300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 350),
+  ('ph_urine', 8.1700, '8.17', 0.183797, '18.379700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 351),
+  ('ph_urine', 8.1800, '8.18', 0.186582, '18.658200%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 352),
+  ('ph_urine', 8.1900, '8.19', 0.189367, '18.936700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 353),
+  ('ph_urine', 8.2000, '8.2', 0.192152, '19.215200%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 354),
+  ('ph_urine', 8.2100, '8.21', 0.194937, '19.493700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 355),
+  ('ph_urine', 8.2200, '8.22', 0.197722, '19.772200%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 356),
+  ('ph_urine', 8.2300, '8.23', 0.200506, '20.050600%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 357),
+  ('ph_urine', 8.2400, '8.24', 0.203291, '20.329100%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 358),
+  ('ph_urine', 8.2500, '8.25', 0.206076, '20.607600%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 359),
+  ('ph_urine', 8.2600, '8.26', 0.208861, '20.886100%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 360),
+  ('ph_urine', 8.2700, '8.27', 0.211646, '21.164600%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 361),
+  ('ph_urine', 8.2800, '8.28', 0.214430, '21.443000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 362),
+  ('ph_urine', 8.2900, '8.29', 0.217215, '21.721500%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 363),
+  ('ph_urine', 8.3000, '8.3', 0.220000, '22.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 364),
+  ('ph_urine', 8.3100, '8.31', 0.223210, '22.321000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 365),
+  ('ph_urine', 8.3200, '8.32', 0.226420, '22.642000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 366),
+  ('ph_urine', 8.3300, '8.33', 0.229630, '22.963000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 367),
+  ('ph_urine', 8.3400, '8.34', 0.232840, '23.284000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 368),
+  ('ph_urine', 8.3500, '8.35', 0.236049, '23.604900%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 369),
+  ('ph_urine', 8.3600, '8.36', 0.239259, '23.925900%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 370),
+  ('ph_urine', 8.3700, '8.37', 0.242469, '24.246900%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 371),
+  ('ph_urine', 8.3800, '8.38', 0.245679, '24.567900%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 372),
+  ('ph_urine', 8.3900, '8.39', 0.248889, '24.888900%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 373),
+  ('ph_urine', 8.4000, '8.4', 0.252099, '25.209900%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 374),
+  ('ph_urine', 8.4100, '8.41', 0.255309, '25.530900%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 375),
+  ('ph_urine', 8.4200, '8.42', 0.258519, '25.851900%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 376),
+  ('ph_urine', 8.4300, '8.43', 0.261728, '26.172800%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 377),
+  ('ph_urine', 8.4400, '8.44', 0.264938, '26.493800%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 378),
+  ('ph_urine', 8.4500, '8.45', 0.268148, '26.814800%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 379),
+  ('ph_urine', 8.4600, '8.46', 0.271358, '27.135800%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 380),
+  ('ph_urine', 8.4700, '8.47', 0.274568, '27.456800%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 381),
+  ('ph_urine', 8.4800, '8.48', 0.277778, '27.777800%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 382),
+  ('ph_urine', 8.4900, '8.49', 0.280988, '28.098800%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 383),
+  ('ph_urine', 8.5000, '8.5', 0.284198, '28.419800%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 384),
+  ('ph_urine', 8.5100, '8.51', 0.287407, '28.740700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 385),
+  ('ph_urine', 8.5200, '8.52', 0.290617, '29.061700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 386),
+  ('ph_urine', 8.5300, '8.53', 0.293827, '29.382700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 387),
+  ('ph_urine', 8.5400, '8.54', 0.297037, '29.703700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 388),
+  ('ph_urine', 8.5500, '8.55', 0.300247, '30.024700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 389),
+  ('ph_urine', 8.5600, '8.56', 0.303457, '30.345700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 390),
+  ('ph_urine', 8.5700, '8.57', 0.306667, '30.666700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 391),
+  ('ph_urine', 8.5800, '8.58', 0.309877, '30.987700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 392),
+  ('ph_urine', 8.5900, '8.59', 0.313086, '31.308600%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 393),
+  ('ph_urine', 8.6000, '8.6', 0.316296, '31.629600%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 394),
+  ('ph_urine', 8.6100, '8.61', 0.319506, '31.950600%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 395),
+  ('ph_urine', 8.6200, '8.62', 0.322716, '32.271600%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 396),
+  ('ph_urine', 8.6300, '8.63', 0.325926, '32.592600%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 397),
+  ('ph_urine', 8.6400, '8.64', 0.329136, '32.913600%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 398),
+  ('ph_urine', 8.6500, '8.65', 0.332346, '33.234600%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 399),
+  ('ph_urine', 8.6600, '8.66', 0.335556, '33.555600%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 400),
+  ('ph_urine', 8.6700, '8.67', 0.338765, '33.876500%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 401),
+  ('ph_urine', 8.6800, '8.68', 0.341975, '34.197500%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 402),
+  ('ph_urine', 8.6900, '8.69', 0.345185, '34.518500%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 403),
+  ('ph_urine', 8.7000, '8.7', 0.348395, '34.839500%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 404),
+  ('ph_urine', 8.7100, '8.71', 0.351605, '35.160500%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 405),
+  ('ph_urine', 8.7200, '8.72', 0.354815, '35.481500%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 406),
+  ('ph_urine', 8.7300, '8.73', 0.358025, '35.802500%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 407),
+  ('ph_urine', 8.7400, '8.74', 0.361235, '36.123500%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 408),
+  ('ph_urine', 8.7500, '8.75', 0.364444, '36.444400%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 409),
+  ('ph_urine', 8.7600, '8.76', 0.367654, '36.765400%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 410),
+  ('ph_urine', 8.7700, '8.77', 0.370864, '37.086400%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 411),
+  ('ph_urine', 8.7800, '8.78', 0.374074, '37.407400%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 412),
+  ('ph_urine', 8.7900, '8.79', 0.377284, '37.728400%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 413),
+  ('ph_urine', 8.8000, '8.8', 0.380494, '38.049400%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 414),
+  ('ph_urine', 8.8100, '8.81', 0.383704, '38.370400%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 415),
+  ('ph_urine', 8.8200, '8.82', 0.386914, '38.691400%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 416),
+  ('ph_urine', 8.8300, '8.83', 0.390123, '39.012300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 417),
+  ('ph_urine', 8.8400, '8.84', 0.393333, '39.333300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 418),
+  ('ph_urine', 8.8500, '8.85', 0.396543, '39.654300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 419),
+  ('ph_urine', 8.8600, '8.86', 0.399753, '39.975300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 420),
+  ('ph_urine', 8.8700, '8.87', 0.402963, '40.296300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 421),
+  ('ph_urine', 8.8800, '8.88', 0.406173, '40.617300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 422),
+  ('ph_urine', 8.8900, '8.89', 0.409383, '40.938300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 423),
+  ('ph_urine', 8.9000, '8.9', 0.412593, '41.259300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 424),
+  ('ph_urine', 8.9100, '8.91', 0.415802, '41.580200%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 425),
+  ('ph_urine', 8.9200, '8.92', 0.419012, '41.901200%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 426),
+  ('ph_urine', 8.9300, '8.93', 0.422222, '42.222200%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 427),
+  ('ph_urine', 8.9400, '8.94', 0.425432, '42.543200%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 428),
+  ('ph_urine', 8.9500, '8.95', 0.428642, '42.864200%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 429),
+  ('ph_urine', 8.9600, '8.96', 0.431852, '43.185200%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 430),
+  ('ph_urine', 8.9700, '8.97', 0.435062, '43.506200%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 431),
+  ('ph_urine', 8.9800, '8.98', 0.438272, '43.827200%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 432),
+  ('ph_urine', 8.9900, '8.99', 0.441481, '44.148100%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 433),
+  ('ph_urine', 9.0000, '9', 0.444691, '44.469100%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 434),
+  ('ph_urine', 9.0100, '9.01', 0.447901, '44.790100%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 435),
+  ('ph_urine', 9.0200, '9.02', 0.451111, '45.111100%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 436),
+  ('ph_urine', 9.0300, '9.03', 0.454321, '45.432100%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 437),
+  ('ph_urine', 9.0400, '9.04', 0.457531, '45.753100%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 438),
+  ('ph_urine', 9.0500, '9.05', 0.460741, '46.074100%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 439),
+  ('ph_urine', 9.0600, '9.06', 0.463951, '46.395100%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 440),
+  ('ph_urine', 9.0700, '9.07', 0.467160, '46.716000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 441),
+  ('ph_urine', 9.0800, '9.08', 0.470370, '47.037000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 442),
+  ('ph_urine', 9.0900, '9.09', 0.473580, '47.358000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 443),
+  ('ph_urine', 9.1000, '9.1', 0.476790, '47.679000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 444),
+  ('ph_urine', 9.1100, '9.11', 0.480000, '48.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 445),
+  ('ph_saliva', 4.8000, '4.8', 0.960000, '96.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 14),
+  ('ph_saliva', 4.8100, '4.81', 0.955000, '95.500000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 15),
+  ('ph_saliva', 4.8200, '4.82', 0.950000, '95.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 16),
+  ('ph_saliva', 4.8300, '4.83', 0.945000, '94.500000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 17),
+  ('ph_saliva', 4.8400, '4.84', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 18),
+  ('ph_saliva', 4.8500, '4.85', 0.935000, '93.500000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 19),
+  ('ph_saliva', 4.8600, '4.86', 0.930000, '93.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 20),
+  ('ph_saliva', 4.8700, '4.87', 0.925000, '92.500000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 21),
+  ('ph_saliva', 4.8800, '4.88', 0.920000, '92.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 22),
+  ('ph_saliva', 4.8900, '4.89', 0.915000, '91.500000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 23),
+  ('ph_saliva', 4.9000, '4.9', 0.910000, '91.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 24),
+  ('ph_saliva', 4.9100, '4.91', 0.905000, '90.500000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 25),
+  ('ph_saliva', 4.9200, '4.92', 0.900000, '90.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 26),
+  ('ph_saliva', 4.9300, '4.93', 0.895000, '89.500000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 27),
+  ('ph_saliva', 4.9400, '4.94', 0.890000, '89.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 28),
+  ('ph_saliva', 4.9500, '4.95', 0.885000, '88.500000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 29),
+  ('ph_saliva', 4.9600, '4.96', 0.880000, '88.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 30),
+  ('ph_saliva', 4.9700, '4.97', 0.875000, '87.500000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 31),
+  ('ph_saliva', 4.9800, '4.98', 0.870000, '87.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 32),
+  ('ph_saliva', 4.9900, '4.99', 0.865000, '86.500000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 33),
+  ('ph_saliva', 5.0000, '5', 0.860000, '86.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 34),
+  ('ph_saliva', 5.0100, '5.01', 0.855000, '85.500000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 35),
+  ('ph_saliva', 5.0200, '5.02', 0.850000, '85.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 36),
+  ('ph_saliva', 5.0300, '5.03', 0.845000, '84.500000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 37),
+  ('ph_saliva', 5.0400, '5.04', 0.840000, '84.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 38),
+  ('ph_saliva', 5.0500, '5.05', 0.835000, '83.500000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 39),
+  ('ph_saliva', 5.0600, '5.06', 0.830000, '83.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 40),
+  ('ph_saliva', 5.0700, '5.07', 0.825000, '82.500000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 41),
+  ('ph_saliva', 5.0800, '5.08', 0.820000, '82.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 42),
+  ('ph_saliva', 5.0900, '5.09', 0.815000, '81.500000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 43),
+  ('ph_saliva', 5.1000, '5.1', 0.810000, '81.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 44),
+  ('ph_saliva', 5.1100, '5.11', 0.805000, '80.500000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 45),
+  ('ph_saliva', 5.1200, '5.12', 0.800000, '80.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 46),
+  ('ph_saliva', 5.1300, '5.13', 0.795000, '79.500000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 47),
+  ('ph_saliva', 5.1400, '5.14', 0.790000, '79.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 48),
+  ('ph_saliva', 5.1500, '5.15', 0.785000, '78.500000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 49),
+  ('ph_saliva', 5.1600, '5.16', 0.780000, '78.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 50),
+  ('ph_saliva', 5.1700, '5.17', 0.775000, '77.500000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 51),
+  ('ph_saliva', 5.1800, '5.18', 0.770000, '77.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 52),
+  ('ph_saliva', 5.1900, '5.19', 0.765000, '76.500000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 53),
+  ('ph_saliva', 5.2000, '5.2', 0.760000, '76.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 54),
+  ('ph_saliva', 5.2100, '5.21', 0.753667, '75.366700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 55),
+  ('ph_saliva', 5.2200, '5.22', 0.747333, '74.733300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 56),
+  ('ph_saliva', 5.2300, '5.23', 0.741000, '74.100000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 57),
+  ('ph_saliva', 5.2400, '5.24', 0.734667, '73.466700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 58),
+  ('ph_saliva', 5.2500, '5.25', 0.728333, '72.833300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 59),
+  ('ph_saliva', 5.2600, '5.26', 0.722000, '72.200000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 60),
+  ('ph_saliva', 5.2700, '5.27', 0.715667, '71.566700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 61),
+  ('ph_saliva', 5.2800, '5.28', 0.709333, '70.933300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 62),
+  ('ph_saliva', 5.2900, '5.29', 0.703000, '70.300000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 63),
+  ('ph_saliva', 5.3000, '5.3', 0.696667, '69.666700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 64),
+  ('ph_saliva', 5.3100, '5.31', 0.690333, '69.033300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 65),
+  ('ph_saliva', 5.3200, '5.32', 0.684000, '68.400000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 66),
+  ('ph_saliva', 5.3300, '5.33', 0.677667, '67.766700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 67),
+  ('ph_saliva', 5.3400, '5.34', 0.671333, '67.133300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 68),
+  ('ph_saliva', 5.3500, '5.35', 0.665000, '66.500000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 69),
+  ('ph_saliva', 5.3600, '5.36', 0.658667, '65.866700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 70),
+  ('ph_saliva', 5.3700, '5.37', 0.652333, '65.233300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 71),
+  ('ph_saliva', 5.3800, '5.38', 0.646000, '64.600000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 72),
+  ('ph_saliva', 5.3900, '5.39', 0.639667, '63.966700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 73),
+  ('ph_saliva', 5.4000, '5.4', 0.633333, '63.333300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 74),
+  ('ph_saliva', 5.4100, '5.41', 0.627000, '62.700000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 75),
+  ('ph_saliva', 5.4200, '5.42', 0.620667, '62.066700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 76),
+  ('ph_saliva', 5.4300, '5.43', 0.614333, '61.433300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 77),
+  ('ph_saliva', 5.4400, '5.44', 0.608000, '60.800000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 78),
+  ('ph_saliva', 5.4500, '5.45', 0.601667, '60.166700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 79),
+  ('ph_saliva', 5.4600, '5.46', 0.595333, '59.533300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 80),
+  ('ph_saliva', 5.4700, '5.47', 0.589000, '58.900000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 81),
+  ('ph_saliva', 5.4800, '5.48', 0.582667, '58.266700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 82),
+  ('ph_saliva', 5.4900, '5.49', 0.576333, '57.633300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 83),
+  ('ph_saliva', 5.5000, '5.5', 0.570000, '57.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 84),
+  ('ph_saliva', 5.5100, '5.51', 0.563667, '56.366700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 85),
+  ('ph_saliva', 5.5200, '5.52', 0.557333, '55.733300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 86),
+  ('ph_saliva', 5.5300, '5.53', 0.551000, '55.100000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 87),
+  ('ph_saliva', 5.5400, '5.54', 0.544667, '54.466700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 88),
+  ('ph_saliva', 5.5500, '5.55', 0.538333, '53.833300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 89),
+  ('ph_saliva', 5.5600, '5.56', 0.532000, '53.200000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 90),
+  ('ph_saliva', 5.5700, '5.57', 0.525667, '52.566700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 91),
+  ('ph_saliva', 5.5800, '5.58', 0.519333, '51.933300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 92),
+  ('ph_saliva', 5.5900, '5.59', 0.513000, '51.300000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 93),
+  ('ph_saliva', 5.6000, '5.6', 0.506667, '50.666700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 94),
+  ('ph_saliva', 5.6100, '5.61', 0.500333, '50.033300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 95),
+  ('ph_saliva', 5.6200, '5.62', 0.494000, '49.400000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 96),
+  ('ph_saliva', 5.6300, '5.63', 0.487667, '48.766700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 97),
+  ('ph_saliva', 5.6400, '5.64', 0.481333, '48.133300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 98),
+  ('ph_saliva', 5.6500, '5.65', 0.475000, '47.500000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 99),
+  ('ph_saliva', 5.6600, '5.66', 0.468667, '46.866700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 100),
+  ('ph_saliva', 5.6700, '5.67', 0.462333, '46.233300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 101),
+  ('ph_saliva', 5.6800, '5.68', 0.456000, '45.600000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 102),
+  ('ph_saliva', 5.6900, '5.69', 0.449667, '44.966700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 103),
+  ('ph_saliva', 5.7000, '5.7', 0.443333, '44.333300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 104),
+  ('ph_saliva', 5.7100, '5.71', 0.437000, '43.700000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 105),
+  ('ph_saliva', 5.7200, '5.72', 0.430667, '43.066700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 106),
+  ('ph_saliva', 5.7300, '5.73', 0.424333, '42.433300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 107),
+  ('ph_saliva', 5.7400, '5.74', 0.418000, '41.800000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 108),
+  ('ph_saliva', 5.7500, '5.75', 0.411667, '41.166700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 109),
+  ('ph_saliva', 5.7600, '5.76', 0.405333, '40.533300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 110),
+  ('ph_saliva', 5.7700, '5.77', 0.400000, '40.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 111),
+  ('ph_saliva', 5.7800, '5.78', 0.400000, '40.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 112),
+  ('ph_saliva', 5.7900, '5.79', 0.400000, '40.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 113),
+  ('ph_saliva', 5.8000, '5.8', 0.400000, '40.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 114),
+  ('ph_saliva', 5.8100, '5.81', 0.400000, '40.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 115),
+  ('ph_saliva', 5.8200, '5.82', 0.400000, '40.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 116),
+  ('ph_saliva', 5.8300, '5.83', 0.400000, '40.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 117),
+  ('ph_saliva', 5.8400, '5.84', 0.400000, '40.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 118),
+  ('ph_saliva', 5.8500, '5.85', 0.400000, '40.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 119),
+  ('ph_saliva', 5.8600, '5.86', 0.400000, '40.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 120),
+  ('ph_saliva', 5.8700, '5.87', 0.400000, '40.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 121),
+  ('ph_saliva', 5.8800, '5.88', 0.400000, '40.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 122),
+  ('ph_saliva', 5.8900, '5.89', 0.400000, '40.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 123),
+  ('ph_saliva', 5.9000, '5.9', 0.400000, '40.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 124),
+  ('ph_saliva', 5.9100, '5.91', 0.400000, '40.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 125),
+  ('ph_saliva', 5.9200, '5.92', 0.400000, '40.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 126),
+  ('ph_saliva', 5.9300, '5.93', 0.300000, '30.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 127),
+  ('ph_saliva', 5.9400, '5.94', 0.300000, '30.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 128),
+  ('ph_saliva', 5.9500, '5.95', 0.300000, '30.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 129),
+  ('ph_saliva', 5.9600, '5.96', 0.300000, '30.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 130),
+  ('ph_saliva', 5.9700, '5.97', 0.300000, '30.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 131),
+  ('ph_saliva', 5.9800, '5.98', 0.300000, '30.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 132),
+  ('ph_saliva', 5.9900, '5.99', 0.300000, '30.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 133),
+  ('ph_saliva', 6.0000, '6', 0.300000, '30.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 134),
+  ('ph_saliva', 6.0100, '6.01', 0.300000, '30.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 135),
+  ('ph_saliva', 6.0200, '6.02', 0.300000, '30.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 136),
+  ('ph_saliva', 6.0300, '6.03', 0.300000, '30.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 137),
+  ('ph_saliva', 6.0400, '6.04', 0.250000, '25.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 138),
+  ('ph_saliva', 6.0500, '6.05', 0.250000, '25.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 139),
+  ('ph_saliva', 6.0600, '6.06', 0.250000, '25.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 140),
+  ('ph_saliva', 6.0700, '6.07', 0.250000, '25.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 141),
+  ('ph_saliva', 6.0800, '6.08', 0.250000, '25.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 142),
+  ('ph_saliva', 6.0900, '6.09', 0.250000, '25.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 143),
+  ('ph_saliva', 6.1000, '6.1', 0.250000, '25.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 144),
+  ('ph_saliva', 6.1100, '6.11', 0.250000, '25.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 145),
+  ('ph_saliva', 6.1200, '6.12', 0.250000, '25.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 146),
+  ('ph_saliva', 6.1300, '6.13', 0.250000, '25.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 147),
+  ('ph_saliva', 6.1400, '6.14', 0.200000, '20.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 148),
+  ('ph_saliva', 6.1500, '6.15', 0.200000, '20.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 149),
+  ('ph_saliva', 6.1600, '6.16', 0.200000, '20.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 150),
+  ('ph_saliva', 6.1700, '6.17', 0.200000, '20.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 151),
+  ('ph_saliva', 6.1800, '6.18', 0.200000, '20.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 152),
+  ('ph_saliva', 6.1900, '6.19', 0.200000, '20.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 153),
+  ('ph_saliva', 6.2000, '6.2', 0.200000, '20.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 154),
+  ('ph_saliva', 6.2100, '6.21', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 155),
+  ('ph_saliva', 6.2200, '6.22', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 156),
+  ('ph_saliva', 6.2300, '6.23', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 157),
+  ('ph_saliva', 6.2400, '6.24', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 158),
+  ('ph_saliva', 6.2500, '6.25', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 159),
+  ('ph_saliva', 6.2600, '6.26', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 160),
+  ('ph_saliva', 6.2700, '6.27', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 161),
+  ('ph_saliva', 6.2800, '6.28', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 162),
+  ('ph_saliva', 6.2900, '6.29', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 163),
+  ('ph_saliva', 6.3000, '6.3', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 164),
+  ('ph_saliva', 6.3100, '6.31', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 165),
+  ('ph_saliva', 6.3200, '6.32', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 166),
+  ('ph_saliva', 6.3300, '6.33', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 167),
+  ('ph_saliva', 6.3400, '6.34', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 168),
+  ('ph_saliva', 6.3500, '6.35', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 169),
+  ('ph_saliva', 6.3600, '6.36', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 170),
+  ('ph_saliva', 6.3700, '6.37', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 171),
+  ('ph_saliva', 6.3800, '6.38', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 172),
+  ('ph_saliva', 6.3900, '6.39', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 173),
+  ('ph_saliva', 6.4000, '6.4', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 174),
+  ('ph_saliva', 6.4100, '6.41', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 175),
+  ('ph_saliva', 6.4200, '6.42', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 176),
+  ('ph_saliva', 6.4300, '6.43', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 177),
+  ('ph_saliva', 6.4400, '6.44', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 178),
+  ('ph_saliva', 6.4500, '6.45', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 179),
+  ('ph_saliva', 6.4600, '6.46', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 180),
+  ('ph_saliva', 6.4700, '6.47', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 181),
+  ('ph_saliva', 6.4800, '6.48', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 182),
+  ('ph_saliva', 6.4900, '6.49', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 183),
+  ('ph_saliva', 6.5000, '6.5', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 184),
+  ('ph_saliva', 6.5100, '6.51', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 185),
+  ('ph_saliva', 6.5200, '6.52', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 186),
+  ('ph_saliva', 6.5300, '6.53', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 187),
+  ('ph_saliva', 6.5400, '6.54', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 188),
+  ('ph_saliva', 6.5500, '6.55', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 189),
+  ('ph_saliva', 6.5600, '6.56', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 190),
+  ('ph_saliva', 6.5700, '6.57', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 191),
+  ('ph_saliva', 6.5800, '6.58', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 192),
+  ('ph_saliva', 6.5900, '6.59', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 193),
+  ('ph_saliva', 6.6000, '6.6', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 194),
+  ('ph_saliva', 6.6100, '6.61', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 195),
+  ('ph_saliva', 6.6200, '6.62', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 196),
+  ('ph_saliva', 6.6300, '6.63', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 197),
+  ('ph_saliva', 6.6400, '6.64', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 198),
+  ('ph_saliva', 6.6500, '6.65', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 199),
+  ('ph_saliva', 6.6600, '6.66', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 200),
+  ('ph_saliva', 6.6700, '6.67', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 201),
+  ('ph_saliva', 6.6800, '6.68', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 202),
+  ('ph_saliva', 6.6900, '6.69', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 203),
+  ('ph_saliva', 6.7000, '6.7', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 204),
+  ('ph_saliva', 6.7100, '6.71', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 205),
+  ('ph_saliva', 6.7200, '6.72', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 206),
+  ('ph_saliva', 6.7300, '6.73', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 207),
+  ('ph_saliva', 6.7400, '6.74', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 208),
+  ('ph_saliva', 6.7500, '6.75', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 209),
+  ('ph_saliva', 6.7600, '6.76', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 210),
+  ('ph_saliva', 6.7700, '6.77', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 211),
+  ('ph_saliva', 6.7800, '6.78', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 212),
+  ('ph_saliva', 6.7900, '6.79', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 213),
+  ('ph_saliva', 6.8000, '6.8', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 214),
+  ('ph_saliva', 6.8100, '6.81', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 215),
+  ('ph_saliva', 6.8200, '6.82', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 216),
+  ('ph_saliva', 6.8300, '6.83', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 217),
+  ('ph_saliva', 6.8400, '6.84', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 218),
+  ('ph_saliva', 6.8500, '6.85', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 219),
+  ('ph_saliva', 6.8600, '6.86', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 220),
+  ('ph_saliva', 6.8700, '6.87', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 221),
+  ('ph_saliva', 6.8800, '6.88', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 222),
+  ('ph_saliva', 6.8900, '6.89', 0.139300, '13.930000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 223),
+  ('ph_saliva', 6.9000, '6.9', 0.139300, '13.930000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 224),
+  ('ph_saliva', 6.9100, '6.91', 0.139300, '13.930000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 225),
+  ('ph_saliva', 6.9200, '6.92', 0.139300, '13.930000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 226),
+  ('ph_saliva', 6.9300, '6.93', 0.193667, '19.366700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 227),
+  ('ph_saliva', 6.9400, '6.94', 0.187333, '18.733300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 228),
+  ('ph_saliva', 6.9500, '6.95', 0.181000, '18.100000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 229),
+  ('ph_saliva', 6.9600, '6.96', 0.125000, '12.500000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 230),
+  ('ph_saliva', 6.9700, '6.97', 0.120300, '12.030000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 231),
+  ('ph_saliva', 6.9800, '6.98', 0.120300, '12.030000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 232),
+  ('ph_saliva', 6.9900, '6.99', 0.120300, '12.030000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 233),
+  ('ph_saliva', 7.0000, '7', 0.120300, '12.030000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 234),
+  ('ph_saliva', 7.0100, '7.01', 0.120300, '12.030000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 235),
+  ('ph_saliva', 7.0200, '7.02', 0.120300, '12.030000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 236),
+  ('ph_saliva', 7.0300, '7.03', 0.120300, '12.030000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 237),
+  ('ph_saliva', 7.0400, '7.04', 0.174667, '17.466700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 238),
+  ('ph_saliva', 7.0500, '7.05', 0.168333, '16.833300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 239),
+  ('ph_saliva', 7.0600, '7.06', 0.162000, '16.200000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 240),
+  ('ph_saliva', 7.0700, '7.07', 0.107700, '10.770000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 241),
+  ('ph_saliva', 7.0800, '7.08', 0.107700, '10.770000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 242),
+  ('ph_saliva', 7.0900, '7.09', 0.107700, '10.770000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 243),
+  ('ph_saliva', 7.1000, '7.1', 0.107700, '10.770000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 244),
+  ('ph_saliva', 7.1100, '7.11', 0.107700, '10.770000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 245),
+  ('ph_saliva', 7.1200, '7.12', 0.107700, '10.770000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 246),
+  ('ph_saliva', 7.1300, '7.13', 0.107700, '10.770000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 247),
+  ('ph_saliva', 7.1400, '7.14', 0.107700, '10.770000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 248),
+  ('ph_saliva', 7.1500, '7.15', 0.107700, '10.770000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 249),
+  ('ph_saliva', 7.1600, '7.16', 0.107700, '10.770000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 250),
+  ('ph_saliva', 7.1700, '7.17', 0.107700, '10.770000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 251),
+  ('ph_saliva', 7.1800, '7.18', 0.162000, '16.200000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 252),
+  ('ph_saliva', 7.1900, '7.19', 0.155667, '15.566700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 253),
+  ('ph_saliva', 7.2000, '7.2', 0.149333, '14.933300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 254),
+  ('ph_saliva', 7.2100, '7.21', 0.143000, '14.300000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 255),
+  ('ph_saliva', 7.2200, '7.22', 0.149333, '14.933300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 256),
+  ('ph_saliva', 7.2300, '7.23', 0.143000, '14.300000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 257),
+  ('ph_saliva', 7.2400, '7.24', 0.136667, '13.666700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 258),
+  ('ph_saliva', 7.2500, '7.25', 0.130333, '13.033300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 259),
+  ('ph_saliva', 7.2600, '7.26', 0.076000, '7.600000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 260),
+  ('ph_saliva', 7.2700, '7.27', 0.130333, '13.033300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 261),
+  ('ph_saliva', 7.2800, '7.28', 0.124000, '12.400000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 262),
+  ('ph_saliva', 7.2900, '7.29', 0.117667, '11.766700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 263),
+  ('ph_saliva', 7.3000, '7.3', 0.111333, '11.133300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 264),
+  ('ph_saliva', 7.3100, '7.31', 0.105000, '10.500000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 265),
+  ('ph_saliva', 7.3200, '7.32', 0.117667, '11.766700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 266),
+  ('ph_saliva', 7.3300, '7.33', 0.111333, '11.133300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 267),
+  ('ph_saliva', 7.3400, '7.34', 0.105000, '10.500000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 268),
+  ('ph_saliva', 7.3500, '7.35', 0.050700, '5.070000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 269),
+  ('ph_saliva', 7.3600, '7.36', 0.050700, '5.070000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 270),
+  ('ph_saliva', 7.3700, '7.37', 0.105000, '10.500000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 271),
+  ('ph_saliva', 7.3800, '7.38', 0.050700, '5.070000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 272),
+  ('ph_saliva', 7.3900, '7.39', 0.044400, '4.440000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 273),
+  ('ph_saliva', 7.4000, '7.4', 0.044367, '4.436700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 274),
+  ('ph_saliva', 7.4100, '7.41', 0.044400, '4.440000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 275),
+  ('ph_saliva', 7.4200, '7.42', 0.044400, '4.440000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 276),
+  ('ph_saliva', 7.4300, '7.43', 0.044367, '4.436700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 277),
+  ('ph_saliva', 7.4400, '7.44', 0.038033, '3.803300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 278),
+  ('ph_saliva', 7.4500, '7.45', 0.031700, '3.170000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 279),
+  ('ph_saliva', 7.4600, '7.46', 0.025367, '2.536700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 280),
+  ('ph_saliva', 7.4700, '7.47', 0.019033, '1.903300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 281),
+  ('ph_saliva', 7.4800, '7.48', 0.012700, '1.270000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 282),
+  ('ph_saliva', 7.4900, '7.49', 0.006367, '0.636700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 283),
+  ('ph_saliva', 7.5000, '7.5', 0.000033, '0.003300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 284),
+  ('ph_saliva', 7.5100, '7.51', 0.000000, '0.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 285),
+  ('ph_saliva', 7.5200, '7.52', 0.002785, '0.278500%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 286),
+  ('ph_saliva', 7.5300, '7.53', 0.005570, '0.557000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 287),
+  ('ph_saliva', 7.5400, '7.54', 0.008354, '0.835400%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 288),
+  ('ph_saliva', 7.5500, '7.55', 0.011139, '1.113900%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 289),
+  ('ph_saliva', 7.5600, '7.56', 0.013924, '1.392400%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 290),
+  ('ph_saliva', 7.5700, '7.57', 0.016709, '1.670900%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 291),
+  ('ph_saliva', 7.5800, '7.58', 0.019494, '1.949400%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 292),
+  ('ph_saliva', 7.5900, '7.59', 0.022278, '2.227800%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 293),
+  ('ph_saliva', 7.6000, '7.6', 0.025063, '2.506300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 294),
+  ('ph_saliva', 7.6100, '7.61', 0.027848, '2.784800%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 295),
+  ('ph_saliva', 7.6200, '7.62', 0.030633, '3.063300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 296),
+  ('ph_saliva', 7.6300, '7.63', 0.033418, '3.341800%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 297),
+  ('ph_saliva', 7.6400, '7.64', 0.036203, '3.620300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 298),
+  ('ph_saliva', 7.6500, '7.65', 0.038987, '3.898700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 299),
+  ('ph_saliva', 7.6600, '7.66', 0.041772, '4.177200%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 300),
+  ('ph_saliva', 7.6700, '7.67', 0.044557, '4.455700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 301),
+  ('ph_saliva', 7.6800, '7.68', 0.047342, '4.734200%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 302),
+  ('ph_saliva', 7.6900, '7.69', 0.050127, '5.012700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 303),
+  ('ph_saliva', 7.7000, '7.7', 0.052911, '5.291100%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 304),
+  ('ph_saliva', 7.7100, '7.71', 0.055696, '5.569600%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 305),
+  ('ph_saliva', 7.7200, '7.72', 0.058481, '5.848100%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 306),
+  ('ph_saliva', 7.7300, '7.73', 0.061266, '6.126600%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 307),
+  ('ph_saliva', 7.7400, '7.74', 0.064051, '6.405100%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 308),
+  ('ph_saliva', 7.7500, '7.75', 0.066835, '6.683500%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 309),
+  ('ph_saliva', 7.7600, '7.76', 0.069620, '6.962000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 310),
+  ('ph_saliva', 7.7700, '7.77', 0.072405, '7.240500%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 311),
+  ('ph_saliva', 7.7800, '7.78', 0.075190, '7.519000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 312),
+  ('ph_saliva', 7.7900, '7.79', 0.077975, '7.797500%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 313),
+  ('ph_saliva', 7.8000, '7.8', 0.080759, '8.075900%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 314),
+  ('ph_saliva', 7.8100, '7.81', 0.083544, '8.354400%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 315),
+  ('ph_saliva', 7.8200, '7.82', 0.086329, '8.632900%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 316),
+  ('ph_saliva', 7.8300, '7.83', 0.089114, '8.911400%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 317),
+  ('ph_saliva', 7.8400, '7.84', 0.091899, '9.189900%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 318),
+  ('ph_saliva', 7.8500, '7.85', 0.094684, '9.468400%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 319),
+  ('ph_saliva', 7.8600, '7.86', 0.097468, '9.746800%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 320),
+  ('ph_saliva', 7.8700, '7.87', 0.100253, '10.025300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 321),
+  ('ph_saliva', 7.8800, '7.88', 0.103038, '10.303800%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 322),
+  ('ph_saliva', 7.8900, '7.89', 0.105823, '10.582300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 323),
+  ('ph_saliva', 7.9000, '7.9', 0.108608, '10.860800%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 324),
+  ('ph_saliva', 7.9100, '7.91', 0.111392, '11.139200%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 325),
+  ('ph_saliva', 7.9200, '7.92', 0.114177, '11.417700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 326),
+  ('ph_saliva', 7.9300, '7.93', 0.116962, '11.696200%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 327),
+  ('ph_saliva', 7.9400, '7.94', 0.119747, '11.974700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 328),
+  ('ph_saliva', 7.9500, '7.95', 0.122532, '12.253200%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 329),
+  ('ph_saliva', 7.9600, '7.96', 0.125316, '12.531600%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 330),
+  ('ph_saliva', 7.9700, '7.97', 0.128101, '12.810100%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 331),
+  ('ph_saliva', 7.9800, '7.98', 0.130886, '13.088600%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 332),
+  ('ph_saliva', 7.9900, '7.99', 0.133671, '13.367100%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 333),
+  ('ph_saliva', 8.0000, '8', 0.136456, '13.645600%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 334),
+  ('ph_saliva', 8.0100, '8.01', 0.139241, '13.924100%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 335),
+  ('ph_saliva', 8.0200, '8.02', 0.142025, '14.202500%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 336),
+  ('ph_saliva', 8.0300, '8.03', 0.144810, '14.481000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 337),
+  ('ph_saliva', 8.0400, '8.04', 0.147595, '14.759500%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 338),
+  ('ph_saliva', 8.0500, '8.05', 0.150380, '15.038000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 339),
+  ('ph_saliva', 8.0600, '8.06', 0.153165, '15.316500%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 340),
+  ('ph_saliva', 8.0700, '8.07', 0.155949, '15.594900%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 341),
+  ('ph_saliva', 8.0800, '8.08', 0.158734, '15.873400%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 342),
+  ('ph_saliva', 8.0900, '8.09', 0.161519, '16.151900%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 343),
+  ('ph_saliva', 8.1000, '8.1', 0.164304, '16.430400%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 344),
+  ('ph_saliva', 8.1100, '8.11', 0.167089, '16.708900%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 345),
+  ('ph_saliva', 8.1200, '8.12', 0.169873, '16.987300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 346),
+  ('ph_saliva', 8.1300, '8.13', 0.172658, '17.265800%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 347),
+  ('ph_saliva', 8.1400, '8.14', 0.175443, '17.544300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 348),
+  ('ph_saliva', 8.1500, '8.15', 0.178228, '17.822800%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 349),
+  ('ph_saliva', 8.1600, '8.16', 0.181013, '18.101300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 350),
+  ('ph_saliva', 8.1700, '8.17', 0.183797, '18.379700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 351),
+  ('ph_saliva', 8.1800, '8.18', 0.186582, '18.658200%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 352),
+  ('ph_saliva', 8.1900, '8.19', 0.189367, '18.936700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 353),
+  ('ph_saliva', 8.2000, '8.2', 0.192152, '19.215200%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 354),
+  ('ph_saliva', 8.2100, '8.21', 0.194937, '19.493700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 355),
+  ('ph_saliva', 8.2200, '8.22', 0.197722, '19.772200%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 356),
+  ('ph_saliva', 8.2300, '8.23', 0.200506, '20.050600%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 357),
+  ('ph_saliva', 8.2400, '8.24', 0.203291, '20.329100%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 358),
+  ('ph_saliva', 8.2500, '8.25', 0.206076, '20.607600%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 359),
+  ('ph_saliva', 8.2600, '8.26', 0.208861, '20.886100%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 360),
+  ('ph_saliva', 8.2700, '8.27', 0.211646, '21.164600%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 361),
+  ('ph_saliva', 8.2800, '8.28', 0.214430, '21.443000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 362),
+  ('ph_saliva', 8.2900, '8.29', 0.217215, '21.721500%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 363),
+  ('ph_saliva', 8.3000, '8.3', 0.220000, '22.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 364),
+  ('ph_saliva', 8.3100, '8.31', 0.223210, '22.321000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 365),
+  ('ph_saliva', 8.3200, '8.32', 0.226420, '22.642000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 366),
+  ('ph_saliva', 8.3300, '8.33', 0.229630, '22.963000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 367),
+  ('ph_saliva', 8.3400, '8.34', 0.232840, '23.284000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 368),
+  ('ph_saliva', 8.3500, '8.35', 0.236049, '23.604900%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 369),
+  ('ph_saliva', 8.3600, '8.36', 0.239259, '23.925900%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 370),
+  ('ph_saliva', 8.3700, '8.37', 0.242469, '24.246900%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 371),
+  ('ph_saliva', 8.3800, '8.38', 0.245679, '24.567900%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 372),
+  ('ph_saliva', 8.3900, '8.39', 0.248889, '24.888900%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 373),
+  ('ph_saliva', 8.4000, '8.4', 0.252099, '25.209900%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 374),
+  ('ph_saliva', 8.4100, '8.41', 0.255309, '25.530900%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 375),
+  ('ph_saliva', 8.4200, '8.42', 0.258519, '25.851900%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 376),
+  ('ph_saliva', 8.4300, '8.43', 0.261728, '26.172800%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 377),
+  ('ph_saliva', 8.4400, '8.44', 0.264938, '26.493800%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 378),
+  ('ph_saliva', 8.4500, '8.45', 0.268148, '26.814800%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 379),
+  ('ph_saliva', 8.4600, '8.46', 0.271358, '27.135800%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 380),
+  ('ph_saliva', 8.4700, '8.47', 0.274568, '27.456800%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 381),
+  ('ph_saliva', 8.4800, '8.48', 0.277778, '27.777800%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 382),
+  ('ph_saliva', 8.4900, '8.49', 0.280988, '28.098800%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 383),
+  ('ph_saliva', 8.5000, '8.5', 0.284198, '28.419800%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 384),
+  ('ph_saliva', 8.5100, '8.51', 0.287407, '28.740700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 385),
+  ('ph_saliva', 8.5200, '8.52', 0.290617, '29.061700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 386),
+  ('ph_saliva', 8.5300, '8.53', 0.293827, '29.382700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 387),
+  ('ph_saliva', 8.5400, '8.54', 0.297037, '29.703700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 388),
+  ('ph_saliva', 8.5500, '8.55', 0.300247, '30.024700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 389),
+  ('ph_saliva', 8.5600, '8.56', 0.303457, '30.345700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 390),
+  ('ph_saliva', 8.5700, '8.57', 0.306667, '30.666700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 391),
+  ('ph_saliva', 8.5800, '8.58', 0.309877, '30.987700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 392),
+  ('ph_saliva', 8.5900, '8.59', 0.313086, '31.308600%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 393),
+  ('ph_saliva', 8.6000, '8.6', 0.316296, '31.629600%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 394),
+  ('ph_saliva', 8.6100, '8.61', 0.319506, '31.950600%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 395),
+  ('ph_saliva', 8.6200, '8.62', 0.322716, '32.271600%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 396),
+  ('ph_saliva', 8.6300, '8.63', 0.325926, '32.592600%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 397),
+  ('ph_saliva', 8.6400, '8.64', 0.329136, '32.913600%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 398),
+  ('ph_saliva', 8.6500, '8.65', 0.332346, '33.234600%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 399),
+  ('ph_saliva', 8.6600, '8.66', 0.335556, '33.555600%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 400),
+  ('ph_saliva', 8.6700, '8.67', 0.338765, '33.876500%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 401),
+  ('ph_saliva', 8.6800, '8.68', 0.341975, '34.197500%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 402),
+  ('ph_saliva', 8.6900, '8.69', 0.345185, '34.518500%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 403),
+  ('ph_saliva', 8.7000, '8.7', 0.348395, '34.839500%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 404),
+  ('ph_saliva', 8.7100, '8.71', 0.351605, '35.160500%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 405),
+  ('ph_saliva', 8.7200, '8.72', 0.354815, '35.481500%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 406),
+  ('ph_saliva', 8.7300, '8.73', 0.358025, '35.802500%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 407),
+  ('ph_saliva', 8.7400, '8.74', 0.361235, '36.123500%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 408),
+  ('ph_saliva', 8.7500, '8.75', 0.364444, '36.444400%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 409),
+  ('ph_saliva', 8.7600, '8.76', 0.367654, '36.765400%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 410),
+  ('ph_saliva', 8.7700, '8.77', 0.370864, '37.086400%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 411),
+  ('ph_saliva', 8.7800, '8.78', 0.374074, '37.407400%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 412),
+  ('ph_saliva', 8.7900, '8.79', 0.377284, '37.728400%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 413),
+  ('ph_saliva', 8.8000, '8.8', 0.380494, '38.049400%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 414),
+  ('ph_saliva', 8.8100, '8.81', 0.383704, '38.370400%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 415),
+  ('ph_saliva', 8.8200, '8.82', 0.386914, '38.691400%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 416),
+  ('ph_saliva', 8.8300, '8.83', 0.390123, '39.012300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 417),
+  ('ph_saliva', 8.8400, '8.84', 0.393333, '39.333300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 418),
+  ('ph_saliva', 8.8500, '8.85', 0.396543, '39.654300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 419),
+  ('ph_saliva', 8.8600, '8.86', 0.399753, '39.975300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 420),
+  ('ph_saliva', 8.8700, '8.87', 0.402963, '40.296300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 421),
+  ('ph_saliva', 8.8800, '8.88', 0.406173, '40.617300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 422),
+  ('ph_saliva', 8.8900, '8.89', 0.409383, '40.938300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 423),
+  ('ph_saliva', 8.9000, '8.9', 0.412593, '41.259300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 424),
+  ('ph_saliva', 8.9100, '8.91', 0.415802, '41.580200%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 425),
+  ('ph_saliva', 8.9200, '8.92', 0.419012, '41.901200%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 426),
+  ('ph_saliva', 8.9300, '8.93', 0.422222, '42.222200%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 427),
+  ('ph_saliva', 8.9400, '8.94', 0.425432, '42.543200%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 428),
+  ('ph_saliva', 8.9500, '8.95', 0.428642, '42.864200%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 429),
+  ('ph_saliva', 8.9600, '8.96', 0.431852, '43.185200%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 430),
+  ('ph_saliva', 8.9700, '8.97', 0.435062, '43.506200%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 431),
+  ('ph_saliva', 8.9800, '8.98', 0.438272, '43.827200%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 432),
+  ('ph_saliva', 8.9900, '8.99', 0.441481, '44.148100%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 433),
+  ('ph_saliva', 9.0000, '9', 0.444691, '44.469100%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 434),
+  ('ph_saliva', 9.0100, '9.01', 0.447901, '44.790100%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 435),
+  ('ph_saliva', 9.0200, '9.02', 0.451111, '45.111100%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 436),
+  ('ph_saliva', 9.0300, '9.03', 0.454321, '45.432100%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 437),
+  ('ph_saliva', 9.0400, '9.04', 0.457531, '45.753100%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 438),
+  ('ph_saliva', 9.0500, '9.05', 0.460741, '46.074100%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 439),
+  ('ph_saliva', 9.0600, '9.06', 0.463951, '46.395100%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 440),
+  ('ph_saliva', 9.0700, '9.07', 0.467160, '46.716000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 441),
+  ('ph_saliva', 9.0800, '9.08', 0.470370, '47.037000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 442),
+  ('ph_saliva', 9.0900, '9.09', 0.473580, '47.358000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 443),
+  ('ph_saliva', 9.1000, '9.1', 0.476790, '47.679000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 444),
+  ('ph_saliva', 9.1100, '9.11', 0.480000, '48.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 445),
+  ('salts', 0.0000, '0', 0.960000, '96.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 14),
+  ('salts', 0.1000, '0.1', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 15),
+  ('salts', 0.2000, '0.2', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 16),
+  ('salts', 0.3000, '0.3', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 17),
+  ('salts', 0.4000, '0.4', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 18),
+  ('salts', 0.5000, '0.5', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 19),
+  ('salts', 0.6000, '0.6', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 20),
+  ('salts', 0.7000, '0.7', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 21),
+  ('salts', 0.8000, '0.8', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 22),
+  ('salts', 0.9000, '0.9', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 23),
+  ('salts', 1.0000, '1', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 24),
+  ('salts', 1.1000, '1.1', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 25),
+  ('salts', 1.2000, '1.2', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 26),
+  ('salts', 1.3000, '1.3', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 27),
+  ('salts', 1.4000, '1.4', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 28),
+  ('salts', 1.5000, '1.5', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 29),
+  ('salts', 1.6000, '1.6', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 30),
+  ('salts', 1.7000, '1.7', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 31),
+  ('salts', 1.8000, '1.8', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 32),
+  ('salts', 1.9000, '1.9', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 33),
+  ('salts', 2.0000, '2', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 34),
+  ('salts', 2.1000, '2.1', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 35),
+  ('salts', 2.2000, '2.2', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 36),
+  ('salts', 2.3000, '2.3', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 37),
+  ('salts', 2.4000, '2.4', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 38),
+  ('salts', 2.5000, '2.5', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 39),
+  ('salts', 2.6000, '2.6', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 40),
+  ('salts', 2.7000, '2.7', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 41),
+  ('salts', 2.8000, '2.8', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 42),
+  ('salts', 2.9000, '2.9', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 43),
+  ('salts', 3.0000, '3', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 44),
+  ('salts', 3.1000, '3.1', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 45),
+  ('salts', 3.2000, '3.2', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 46),
+  ('salts', 3.3000, '3.3', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 47),
+  ('salts', 3.4000, '3.4', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 48),
+  ('salts', 3.5000, '3.5', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 49),
+  ('salts', 3.6000, '3.6', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 50),
+  ('salts', 3.7000, '3.7', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 51),
+  ('salts', 3.8000, '3.8', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 52),
+  ('salts', 3.9000, '3.9', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 53),
+  ('salts', 4.0000, '4', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 54),
+  ('salts', 4.1000, '4.1', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 55),
+  ('salts', 4.2000, '4.2', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 56),
+  ('salts', 4.3000, '4.3', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 57),
+  ('salts', 4.4000, '4.4', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 58),
+  ('salts', 4.5000, '4.5', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 59),
+  ('salts', 4.6000, '4.6', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 60),
+  ('salts', 4.7000, '4.7', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 61),
+  ('salts', 4.8000, '4.8', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 62),
+  ('salts', 4.9000, '4.9', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 63),
+  ('salts', 5.0000, '5', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 64),
+  ('salts', 5.1000, '5.1', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 65),
+  ('salts', 5.2000, '5.2', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 66),
+  ('salts', 5.3000, '5.3', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 67),
+  ('salts', 5.4000, '5.4', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 68),
+  ('salts', 5.5000, '5.5', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 69),
+  ('salts', 5.6000, '5.6', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 70),
+  ('salts', 5.7000, '5.7', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 71),
+  ('salts', 5.8000, '5.8', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 72),
+  ('salts', 5.9000, '5.9', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 73),
+  ('salts', 6.0000, '6', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 74),
+  ('salts', 6.1000, '6.1', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 75),
+  ('salts', 6.2000, '6.2', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 76),
+  ('salts', 6.3000, '6.3', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 77),
+  ('salts', 6.4000, '6.4', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 78),
+  ('salts', 6.5000, '6.5', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 79),
+  ('salts', 6.6000, '6.6', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 80),
+  ('salts', 6.7000, '6.7', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 81),
+  ('salts', 6.8000, '6.8', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 82),
+  ('salts', 6.9000, '6.9', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 83),
+  ('salts', 7.0000, '7', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 84),
+  ('salts', 7.1000, '7.1', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 85),
+  ('salts', 7.2000, '7.2', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 86),
+  ('salts', 7.3000, '7.3', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 87),
+  ('salts', 7.4000, '7.4', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 88),
+  ('salts', 7.5000, '7.5', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 89),
+  ('salts', 7.6000, '7.6', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 90),
+  ('salts', 7.7000, '7.7', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 91),
+  ('salts', 7.8000, '7.8', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 92),
+  ('salts', 7.9000, '7.9', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 93),
+  ('salts', 8.0000, '8', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 94),
+  ('salts', 8.1000, '8.1', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 95),
+  ('salts', 8.2000, '8.2', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 96),
+  ('salts', 8.3000, '8.3', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 97),
+  ('salts', 8.4000, '8.4', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 98),
+  ('salts', 8.5000, '8.5', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 99),
+  ('salts', 8.6000, '8.6', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 100),
+  ('salts', 8.7000, '8.7', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 101),
+  ('salts', 8.8000, '8.8', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 102),
+  ('salts', 8.9000, '8.9', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 103),
+  ('salts', 9.0000, '9', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 104),
+  ('salts', 9.1000, '9.1', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 105),
+  ('salts', 9.2000, '9.2', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 106),
+  ('salts', 9.3000, '9.3', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 107),
+  ('salts', 9.4000, '9.4', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 108),
+  ('salts', 9.5000, '9.5', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 109),
+  ('salts', 9.6000, '9.6', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 110),
+  ('salts', 9.7000, '9.7', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 111),
+  ('salts', 9.8000, '9.8', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 112),
+  ('salts', 9.9000, '9.9', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 113),
+  ('salts', 10.0000, '10', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 114),
+  ('salts', 10.1000, '10.1', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 115),
+  ('salts', 10.2000, '10.2', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 116),
+  ('salts', 10.3000, '10.3', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 117),
+  ('salts', 10.4000, '10.4', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 118),
+  ('salts', 10.5000, '10.5', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 119),
+  ('salts', 10.6000, '10.6', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 120),
+  ('salts', 10.7000, '10.7', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 121),
+  ('salts', 10.8000, '10.8', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 122),
+  ('salts', 10.9000, '10.9', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 123),
+  ('salts', 11.0000, '11', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 124),
+  ('salts', 11.1000, '11.1', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 125),
+  ('salts', 11.2000, '11.2', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 126),
+  ('salts', 11.3000, '11.3', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 127),
+  ('salts', 11.4000, '11.4', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 128),
+  ('salts', 11.5000, '11.5', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 129),
+  ('salts', 11.6000, '11.6', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 130),
+  ('salts', 11.7000, '11.7', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 131),
+  ('salts', 11.8000, '11.8', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 132),
+  ('salts', 11.9000, '11.9', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 133),
+  ('salts', 12.0000, '12', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 134),
+  ('salts', 12.1000, '12.1', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 135),
+  ('salts', 12.2000, '12.2', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 136),
+  ('salts', 12.3000, '12.3', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 137),
+  ('salts', 12.4000, '12.4', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 138),
+  ('salts', 12.5000, '12.5', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 139),
+  ('salts', 12.6000, '12.6', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 140),
+  ('salts', 12.7000, '12.7', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 141),
+  ('salts', 12.8000, '12.8', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 142),
+  ('salts', 12.9000, '12.9', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 143),
+  ('salts', 13.0000, '13', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 144),
+  ('salts', 13.1000, '13.1', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 145),
+  ('salts', 13.2000, '13.2', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 146),
+  ('salts', 13.3000, '13.3', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 147),
+  ('salts', 13.4000, '13.4', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 148),
+  ('salts', 13.5000, '13.5', 0.940000, '94.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 149),
+  ('salts', 13.6000, '13.6', 0.946207, '94.620700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 150),
+  ('salts', 13.7000, '13.7', 0.932414, '93.241400%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 151),
+  ('salts', 13.8000, '13.8', 0.918621, '91.862100%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 152),
+  ('salts', 13.9000, '13.9', 0.904828, '90.482800%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 153),
+  ('salts', 14.0000, '14', 0.891034, '89.103400%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 154),
+  ('salts', 14.1000, '14.1', 0.877241, '87.724100%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 155),
+  ('salts', 14.2000, '14.2', 0.863448, '86.344800%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 156),
+  ('salts', 14.3000, '14.3', 0.849655, '84.965500%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 157),
+  ('salts', 14.4000, '14.4', 0.835862, '83.586200%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 158),
+  ('salts', 14.5000, '14.5', 0.822069, '82.206900%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 159),
+  ('salts', 14.6000, '14.6', 0.808276, '80.827600%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 160),
+  ('salts', 14.7000, '14.7', 0.794483, '79.448300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 161),
+  ('salts', 14.8000, '14.8', 0.780690, '78.069000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 162),
+  ('salts', 14.9000, '14.9', 0.766897, '76.689700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 163),
+  ('salts', 15.0000, '15', 0.753103, '75.310300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 164),
+  ('salts', 15.1000, '15.1', 0.739310, '73.931000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 165),
+  ('salts', 15.2000, '15.2', 0.725517, '72.551700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 166),
+  ('salts', 15.3000, '15.3', 0.711724, '71.172400%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 167),
+  ('salts', 15.4000, '15.4', 0.697931, '69.793100%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 168),
+  ('salts', 15.5000, '15.5', 0.684138, '68.413800%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 169),
+  ('salts', 15.6000, '15.6', 0.670345, '67.034500%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 170),
+  ('salts', 15.7000, '15.7', 0.656552, '65.655200%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 171),
+  ('salts', 15.8000, '15.8', 0.642759, '64.275900%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 172),
+  ('salts', 15.9000, '15.9', 0.628966, '62.896600%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 173),
+  ('salts', 16.0000, '16', 0.615172, '61.517200%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 174),
+  ('salts', 16.1000, '16.1', 0.601379, '60.137900%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 175),
+  ('salts', 16.2000, '16.2', 0.587586, '58.758600%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 176),
+  ('salts', 16.3000, '16.3', 0.573793, '57.379300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 177),
+  ('salts', 16.4000, '16.4', 0.560000, '56.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 178),
+  ('salts', 16.5000, '16.5', 0.544444, '54.444400%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 179),
+  ('salts', 16.6000, '16.6', 0.528889, '52.888900%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 180),
+  ('salts', 16.7000, '16.7', 0.513333, '51.333300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 181),
+  ('salts', 16.8000, '16.8', 0.497778, '49.777800%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 182),
+  ('salts', 16.9000, '16.9', 0.482222, '48.222200%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 183),
+  ('salts', 17.0000, '17', 0.466667, '46.666700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 184),
+  ('salts', 17.1000, '17.1', 0.451111, '45.111100%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 185),
+  ('salts', 17.2000, '17.2', 0.435556, '43.555600%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 186),
+  ('salts', 17.3000, '17.3', 0.420000, '42.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 187),
+  ('salts', 17.4000, '17.4', 0.404444, '40.444400%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 188),
+  ('salts', 17.5000, '17.5', 0.388889, '38.888900%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 189),
+  ('salts', 17.6000, '17.6', 0.373333, '37.333300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 190),
+  ('salts', 17.7000, '17.7', 0.357778, '35.777800%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 191),
+  ('salts', 17.8000, '17.8', 0.342222, '34.222200%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 192),
+  ('salts', 17.9000, '17.9', 0.326667, '32.666700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 193),
+  ('salts', 18.0000, '18', 0.311111, '31.111100%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 194),
+  ('salts', 18.1000, '18.1', 0.295556, '29.555600%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 195),
+  ('salts', 18.2000, '18.2', 0.280000, '28.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 196),
+  ('salts', 18.3000, '18.3', 0.264444, '26.444400%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 197),
+  ('salts', 18.4000, '18.4', 0.248889, '24.888900%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 198),
+  ('salts', 18.5000, '18.5', 0.233333, '23.333300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 199),
+  ('salts', 18.6000, '18.6', 0.217778, '21.777800%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 200),
+  ('salts', 18.7000, '18.7', 0.202222, '20.222200%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 201),
+  ('salts', 18.8000, '18.8', 0.186667, '18.666700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 202),
+  ('salts', 18.9000, '18.9', 0.171111, '17.111100%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 203),
+  ('salts', 19.0000, '19', 0.155556, '15.555600%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 204),
+  ('salts', 19.1000, '19.1', 0.140000, '14.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 205),
+  ('salts', 19.2000, '19.2', 0.124444, '12.444400%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 206),
+  ('salts', 19.3000, '19.3', 0.108889, '10.888900%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 207),
+  ('salts', 19.4000, '19.4', 0.093333, '9.333300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 208),
+  ('salts', 19.5000, '19.5', 0.077778, '7.777800%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 209),
+  ('salts', 19.6000, '19.6', 0.062222, '6.222200%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 210),
+  ('salts', 19.7000, '19.7', 0.046667, '4.666700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 211),
+  ('salts', 19.8000, '19.8', 0.031111, '3.111100%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 212),
+  ('salts', 19.9000, '19.9', 0.015556, '1.555600%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 213),
+  ('salts', 20.0000, '20', 0.000000, '0.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 214),
+  ('salts', 20.1000, '20.1', 0.001343, '0.134300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 215),
+  ('salts', 20.2000, '20.2', 0.002687, '0.268700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 216),
+  ('salts', 20.3000, '20.3', 0.004030, '0.403000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 217),
+  ('salts', 20.4000, '20.4', 0.005373, '0.537300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 218),
+  ('salts', 20.5000, '20.5', 0.006716, '0.671600%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 219),
+  ('salts', 20.6000, '20.6', 0.008060, '0.806000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 220),
+  ('salts', 20.7000, '20.7', 0.009403, '0.940300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 221),
+  ('salts', 20.8000, '20.8', 0.010746, '1.074600%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 222),
+  ('salts', 20.9000, '20.9', 0.012090, '1.209000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 223),
+  ('salts', 21.0000, '21', 0.013433, '1.343300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 224),
+  ('salts', 21.1000, '21.1', 0.014776, '1.477600%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 225),
+  ('salts', 21.2000, '21.2', 0.016119, '1.611900%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 226),
+  ('salts', 21.3000, '21.3', 0.017463, '1.746300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 227),
+  ('salts', 21.4000, '21.4', 0.018806, '1.880600%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 228),
+  ('salts', 21.5000, '21.5', 0.020149, '2.014900%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 229),
+  ('salts', 21.6000, '21.6', 0.021493, '2.149300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 230),
+  ('salts', 21.7000, '21.7', 0.022836, '2.283600%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 231),
+  ('salts', 21.8000, '21.8', 0.024179, '2.417900%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 232),
+  ('salts', 21.9000, '21.9', 0.025522, '2.552200%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 233),
+  ('salts', 22.0000, '22', 0.026866, '2.686600%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 234),
+  ('salts', 22.1000, '22.1', 0.028209, '2.820900%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 235),
+  ('salts', 22.2000, '22.2', 0.029552, '2.955200%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 236),
+  ('salts', 22.3000, '22.3', 0.030896, '3.089600%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 237),
+  ('salts', 22.4000, '22.4', 0.032239, '3.223900%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 238),
+  ('salts', 22.5000, '22.5', 0.033582, '3.358200%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 239),
+  ('salts', 22.6000, '22.6', 0.034925, '3.492500%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 240),
+  ('salts', 22.7000, '22.7', 0.036269, '3.626900%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 241),
+  ('salts', 22.8000, '22.8', 0.037612, '3.761200%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 242),
+  ('salts', 22.9000, '22.9', 0.038955, '3.895500%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 243),
+  ('salts', 23.0000, '23', 0.040299, '4.029900%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 244),
+  ('salts', 23.1000, '23.1', 0.041642, '4.164200%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 245),
+  ('salts', 23.2000, '23.2', 0.042985, '4.298500%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 246),
+  ('salts', 23.3000, '23.3', 0.044328, '4.432800%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 247),
+  ('salts', 23.4000, '23.4', 0.045672, '4.567200%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 248),
+  ('salts', 23.5000, '23.5', 0.047015, '4.701500%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 249),
+  ('salts', 23.6000, '23.6', 0.048358, '4.835800%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 250),
+  ('salts', 23.7000, '23.7', 0.049701, '4.970100%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 251),
+  ('salts', 23.8000, '23.8', 0.051045, '5.104500%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 252),
+  ('salts', 23.9000, '23.9', 0.052388, '5.238800%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 253),
+  ('salts', 24.0000, '24', 0.053731, '5.373100%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 254),
+  ('salts', 24.1000, '24.1', 0.055075, '5.507500%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 255),
+  ('salts', 24.2000, '24.2', 0.056418, '5.641800%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 256),
+  ('salts', 24.3000, '24.3', 0.057761, '5.776100%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 257),
+  ('salts', 24.4000, '24.4', 0.059104, '5.910400%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 258),
+  ('salts', 24.5000, '24.5', 0.060448, '6.044800%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 259),
+  ('salts', 24.6000, '24.6', 0.061791, '6.179100%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 260),
+  ('salts', 24.7000, '24.7', 0.063134, '6.313400%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 261),
+  ('salts', 24.8000, '24.8', 0.064478, '6.447800%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 262),
+  ('salts', 24.9000, '24.9', 0.065821, '6.582100%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 263),
+  ('salts', 25.0000, '25', 0.067164, '6.716400%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 264),
+  ('salts', 25.1000, '25.1', 0.068507, '6.850700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 265),
+  ('salts', 25.2000, '25.2', 0.069851, '6.985100%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 266),
+  ('salts', 25.3000, '25.3', 0.071194, '7.119400%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 267),
+  ('salts', 25.4000, '25.4', 0.072537, '7.253700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 268),
+  ('salts', 25.5000, '25.5', 0.073881, '7.388100%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 269),
+  ('salts', 25.6000, '25.6', 0.075224, '7.522400%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 270),
+  ('salts', 25.7000, '25.7', 0.076567, '7.656700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 271),
+  ('salts', 25.8000, '25.8', 0.077910, '7.791000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 272),
+  ('salts', 25.9000, '25.9', 0.079254, '7.925400%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 273),
+  ('salts', 26.0000, '26', 0.080597, '8.059700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 274),
+  ('salts', 26.1000, '26.1', 0.081940, '8.194000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 275),
+  ('salts', 26.2000, '26.2', 0.083284, '8.328400%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 276),
+  ('salts', 26.3000, '26.3', 0.084627, '8.462700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 277),
+  ('salts', 26.4000, '26.4', 0.085970, '8.597000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 278),
+  ('salts', 26.5000, '26.5', 0.087313, '8.731300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 279),
+  ('salts', 26.6000, '26.6', 0.088657, '8.865700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 280),
+  ('salts', 26.7000, '26.7', 0.090000, '9.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 281),
+  ('salts', 26.8000, '26.8', 0.091343, '9.134300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 282),
+  ('salts', 26.9000, '26.9', 0.092687, '9.268700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 283),
+  ('salts', 27.0000, '27', 0.094030, '9.403000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 284),
+  ('salts', 27.1000, '27.1', 0.095373, '9.537300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 285),
+  ('salts', 27.2000, '27.2', 0.096716, '9.671600%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 286),
+  ('salts', 27.3000, '27.3', 0.098060, '9.806000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 287),
+  ('salts', 27.4000, '27.4', 0.099403, '9.940300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 288),
+  ('salts', 27.5000, '27.5', 0.100746, '10.074600%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 289),
+  ('salts', 27.6000, '27.6', 0.102090, '10.209000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 290),
+  ('salts', 27.7000, '27.7', 0.103433, '10.343300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 291),
+  ('salts', 27.8000, '27.8', 0.104776, '10.477600%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 292),
+  ('salts', 27.9000, '27.9', 0.106119, '10.611900%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 293),
+  ('salts', 28.0000, '28', 0.107463, '10.746300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 294),
+  ('salts', 28.1000, '28.1', 0.108806, '10.880600%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 295),
+  ('salts', 28.2000, '28.2', 0.110149, '11.014900%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 296),
+  ('salts', 28.3000, '28.3', 0.111493, '11.149300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 297),
+  ('salts', 28.4000, '28.4', 0.112836, '11.283600%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 298),
+  ('salts', 28.5000, '28.5', 0.114179, '11.417900%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 299),
+  ('salts', 28.6000, '28.6', 0.115522, '11.552200%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 300),
+  ('salts', 28.7000, '28.7', 0.116866, '11.686600%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 301),
+  ('salts', 28.8000, '28.8', 0.118209, '11.820900%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 302),
+  ('salts', 28.9000, '28.9', 0.119552, '11.955200%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 303),
+  ('salts', 29.0000, '29', 0.120896, '12.089600%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 304),
+  ('salts', 29.1000, '29.1', 0.122239, '12.223900%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 305),
+  ('salts', 29.2000, '29.2', 0.123582, '12.358200%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 306),
+  ('salts', 29.3000, '29.3', 0.124925, '12.492500%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 307),
+  ('salts', 29.4000, '29.4', 0.126269, '12.626900%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 308),
+  ('salts', 29.5000, '29.5', 0.127612, '12.761200%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 309),
+  ('salts', 29.6000, '29.6', 0.128955, '12.895500%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 310),
+  ('salts', 29.7000, '29.7', 0.130299, '13.029900%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 311),
+  ('salts', 29.8000, '29.8', 0.131642, '13.164200%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 312),
+  ('salts', 29.9000, '29.9', 0.132985, '13.298500%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 313),
+  ('salts', 30.0000, '30', 0.134328, '13.432800%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 314),
+  ('salts', 30.1000, '30.1', 0.135672, '13.567200%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 315),
+  ('salts', 30.2000, '30.2', 0.137015, '13.701500%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 316),
+  ('salts', 30.3000, '30.3', 0.138358, '13.835800%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 317),
+  ('salts', 30.4000, '30.4', 0.139701, '13.970100%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 318),
+  ('salts', 30.5000, '30.5', 0.141045, '14.104500%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 319),
+  ('salts', 30.6000, '30.6', 0.142388, '14.238800%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 320),
+  ('salts', 30.7000, '30.7', 0.143731, '14.373100%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 321),
+  ('salts', 30.8000, '30.8', 0.145075, '14.507500%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 322),
+  ('salts', 30.9000, '30.9', 0.146418, '14.641800%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 323),
+  ('salts', 31.0000, '31', 0.147761, '14.776100%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 324),
+  ('salts', 31.1000, '31.1', 0.149104, '14.910400%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 325),
+  ('salts', 31.2000, '31.2', 0.150448, '15.044800%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 326),
+  ('salts', 31.3000, '31.3', 0.151791, '15.179100%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 327),
+  ('salts', 31.4000, '31.4', 0.153134, '15.313400%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 328),
+  ('salts', 31.5000, '31.5', 0.154478, '15.447800%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 329),
+  ('salts', 31.6000, '31.6', 0.155821, '15.582100%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 330),
+  ('salts', 31.7000, '31.7', 0.157164, '15.716400%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 331),
+  ('salts', 31.8000, '31.8', 0.158507, '15.850700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 332),
+  ('salts', 31.9000, '31.9', 0.159851, '15.985100%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 333),
+  ('salts', 32.0000, '32', 0.161194, '16.119400%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 334),
+  ('salts', 32.1000, '32.1', 0.162537, '16.253700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 335),
+  ('salts', 32.2000, '32.2', 0.163881, '16.388100%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 336),
+  ('salts', 32.3000, '32.3', 0.165224, '16.522400%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 337),
+  ('salts', 32.4000, '32.4', 0.166567, '16.656700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 338),
+  ('salts', 32.5000, '32.5', 0.167910, '16.791000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 339),
+  ('salts', 32.6000, '32.6', 0.169254, '16.925400%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 340),
+  ('salts', 32.7000, '32.7', 0.170597, '17.059700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 341),
+  ('salts', 32.8000, '32.8', 0.171940, '17.194000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 342),
+  ('salts', 32.9000, '32.9', 0.173284, '17.328400%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 343),
+  ('salts', 33.0000, '33', 0.174627, '17.462700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 344),
+  ('salts', 33.1000, '33.1', 0.175970, '17.597000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 345),
+  ('salts', 33.2000, '33.2', 0.177313, '17.731300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 346),
+  ('salts', 33.3000, '33.3', 0.178657, '17.865700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 347),
+  ('salts', 33.4000, '33.4', 0.180000, '18.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 348),
+  ('salts', 33.5000, '33.5', 0.181867, '18.186700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 349),
+  ('salts', 33.6000, '33.6', 0.183733, '18.373300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 350),
+  ('salts', 33.7000, '33.7', 0.185600, '18.560000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 351),
+  ('salts', 33.8000, '33.8', 0.187467, '18.746700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 352),
+  ('salts', 33.9000, '33.9', 0.189333, '18.933300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 353),
+  ('salts', 34.0000, '34', 0.191200, '19.120000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 354),
+  ('salts', 34.1000, '34.1', 0.193067, '19.306700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 355),
+  ('salts', 34.2000, '34.2', 0.194933, '19.493300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 356),
+  ('salts', 34.3000, '34.3', 0.196800, '19.680000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 357),
+  ('salts', 34.4000, '34.4', 0.198667, '19.866700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 358),
+  ('salts', 34.5000, '34.5', 0.200533, '20.053300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 359),
+  ('salts', 34.6000, '34.6', 0.202400, '20.240000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 360),
+  ('salts', 34.7000, '34.7', 0.204267, '20.426700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 361),
+  ('salts', 34.8000, '34.8', 0.206133, '20.613300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 362),
+  ('salts', 34.9000, '34.9', 0.208000, '20.800000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 363),
+  ('salts', 35.0000, '35', 0.209867, '20.986700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 364),
+  ('salts', 35.1000, '35.1', 0.211733, '21.173300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 365),
+  ('salts', 35.2000, '35.2', 0.213600, '21.360000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 366),
+  ('salts', 35.3000, '35.3', 0.215467, '21.546700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 367),
+  ('salts', 35.4000, '35.4', 0.217333, '21.733300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 368),
+  ('salts', 35.5000, '35.5', 0.219200, '21.920000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 369),
+  ('salts', 35.6000, '35.6', 0.221067, '22.106700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 370),
+  ('salts', 35.7000, '35.7', 0.222933, '22.293300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 371),
+  ('salts', 35.8000, '35.8', 0.224800, '22.480000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 372),
+  ('salts', 35.9000, '35.9', 0.226667, '22.666700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 373),
+  ('salts', 36.0000, '36', 0.228533, '22.853300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 374),
+  ('salts', 36.1000, '36.1', 0.230400, '23.040000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 375),
+  ('salts', 36.2000, '36.2', 0.232267, '23.226700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 376),
+  ('salts', 36.3000, '36.3', 0.234133, '23.413300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 377),
+  ('salts', 36.4000, '36.4', 0.236000, '23.600000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 378),
+  ('salts', 36.5000, '36.5', 0.237867, '23.786700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 379),
+  ('salts', 36.6000, '36.6', 0.239733, '23.973300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 380),
+  ('salts', 36.7000, '36.7', 0.241600, '24.160000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 381),
+  ('salts', 36.8000, '36.8', 0.243467, '24.346700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 382),
+  ('salts', 36.9000, '36.9', 0.245333, '24.533300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 383),
+  ('salts', 37.0000, '37', 0.247200, '24.720000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 384),
+  ('salts', 37.1000, '37.1', 0.249067, '24.906700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 385),
+  ('salts', 37.2000, '37.2', 0.250933, '25.093300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 386),
+  ('salts', 37.3000, '37.3', 0.252800, '25.280000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 387),
+  ('salts', 37.4000, '37.4', 0.254667, '25.466700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 388),
+  ('salts', 37.5000, '37.5', 0.256533, '25.653300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 389),
+  ('salts', 37.6000, '37.6', 0.258400, '25.840000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 390),
+  ('salts', 37.7000, '37.7', 0.260267, '26.026700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 391),
+  ('salts', 37.8000, '37.8', 0.262133, '26.213300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 392),
+  ('salts', 37.9000, '37.9', 0.264000, '26.400000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 393),
+  ('salts', 38.0000, '38', 0.265867, '26.586700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 394),
+  ('salts', 38.1000, '38.1', 0.267733, '26.773300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 395),
+  ('salts', 38.2000, '38.2', 0.269600, '26.960000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 396),
+  ('salts', 38.3000, '38.3', 0.271467, '27.146700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 397),
+  ('salts', 38.4000, '38.4', 0.273333, '27.333300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 398),
+  ('salts', 38.5000, '38.5', 0.275200, '27.520000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 399),
+  ('salts', 38.6000, '38.6', 0.277067, '27.706700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 400),
+  ('salts', 38.7000, '38.7', 0.278933, '27.893300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 401),
+  ('salts', 38.8000, '38.8', 0.280800, '28.080000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 402),
+  ('salts', 38.9000, '38.9', 0.282667, '28.266700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 403),
+  ('salts', 39.0000, '39', 0.284533, '28.453300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 404),
+  ('salts', 39.1000, '39.1', 0.286400, '28.640000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 405),
+  ('salts', 39.2000, '39.2', 0.288267, '28.826700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 406),
+  ('salts', 39.3000, '39.3', 0.290133, '29.013300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 407),
+  ('salts', 39.4000, '39.4', 0.292000, '29.200000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 408),
+  ('salts', 39.5000, '39.5', 0.293867, '29.386700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 409),
+  ('salts', 39.6000, '39.6', 0.295733, '29.573300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 410),
+  ('salts', 39.7000, '39.7', 0.297600, '29.760000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 411),
+  ('salts', 39.8000, '39.8', 0.299467, '29.946700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 412),
+  ('salts', 39.9000, '39.9', 0.301333, '30.133300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 413),
+  ('salts', 40.0000, '40', 0.303200, '30.320000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 414),
+  ('salts', 40.1000, '40.1', 0.305067, '30.506700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 415),
+  ('salts', 40.2000, '40.2', 0.306933, '30.693300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 416),
+  ('salts', 40.3000, '40.3', 0.308800, '30.880000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 417),
+  ('salts', 40.4000, '40.4', 0.310667, '31.066700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 418),
+  ('salts', 40.5000, '40.5', 0.312533, '31.253300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 419),
+  ('salts', 40.6000, '40.6', 0.314400, '31.440000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 420),
+  ('salts', 40.7000, '40.7', 0.316267, '31.626700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 421),
+  ('salts', 40.8000, '40.8', 0.318133, '31.813300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 422),
+  ('salts', 40.9000, '40.9', 0.320000, '32.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 423),
+  ('salts', 41.0000, '41', 0.321867, '32.186700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 424),
+  ('salts', 41.1000, '41.1', 0.323733, '32.373300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 425),
+  ('salts', 41.2000, '41.2', 0.325600, '32.560000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 426),
+  ('salts', 41.3000, '41.3', 0.327467, '32.746700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 427),
+  ('salts', 41.4000, '41.4', 0.329333, '32.933300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 428),
+  ('salts', 41.5000, '41.5', 0.331200, '33.120000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 429),
+  ('salts', 41.6000, '41.6', 0.333067, '33.306700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 430),
+  ('salts', 41.7000, '41.7', 0.334933, '33.493300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 431),
+  ('salts', 41.8000, '41.8', 0.336800, '33.680000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 432),
+  ('salts', 41.9000, '41.9', 0.338667, '33.866700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 433),
+  ('salts', 42.0000, '42', 0.340533, '34.053300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 434),
+  ('salts', 42.1000, '42.1', 0.342400, '34.240000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 435),
+  ('salts', 42.2000, '42.2', 0.344267, '34.426700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 436),
+  ('salts', 42.3000, '42.3', 0.346133, '34.613300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 437),
+  ('salts', 42.4000, '42.4', 0.348000, '34.800000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 438),
+  ('salts', 42.5000, '42.5', 0.349867, '34.986700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 439),
+  ('salts', 42.6000, '42.6', 0.351733, '35.173300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 440),
+  ('salts', 42.7000, '42.7', 0.353600, '35.360000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 441),
+  ('salts', 42.8000, '42.8', 0.355467, '35.546700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 442),
+  ('salts', 42.9000, '42.9', 0.357333, '35.733300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 443),
+  ('salts', 43.0000, '43', 0.359200, '35.920000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 444),
+  ('salts', 43.1000, '43.1', 0.361067, '36.106700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 445),
+  ('salts', 43.2000, '43.2', 0.362933, '36.293300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 446),
+  ('salts', 43.3000, '43.3', 0.364800, '36.480000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 447),
+  ('salts', 43.4000, '43.4', 0.366667, '36.666700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 448),
+  ('salts', 43.5000, '43.5', 0.368533, '36.853300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 449),
+  ('salts', 43.6000, '43.6', 0.370400, '37.040000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 450),
+  ('salts', 43.7000, '43.7', 0.372267, '37.226700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 451),
+  ('salts', 43.8000, '43.8', 0.374133, '37.413300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 452),
+  ('salts', 43.9000, '43.9', 0.376000, '37.600000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 453),
+  ('salts', 44.0000, '44', 0.377867, '37.786700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 454),
+  ('salts', 44.1000, '44.1', 0.379733, '37.973300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 455),
+  ('salts', 44.2000, '44.2', 0.381600, '38.160000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 456),
+  ('salts', 44.3000, '44.3', 0.383467, '38.346700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 457),
+  ('salts', 44.4000, '44.4', 0.385333, '38.533300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 458),
+  ('salts', 44.5000, '44.5', 0.387200, '38.720000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 459),
+  ('salts', 44.6000, '44.6', 0.389067, '38.906700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 460),
+  ('salts', 44.7000, '44.7', 0.390933, '39.093300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 461),
+  ('salts', 44.8000, '44.8', 0.392800, '39.280000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 462),
+  ('salts', 44.9000, '44.9', 0.394667, '39.466700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 463),
+  ('salts', 45.0000, '45', 0.396533, '39.653300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 464),
+  ('salts', 45.1000, '45.1', 0.398400, '39.840000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 465),
+  ('salts', 45.2000, '45.2', 0.400267, '40.026700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 466),
+  ('salts', 45.3000, '45.3', 0.402133, '40.213300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 467),
+  ('salts', 45.4000, '45.4', 0.404000, '40.400000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 468),
+  ('salts', 45.5000, '45.5', 0.405867, '40.586700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 469),
+  ('salts', 45.6000, '45.6', 0.407733, '40.773300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 470),
+  ('salts', 45.7000, '45.7', 0.409600, '40.960000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 471),
+  ('salts', 45.8000, '45.8', 0.411467, '41.146700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 472),
+  ('salts', 45.9000, '45.9', 0.413333, '41.333300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 473),
+  ('salts', 46.0000, '46', 0.415200, '41.520000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 474),
+  ('salts', 46.1000, '46.1', 0.417067, '41.706700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 475),
+  ('salts', 46.2000, '46.2', 0.418933, '41.893300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 476),
+  ('salts', 46.3000, '46.3', 0.420800, '42.080000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 477),
+  ('salts', 46.4000, '46.4', 0.422667, '42.266700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 478),
+  ('salts', 46.5000, '46.5', 0.424533, '42.453300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 479),
+  ('salts', 46.6000, '46.6', 0.426400, '42.640000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 480),
+  ('salts', 46.7000, '46.7', 0.428267, '42.826700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 481),
+  ('salts', 46.8000, '46.8', 0.430133, '43.013300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 482),
+  ('salts', 46.9000, '46.9', 0.432000, '43.200000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 483),
+  ('salts', 47.0000, '47', 0.433867, '43.386700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 484),
+  ('salts', 47.1000, '47.1', 0.435733, '43.573300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 485),
+  ('salts', 47.2000, '47.2', 0.437600, '43.760000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 486),
+  ('salts', 47.3000, '47.3', 0.439467, '43.946700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 487),
+  ('salts', 47.4000, '47.4', 0.441333, '44.133300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 488),
+  ('salts', 47.5000, '47.5', 0.443200, '44.320000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 489),
+  ('salts', 47.6000, '47.6', 0.445067, '44.506700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 490),
+  ('salts', 47.7000, '47.7', 0.446933, '44.693300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 491),
+  ('salts', 47.8000, '47.8', 0.448800, '44.880000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 492),
+  ('salts', 47.9000, '47.9', 0.450667, '45.066700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 493),
+  ('salts', 48.0000, '48', 0.452533, '45.253300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 494),
+  ('salts', 48.1000, '48.1', 0.454400, '45.440000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 495),
+  ('salts', 48.2000, '48.2', 0.456267, '45.626700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 496),
+  ('salts', 48.3000, '48.3', 0.458133, '45.813300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 497),
+  ('salts', 48.4000, '48.4', 0.460000, '46.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 498),
+  ('salts', 48.5000, '48.5', 0.460763, '46.076300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 499),
+  ('salts', 48.6000, '48.6', 0.461527, '46.152700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 500),
+  ('salts', 48.7000, '48.7', 0.462290, '46.229000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 501),
+  ('salts', 48.8000, '48.8', 0.463053, '46.305300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 502),
+  ('salts', 48.9000, '48.9', 0.463817, '46.381700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 503),
+  ('salts', 49.0000, '49', 0.464580, '46.458000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 504),
+  ('salts', 49.1000, '49.1', 0.465344, '46.534400%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 505),
+  ('salts', 49.2000, '49.2', 0.466107, '46.610700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 506),
+  ('salts', 49.3000, '49.3', 0.466870, '46.687000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 507),
+  ('salts', 49.4000, '49.4', 0.467634, '46.763400%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 508),
+  ('salts', 49.5000, '49.5', 0.468397, '46.839700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 509),
+  ('salts', 49.6000, '49.6', 0.469160, '46.916000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 510),
+  ('salts', 49.7000, '49.7', 0.469924, '46.992400%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 511),
+  ('salts', 49.8000, '49.8', 0.470687, '47.068700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 512),
+  ('salts', 49.9000, '49.9', 0.471450, '47.145000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 513),
+  ('salts', 50.0000, '50', 0.472214, '47.221400%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 514),
+  ('salts', 50.1000, '50.1', 0.472977, '47.297700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 515),
+  ('salts', 50.2000, '50.2', 0.473740, '47.374000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 516),
+  ('salts', 50.3000, '50.3', 0.474504, '47.450400%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 517),
+  ('salts', 50.4000, '50.4', 0.475267, '47.526700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 518),
+  ('salts', 50.5000, '50.5', 0.476031, '47.603100%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 519),
+  ('salts', 50.6000, '50.6', 0.476794, '47.679400%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 520),
+  ('salts', 50.7000, '50.7', 0.477557, '47.755700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 521),
+  ('salts', 50.8000, '50.8', 0.478321, '47.832100%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 522),
+  ('salts', 50.9000, '50.9', 0.479084, '47.908400%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 523),
+  ('salts', 51.0000, '51', 0.479847, '47.984700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 524),
+  ('salts', 51.1000, '51.1', 0.480611, '48.061100%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 525),
+  ('salts', 51.2000, '51.2', 0.481374, '48.137400%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 526),
+  ('salts', 51.3000, '51.3', 0.482137, '48.213700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 527),
+  ('salts', 51.4000, '51.4', 0.482901, '48.290100%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 528),
+  ('salts', 51.5000, '51.5', 0.483664, '48.366400%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 529),
+  ('salts', 51.6000, '51.6', 0.484427, '48.442700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 530),
+  ('salts', 51.7000, '51.7', 0.485191, '48.519100%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 531),
+  ('salts', 51.8000, '51.8', 0.485954, '48.595400%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 532),
+  ('salts', 51.9000, '51.9', 0.486718, '48.671800%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 533),
+  ('salts', 52.0000, '52', 0.487481, '48.748100%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 534),
+  ('salts', 52.1000, '52.1', 0.488244, '48.824400%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 535),
+  ('salts', 52.2000, '52.2', 0.489008, '48.900800%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 536),
+  ('salts', 52.3000, '52.3', 0.489771, '48.977100%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 537),
+  ('salts', 52.4000, '52.4', 0.490534, '49.053400%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 538),
+  ('salts', 52.5000, '52.5', 0.491298, '49.129800%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 539),
+  ('salts', 52.6000, '52.6', 0.492061, '49.206100%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 540),
+  ('salts', 52.7000, '52.7', 0.492824, '49.282400%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 541),
+  ('salts', 52.8000, '52.8', 0.493588, '49.358800%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 542),
+  ('salts', 52.9000, '52.9', 0.494351, '49.435100%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 543),
+  ('salts', 53.0000, '53', 0.495115, '49.511500%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 544),
+  ('salts', 53.1000, '53.1', 0.495878, '49.587800%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 545),
+  ('salts', 53.2000, '53.2', 0.496641, '49.664100%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 546),
+  ('salts', 53.3000, '53.3', 0.497405, '49.740500%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 547),
+  ('salts', 53.4000, '53.4', 0.498168, '49.816800%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 548),
+  ('salts', 53.5000, '53.5', 0.498931, '49.893100%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 549),
+  ('salts', 53.6000, '53.6', 0.499695, '49.969500%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 550),
+  ('salts', 53.7000, '53.7', 0.500458, '50.045800%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 551),
+  ('salts', 53.8000, '53.8', 0.501221, '50.122100%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 552),
+  ('salts', 53.9000, '53.9', 0.501985, '50.198500%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 553),
+  ('salts', 54.0000, '54', 0.502748, '50.274800%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 554),
+  ('salts', 54.1000, '54.1', 0.503511, '50.351100%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 555),
+  ('salts', 54.2000, '54.2', 0.504275, '50.427500%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 556),
+  ('salts', 54.3000, '54.3', 0.505038, '50.503800%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 557),
+  ('salts', 54.4000, '54.4', 0.505802, '50.580200%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 558),
+  ('salts', 54.5000, '54.5', 0.506565, '50.656500%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 559),
+  ('salts', 54.6000, '54.6', 0.507328, '50.732800%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 560),
+  ('salts', 54.7000, '54.7', 0.508092, '50.809200%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 561),
+  ('salts', 54.8000, '54.8', 0.508855, '50.885500%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 562),
+  ('salts', 54.9000, '54.9', 0.509618, '50.961800%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 563),
+  ('salts', 55.0000, '55', 0.510382, '51.038200%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 564),
+  ('salts', 55.1000, '55.1', 0.511145, '51.114500%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 565),
+  ('salts', 55.2000, '55.2', 0.511908, '51.190800%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 566),
+  ('salts', 55.3000, '55.3', 0.512672, '51.267200%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 567),
+  ('salts', 55.4000, '55.4', 0.513435, '51.343500%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 568),
+  ('salts', 55.5000, '55.5', 0.514198, '51.419800%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 569),
+  ('salts', 55.6000, '55.6', 0.514962, '51.496200%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 570),
+  ('salts', 55.7000, '55.7', 0.515725, '51.572500%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 571),
+  ('salts', 55.8000, '55.8', 0.516489, '51.648900%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 572),
+  ('salts', 55.9000, '55.9', 0.517252, '51.725200%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 573),
+  ('salts', 56.0000, '56', 0.518015, '51.801500%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 574),
+  ('salts', 56.1000, '56.1', 0.518779, '51.877900%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 575),
+  ('salts', 56.2000, '56.2', 0.519542, '51.954200%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 576),
+  ('salts', 56.3000, '56.3', 0.520305, '52.030500%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 577),
+  ('salts', 56.4000, '56.4', 0.521069, '52.106900%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 578),
+  ('salts', 56.5000, '56.5', 0.521832, '52.183200%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 579),
+  ('salts', 56.6000, '56.6', 0.522595, '52.259500%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 580),
+  ('salts', 56.7000, '56.7', 0.523359, '52.335900%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 581),
+  ('salts', 56.8000, '56.8', 0.524122, '52.412200%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 582),
+  ('salts', 56.9000, '56.9', 0.524885, '52.488500%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 583),
+  ('salts', 57.0000, '57', 0.525649, '52.564900%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 584),
+  ('salts', 57.1000, '57.1', 0.526412, '52.641200%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 585),
+  ('salts', 57.2000, '57.2', 0.527176, '52.717600%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 586),
+  ('salts', 57.3000, '57.3', 0.527939, '52.793900%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 587),
+  ('salts', 57.4000, '57.4', 0.528702, '52.870200%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 588),
+  ('salts', 57.5000, '57.5', 0.529466, '52.946600%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 589),
+  ('salts', 57.6000, '57.6', 0.530229, '53.022900%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 590),
+  ('salts', 57.7000, '57.7', 0.530992, '53.099200%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 591),
+  ('salts', 57.8000, '57.8', 0.531756, '53.175600%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 592),
+  ('salts', 57.9000, '57.9', 0.532519, '53.251900%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 593),
+  ('salts', 58.0000, '58', 0.533282, '53.328200%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 594),
+  ('salts', 58.1000, '58.1', 0.534046, '53.404600%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 595),
+  ('salts', 58.2000, '58.2', 0.534809, '53.480900%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 596),
+  ('salts', 58.3000, '58.3', 0.535573, '53.557300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 597),
+  ('salts', 58.4000, '58.4', 0.536336, '53.633600%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 598),
+  ('salts', 58.5000, '58.5', 0.537099, '53.709900%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 599),
+  ('salts', 58.6000, '58.6', 0.537863, '53.786300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 600),
+  ('salts', 58.7000, '58.7', 0.538626, '53.862600%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 601),
+  ('salts', 58.8000, '58.8', 0.539389, '53.938900%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 602),
+  ('salts', 58.9000, '58.9', 0.540153, '54.015300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 603),
+  ('salts', 59.0000, '59', 0.540916, '54.091600%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 604),
+  ('salts', 59.1000, '59.1', 0.541679, '54.167900%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 605),
+  ('salts', 59.2000, '59.2', 0.542443, '54.244300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 606),
+  ('salts', 59.3000, '59.3', 0.543206, '54.320600%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 607),
+  ('salts', 59.4000, '59.4', 0.543969, '54.396900%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 608),
+  ('salts', 59.5000, '59.5', 0.544733, '54.473300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 609),
+  ('salts', 59.6000, '59.6', 0.545496, '54.549600%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 610),
+  ('salts', 59.7000, '59.7', 0.546260, '54.626000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 611),
+  ('salts', 59.8000, '59.8', 0.547023, '54.702300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 612),
+  ('salts', 59.9000, '59.9', 0.547786, '54.778600%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 613),
+  ('salts', 60.0000, '60', 0.548550, '54.855000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 614),
+  ('salts', 60.1000, '60.1', 0.549313, '54.931300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 615),
+  ('salts', 60.2000, '60.2', 0.550076, '55.007600%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 616),
+  ('salts', 60.3000, '60.3', 0.550840, '55.084000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 617),
+  ('salts', 60.4000, '60.4', 0.551603, '55.160300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 618),
+  ('salts', 60.5000, '60.5', 0.552366, '55.236600%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 619),
+  ('salts', 60.6000, '60.6', 0.553130, '55.313000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 620),
+  ('salts', 60.7000, '60.7', 0.553893, '55.389300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 621),
+  ('salts', 60.8000, '60.8', 0.554656, '55.465600%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 622),
+  ('salts', 60.9000, '60.9', 0.555420, '55.542000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 623),
+  ('salts', 61.0000, '61', 0.556183, '55.618300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 624),
+  ('salts', 61.1000, '61.1', 0.556947, '55.694700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 625),
+  ('salts', 61.2000, '61.2', 0.557710, '55.771000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 626),
+  ('salts', 61.3000, '61.3', 0.558473, '55.847300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 627),
+  ('salts', 61.4000, '61.4', 0.560000, '56.000000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 628),
+  ('salts', 61.5000, '61.5', 0.561246, '56.124600%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 629),
+  ('salts', 61.6000, '61.6', 0.562492, '56.249200%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 630),
+  ('salts', 61.7000, '61.7', 0.563738, '56.373800%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 631),
+  ('salts', 61.8000, '61.8', 0.564984, '56.498400%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 632),
+  ('salts', 61.9000, '61.9', 0.566231, '56.623100%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 633),
+  ('salts', 62.0000, '62', 0.567477, '56.747700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 634),
+  ('salts', 62.1000, '62.1', 0.568723, '56.872300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 635),
+  ('salts', 62.2000, '62.2', 0.569969, '56.996900%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 636),
+  ('salts', 62.3000, '62.3', 0.571215, '57.121500%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 637),
+  ('salts', 62.4000, '62.4', 0.572461, '57.246100%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 638),
+  ('salts', 62.5000, '62.5', 0.573707, '57.370700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 639),
+  ('salts', 62.6000, '62.6', 0.574953, '57.495300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 640),
+  ('salts', 62.7000, '62.7', 0.576199, '57.619900%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 641),
+  ('salts', 62.8000, '62.8', 0.577445, '57.744500%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 642),
+  ('salts', 62.9000, '62.9', 0.578692, '57.869200%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 643),
+  ('salts', 63.0000, '63', 0.579938, '57.993800%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 644),
+  ('salts', 63.1000, '63.1', 0.581184, '58.118400%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 645),
+  ('salts', 63.2000, '63.2', 0.582430, '58.243000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 646),
+  ('salts', 63.3000, '63.3', 0.583676, '58.367600%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 647),
+  ('salts', 63.4000, '63.4', 0.584922, '58.492200%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 648),
+  ('salts', 63.5000, '63.5', 0.586168, '58.616800%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 649),
+  ('salts', 63.6000, '63.6', 0.587414, '58.741400%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 650),
+  ('salts', 63.7000, '63.7', 0.588660, '58.866000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 651),
+  ('salts', 63.8000, '63.8', 0.589907, '58.990700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 652),
+  ('salts', 63.9000, '63.9', 0.591153, '59.115300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 653),
+  ('salts', 64.0000, '64', 0.592399, '59.239900%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 654),
+  ('salts', 64.1000, '64.1', 0.593645, '59.364500%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 655),
+  ('salts', 64.2000, '64.2', 0.594891, '59.489100%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 656),
+  ('salts', 64.3000, '64.3', 0.596137, '59.613700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 657),
+  ('salts', 64.4000, '64.4', 0.597383, '59.738300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 658),
+  ('salts', 64.5000, '64.5', 0.598629, '59.862900%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 659),
+  ('salts', 64.6000, '64.6', 0.599875, '59.987500%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 660),
+  ('salts', 64.7000, '64.7', 0.601121, '60.112100%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 661),
+  ('salts', 64.8000, '64.8', 0.602368, '60.236800%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 662),
+  ('salts', 64.9000, '64.9', 0.603614, '60.361400%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 663),
+  ('salts', 65.0000, '65', 0.604860, '60.486000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 664),
+  ('salts', 65.1000, '65.1', 0.606106, '60.610600%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 665),
+  ('salts', 65.2000, '65.2', 0.607352, '60.735200%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 666),
+  ('salts', 65.3000, '65.3', 0.608598, '60.859800%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 667),
+  ('salts', 65.4000, '65.4', 0.609844, '60.984400%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 668),
+  ('salts', 65.5000, '65.5', 0.611090, '61.109000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 669),
+  ('salts', 65.6000, '65.6', 0.612336, '61.233600%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 670),
+  ('salts', 65.7000, '65.7', 0.613583, '61.358300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 671),
+  ('salts', 65.8000, '65.8', 0.614829, '61.482900%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 672),
+  ('salts', 65.9000, '65.9', 0.616075, '61.607500%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 673),
+  ('salts', 66.0000, '66', 0.617321, '61.732100%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 674),
+  ('salts', 66.1000, '66.1', 0.618567, '61.856700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 675),
+  ('salts', 66.2000, '66.2', 0.619813, '61.981300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 676),
+  ('salts', 66.3000, '66.3', 0.621059, '62.105900%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 677),
+  ('salts', 66.4000, '66.4', 0.622305, '62.230500%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 678),
+  ('salts', 66.5000, '66.5', 0.623551, '62.355100%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 679),
+  ('salts', 66.6000, '66.6', 0.624798, '62.479800%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 680),
+  ('salts', 66.7000, '66.7', 0.626044, '62.604400%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 681),
+  ('salts', 66.8000, '66.8', 0.627290, '62.729000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 682),
+  ('salts', 66.9000, '66.9', 0.628536, '62.853600%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 683),
+  ('salts', 67.0000, '67', 0.629782, '62.978200%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 684),
+  ('salts', 67.1000, '67.1', 0.631028, '63.102800%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 685),
+  ('salts', 67.2000, '67.2', 0.632274, '63.227400%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 686),
+  ('salts', 67.3000, '67.3', 0.633520, '63.352000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 687),
+  ('salts', 67.4000, '67.4', 0.634766, '63.476600%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 688),
+  ('salts', 67.5000, '67.5', 0.636012, '63.601200%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 689),
+  ('salts', 67.6000, '67.6', 0.637259, '63.725900%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 690),
+  ('salts', 67.7000, '67.7', 0.638505, '63.850500%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 691),
+  ('salts', 67.8000, '67.8', 0.639751, '63.975100%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 692),
+  ('salts', 67.9000, '67.9', 0.640997, '64.099700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 693),
+  ('salts', 68.0000, '68', 0.642243, '64.224300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 694),
+  ('salts', 68.1000, '68.1', 0.643489, '64.348900%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 695),
+  ('salts', 68.2000, '68.2', 0.644735, '64.473500%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 696),
+  ('salts', 68.3000, '68.3', 0.645981, '64.598100%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 697),
+  ('salts', 68.4000, '68.4', 0.647227, '64.722700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 698),
+  ('salts', 68.5000, '68.5', 0.648474, '64.847400%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 699),
+  ('salts', 68.6000, '68.6', 0.649720, '64.972000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 700),
+  ('salts', 68.7000, '68.7', 0.650966, '65.096600%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 701),
+  ('salts', 68.8000, '68.8', 0.652212, '65.221200%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 702),
+  ('salts', 68.9000, '68.9', 0.653458, '65.345800%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 703),
+  ('salts', 69.0000, '69', 0.654704, '65.470400%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 704),
+  ('salts', 69.1000, '69.1', 0.655950, '65.595000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 705),
+  ('salts', 69.2000, '69.2', 0.657196, '65.719600%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 706),
+  ('salts', 69.3000, '69.3', 0.658442, '65.844200%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 707),
+  ('salts', 69.4000, '69.4', 0.659688, '65.968800%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 708),
+  ('salts', 69.5000, '69.5', 0.660935, '66.093500%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 709),
+  ('salts', 69.6000, '69.6', 0.662181, '66.218100%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 710),
+  ('salts', 69.7000, '69.7', 0.663427, '66.342700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 711),
+  ('salts', 69.8000, '69.8', 0.664673, '66.467300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 712),
+  ('salts', 69.9000, '69.9', 0.665919, '66.591900%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 713),
+  ('salts', 70.0000, '70', 0.667165, '66.716500%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 714),
+  ('salts', 70.1000, '70.1', 0.668411, '66.841100%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 715),
+  ('salts', 70.2000, '70.2', 0.669657, '66.965700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 716),
+  ('salts', 70.3000, '70.3', 0.670903, '67.090300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 717),
+  ('salts', 70.4000, '70.4', 0.672150, '67.215000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 718),
+  ('salts', 70.5000, '70.5', 0.673396, '67.339600%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 719),
+  ('salts', 70.6000, '70.6', 0.674642, '67.464200%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 720),
+  ('salts', 70.7000, '70.7', 0.675888, '67.588800%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 721),
+  ('salts', 70.8000, '70.8', 0.677134, '67.713400%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 722),
+  ('salts', 70.9000, '70.9', 0.678380, '67.838000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 723),
+  ('salts', 71.0000, '71', 0.679626, '67.962600%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 724),
+  ('salts', 71.1000, '71.1', 0.680872, '68.087200%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 725),
+  ('salts', 71.2000, '71.2', 0.682118, '68.211800%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 726),
+  ('salts', 71.3000, '71.3', 0.683364, '68.336400%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 727),
+  ('salts', 71.4000, '71.4', 0.684611, '68.461100%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 728),
+  ('salts', 71.5000, '71.5', 0.685857, '68.585700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 729),
+  ('salts', 71.6000, '71.6', 0.687103, '68.710300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 730),
+  ('salts', 71.7000, '71.7', 0.688349, '68.834900%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 731),
+  ('salts', 71.8000, '71.8', 0.689595, '68.959500%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 732),
+  ('salts', 71.9000, '71.9', 0.690841, '69.084100%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 733),
+  ('salts', 72.0000, '72', 0.692087, '69.208700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 734),
+  ('salts', 72.1000, '72.1', 0.693333, '69.333300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 735),
+  ('salts', 72.2000, '72.2', 0.694579, '69.457900%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 736),
+  ('salts', 72.3000, '72.3', 0.695826, '69.582600%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 737),
+  ('salts', 72.4000, '72.4', 0.697072, '69.707200%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 738),
+  ('salts', 72.5000, '72.5', 0.698318, '69.831800%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 739),
+  ('salts', 72.6000, '72.6', 0.699564, '69.956400%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 740),
+  ('salts', 72.7000, '72.7', 0.700810, '70.081000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 741),
+  ('salts', 72.8000, '72.8', 0.702056, '70.205600%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 742),
+  ('salts', 72.9000, '72.9', 0.703302, '70.330200%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 743),
+  ('salts', 73.0000, '73', 0.704548, '70.454800%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 744),
+  ('salts', 73.1000, '73.1', 0.705794, '70.579400%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 745),
+  ('salts', 73.2000, '73.2', 0.707040, '70.704000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 746),
+  ('salts', 73.3000, '73.3', 0.708287, '70.828700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 747),
+  ('salts', 73.4000, '73.4', 0.709533, '70.953300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 748),
+  ('salts', 73.5000, '73.5', 0.710779, '71.077900%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 749),
+  ('salts', 73.6000, '73.6', 0.712025, '71.202500%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 750),
+  ('salts', 73.7000, '73.7', 0.713271, '71.327100%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 751),
+  ('salts', 73.8000, '73.8', 0.714517, '71.451700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 752),
+  ('salts', 73.9000, '73.9', 0.715763, '71.576300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 753),
+  ('salts', 74.0000, '74', 0.717009, '71.700900%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 754),
+  ('salts', 74.1000, '74.1', 0.718255, '71.825500%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 755),
+  ('salts', 74.2000, '74.2', 0.719502, '71.950200%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 756),
+  ('salts', 74.3000, '74.3', 0.720748, '72.074800%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 757),
+  ('salts', 74.4000, '74.4', 0.721994, '72.199400%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 758),
+  ('salts', 74.5000, '74.5', 0.723240, '72.324000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 759),
+  ('salts', 74.6000, '74.6', 0.724486, '72.448600%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 760),
+  ('salts', 74.7000, '74.7', 0.725732, '72.573200%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 761),
+  ('salts', 74.8000, '74.8', 0.726978, '72.697800%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 762),
+  ('salts', 74.9000, '74.9', 0.728224, '72.822400%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 763),
+  ('salts', 75.0000, '75', 0.729470, '72.947000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 764),
+  ('salts', 75.1000, '75.1', 0.730717, '73.071700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 765),
+  ('salts', 75.2000, '75.2', 0.731963, '73.196300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 766),
+  ('salts', 75.3000, '75.3', 0.733209, '73.320900%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 767),
+  ('salts', 75.4000, '75.4', 0.734455, '73.445500%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 768),
+  ('salts', 75.5000, '75.5', 0.735701, '73.570100%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 769),
+  ('salts', 75.6000, '75.6', 0.736947, '73.694700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 770),
+  ('salts', 75.7000, '75.7', 0.738193, '73.819300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 771),
+  ('salts', 75.8000, '75.8', 0.739439, '73.943900%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 772),
+  ('salts', 75.9000, '75.9', 0.740685, '74.068500%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 773),
+  ('salts', 76.0000, '76', 0.741931, '74.193100%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 774),
+  ('salts', 76.1000, '76.1', 0.743178, '74.317800%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 775),
+  ('salts', 76.2000, '76.2', 0.744424, '74.442400%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 776),
+  ('salts', 76.3000, '76.3', 0.745670, '74.567000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 777),
+  ('salts', 76.4000, '76.4', 0.746916, '74.691600%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 778),
+  ('salts', 76.5000, '76.5', 0.748162, '74.816200%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 779),
+  ('salts', 76.6000, '76.6', 0.749408, '74.940800%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 780),
+  ('salts', 76.7000, '76.7', 0.750654, '75.065400%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 781),
+  ('salts', 76.8000, '76.8', 0.751900, '75.190000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 782),
+  ('salts', 76.9000, '76.9', 0.753146, '75.314600%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 783),
+  ('salts', 77.0000, '77', 0.754393, '75.439300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 784),
+  ('salts', 77.1000, '77.1', 0.755639, '75.563900%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 785),
+  ('salts', 77.2000, '77.2', 0.756885, '75.688500%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 786),
+  ('salts', 77.3000, '77.3', 0.758131, '75.813100%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 787),
+  ('salts', 77.4000, '77.4', 0.759377, '75.937700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 788),
+  ('salts', 77.5000, '77.5', 0.760623, '76.062300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 789),
+  ('salts', 77.6000, '77.6', 0.761869, '76.186900%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 790),
+  ('salts', 77.7000, '77.7', 0.763115, '76.311500%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 791),
+  ('salts', 77.8000, '77.8', 0.764361, '76.436100%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 792),
+  ('salts', 77.9000, '77.9', 0.765607, '76.560700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 793),
+  ('salts', 78.0000, '78', 0.766854, '76.685400%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 794),
+  ('salts', 78.1000, '78.1', 0.768100, '76.810000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 795),
+  ('salts', 78.2000, '78.2', 0.769346, '76.934600%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 796),
+  ('salts', 78.3000, '78.3', 0.770592, '77.059200%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 797),
+  ('salts', 78.4000, '78.4', 0.771838, '77.183800%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 798),
+  ('salts', 78.5000, '78.5', 0.773084, '77.308400%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 799),
+  ('salts', 78.6000, '78.6', 0.774330, '77.433000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 800),
+  ('salts', 78.7000, '78.7', 0.775576, '77.557600%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 801),
+  ('salts', 78.8000, '78.8', 0.776822, '77.682200%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 802),
+  ('salts', 78.9000, '78.9', 0.778069, '77.806900%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 803),
+  ('salts', 79.0000, '79', 0.779315, '77.931500%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 804),
+  ('salts', 79.1000, '79.1', 0.780561, '78.056100%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 805),
+  ('salts', 79.2000, '79.2', 0.781807, '78.180700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 806),
+  ('salts', 79.3000, '79.3', 0.783053, '78.305300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 807),
+  ('salts', 79.4000, '79.4', 0.784299, '78.429900%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 808),
+  ('salts', 79.5000, '79.5', 0.785545, '78.554500%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 809),
+  ('salts', 79.6000, '79.6', 0.786791, '78.679100%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 810),
+  ('salts', 79.7000, '79.7', 0.788037, '78.803700%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 811),
+  ('salts', 79.8000, '79.8', 0.789283, '78.928300%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 812),
+  ('salts', 79.9000, '79.9', 0.790530, '79.053000%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 813),
+  ('salts', 80.0000, '80', 0.791776, '79.177600%', null, null, 'HORSE Energy Loss Version 3 no urea or age.xlsx', 'v3', 814)
+on conflict (lookup_type, exact_reading, source_version) do update
+set
+  exact_reading_text = excluded.exact_reading_text,
+  loss_fraction = excluded.loss_fraction,
+  loss_percent_text = excluded.loss_percent_text,
+  source_document = excluded.source_document,
+  source_row_number = excluded.source_row_number;
+
+-- <<< END 0024_versioned_four_loss_biochemistry_scoring.sql
+
+-- >>> BEGIN 0025_user_trend_view_preferences.sql
+-- Sprint 028B - self-only saved longitudinal trend view preferences.
+
+create table if not exists public.user_trend_view_preferences (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid not null references public.users(id) on delete cascade,
+  label text not null,
+  score_view text not null default 'both' check (score_view in ('none', 'hydration', 'biochemistry', 'both')),
+  ph_view text not null default 'both' check (ph_view in ('none', 'urine', 'saliva', 'both')),
+  show_carbohydrate boolean not null default false,
+  show_conductivity boolean not null default false,
+  time_filter text not null default 'both' check (time_filter in ('am', 'pm', 'both', 'all')),
+  range_days integer not null default 90 check (range_days in (30, 90, 365)),
+  is_default boolean not null default false,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  constraint user_trend_view_preferences_label_check check (
+    label = btrim(label) and char_length(label) between 1 and 40
+  ),
+  constraint user_trend_view_preferences_group_count_check check (
+    (
+      case when score_view <> 'none' then 1 else 0 end
+      + case when ph_view <> 'none' then 1 else 0 end
+      + case when show_carbohydrate then 1 else 0 end
+      + case when show_conductivity then 1 else 0 end
+    ) between 1 and 2
+  )
+);
+
+create unique index if not exists idx_user_trend_view_preferences_owner_label
+  on public.user_trend_view_preferences (user_id, lower(label));
+create unique index if not exists idx_user_trend_view_preferences_one_default
+  on public.user_trend_view_preferences (user_id) where is_default;
+create index if not exists idx_user_trend_view_preferences_owner_updated
+  on public.user_trend_view_preferences (user_id, updated_at desc, id);
+
+create or replace function public.touch_user_trend_view_preference_updated_at()
+returns trigger
+language plpgsql
+set search_path = pg_catalog, public
+as $$
+begin
+  new.updated_at := pg_catalog.now();
+  return new;
+end
+$$;
+
+drop trigger if exists user_trend_view_preferences_touch_updated_at on public.user_trend_view_preferences;
+create trigger user_trend_view_preferences_touch_updated_at
+before update on public.user_trend_view_preferences
+for each row execute function public.touch_user_trend_view_preference_updated_at();
+
+alter table public.user_trend_view_preferences enable row level security;
+
+create policy "user_trend_view_preferences_select_self_active"
+on public.user_trend_view_preferences for select
+using (
+  user_id = public.current_app_user_id()
+  and public.is_active_app_user()
+);
+
+create policy "user_trend_view_preferences_insert_self_active"
+on public.user_trend_view_preferences for insert
+with check (
+  user_id = public.current_app_user_id()
+  and public.is_active_app_user()
+);
+
+create policy "user_trend_view_preferences_update_self_active"
+on public.user_trend_view_preferences for update
+using (
+  user_id = public.current_app_user_id()
+  and public.is_active_app_user()
+)
+with check (
+  user_id = public.current_app_user_id()
+  and public.is_active_app_user()
+);
+
+create policy "user_trend_view_preferences_delete_self_active"
+on public.user_trend_view_preferences for delete
+using (
+  user_id = public.current_app_user_id()
+  and public.is_active_app_user()
+);
+
+create or replace function public.set_default_biochemistry_trend_preference(target_preference_id uuid)
+returns boolean
+language plpgsql
+security definer
+set search_path = pg_catalog, public
+as $$
+declare
+  actor_user_id uuid;
+begin
+  select u.id
+    into actor_user_id
+  from public.users u
+  where u.id = public.current_app_user_id()
+    and u.status = 'active'
+  for update;
+
+  if actor_user_id is null then
+    return false;
+  end if;
+
+  perform 1
+  from public.user_trend_view_preferences p
+  where p.id = target_preference_id
+    and p.user_id = actor_user_id
+  for update;
+
+  if not found then
+    return false;
+  end if;
+
+  update public.user_trend_view_preferences
+    set is_default = false
+  where user_id = actor_user_id
+    and is_default;
+
+  update public.user_trend_view_preferences
+    set is_default = true
+  where id = target_preference_id
+    and user_id = actor_user_id;
+
+  return found;
+end
+$$;
+
+revoke all on table public.user_trend_view_preferences from public, anon;
+grant select, insert, update, delete on table public.user_trend_view_preferences to authenticated;
+
+revoke execute on function public.touch_user_trend_view_preference_updated_at() from public, anon, authenticated;
+revoke execute on function public.set_default_biochemistry_trend_preference(uuid) from public, anon;
+grant execute on function public.set_default_biochemistry_trend_preference(uuid) to authenticated;
+
+-- <<< END 0025_user_trend_view_preferences.sql

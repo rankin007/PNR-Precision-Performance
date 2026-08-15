@@ -1,5 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { createServerClient } from "@supabase/ssr";
+import { createSupabaseApiKeyFetch } from "@/lib/supabase/api-key-fetch";
 import { hasSupabaseEnv, supabaseEnv } from "@/lib/supabase/env";
 
 export async function updateSupabaseSession(request: NextRequest) {
@@ -24,6 +25,7 @@ export async function updateSupabaseSession(request: NextRequest) {
   }
 
   const supabase = createServerClient(supabaseEnv.url!, supabaseEnv.anonKey!, {
+    global: { fetch: createSupabaseApiKeyFetch(supabaseEnv.anonKey!) },
     cookies: {
       getAll() {
         return request.cookies.getAll();

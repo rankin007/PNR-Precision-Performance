@@ -50,7 +50,8 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(
       {
         ok: false,
-        message: "Commerce reconciliation is disabled pending commercial authority.",
+        reason: commercialAuthority.reasonCode,
+        message: commercialAuthority.publicMessage,
       },
       { status: 503 },
     );

@@ -8,6 +8,8 @@ import {
   BIOCHEMISTRY_NUMERIC_FIELDS,
   BIOCHEMISTRY_TIME_OF_DAY_OPTIONS,
   EMPTY_BIOCHEMISTRY_CAPTURE_VALUES,
+  normalizeBiochemistryCaptureValues,
+  type BiochemistryHorseOption,
   type BiochemistryCaptureValues,
   type BiochemistryFieldError,
   type BiochemistryFieldName,
@@ -19,13 +21,9 @@ import {
   validateBiochemistryCaptureValues,
 } from "@/components/ops/biochemistry-workflow-state";
 
-type HorseOption = {
-  id: string;
-  name: string;
-};
-
 type BiochemistryCaptureWorkflowProps = {
-  horses: HorseOption[];
+  horses: BiochemistryHorseOption[];
+  initialValues?: Partial<BiochemistryCaptureValues>;
   envReady: boolean;
   serverError?: string;
   action: typeof submitBiochemistryTestAction;
@@ -41,12 +39,15 @@ function firstErrorFor(errors: BiochemistryFieldError[], field: BiochemistryFiel
 
 export function BiochemistryCaptureWorkflow({
   horses,
+  initialValues,
   envReady,
   serverError,
   action,
 }: BiochemistryCaptureWorkflowProps) {
   const [stage, setStage] = useState<BiochemistryWorkflowStage>("capture");
-  const [values, setValues] = useState<BiochemistryCaptureValues>(EMPTY_BIOCHEMISTRY_CAPTURE_VALUES);
+  const [values, setValues] = useState<BiochemistryCaptureValues>(() =>
+    normalizeBiochemistryCaptureValues(initialValues ?? EMPTY_BIOCHEMISTRY_CAPTURE_VALUES),
+  );
   const [errors, setErrors] = useState<BiochemistryFieldError[]>([]);
   const [submitLocked, setSubmitLocked] = useState(false);
   const [noteReviewConfirmed, setNoteReviewConfirmed] = useState(false);
@@ -185,7 +186,6 @@ export function BiochemistryCaptureWorkflow({
         <input type="hidden" name="phSaliva" value={values.phSaliva} />
         <input type="hidden" name="phUrine" value={values.phUrine} />
         <input type="hidden" name="conductivityRawMeterValue" value={values.conductivityRawMeterValue} />
-        <input type="hidden" name="ureaReading" value={values.ureaReading} />
         <input type="hidden" name="notes" value={values.notes} />
 
         {stage === "capture" ? (
@@ -210,13 +210,13 @@ export function BiochemistryCaptureWorkflow({
 
         <div className="grid gap-3 border-t border-ink/10 pt-5 sm:flex sm:items-center sm:justify-between">
           <p className="text-sm text-steel">
-            Exact lookup only. Missing lookup rows block scoring rather than guessing.
+            Readings follow the accepted table-matching rules. Missing source rows block scoring rather than guessing.
           </p>
           <div className="flex flex-wrap gap-3">
             {stage !== "capture" ? (
               <button
                 type="button"
-                className="rounded-full border border-ink/15 bg-white px-5 py-3 text-sm font-semibold text-ink"
+                className="min-h-11 rounded-full border border-ink/15 bg-white px-5 py-3 text-sm font-semibold text-ink"
                 onClick={editCapture}
                 disabled={submitLocked}
               >
@@ -226,8 +226,11 @@ export function BiochemistryCaptureWorkflow({
             {stage === "capture" ? (
               <button
                 type="button"
-                className="rounded-full bg-brand px-5 py-3 text-sm font-semibold text-white transition hover:bg-technical focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-data"
-                onClick={moveToReview}
+                className="min-h-11 rounded-full bg-brand px-5 py-3 text-sm font-semibold text-white transition hover:bg-technical focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-data"
+                onClick={(event) => {
+                  event.preventDefault();
+                  moveToReview();
+                }}
                 disabled={unavailable || noHorses}
                 aria-disabled={unavailable || noHorses}
               >
@@ -236,7 +239,7 @@ export function BiochemistryCaptureWorkflow({
             ) : (
               <button
                 type="submit"
-                className="rounded-full bg-brand px-5 py-3 text-sm font-semibold text-white transition hover:bg-technical disabled:cursor-not-allowed disabled:bg-muted focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-data"
+                className="min-h-11 rounded-full bg-brand px-5 py-3 text-sm font-semibold text-white transition hover:bg-technical disabled:cursor-not-allowed disabled:bg-muted focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-data"
                 disabled={submitLocked || unavailable || noHorses}
                 aria-describedby="submit-limitation"
               >
@@ -261,7 +264,7 @@ function CaptureFields({
   updateField,
 }: {
   values: BiochemistryCaptureValues;
-  horses: HorseOption[];
+  horses: BiochemistryHorseOption[];
   errors: BiochemistryFieldError[];
   disabled: boolean;
   updateField: (field: BiochemistryFieldName, value: string) => void;
@@ -270,7 +273,7 @@ function CaptureFields({
     <div className="grid gap-6">
       <section className="grid gap-4" aria-labelledby="context-heading">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-ember">Horse and test context</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-ink">Horse and test context</p>
           <h2 id="context-heading" className="mt-2 text-xl font-semibold text-ink">Identify this test</h2>
         </div>
         <div className="grid gap-4 md:grid-cols-[1.4fr_1fr_1fr]">
@@ -331,10 +334,10 @@ function CaptureFields({
 
       <section className="grid gap-4 rounded-2xl border border-ink/10 bg-white p-4 shadow-panel" aria-labelledby="readings-heading">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-ember">Measurements</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-ink">Measurements</p>
           <h2 id="readings-heading" className="mt-2 text-xl font-semibold text-ink">Enter typed readings</h2>
         </div>
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {BIOCHEMISTRY_NUMERIC_FIELDS.map(({ field, label, unit }) => (
             <FieldErrorWrapper key={field} field={field} errors={errors}>
               <label className="grid gap-2 text-sm font-medium text-ink" htmlFor={field}>
@@ -360,7 +363,7 @@ function CaptureFields({
 
       <section className="grid gap-4" aria-labelledby="notes-heading">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-ember">Optional typed notes</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-ink">Optional typed notes</p>
           <h2 id="notes-heading" className="mt-2 text-xl font-semibold text-ink">Add context</h2>
           <p id="notes-dictation-guidance" className="mt-2 max-w-3xl text-sm leading-6 text-steel">
             Typing is always available. If your device keyboard provides a microphone, you may use its dictation into this same editable field. This application does not record or store audio; dictation availability and behaviour are controlled by your device and keyboard settings. If dictation is unavailable, offline, interrupted or inaccurate, continue typing and review the text before submission.
@@ -427,7 +430,7 @@ function ReviewFields({
   return (
     <section className="grid gap-5 rounded-2xl border border-ink/10 bg-white p-4 shadow-panel" aria-labelledby="review-heading">
       <div>
-        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-ember">Review and submit</p>
+        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-ink">Review and submit</p>
         <h2 id="review-heading" className="mt-2 text-xl font-semibold text-ink">Confirm typed values</h2>
         <p className="mt-2 text-sm leading-6 text-steel">
           Review does not calculate production zones or recommendations.
@@ -443,7 +446,7 @@ function ReviewFields({
       </dl>
       <div className="rounded-2xl border border-ink/10 bg-sand p-4">
         <p className="text-sm font-semibold text-ink">Typed notes</p>
-        <p className="mt-2 whitespace-pre-wrap text-sm leading-6 text-steel">
+        <p className="mt-2 whitespace-pre-wrap text-sm leading-6 text-ink">
           {hasNotes ? values.notes : "No notes added"}
         </p>
       </div>
@@ -461,7 +464,7 @@ function ReviewFields({
             />
             I reviewed this note and corrected any dictation errors.
           </label>
-          <p id="note-review-guidance" className="text-xs leading-5 text-steel">
+          <p id="note-review-guidance" className="text-xs leading-5 text-ink">
             Check the exact note text above. Use Edit values to make corrections before submitting.
           </p>
           {noteReviewError ? (
@@ -478,7 +481,7 @@ function ReviewFields({
 function ReviewItem({ label, value }: { label: string; value: string }) {
   return (
     <div className="rounded-2xl border border-ink/10 bg-sand p-4">
-      <dt className="text-xs font-semibold uppercase tracking-[0.14em] text-steel">{label}</dt>
+      <dt className="text-xs font-semibold uppercase tracking-[0.14em] text-ink">{label}</dt>
       <dd className="mt-2 text-base font-semibold text-ink">{value}</dd>
     </div>
   );

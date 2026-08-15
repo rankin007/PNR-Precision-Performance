@@ -1,0 +1,41 @@
+{
+  "source": {
+    "document": "HORSE Energy Loss Version 3 no urea or age.xlsx",
+    "version": "v3",
+    "effectiveDate": "2026-08-07",
+    "workbookSha256": "838d935f20b864a4f5ed5c0ca5d017322a1608d1ca1a68ec9b02f6afb4bc5f30"
+  },
+  "workbookExample": {
+    "rawReadings": {
+      "carbsReading": 4.5,
+      "phUrine": 7.24,
+      "phSaliva": 7.25,
+      "conductivityRawMeterValue": 18.18
+    },
+    "expected": {
+      "conductivityConvertedCValue": 26,
+      "conductivityLookupCValue": 26,
+      "carbsLoss": 0.08,
+      "urinePhLoss": 0.082333,
+      "salivaPhLoss": 0.130333,
+      "saltsLoss": 0.080597,
+      "hydrationScoreEnergyLoss": 0.080299,
+      "hydrationScore": 0.919701,
+      "healthScoreEnergyLoss": 0.093316,
+      "healthScore": 0.906684
+    }
+  },
+  "discriminatingCases": {
+    "carbsFloor": 4.55,
+    "carbsBelowMinimum": -0.1,
+    "conductivityFloorRaw": 18.17,
+    "conductivityFloorEffective": 25.98,
+    "conductivityFloorSelected": 25.9,
+    "conductivityHalfUpRaw": 26.5,
+    "conductivityHalfUpEffective": 37.9,
+    "conductivityHalfUpSelected": 37.9,
+    "conductivityCapRaw": 56,
+    "conductivityMaximumRaw": 99,
+    "conductivityCapEffective": 80
+  }
+}

@@ -121,8 +121,8 @@ export function SignInForm({
         </Notice>
       ) : null}
 
-      <form onSubmit={(event) => { event.preventDefault(); if (codeRequested) verifyCode(); else requestCode(); }} className="mt-6 grid gap-4">
-        <label className="grid gap-2 text-sm font-medium text-ink">
+      <form onSubmit={(event) => { event.preventDefault(); if (codeRequested) verifyCode(); else requestCode(); }} className="mt-6 grid min-w-0 w-full gap-4">
+        <label className="grid min-w-0 gap-2 text-sm font-medium text-ink">
           Email address
           <input
             name="email"
@@ -134,12 +134,12 @@ export function SignInForm({
             required
             placeholder="you@example.com"
             disabled={!envReady}
-            className="rounded-2xl border border-technical/20 bg-canvas px-4 py-3 text-base text-technical transition focus:border-data"
+            className="min-w-0 w-full rounded-2xl border border-technical/20 bg-canvas px-4 py-3 text-base text-technical transition focus:border-data"
           />
         </label>
         {codeRequested ? (
           <>
-            <label className="grid gap-2 text-sm font-medium text-ink">
+            <label className="grid min-w-0 gap-2 text-sm font-medium text-ink">
               Six-digit code
               <input
                 name="code"
@@ -152,7 +152,7 @@ export function SignInForm({
                 aria-describedby="otp-help"
                 required
                 autoFocus
-                className="rounded-2xl border border-technical/20 bg-canvas px-4 py-3 font-mono text-xl tracking-[0.25em] text-technical transition focus:border-data"
+                className="min-w-0 w-full rounded-2xl border border-technical/20 bg-canvas px-4 py-3 font-mono text-xl tracking-[0.25em] text-technical transition focus:border-data"
               />
             </label>
             <p id="otp-help" className="text-sm leading-6 text-steel">

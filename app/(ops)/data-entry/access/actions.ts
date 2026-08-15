@@ -4,6 +4,20 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { requireAdminAppContext, requireOperationalWriteAppContext } from "@/lib/auth/session";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
+import {
+  executeManagedAssignmentMutation,
+  executeManagedRevocationMutation,
+  isUuid,
+  parseManagedAccessRole,
+  resolveManagedAssignmentRequest,
+  resolveManagedRevocationRequest,
+} from "@/lib/auth/managed-access-contract";
+import {
+  createManagedAccessMutationAdapter,
+  type ManagedAccessQueryClient,
+} from "@/lib/auth/managed-access-mutation-adapter";
+import { getManagedAccessSnapshot } from "@/lib/auth/managed-access-server";
+import { requireManagedAccessAppContext } from "@/lib/auth/session";
 
 const lowerRoles = new Set(["stable_manager","veterinarian","consultant","stable_hand"]);
 const horseAssignmentRoles = new Set(["stable_hand","veterinarian","consultant"]);
@@ -89,4 +103,62 @@ export async function updateStableLifecycleAction(formData: FormData) {
   const supabase=await createSupabaseServerClient();
   const {error}=await supabase.from("stables").update({status,updated_at:new Date().toISOString()}).eq("id",stableId);
   if(error) finish("denied"); revalidatePath("/portal/horses"); finish("stable-updated");
+}
+
+function managedField(formData: FormData, key: string) {
+  const item = formData.get(key);
+  return typeof item === "string" ? item.trim() : "";
+}
+
+function managedAccessRedirect(status: "assigned" | "revoked" | "unavailable"): never {
+  revalidatePath("/data-entry/access");
+  redirect(`/data-entry/access?status=${status}`);
+}
+
+export async function assignManagedHorseAccessAction(formData: FormData) {
+  const context = await requireManagedAccessAppContext("/data-entry/access");
+  const horseId = managedField(formData, "horseId");
+  const memberProfileId = managedField(formData, "memberProfileId");
+  const roleCode = parseManagedAccessRole(managedField(formData, "roleCode"));
+  if (!isUuid(horseId) || !isUuid(memberProfileId) || !roleCode || !context.appUserId) {
+    managedAccessRedirect("unavailable");
+  }
+  const snapshot = await getManagedAccessSnapshot(context);
+  const request = resolveManagedAssignmentRequest(snapshot, { horseId, memberProfileId, roleCode });
+  if (!request.accepted) managedAccessRedirect("unavailable");
+
+  const reference = new Date();
+  const supabase = await createSupabaseServerClient();
+  const adapter = createManagedAccessMutationAdapter(
+    supabase as unknown as ManagedAccessQueryClient,
+    reference.toISOString(),
+  );
+  const mutation = await executeManagedAssignmentMutation(adapter, {
+    horse: request.horse,
+    candidate: request.candidate,
+    roleCode: request.roleCode,
+    actorAppUserId: context.appUserId,
+    reference,
+  });
+  if (mutation.outcome !== "assigned") managedAccessRedirect("unavailable");
+  managedAccessRedirect("assigned");
+}
+
+export async function revokeManagedHorseAccessAction(formData: FormData) {
+  const context = await requireManagedAccessAppContext("/data-entry/access");
+  const assignmentId = managedField(formData, "assignmentId");
+  if (!isUuid(assignmentId)) managedAccessRedirect("unavailable");
+  const snapshot = await getManagedAccessSnapshot(context);
+  const request = resolveManagedRevocationRequest(snapshot, assignmentId);
+  if (!request.accepted) managedAccessRedirect("unavailable");
+
+  const nowIso = new Date().toISOString();
+  const supabase = await createSupabaseServerClient();
+  const adapter = createManagedAccessMutationAdapter(
+    supabase as unknown as ManagedAccessQueryClient,
+    nowIso,
+  );
+  const mutation = await executeManagedRevocationMutation(adapter, request.assignment);
+  if (mutation.outcome !== "revoked") managedAccessRedirect("unavailable");
+  managedAccessRedirect("revoked");
 }

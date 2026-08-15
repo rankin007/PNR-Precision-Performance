@@ -1,4 +1,5 @@
 import { createClient } from "@supabase/supabase-js";
+import { createSupabaseApiKeyFetch } from "@/lib/supabase/api-key-fetch";
 import { supabaseEnv } from "@/lib/supabase/env";
 
 export function hasSupabaseAdminEnv() {
@@ -15,6 +16,7 @@ export function createSupabaseAdminClient() {
   }
 
   return createClient(supabaseEnv.url!, supabaseEnv.serviceRoleKey!, {
+    global: { fetch: createSupabaseApiKeyFetch(supabaseEnv.serviceRoleKey!) },
     auth: {
       autoRefreshToken: false,
       persistSession: false,

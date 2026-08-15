@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { readEnquiryEnvironment } from "@/lib/enquiries/env";
+import { authorizeInternalEnquiryPost, runDedicatedSmtpPreflight } from "@/lib/enquiries/preflight-auth";
 import { deleteFixture, internalRequestIsAuthorized, proveRateLimit, proveRetention, readFixtureStatus, readSchemaStatus, runEnquiryMaintenance, runSmtpPreflight } from "@/lib/enquiries/server";
 
 export const runtime = "nodejs";
@@ -10,6 +11,11 @@ function authorized(request: Request) {
   return environment && internalRequestIsAuthorized(request.headers.get("authorization"), environment.cronSecret);
 }
 
+function sharedAuthorized(request: Request) {
+  if (!authorized(request)) return false;
+  return true;
+}
+
 export async function GET(request: Request) {
   if (!authorized(request)) return NextResponse.json({ result: "unavailable" }, { status: 404 });
   const result = await runEnquiryMaintenance();
@@ -17,16 +23,15 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
-  if (!authorized(request)) return NextResponse.json({ result: "unavailable" }, { status: 404 });
-  if (!request.headers.get("content-type")?.toLowerCase().startsWith("application/json")) return NextResponse.json({ result: "unavailable" }, { status: 415 });
-  let body: { action?: unknown; reference?: unknown };
-  try {
-    const raw = await request.text();
-    if (Buffer.byteLength(raw, "utf8") > 1024) throw new Error("invalid");
-    body = JSON.parse(raw);
-  } catch {
-    return NextResponse.json({ result: "unavailable" }, { status: 400 });
+  const admission = await authorizeInternalEnquiryPost(request, () => sharedAuthorized(request));
+  if (admission.kind === "dedicated") {
+    const result = await runDedicatedSmtpPreflight();
+    return NextResponse.json(result, { status: result.status === "ready" ? 200 : 503 });
   }
+  if (admission.kind === "denied") return NextResponse.json({ result: "unavailable" }, { status: 404 });
+  if (admission.kind === "shared-error") return NextResponse.json({ result: "unavailable" }, { status: admission.status });
+
+  const body = { action: admission.action, reference: admission.reference };
   const reference = typeof body.reference === "string" ? body.reference : "";
   const result = body.action === "status"
     ? await readFixtureStatus(reference)

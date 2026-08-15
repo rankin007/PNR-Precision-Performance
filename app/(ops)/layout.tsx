@@ -1,6 +1,6 @@
 import { AppShell } from "@/components/layout/app-shell";
 import { requirePortalAppContext } from "@/lib/auth/session";
-import { opsNavigation } from "@/lib/navigation";
+import { opsNavigationForRole } from "@/lib/navigation";
 
 export default async function OpsLayout({
   children,
@@ -13,7 +13,7 @@ export default async function OpsLayout({
     <AppShell
       area="Operations"
       description="Phone-first operational workflows for horse records, feeding, and training capture."
-      navigation={opsNavigation}
+      navigation={opsNavigationForRole(context.primaryRole)}
       userEmail={context.sessionUser?.email ?? null}
       memberDisplayName={context.memberDisplayName}
       membershipLevelCodes={context.membershipLevelCodes}

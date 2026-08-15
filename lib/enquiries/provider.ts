@@ -6,6 +6,7 @@ import type { EnquiryPayload } from "@/lib/enquiries/contract";
 
 export type SmtpProviderClass = "google_workspace" | "microsoft_365" | "amazon_ses" | "resend" | "postmark" | "mailgun" | "sendgrid";
 export type SmtpProvider = { providerClass: SmtpProviderClass; publicLabel: string; processingDisclosure: string };
+export type SmtpTransportConfiguration = Pick<EnquiryEnvironment, "smtpHost" | "smtpPort" | "smtpUser" | "smtpPass">;
 export type DeliveryOutcome =
   | { state: "sent"; errorClass: null }
   | { state: "retryable"; errorClass: "connection" | "authentication" | "pre_envelope" }
@@ -83,7 +84,7 @@ export function classifyProviderError(error: unknown): Exclude<DeliveryOutcome, 
   return { state: "delivery_unknown", errorClass: "unexpected" };
 }
 
-function createSmtpTransport(config: EnquiryEnvironment) {
+function createSmtpTransport(config: SmtpTransportConfiguration) {
   return nodemailer.createTransport({
     host: config.smtpHost,
     port: config.smtpPort,
@@ -96,7 +97,7 @@ function createSmtpTransport(config: EnquiryEnvironment) {
 }
 
 export async function verifySmtpTransport(
-  config: EnquiryEnvironment,
+  config: SmtpTransportConfiguration,
   transport?: Pick<Transporter, "verify">,
 ): Promise<SmtpPreflightOutcome> {
   const activeTransport = transport ?? createSmtpTransport(config);

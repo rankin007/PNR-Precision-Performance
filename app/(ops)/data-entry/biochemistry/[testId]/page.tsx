@@ -58,7 +58,7 @@ export default async function BiochemistryResultPage({
     <SectionCard
       eyebrow="Biochemistry Result"
       title={result.test ? `${result.test.horseName} test result` : "Biochemistry result"}
-      description="Review the saved scoring snapshot, blocked lookup state, and unavailable production zone/recommendation state."
+      description="Review the saved readings, numeric scoring snapshot, blocked lookup state, and source versions."
     >
       {!result.envReady || !result.schemaReady ? (
         <div className="rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
@@ -78,7 +78,7 @@ export default async function BiochemistryResultPage({
         </div>
       ) : null}
 
-      {result.test && result.scoringResult && result.zones && result.recommendations ? (
+      {result.test && result.scoringResult ? (
         <div className="grid gap-5">
           <div className="rounded-[1.5rem] border border-ink/10 bg-sand p-5">
             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-ember">Test Snapshot</p>
@@ -100,11 +100,7 @@ export default async function BiochemistryResultPage({
             </div>
           </div>
 
-          <BiochemistryResultPanel
-            scoringResult={result.scoringResult}
-            zones={result.zones}
-            recommendations={result.recommendations}
-          />
+          <BiochemistryResultPanel scoringResult={result.scoringResult} />
           <TestEvidenceManager testId={testId} />
           <section className="rounded-[1.5rem] border border-ink/10 bg-white p-5 shadow-panel" aria-labelledby="comments-heading">
             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-ember">Entry notes</p>

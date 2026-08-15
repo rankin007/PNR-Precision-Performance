@@ -4,17 +4,22 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import {
   BIOCHEMISTRY_FORMULA_VERSION,
+  BIOCHEMISTRY_FORMULA_VERSION_V2,
   BIOCHEMISTRY_LOOKUP_SOURCE_DOCUMENT,
+  BIOCHEMISTRY_LOOKUP_SOURCE_DOCUMENT_V3,
   BIOCHEMISTRY_LOOKUP_SOURCE_VERSION,
+  BIOCHEMISTRY_LOOKUP_SOURCE_VERSION_V3,
+  type AnyBiochemistryScoringResult,
   type BiochemistryLookupRow,
   type BiochemistryLookupType,
   type BiochemistryRawReadings,
+  type BiochemistryRawReadingsV2,
   type BiochemistryScoringResult,
+  type BiochemistryScoringResultV2,
   type BiochemistryTimeOfDay,
-  classifyBiochemistryScoringResult,
-  generateBiochemistryRecommendations,
   getExactLookupKey,
-  scoreBiochemistryReadings,
+  scoreBiochemistryReadingsV2,
+  validateBiochemistryV2RawReadings,
 } from "@/lib/domain/biochemistry";
 import { requireOperationalWriteAppContext } from "@/lib/auth/session";
 import { requirePortalAppContext } from "@/lib/auth/session";
@@ -71,9 +76,7 @@ export type BiochemistryResultState = {
     }>;
     canComment: boolean;
   } | null;
-  scoringResult: BiochemistryScoringResult | null;
-  zones: ReturnType<typeof classifyBiochemistryScoringResult> | null;
-  recommendations: ReturnType<typeof generateBiochemistryRecommendations> | null;
+  scoringResult: AnyBiochemistryScoringResult | null;
   error?: "not-found" | "schema-unavailable" | "load-failed";
 };
 
@@ -171,15 +174,24 @@ function isSchemaUnavailable(error: unknown) {
 }
 
 function lookupRowsToDomainRows(rows: LookupValueRow[]): BiochemistryLookupRow[] {
-  return rows.map((row) => ({
-    lookupType: row.lookup_type,
-    exactReading: row.exact_reading,
-    exactReadingText: row.exact_reading_text,
-    lossFraction: row.loss_fraction,
-    lossPercentText: row.loss_percent_text,
-    sourceDocument: BIOCHEMISTRY_LOOKUP_SOURCE_DOCUMENT,
-    sourceVersion: BIOCHEMISTRY_LOOKUP_SOURCE_VERSION,
-  }));
+  return rows.map((row) => {
+    if (
+      row.source_document !== BIOCHEMISTRY_LOOKUP_SOURCE_DOCUMENT_V3
+      || row.source_version !== BIOCHEMISTRY_LOOKUP_SOURCE_VERSION_V3
+    ) {
+      throw new Error("Biochemistry v2 lookup rows must use the accepted v3 source identity.");
+    }
+
+    return {
+      lookupType: row.lookup_type,
+      exactReading: row.exact_reading,
+      exactReadingText: row.exact_reading_text,
+      lossFraction: row.loss_fraction,
+      lossPercentText: row.loss_percent_text,
+      sourceDocument: row.source_document,
+      sourceVersion: row.source_version,
+    };
+  });
 }
 
 function buildLookupIdMap(rows: LookupValueRow[]) {
@@ -211,20 +223,13 @@ async function fetchLookupRows(supabase: SupabaseClient) {
   const { data, error } = await supabase
     .from("biochemistry_lookup_values")
     .select("id, lookup_type, exact_reading, exact_reading_text, loss_fraction, loss_percent_text, source_document, source_version")
-    .eq("source_version", BIOCHEMISTRY_LOOKUP_SOURCE_VERSION);
+    .eq("source_version", BIOCHEMISTRY_LOOKUP_SOURCE_VERSION_V3);
 
   if (error) {
     return { rows: [] as LookupValueRow[], error };
   }
 
   return { rows: (data ?? []) as LookupValueRow[], error: null };
-}
-
-function createZonesAndRecommendations(scoringResult: BiochemistryScoringResult) {
-  const zones = classifyBiochemistryScoringResult(scoringResult, []);
-  const recommendations = generateBiochemistryRecommendations([zones.hydration, zones.health], []);
-
-  return { zones, recommendations };
 }
 
 function redirectWithError(error: string): never {
@@ -248,14 +253,12 @@ export async function submitBiochemistryTestAction(formData: FormData) {
     phSaliva: readRequiredNumber(formData, "phSaliva"),
     phUrine: readRequiredNumber(formData, "phUrine"),
     conductivityRawMeterValue: readRequiredNumber(formData, "conductivityRawMeterValue"),
-    ureaReading: readRequiredNumber(formData, "ureaReading"),
   };
-  const rawReadings: BiochemistryRawReadings = {
+  const rawReadings: BiochemistryRawReadingsV2 = {
     carbsReading: numericReadings.carbsReading.value ?? Number.NaN,
     phSaliva: numericReadings.phSaliva.value ?? Number.NaN,
     phUrine: numericReadings.phUrine.value ?? Number.NaN,
     conductivityRawMeterValue: numericReadings.conductivityRawMeterValue.value ?? Number.NaN,
-    ureaReading: numericReadings.ureaReading.value ?? Number.NaN,
   };
 
   if (
@@ -268,7 +271,10 @@ export async function submitBiochemistryTestAction(formData: FormData) {
     redirectWithError("missing-fields");
   }
 
-  if (Object.values(numericReadings).some((reading) => reading.status === "invalid")) {
+  if (
+    Object.values(numericReadings).some((reading) => reading.status === "invalid")
+    || validateBiochemistryV2RawReadings(rawReadings).length > 0
+  ) {
     redirectWithError("invalid-number");
   }
   if (validatedInitialNote && !validatedInitialNote.ok) {
@@ -288,18 +294,26 @@ export async function submitBiochemistryTestAction(formData: FormData) {
     if (isSchemaUnavailable(lookupResult.error)) {
       redirectWithError("biochemistry-schema-unavailable");
     }
-
     redirectWithError("lookup-load-failed");
   }
 
   const lookupRows = lookupResult.rows;
-
   if (lookupRows.length === 0) {
     redirectWithError("lookup-load-failed");
   }
 
   const lookupIdMap = buildLookupIdMap(lookupRows);
-  const scoringResult = scoreBiochemistryReadings(rawReadings, lookupRowsToDomainRows(lookupRows));
+  let domainLookupRows: BiochemistryLookupRow[];
+  try {
+    domainLookupRows = lookupRowsToDomainRows(lookupRows);
+  } catch {
+    redirectWithError("lookup-load-failed");
+  }
+  const scoringResult = scoreBiochemistryReadingsV2(rawReadings, domainLookupRows);
+
+  if (scoringResult.scoringStatus !== "scored") {
+    redirectWithError("lookup-load-failed");
+  }
 
   const insertPayload = {
     horse_id: horse.id,
@@ -309,35 +323,35 @@ export async function submitBiochemistryTestAction(formData: FormData) {
     carbs_reading: rawReadings.carbsReading,
     ph_saliva: rawReadings.phSaliva,
     ph_urine: rawReadings.phUrine,
-    ph_average: scoringResult.derivedReadings.phAverage,
+    ph_average: null,
     conductivity_raw_meter_value: rawReadings.conductivityRawMeterValue,
     conductivity_converted_c_value: scoringResult.derivedReadings.conductivityConvertedCValue,
-    urea_reading: rawReadings.ureaReading,
-    carbs_lookup_value_id: scoringResult.losses.carbs
-      ? lookupIdMap.get(getExactLookupKey("carbs", scoringResult.losses.carbs.exactReading)) ?? null
-      : null,
-    ph_average_lookup_value_id: scoringResult.losses.phAverage
-      ? lookupIdMap.get(getExactLookupKey("ph_average", scoringResult.losses.phAverage.exactReading)) ?? null
-      : null,
-    salts_lookup_value_id: scoringResult.losses.salts
-      ? lookupIdMap.get(getExactLookupKey("salts", scoringResult.losses.salts.exactReading)) ?? null
-      : null,
-    urea_lookup_value_id: scoringResult.losses.urea
-      ? lookupIdMap.get(getExactLookupKey("urea", scoringResult.losses.urea.exactReading)) ?? null
-      : null,
-    carbs_loss_fraction: scoringResult.losses.carbs?.lossFraction ?? null,
-    ph_average_loss_fraction: scoringResult.losses.phAverage?.lossFraction ?? null,
-    salts_loss_fraction: scoringResult.losses.salts?.lossFraction ?? null,
-    urea_loss_fraction: scoringResult.losses.urea?.lossFraction ?? null,
-    hydration_score_energy_loss: scoringResult.scoringStatus === "scored" ? scoringResult.hydrationScoreEnergyLoss : null,
-    hydration_score: scoringResult.scoringStatus === "scored" ? scoringResult.hydrationScore : null,
-    health_score_energy_loss: scoringResult.scoringStatus === "scored" ? scoringResult.healthScoreEnergyLoss : null,
-    health_score: scoringResult.scoringStatus === "scored" ? scoringResult.healthScore : null,
-    scoring_status: scoringResult.scoringStatus,
-    scoring_blockers: scoringResult.scoringBlockers,
-    formula_version: BIOCHEMISTRY_FORMULA_VERSION,
-    lookup_source_document: BIOCHEMISTRY_LOOKUP_SOURCE_DOCUMENT,
-    lookup_source_version: BIOCHEMISTRY_LOOKUP_SOURCE_VERSION,
+    conductivity_lookup_c_value: scoringResult.derivedReadings.conductivityLookupCValue,
+    urea_reading: null,
+    carbs_lookup_value_id: lookupIdMap.get(getExactLookupKey("carbs", scoringResult.losses.carbs.exactReading)) ?? null,
+    ph_urine_lookup_value_id: lookupIdMap.get(getExactLookupKey("ph_urine", scoringResult.losses.phUrine.exactReading)) ?? null,
+    ph_saliva_lookup_value_id: lookupIdMap.get(getExactLookupKey("ph_saliva", scoringResult.losses.phSaliva.exactReading)) ?? null,
+    salts_lookup_value_id: lookupIdMap.get(getExactLookupKey("salts", scoringResult.losses.salts.exactReading)) ?? null,
+    ph_average_lookup_value_id: null,
+    urea_lookup_value_id: null,
+    carbs_lookup_reading: scoringResult.losses.carbs.exactReading,
+    ph_urine_lookup_reading: scoringResult.losses.phUrine.exactReading,
+    ph_saliva_lookup_reading: scoringResult.losses.phSaliva.exactReading,
+    carbs_loss_fraction: scoringResult.losses.carbs.lossFraction,
+    ph_urine_loss_fraction: scoringResult.losses.phUrine.lossFraction,
+    ph_saliva_loss_fraction: scoringResult.losses.phSaliva.lossFraction,
+    salts_loss_fraction: scoringResult.losses.salts.lossFraction,
+    ph_average_loss_fraction: null,
+    urea_loss_fraction: null,
+    hydration_score_energy_loss: scoringResult.hydrationScoreEnergyLoss,
+    hydration_score: scoringResult.hydrationScore,
+    health_score_energy_loss: scoringResult.healthScoreEnergyLoss,
+    health_score: scoringResult.healthScore,
+    scoring_status: "scored",
+    scoring_blockers: [],
+    formula_version: BIOCHEMISTRY_FORMULA_VERSION_V2,
+    lookup_source_document: BIOCHEMISTRY_LOOKUP_SOURCE_DOCUMENT_V3,
+    lookup_source_version: BIOCHEMISTRY_LOOKUP_SOURCE_VERSION_V3,
     created_by_user_id: context.appUserId,
     updated_by_user_id: context.appUserId,
   };
@@ -352,7 +366,6 @@ export async function submitBiochemistryTestAction(formData: FormData) {
     if (isSchemaUnavailable(insertError)) {
       redirectWithError("biochemistry-schema-unavailable");
     }
-
     redirectWithError("save-failed");
   }
 
@@ -369,14 +382,13 @@ export async function submitBiochemistryTestAction(formData: FormData) {
       if (isSchemaUnavailable(noteError)) {
         redirectWithError("biochemistry-schema-unavailable");
       }
-
-      redirect(`/data-entry/biochemistry/${test.id}?warning=note-save-failed`);
+      redirect("/data-entry/biochemistry/" + test.id + "?warning=note-save-failed");
     }
   }
 
   revalidatePath("/data-entry/biochemistry");
-  revalidatePath(`/data-entry/biochemistry/${test.id}`);
-  redirect(`/data-entry/biochemistry/${test.id}`);
+  revalidatePath("/data-entry/biochemistry/" + test.id);
+  redirect("/data-entry/biochemistry/" + test.id);
 }
 
 export async function getBiochemistryResult(testId: string): Promise<BiochemistryResultState> {
@@ -386,8 +398,6 @@ export async function getBiochemistryResult(testId: string): Promise<Biochemistr
       schemaReady: false,
       test: null,
       scoringResult: null,
-      zones: null,
-      recommendations: null,
       error: "schema-unavailable",
     };
   }
@@ -407,8 +417,6 @@ export async function getBiochemistryResult(testId: string): Promise<Biochemistr
       schemaReady: !isSchemaUnavailable(error),
       test: null,
       scoringResult: null,
-      zones: null,
-      recommendations: null,
       error: isSchemaUnavailable(error) ? "schema-unavailable" : "load-failed",
     };
   }
@@ -419,99 +427,138 @@ export async function getBiochemistryResult(testId: string): Promise<Biochemistr
       schemaReady: true,
       test: null,
       scoringResult: null,
-      zones: null,
-      recommendations: null,
       error: "not-found",
     };
   }
 
-  const rawReadings = {
-    carbsReading: Number(data.carbs_reading),
-    phSaliva: Number(data.ph_saliva),
-    phUrine: Number(data.ph_urine),
-    conductivityRawMeterValue: Number(data.conductivity_raw_meter_value),
-    ureaReading: Number(data.urea_reading),
-  } satisfies BiochemistryRawReadings;
-  const derivedReadings = {
-    phAverage: Number(data.ph_average),
-    conductivityConvertedCValue: Number(data.conductivity_converted_c_value),
-  };
+  const makeLossSnapshot = (
+    lookupType: BiochemistryLookupType,
+    exactReading: number,
+    lossFraction: number,
+    sourceDocument: string,
+    sourceVersion: string,
+  ) => ({
+    lookupType,
+    exactReading,
+    exactReadingText: String(exactReading),
+    lossFraction,
+    lossPercentText: String(lossFraction * 100) + "%",
+    sourceDocument,
+    sourceVersion,
+  });
+
   const scoringStatus = data.scoring_status === "scored" ? "scored" : "blocked";
-  const scoringBlockers = Array.isArray(data.scoring_blockers)
-    ? data.scoring_blockers.map((blocker: { lookupType?: unknown; exactReading?: unknown }) => ({
-        lookupType: blocker.lookupType === "carbs"
-          || blocker.lookupType === "ph_average"
-          || blocker.lookupType === "salts"
-          || blocker.lookupType === "urea"
-          ? blocker.lookupType
-          : "carbs",
-        exactReading: typeof blocker.exactReading === "number" ? blocker.exactReading : Number(blocker.exactReading ?? 0),
-        reason: "missing_exact_lookup" as const,
-      }))
-    : [];
-  const scoringResult: BiochemistryScoringResult = scoringStatus === "scored"
-    ? {
-        formulaVersion: BIOCHEMISTRY_FORMULA_VERSION,
-        lookupSourceDocument: BIOCHEMISTRY_LOOKUP_SOURCE_DOCUMENT,
-        lookupSourceVersion: BIOCHEMISTRY_LOOKUP_SOURCE_VERSION,
-        rawReadings,
-        derivedReadings,
-        losses: {
-          carbs: {
-            lookupType: "carbs" as const,
-            exactReading: rawReadings.carbsReading,
-            exactReadingText: String(rawReadings.carbsReading),
-            lossFraction: Number(data.carbs_loss_fraction),
-            lossPercentText: `${Number(data.carbs_loss_fraction) * 100}%`,
-            sourceDocument: BIOCHEMISTRY_LOOKUP_SOURCE_DOCUMENT,
-            sourceVersion: BIOCHEMISTRY_LOOKUP_SOURCE_VERSION,
+  let scoringResult: AnyBiochemistryScoringResult;
+
+  if (data.formula_version === BIOCHEMISTRY_FORMULA_VERSION_V2) {
+    const rawReadings: BiochemistryRawReadingsV2 = {
+      carbsReading: Number(data.carbs_reading),
+      phSaliva: Number(data.ph_saliva),
+      phUrine: Number(data.ph_urine),
+      conductivityRawMeterValue: Number(data.conductivity_raw_meter_value),
+    };
+    const derivedReadings = {
+      conductivityConvertedCValue: Number(data.conductivity_converted_c_value),
+      conductivityLookupCValue: Number(data.conductivity_lookup_c_value),
+    };
+    const blockers = Array.isArray(data.scoring_blockers)
+      ? data.scoring_blockers.map((blocker: { lookupType?: unknown; exactReading?: unknown; reason?: unknown }) => ({
+          lookupType: blocker.lookupType === "ph_urine"
+            || blocker.lookupType === "ph_saliva"
+            || blocker.lookupType === "salts"
+            ? blocker.lookupType
+            : "carbs",
+          exactReading: Number(blocker.exactReading ?? 0),
+          reason: blocker.reason === "invalid_reading" || blocker.reason === "below_minimum_lookup"
+            ? blocker.reason
+            : "missing_lower_lookup",
+        }))
+      : [];
+    scoringResult = scoringStatus === "scored"
+      ? {
+          formulaVersion: BIOCHEMISTRY_FORMULA_VERSION_V2,
+          lookupSourceDocument: BIOCHEMISTRY_LOOKUP_SOURCE_DOCUMENT_V3,
+          lookupSourceVersion: BIOCHEMISTRY_LOOKUP_SOURCE_VERSION_V3,
+          rawReadings,
+          derivedReadings,
+          losses: {
+            carbs: makeLossSnapshot("carbs", Number(data.carbs_lookup_reading), Number(data.carbs_loss_fraction), BIOCHEMISTRY_LOOKUP_SOURCE_DOCUMENT_V3, BIOCHEMISTRY_LOOKUP_SOURCE_VERSION_V3),
+            phUrine: makeLossSnapshot("ph_urine", Number(data.ph_urine_lookup_reading), Number(data.ph_urine_loss_fraction), BIOCHEMISTRY_LOOKUP_SOURCE_DOCUMENT_V3, BIOCHEMISTRY_LOOKUP_SOURCE_VERSION_V3),
+            phSaliva: makeLossSnapshot("ph_saliva", Number(data.ph_saliva_lookup_reading), Number(data.ph_saliva_loss_fraction), BIOCHEMISTRY_LOOKUP_SOURCE_DOCUMENT_V3, BIOCHEMISTRY_LOOKUP_SOURCE_VERSION_V3),
+            salts: makeLossSnapshot("salts", Number(data.conductivity_lookup_c_value), Number(data.salts_loss_fraction), BIOCHEMISTRY_LOOKUP_SOURCE_DOCUMENT_V3, BIOCHEMISTRY_LOOKUP_SOURCE_VERSION_V3),
           },
-          phAverage: {
-            lookupType: "ph_average" as const,
-            exactReading: derivedReadings.phAverage,
-            exactReadingText: String(derivedReadings.phAverage),
-            lossFraction: Number(data.ph_average_loss_fraction),
-            lossPercentText: `${Number(data.ph_average_loss_fraction) * 100}%`,
-            sourceDocument: BIOCHEMISTRY_LOOKUP_SOURCE_DOCUMENT,
-            sourceVersion: BIOCHEMISTRY_LOOKUP_SOURCE_VERSION,
+          hydrationScoreEnergyLoss: Number(data.hydration_score_energy_loss),
+          hydrationScore: Number(data.hydration_score),
+          healthScoreEnergyLoss: Number(data.health_score_energy_loss),
+          healthScore: Number(data.health_score),
+          scoringStatus: "scored",
+          scoringBlockers: [],
+        } as BiochemistryScoringResultV2
+      : {
+          formulaVersion: BIOCHEMISTRY_FORMULA_VERSION_V2,
+          lookupSourceDocument: BIOCHEMISTRY_LOOKUP_SOURCE_DOCUMENT_V3,
+          lookupSourceVersion: BIOCHEMISTRY_LOOKUP_SOURCE_VERSION_V3,
+          rawReadings,
+          derivedReadings,
+          losses: {},
+          scoringStatus: "blocked",
+          scoringBlockers: blockers,
+        } as BiochemistryScoringResultV2;
+  } else {
+    const rawReadings = {
+      carbsReading: Number(data.carbs_reading),
+      phSaliva: Number(data.ph_saliva),
+      phUrine: Number(data.ph_urine),
+      conductivityRawMeterValue: Number(data.conductivity_raw_meter_value),
+      ureaReading: Number(data.urea_reading),
+    } satisfies BiochemistryRawReadings;
+    const derivedReadings = {
+      phAverage: Number(data.ph_average),
+      conductivityConvertedCValue: Number(data.conductivity_converted_c_value),
+    };
+    const blockers = Array.isArray(data.scoring_blockers)
+      ? data.scoring_blockers.map((blocker: { lookupType?: unknown; exactReading?: unknown }) => ({
+          lookupType: blocker.lookupType === "ph_average"
+            || blocker.lookupType === "salts"
+            || blocker.lookupType === "urea"
+            ? blocker.lookupType
+            : "carbs",
+          exactReading: Number(blocker.exactReading ?? 0),
+          reason: "missing_exact_lookup" as const,
+        }))
+      : [];
+    scoringResult = scoringStatus === "scored"
+      ? {
+          formulaVersion: BIOCHEMISTRY_FORMULA_VERSION,
+          lookupSourceDocument: BIOCHEMISTRY_LOOKUP_SOURCE_DOCUMENT,
+          lookupSourceVersion: BIOCHEMISTRY_LOOKUP_SOURCE_VERSION,
+          rawReadings,
+          derivedReadings,
+          losses: {
+            carbs: makeLossSnapshot("carbs", rawReadings.carbsReading, Number(data.carbs_loss_fraction), BIOCHEMISTRY_LOOKUP_SOURCE_DOCUMENT, BIOCHEMISTRY_LOOKUP_SOURCE_VERSION),
+            phAverage: makeLossSnapshot("ph_average", derivedReadings.phAverage, Number(data.ph_average_loss_fraction), BIOCHEMISTRY_LOOKUP_SOURCE_DOCUMENT, BIOCHEMISTRY_LOOKUP_SOURCE_VERSION),
+            salts: makeLossSnapshot("salts", derivedReadings.conductivityConvertedCValue, Number(data.salts_loss_fraction), BIOCHEMISTRY_LOOKUP_SOURCE_DOCUMENT, BIOCHEMISTRY_LOOKUP_SOURCE_VERSION),
+            urea: makeLossSnapshot("urea", rawReadings.ureaReading, Number(data.urea_loss_fraction), BIOCHEMISTRY_LOOKUP_SOURCE_DOCUMENT, BIOCHEMISTRY_LOOKUP_SOURCE_VERSION),
           },
-          salts: {
-            lookupType: "salts" as const,
-            exactReading: derivedReadings.conductivityConvertedCValue,
-            exactReadingText: String(derivedReadings.conductivityConvertedCValue),
-            lossFraction: Number(data.salts_loss_fraction),
-            lossPercentText: `${Number(data.salts_loss_fraction) * 100}%`,
-            sourceDocument: BIOCHEMISTRY_LOOKUP_SOURCE_DOCUMENT,
-            sourceVersion: BIOCHEMISTRY_LOOKUP_SOURCE_VERSION,
-          },
-          urea: {
-            lookupType: "urea" as const,
-            exactReading: rawReadings.ureaReading,
-            exactReadingText: String(rawReadings.ureaReading),
-            lossFraction: Number(data.urea_loss_fraction),
-            lossPercentText: `${Number(data.urea_loss_fraction) * 100}%`,
-            sourceDocument: BIOCHEMISTRY_LOOKUP_SOURCE_DOCUMENT,
-            sourceVersion: BIOCHEMISTRY_LOOKUP_SOURCE_VERSION,
-          },
-        },
-        hydrationScoreEnergyLoss: Number(data.hydration_score_energy_loss),
-        hydrationScore: Number(data.hydration_score),
-        healthScoreEnergyLoss: Number(data.health_score_energy_loss),
-        healthScore: Number(data.health_score),
-        scoringStatus: "scored" as const,
-        scoringBlockers: [],
-      }
-    : {
-        formulaVersion: BIOCHEMISTRY_FORMULA_VERSION,
-        lookupSourceDocument: BIOCHEMISTRY_LOOKUP_SOURCE_DOCUMENT,
-        lookupSourceVersion: BIOCHEMISTRY_LOOKUP_SOURCE_VERSION,
-        rawReadings,
-        derivedReadings,
-        losses: {},
-        scoringStatus: "blocked" as const,
-        scoringBlockers,
-      };
-  const { zones, recommendations } = createZonesAndRecommendations(scoringResult);
+          hydrationScoreEnergyLoss: Number(data.hydration_score_energy_loss),
+          hydrationScore: Number(data.hydration_score),
+          healthScoreEnergyLoss: Number(data.health_score_energy_loss),
+          healthScore: Number(data.health_score),
+          scoringStatus: "scored",
+          scoringBlockers: [],
+        } as BiochemistryScoringResult
+      : {
+          formulaVersion: BIOCHEMISTRY_FORMULA_VERSION,
+          lookupSourceDocument: BIOCHEMISTRY_LOOKUP_SOURCE_DOCUMENT,
+          lookupSourceVersion: BIOCHEMISTRY_LOOKUP_SOURCE_VERSION,
+          rawReadings,
+          derivedReadings,
+          losses: {},
+          scoringStatus: "blocked",
+          scoringBlockers: blockers,
+        } as BiochemistryScoringResult;
+  }
+
   const comments = ((Array.isArray(data.biochemistry_test_notes) ? data.biochemistry_test_notes : []) as CommentRow[])
     .map((note) => ({
       id: note.id, text: note.note_text,
@@ -535,7 +582,5 @@ export async function getBiochemistryResult(testId: string): Promise<Biochemistr
       canComment: Boolean(context.primaryRole),
     },
     scoringResult,
-    zones,
-    recommendations,
   };
 }

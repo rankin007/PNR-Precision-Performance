@@ -1,74 +1,37 @@
-export type NavigationItem = {
-  href: string;
-  label: string;
-  description: string;
-};
+import type { OperationalRole } from "@/lib/auth/role-matrix";
+
+export type NavigationItem = { href: string; label: string; description: string };
 
 export const portalNavigation: NavigationItem[] = [
-  {
-    href: "/portal",
-    label: "Overview",
-    description: "Permission-aware member landing area.",
-  },
-  {
-    href: "/portal/horses",
-    label: "Horses",
-    description: "Assigned horse profiles and summaries.",
-  },
-  {
-    href: "/portal/reports",
-    label: "Reports",
-    description: "Performance and history reporting area.",
-  },
+  { href: "/portal", label: "Overview", description: "Permission-aware member landing area." },
+  { href: "/portal/horses", label: "Horses", description: "Assigned horse profiles and summaries." },
+  { href: "/portal/reports", label: "Reports", description: "Permission-scoped stored biochemistry trends." },
 ];
 
 export const adminNavigation: NavigationItem[] = [
-  {
-    href: "/admin",
-    label: "Overview",
-    description: "Membership, permissions, and operations control.",
-  },
-  {
-    href: "/admin/memberships",
-    label: "Memberships",
-    description: "Level setup and assignment controls.",
-  },
-  {
-    href: "/admin/users",
-    label: "Users",
-    description: "Profiles, access, and organisation management.",
-  },
-  {
-    href: "/admin/commerce",
-    label: "Commerce",
-    description: "Products, orders, payments, and checkout state.",
-  },
+  { href: "/admin", label: "Overview", description: "Membership, permissions, and operations control." },
+  { href: "/admin/memberships", label: "Memberships", description: "Level setup and assignment controls." },
+  { href: "/admin/users", label: "Users", description: "Profiles, access, and organisation management." },
+  { href: "/admin/commerce", label: "Commerce", description: "Products, orders, payments, and checkout state." },
 ];
 
 export const opsNavigation: NavigationItem[] = [
-  {
-    href: "/data-entry",
-    label: "Daily Records",
-    description: "Phone-first logging workflows.",
-  },
-  {
-    href: "/data-entry/feeding",
-    label: "Feeding",
-    description: "Menus and feeding event capture.",
-  },
-  {
-    href: "/data-entry/track",
-    label: "Track Sessions",
-    description: "Training and track activity capture.",
-  },
-  {
-    href: "/data-entry/biochemistry",
-    label: "Biochemistry",
-    description: "Manual readings, exact scoring, and result states.",
-  },
-  {
-    href: "/data-entry/submissions",
-    label: "Submissions",
-    description: "Recent submissions and review paths.",
-  },
+  { href: "/portal", label: "Trainer Dashboard", description: "Accessible horses, daily workflow state, and next actions." },
+  { href: "/data-entry", label: "Daily Records", description: "Phone-first logging workflows." },
+  { href: "/data-entry/feeding", label: "Feeding", description: "Menus and feeding event capture." },
+  { href: "/data-entry/track", label: "Track Sessions", description: "Training and track activity capture." },
+  { href: "/data-entry/biochemistry", label: "Biochemistry", description: "Manual readings, table scoring, and result states." },
+  { href: "/data-entry/submissions", label: "Submissions", description: "Recent submissions and review paths." },
 ];
+
+export const managedAccessNavigationItem: NavigationItem = {
+  href: "/data-entry/access",
+  label: "Access",
+  description: "Horse access for already-scoped veterinary and stable staff.",
+};
+
+export function opsNavigationForRole(role: OperationalRole | null) {
+  return role === "administrator" || role === "trainer"
+    ? [...opsNavigation, managedAccessNavigationItem]
+    : opsNavigation;
+}

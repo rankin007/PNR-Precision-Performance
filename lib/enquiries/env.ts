@@ -16,11 +16,15 @@ export type EnquiryEnvironment = {
 
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+export function publicEnquirySubmissionIsEnabled(source: NodeJS.ProcessEnv = process.env) {
+  return source.PUBLIC_ENQUIRY_SUBMISSION_ENABLED === "enabled";
+}
+
 export function readEnquiryEnvironment(source: NodeJS.ProcessEnv = process.env): EnquiryEnvironment | null {
-  const smtpHost = source.SMTP_HOST?.trim() ?? "";
-  const smtpPort = Number(source.SMTP_PORT);
-  const smtpUser = source.SMTP_USER?.trim() ?? "";
-  const smtpPass = source.SMTP_PASS ?? "";
+  const smtpHost = source.PUBLIC_ENQUIRY_SMTP_HOST?.trim() ?? "";
+  const smtpPort = Number(source.PUBLIC_ENQUIRY_SMTP_PORT);
+  const smtpUser = source.PUBLIC_ENQUIRY_SMTP_USER?.trim() ?? "";
+  const smtpPass = source.PUBLIC_ENQUIRY_SMTP_PASS ?? "";
   const smtpFrom = source.SMTP_FROM?.trim() ?? "";
   const recipient = source.CONTACT_ENQUIRY_EMAIL?.trim() ?? "";
   const abuseSecret = source.ENQUIRY_ABUSE_HMAC_SECRET ?? "";
@@ -41,8 +45,8 @@ export function readEnquiryEnvironment(source: NodeJS.ProcessEnv = process.env):
 }
 
 export function getPublicEnquiryAvailability(source: NodeJS.ProcessEnv = process.env) {
-  const provider = classifySmtpProvider(source.SMTP_HOST?.trim() ?? "");
-  const available = Boolean(readEnquiryEnvironment(source));
+  const provider = classifySmtpProvider(source.PUBLIC_ENQUIRY_SMTP_HOST?.trim() ?? "");
+  const available = publicEnquirySubmissionIsEnabled(source) && Boolean(readEnquiryEnvironment(source));
   return {
     available,
     providerClass: provider?.providerClass ?? null,

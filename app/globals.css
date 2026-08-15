@@ -39,7 +39,6 @@ html {
 
 body {
   margin: 0;
-  min-width: 320px;
   background:
     radial-gradient(circle at top, rgba(195, 161, 91, 0.12), transparent 24%),
     linear-gradient(180deg, #faf9f5 0%, var(--color-warm-bone) 100%);

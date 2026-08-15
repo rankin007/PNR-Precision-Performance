@@ -14,7 +14,7 @@ export function SectionCard({
   return (
     <div className="rounded-[2rem] border border-technical/10 bg-surface/95 p-6 shadow-panel sm:p-8">
       <p className="eyebrow">{eyebrow}</p>
-      <h1 className="mt-5 font-display text-4xl text-ink">{title}</h1>
+      <h1 className="mt-5 break-words font-display text-4xl text-ink">{title}</h1>
       <p className="mt-4 max-w-3xl text-base leading-8 text-steel">{description}</p>
       {children ? <div className="mt-8">{children}</div> : null}
     </div>
