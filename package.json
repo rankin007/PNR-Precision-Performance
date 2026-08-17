@@ -3,31 +3,36 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint",
-    "db:bundle": "powershell -ExecutionPolicy Bypass -File scripts/export-supabase-bootstrap.ps1"
+    "dev": "npm exec -- node node_modules/next/dist/bin/next dev",
+    "build": "npm exec -- node node_modules/next/dist/bin/next build",
+    "start": "npm exec -- node node_modules/next/dist/bin/next start",
+    "lint": "npm exec -- node node_modules/next/dist/bin/next lint --no-cache",
+    "db:bundle": "powershell -ExecutionPolicy Bypass -File scripts/export-supabase-bootstrap.ps1",
+    "typecheck": "npm exec -- node node_modules/typescript/bin/tsc --noEmit --incremental false",
+    "test:product-database-034G": "node scripts/test-product-database-integration-034G.mjs"
   },
   "dependencies": {
     "@supabase/ssr": "0.5.2",
     "@supabase/supabase-js": "2.49.8",
-    "@types/nodemailer": "^8.0.0",
     "next": "15.3.8",
-    "nodemailer": "^8.0.5",
+    "nodemailer": "9.0.4",
     "react": "19.1.0",
     "react-dom": "19.1.0",
+    "server-only": "0.0.1",
     "stripe": "^22.0.1"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.1",
     "@types/node": "22.14.1",
+    "@types/nodemailer": "8.0.1",
     "@types/react": "19.1.2",
     "@types/react-dom": "19.1.2",
     "autoprefixer": "10.4.21",
     "eslint": "^9.25.1",
     "eslint-config-next": "15.3.8",
+    "node": "22.14.0",
     "postcss": "8.5.3",
+    "supabase": "^2.109.1",
     "tailwindcss": "3.4.17",
     "typescript": "5.8.3"
   }

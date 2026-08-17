@@ -1,7 +1,6 @@
 import { hasSupabaseEnv } from "@/lib/supabase/env";
-import { hasSupabaseAdminEnv } from "@/lib/supabase/admin";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
-import { hasStripeServerEnv } from "@/lib/stripe/env";
+import { commercialAuthority } from "@/lib/commerce/commercial-authority";
 
 export type ProductSummary = {
   id: string;
@@ -31,26 +30,26 @@ type ProductRow = {
 const fallbackProducts: ProductSummary[] = [
   {
     id: "product-1",
-    name: "Professional Kit",
-    slug: "professional-kit",
-    description: "Professional Urine and Saliva Analysis BE Kit with instruments, onboarding, protocols, and in-house training.",
-    priceLabel: "$3,500 AUD",
+    name: "Performance Review Pack",
+    slug: "performance-review-pack",
+    description: "Structured review pack for owners and trainers with horse performance context.",
+    priceLabel: "$149 AUD",
     checkoutReady: false,
   },
   {
     id: "product-2",
-    name: "Monthly Service",
-    slug: "monthly-performance-service",
-    description: "$120 Per Horse or P.O.A Unlimited testing.",
-    priceLabel: "$120 AUD",
+    name: "Biochemistry Reporting Bundle",
+    slug: "biochemistry-reporting-bundle",
+    description: "Reporting bundle for biochemical observations and interpretation support.",
+    priceLabel: "$249 AUD",
     checkoutReady: false,
   },
   {
     id: "product-3",
-    name: "Kit Buyback",
-    slug: "kit-buyback",
-    description: "Optional buyback available on or before 4 weeks from purchase date, subject to return condition.",
-    priceLabel: "$500 AUD",
+    name: "Stable Operations Toolkit",
+    slug: "stable-operations-toolkit",
+    description: "Operational templates and reporting support for stable workflows.",
+    priceLabel: "$89 AUD",
     checkoutReady: false,
   },
 ];
@@ -61,21 +60,12 @@ function formatPriceLabel(
 ) {
   const amount = typeof priceAmount === "number" ? priceAmount : Number(priceAmount ?? 0);
   const currency = currencyCode ?? "AUD";
-  const normalizedAmount = Number.isFinite(amount) ? amount : 0;
 
-  try {
-    return new Intl.NumberFormat("en-AU", {
-      style: "currency",
-      currency,
-      maximumFractionDigits: normalizedAmount % 1 === 0 ? 0 : 2,
-    }).format(normalizedAmount);
-  } catch {
-    return `${currency} ${normalizedAmount}`;
-  }
+  return `${currency} ${amount}`;
 }
 
 export async function getPublicProductSummaries() {
-  const checkoutReady = hasSupabaseEnv() && hasSupabaseAdminEnv() && hasStripeServerEnv();
+  const checkoutReady = commercialAuthority.checkoutEnabled;
 
   if (!hasSupabaseEnv()) {
     return {
@@ -117,7 +107,7 @@ export async function getPublicProductSummaries() {
 }
 
 export async function getPublicProductDetail(slug: string) {
-  const checkoutReady = hasSupabaseEnv() && hasSupabaseAdminEnv() && hasStripeServerEnv();
+  const checkoutReady = commercialAuthority.checkoutEnabled;
 
   if (!hasSupabaseEnv()) {
     const product = fallbackProducts.find((item) => item.slug === slug);

@@ -1,4 +1,6 @@
 import { createSupabaseAdminClient, hasSupabaseAdminEnv } from "@/lib/supabase/admin";
+import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { bootstrapAuthenticatedUserWithPersistence } from "@/lib/auth/bootstrap-concurrency";
 
 type AuthUserBootstrapInput = {
   authUserId: string;
@@ -25,107 +27,152 @@ type AdminUserRow = {
   status: string;
 };
 
-type ClientApplicationRow = {
-  id: string;
-  client_name: string;
-  business_name: string | null;
-  stable_address: string;
-  direct_email: string;
-  admin_email: string | null;
-  mobile_number: string;
-  status: string;
-  email_verified_at: string | null;
-  disclaimer_agreed_at: string | null;
-  created_at: string;
+export type InitialAdminEligibilityInput = {
+  sessionPresent: boolean;
+  appUserId: string | null;
+  appUserStatus: string | null;
+  memberProfilePresent: boolean;
+  memberProfileActive: boolean;
+  activeMembershipLevelCodes: string[];
 };
 
-export async function bootstrapAuthenticatedUser(input: AuthUserBootstrapInput) {
-  if (!hasSupabaseAdminEnv()) {
-    return {
-      bootstrapped: false,
-      reason: "missing_service_role",
-    };
+export type InitialAdminEligibilityResult = {
+  eligible: boolean;
+  reason:
+    | "eligible"
+    | "actor-ineligible"
+    | "active-membership"
+    | "membership-history"
+    | "administrator-exists"
+    | "uncertain";
+};
+
+type InitialAdminEligibilityFacts = InitialAdminEligibilityInput & {
+  membershipHistoryReliable: boolean;
+  membershipHistoryCount: number;
+  administratorStateReliable: boolean;
+  administratorAssignmentExists: boolean;
+};
+
+const administratorCodes = ["administrator", "admin"];
+
+export type AtomicInitialAdminClaimResult = "claimed" | "denied";
+
+export function classifyAtomicInitialAdminClaim(data: unknown, hasError: boolean): AtomicInitialAdminClaimResult {
+  return !hasError && data === "claimed" ? "claimed" : "denied";
+}
+
+export async function claimInitialAdministrator(): Promise<AtomicInitialAdminClaimResult> {
+  const client = await createSupabaseServerClient();
+  const { data, error } = await client.rpc("claim_initial_administrator");
+  return classifyAtomicInitialAdminClaim(data, Boolean(error));
+}
+
+export function classifyInitialAdminEligibility(
+  facts: InitialAdminEligibilityFacts,
+): InitialAdminEligibilityResult {
+  if (!facts.sessionPresent || !facts.appUserId || facts.appUserStatus !== "active"
+    || !facts.memberProfilePresent || !facts.memberProfileActive) {
+    return { eligible: false, reason: "actor-ineligible" };
   }
+  if (!Array.isArray(facts.activeMembershipLevelCodes) || facts.activeMembershipLevelCodes.length > 0) {
+    return { eligible: false, reason: "active-membership" };
+  }
+  if (!facts.membershipHistoryReliable || !Number.isInteger(facts.membershipHistoryCount)
+    || facts.membershipHistoryCount < 0 || !facts.administratorStateReliable) {
+    return { eligible: false, reason: "uncertain" };
+  }
+  if (facts.membershipHistoryCount > 0) return { eligible: false, reason: "membership-history" };
+  if (facts.administratorAssignmentExists) return { eligible: false, reason: "administrator-exists" };
+  return { eligible: true, reason: "eligible" };
+}
+
+async function getAdministratorAssignmentState() {
+  if (!hasSupabaseAdminEnv()) return { reliable: false, hasAssignment: true };
+  const admin = createSupabaseAdminClient();
+  const levels = await admin.from("membership_levels").select("id,code").in("code", administratorCodes);
+  if (levels.error || !Array.isArray(levels.data)) return { reliable: false, hasAssignment: true };
+  const canonical = levels.data.filter((row) => row?.code === "administrator" && typeof row.id === "string");
+  const recognized = levels.data.filter((row) => administratorCodes.includes(row?.code) && typeof row.id === "string");
+  if (canonical.length !== 1 || recognized.length < 1 || recognized.length > 2) return { reliable: false, hasAssignment: true };
+  const assignments = await admin
+    .from("user_membership_levels")
+    .select("id", { count: "exact", head: true })
+    .in("membership_level_id", recognized.map((row) => row.id));
+  if (assignments.error || typeof assignments.count !== "number" || assignments.count < 0) {
+    return { reliable: false, hasAssignment: true };
+  }
+  return { reliable: true, hasAssignment: assignments.count > 0 };
+}
+
+export async function getInitialAdminEligibility(
+  input: InitialAdminEligibilityInput,
+): Promise<InitialAdminEligibilityResult> {
+  if (!hasSupabaseAdminEnv()) return classifyInitialAdminEligibility({ ...input, membershipHistoryReliable: false, membershipHistoryCount: -1, administratorStateReliable: false, administratorAssignmentExists: true });
+  const admin = createSupabaseAdminClient();
+  const history = await admin
+    .from("user_membership_levels")
+    .select("id", { count: "exact", head: true })
+    .eq("user_id", input.appUserId);
+  const globalState = await getAdministratorAssignmentState();
+  return classifyInitialAdminEligibility({
+    ...input,
+    membershipHistoryReliable: !history.error && typeof history.count === "number",
+    membershipHistoryCount: typeof history.count === "number" ? history.count : -1,
+    administratorStateReliable: globalState.reliable,
+    administratorAssignmentExists: globalState.hasAssignment,
+  });
+}
+
+export async function verifyCanonicalAdministratorAssignment(userId: string) {
+  if (!hasSupabaseAdminEnv() || !userId) return false;
+  const admin = createSupabaseAdminClient();
+  const level = await admin.from("membership_levels").select("id").eq("code", "administrator").maybeSingle();
+  if (level.error || !level.data?.id) return false;
+  const intended = await admin.from("user_membership_levels").select("id", { count: "exact", head: true })
+    .eq("user_id", userId).eq("membership_level_id", level.data.id);
+  const global = await admin.from("user_membership_levels").select("id", { count: "exact", head: true })
+    .eq("membership_level_id", level.data.id);
+  return !intended.error && !global.error && intended.count === 1 && global.count === 1;
+}
+
+export async function bootstrapAuthenticatedUser(input: AuthUserBootstrapInput) {
+  if (!hasSupabaseAdminEnv()) return { bootstrapped: false as const, reason: "missing_service_role" };
 
   const admin = createSupabaseAdminClient();
-
-  const { data: existingUser } = await admin
-    .from("users")
-    .select("id")
-    .eq("auth_user_id", input.authUserId)
-    .maybeSingle();
-
-  let appUserId = existingUser?.id ?? null;
-
-  if (!appUserId) {
-    const { data: insertedUser, error: userInsertError } = await admin
-      .from("users")
-      .insert({
-        auth_user_id: input.authUserId,
-        email: input.email ?? `${input.authUserId}@pending.local`,
+  return bootstrapAuthenticatedUserWithPersistence(input, {
+    async ensureUser(candidate) {
+      const ensured = await admin.from("users").upsert({
+        auth_user_id: candidate.authUserId,
+        email: candidate.email ?? `${candidate.authUserId}@pending.local`,
         status: "active",
-      })
-      .select("id")
-      .single();
+      }, { onConflict: "auth_user_id", ignoreDuplicates: true });
+      if (ensured.error) throw ensured.error;
 
-    if (userInsertError) {
-      throw userInsertError;
-    }
-
-    appUserId = insertedUser.id;
-  }
-
-  const { data: existingProfile } = await admin
-    .from("member_profiles")
-    .select("id")
-    .eq("user_id", appUserId)
-    .maybeSingle();
-
-  if (!existingProfile) {
-    const displayName =
-      input.displayName || [input.firstName, input.lastName].filter(Boolean).join(" ").trim() || input.email;
-
-    const { error: profileInsertError } = await admin.from("member_profiles").insert({
-      user_id: appUserId,
-      display_name: displayName || "Member",
-      first_name: input.firstName ?? null,
-      last_name: input.lastName ?? null,
-      is_active: true,
-    });
-
-    if (profileInsertError) {
-      throw profileInsertError;
-    }
-  }
-
-  return {
-    bootstrapped: true,
-    appUserId,
-  };
+      const resolved = await admin.from("users").select("id")
+        .eq("auth_user_id", candidate.authUserId).single();
+      if (resolved.error || !resolved.data?.id) throw resolved.error ?? new Error("BOOTSTRAP_USER_RESOLUTION_FAILED");
+      return resolved.data.id;
+    },
+    async ensureProfile(candidate) {
+      const displayName = candidate.displayName
+        || [candidate.firstName, candidate.lastName].filter(Boolean).join(" ").trim()
+        || candidate.email;
+      const ensured = await admin.from("member_profiles").upsert({
+        user_id: candidate.appUserId,
+        display_name: displayName || "Member",
+        first_name: candidate.firstName ?? null,
+        last_name: candidate.lastName ?? null,
+        is_active: true,
+      }, { onConflict: "user_id", ignoreDuplicates: true });
+      if (ensured.error) throw ensured.error;
+    },
+  });
 }
 
 export async function hasAnyAdminAssignment() {
-  if (!hasSupabaseAdminEnv()) {
-    return false;
-  }
-
-  const admin = createSupabaseAdminClient();
-  const { data: adminLevel } = await admin
-    .from("membership_levels")
-    .select("id")
-    .eq("code", "admin")
-    .maybeSingle();
-
-  if (!adminLevel) {
-    return false;
-  }
-
-  const { count } = await admin
-    .from("user_membership_levels")
-    .select("id", { count: "exact", head: true })
-    .eq("membership_level_id", adminLevel.id);
-
-  return Boolean(count && count > 0);
+  const state = await getAdministratorAssignmentState();
+  return !state.reliable || state.hasAssignment;
 }
 
 export async function assignMembershipLevelToUser(params: {
@@ -162,6 +209,29 @@ export async function assignMembershipLevelToUser(params: {
     throw error;
   }
 
+  const primaryRoleByMembership: Record<string, string | null> = {
+    admin: "administrator",
+    administrator: "administrator",
+    trainer: "trainer",
+    "stable-manager": "stable_manager",
+    veterinarian: "veterinarian",
+    consultant: "consultant",
+    "stable-hand": "stable_hand",
+    "stable-staff": "stable_hand",
+    staff: "stable_hand",
+    owner: null,
+  };
+  if (Object.prototype.hasOwnProperty.call(primaryRoleByMembership, membershipLevel.code)) {
+    const { error: roleError } = await admin
+      .from("users")
+      .update({
+        primary_role_code: primaryRoleByMembership[membershipLevel.code],
+        updated_at: new Date().toISOString(),
+      })
+      .eq("id", params.userId);
+    if (roleError) throw roleError;
+  }
+
   return membershipLevel.code;
 }
 
@@ -171,35 +241,15 @@ export async function getMembershipAdminSnapshot() {
       envReady: false,
       membershipLevels: [] as Array<{ code: string; name: string }>,
       users: [] as Array<{ id: string; email: string; status: string }>,
-      applications: [] as Array<{
-        id: string;
-        clientName: string;
-        businessName: string | null;
-        stableAddress: string;
-        directEmail: string;
-        adminEmail: string | null;
-        mobileNumber: string;
-        status: string;
-        emailVerifiedAt: string | null;
-        disclaimerAgreedAt: string | null;
-        createdAt: string;
-      }>,
       hasAdmin: false,
     };
   }
 
   const admin = createSupabaseAdminClient();
 
-  const [{ data: membershipLevels }, { data: users }, { data: applications }] = await Promise.all([
+  const [{ data: membershipLevels }, { data: users }] = await Promise.all([
     admin.from("membership_levels").select("code, name").order("sort_order"),
     admin.from("users").select("id, email, status").order("created_at", { ascending: false }).limit(20),
-    admin
-      .from("client_applications")
-      .select(
-        "id, client_name, business_name, stable_address, direct_email, admin_email, mobile_number, status, email_verified_at, disclaimer_agreed_at, created_at",
-      )
-      .order("created_at", { ascending: false })
-      .limit(20),
   ]);
 
   const hasAdmin = await hasAnyAdminAssignment();
@@ -208,144 +258,7 @@ export async function getMembershipAdminSnapshot() {
     envReady: true,
     membershipLevels: membershipLevels ?? [],
     users: users ?? [],
-    applications: ((applications ?? []) as ClientApplicationRow[]).map((application) => ({
-      id: application.id,
-      clientName: application.client_name,
-      businessName: application.business_name ?? null,
-      stableAddress: application.stable_address,
-      directEmail: application.direct_email,
-      adminEmail: application.admin_email ?? null,
-      mobileNumber: application.mobile_number,
-      status: application.status,
-      emailVerifiedAt: application.email_verified_at ?? null,
-      disclaimerAgreedAt: application.disclaimer_agreed_at ?? null,
-      createdAt: application.created_at,
-    })),
     hasAdmin,
-  };
-}
-
-async function findAuthUserByEmail(email: string) {
-  const admin = createSupabaseAdminClient();
-  const normalizedEmail = email.trim().toLowerCase();
-  const { data, error } = await admin.auth.admin.listUsers({
-    page: 1,
-    perPage: 1000,
-  });
-
-  if (error) {
-    throw error;
-  }
-
-  return data.users.find((user) => user.email?.trim().toLowerCase() === normalizedEmail) ?? null;
-}
-
-export async function provisionApprovedApplicationAccess(params: {
-  applicationId: string;
-  levelCode: string;
-}) {
-  if (!hasSupabaseAdminEnv()) {
-    throw new Error("Missing Supabase service role configuration.");
-  }
-
-  const admin = createSupabaseAdminClient();
-
-  const { data: application, error: applicationError } = await admin
-    .from("client_applications")
-    .select(
-      "id, client_name, business_name, stable_address, direct_email, admin_email, mobile_number, status, email_verified_at, disclaimer_agreed_at",
-    )
-    .eq("id", params.applicationId)
-    .maybeSingle();
-
-  if (applicationError || !application) {
-    throw new Error("Application not found.");
-  }
-
-  if (!application.email_verified_at || !application.disclaimer_agreed_at) {
-    throw new Error("Application must be verified before approval.");
-  }
-
-  const email = application.direct_email.trim().toLowerCase();
-  let authUser = await findAuthUserByEmail(email);
-  let inviteSent = false;
-
-  if (!authUser) {
-    const appUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
-    const { data: inviteData, error: inviteError } = await admin.auth.admin.inviteUserByEmail(email, {
-      redirectTo: `${appUrl}/sign-in`,
-      data: {
-        display_name: application.client_name,
-      },
-    });
-
-    if (inviteError) {
-      throw inviteError;
-    }
-
-    authUser = inviteData.user ?? null;
-    inviteSent = true;
-  }
-
-  if (!authUser?.id) {
-    throw new Error("The member account could not be provisioned.");
-  }
-
-  const bootstrapped = await bootstrapAuthenticatedUser({
-    authUserId: authUser.id,
-    email,
-    displayName: application.client_name,
-  });
-
-  if (!bootstrapped.appUserId) {
-    throw new Error("The application user profile could not be created.");
-  }
-
-  const { error: userUpdateError } = await admin
-    .from("users")
-    .update({
-      email,
-      status: "active",
-    })
-    .eq("id", bootstrapped.appUserId);
-
-  if (userUpdateError) {
-    throw userUpdateError;
-  }
-
-  const { error: profileUpdateError } = await admin
-    .from("member_profiles")
-    .update({
-      display_name: application.client_name,
-      organisation_name: application.business_name || application.stable_address,
-      is_active: true,
-    })
-    .eq("user_id", bootstrapped.appUserId);
-
-  if (profileUpdateError) {
-    throw profileUpdateError;
-  }
-
-  await assignMembershipLevelToUser({
-    userId: bootstrapped.appUserId,
-    levelCode: params.levelCode,
-  });
-
-  const { error: applicationUpdateError } = await admin
-    .from("client_applications")
-    .update({
-      status: "approved",
-      updated_at: new Date().toISOString(),
-    })
-    .eq("id", application.id);
-
-  if (applicationUpdateError) {
-    throw applicationUpdateError;
-  }
-
-  return {
-    email,
-    inviteSent,
   };
 }
 

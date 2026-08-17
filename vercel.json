@@ -4,5 +4,11 @@
   "github": {
     "enabled": true,
     "silent": false
-  }
+  },
+  "crons": [
+    {
+      "path": "/api/internal/enquiries",
+      "schedule": "0 0 * * *"
+    }
+  ]
 }

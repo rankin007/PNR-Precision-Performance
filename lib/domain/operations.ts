@@ -34,7 +34,7 @@ const fallbackSubmissions: SubmissionSummary[] = [
     detail: "Temperature, weight, and water intake submitted for 2026-04-14.",
   },
   {
-    id: "feed-1",
+    id: "feeding-1",
     type: "Feeding Log",
     horseName: "Velvet Charge",
     detail: "Recovery Feed Mix logged with notes.",
@@ -94,6 +94,18 @@ function formatSubmissionDate(value: string | null | undefined) {
   return value ?? "Unspecified";
 }
 
+function parseSubmissionId(submissionId: string) {
+  const separatorIndex = submissionId.indexOf("-");
+
+  if (separatorIndex <= 0 || separatorIndex === submissionId.length - 1) {
+    return { submissionType: "", entityId: "" };
+  }
+
+  return {
+    submissionType: submissionId.slice(0, separatorIndex),
+    entityId: submissionId.slice(separatorIndex + 1),
+  };
+}
 function toNumberOrNull(value: unknown) {
   if (typeof value === "number") {
     return value;
@@ -216,7 +228,7 @@ export async function getSubmissionDetail(submissionId: string) {
     };
   }
 
-  const [submissionType, entityId] = submissionId.split("-", 2);
+  const { submissionType, entityId } = parseSubmissionId(submissionId);
 
   if (!submissionType || !entityId) {
     return {

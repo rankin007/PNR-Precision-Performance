@@ -1,92 +1,97 @@
 # Architect Briefing
 
-Version: v1 - Sprint 034F repository and method integration closed
+Version: v1 - Sprint 034G Product and database integration closed
 
 ## Executive summary
 
-**Business outcome:** Current `main` now has an independently accepted, coherent repository/method layer that can govern later convergence slices.
+**Business outcome:** The canonical repository now has an independently accepted local Product/runtime/database integration surface on the 034G branch.
 
-**Current focus:** Sprint 034F is complete; the next authorized activity is Architect discovery for 034G only.
+**Current focus:** Sprint 034G is complete; publication remains separate, then 034H should reconcile only current executable tests and operator tooling.
 
-**What is proven:** Canonical target/base, 29-path method integrity, exact eight-file local-correction delta, coherent class-scaled launch authority, fail-closed Pack/updater behavior, zero Product drift, 142 passing focused assertions, and independent cross-layer PASS.
+**What is proven:** Exact 210-record continuity integration, six bounded transformations, ordered migration/runtime coherence, 591 focused assertions, typecheck, lint, production build, protected-route redirects, true-mobile layout metrics and independent critical PASS.
 
-**What is not live:** No Product/database integration, provider/Production action, deployment, publication, commit, push, PR or Product Done state.
+**What is not live:** No migration application, provider/Production action, deploy, publication, commit, push, PR, broad 034H tooling reconciliation, durable 034I history reconciliation or Product Done state.
 
 ## Readiness signals
 
 | Signal | Status | Evidence |
 | --- | --- | --- |
-| Repository/method layer | passed | AC-01–AC-15 and independent review 3 PASS |
-| Product invariance | passed | Zero scoped Product/database/dependency/configuration drift |
-| 034G Product/database integration | attention | Deliberately unplanned beyond discovery; separate Pack required |
-| Production/publication readiness | attention | No external or Production proof occurred; Product Done remains false |
+| Product/runtime/database repository integration | passed | AC-01â€“AC-16 and final independent critical PASS |
+| Auth/RLS and callback redirect boundary | passed | 24/24 focused checks plus reviewed same-origin hardening |
+| Local build and representative UI routes | passed | Typecheck/lint/build and calibrated public/sign-in/protected-route evidence |
+| Production/database application readiness | attention | Docker unavailable; no remote migration/provider/deployment proof; Product Done false |
 
 ## Where things stand
 
-Sprint 034F is closed on its fresh current-main branch. The repository has the direct-root Architect, Builder, Fly, Fly Lean and Onboard paths, a current Architect starter, safe Pack tooling and a manifest-protected local correction ledger. The continuity branch remains a bounded recovery reference, not a merge source or Product-completion signal.
+Sprint 034G is closed on its fresh merged-main branch. The Product trees and `0001`â€“`0025` migration chain are locally coherent with accepted dependencies and runtime config. The continuity branch remains an immutable source/history reference, while the source manifest records every imported blob, deletion and bounded transformation. Publication and external verification remain separate.
 
 ## Current status
 
-`planning/STATUS.json` is `sprint-closed` for 034F. Only the repository/method convergence slice is complete; 034G, 034H and 034I remain planned.
+`planning/STATUS.json` is `sprint-closed` for 034G. Repository/method and Product/database convergence slices are complete locally; 034H and 034I remain planned.
 
 ## Since last sprint
 
-- Created and applied the 034F Pack from exact current `main`.
-- Materialised the 29-path direct-root method plus four extra governance/spec files and current-only planning records.
-- Added the current root Architect starter and reconciled class-scaled Fly authority across templates, skills, commands and `AGENTS.md`.
-- Added a same-version local-correction updater guard that future method versions supersede.
-- Added 142-assertion focused proof and completed three independent inspection decisions ending in PASS.
+- Created and applied the strict four-file 034G Pack from exact merged `main`.
+- Materialised 210 approved continuity records: A91, D54, M64 and one rename.
+- Reconciled dependencies to one seven-script current package surface and exact lock graph.
+- Added immutable source manifest and a 591-assertion critical verifier.
+- Passed typecheck, lint, production build, SQL substitute proof and representative UI/redirect review.
+- Fixed the independent inspector's callback open-redirect finding and received final PASS.
 
 ## Architecture / file map
 
-- `.120x/method-manifest.json`: 29-path method authority and exact eight-file `localCorrections` ledger.
-- `.agents/skills/`, `.claude/commands/`, `templates/method/`: coherent direct-root launch and role doctrine.
-- `architect-chat-starter-prompt.md`: current repository-specific Architect entry context.
-- `scripts/apply-architect-pack.js`, `scripts/update-method.js`: fail-closed Pack application and method refresh.
-- `scripts/test-method-integration-034F.mjs`: dependency-free executable proof.
-- `planning/`, `delivery_road_map.md`: current-only authority, evidence and next-slice boundary.
+- `app/`, `components/`, `lib/`, `public/`: public, auth, portal, operations, administrator, enquiry, evidence and commerce Product surfaces.
+- `supabase/migrations/`: accepted unique `0001`â€“`0025` schema/RLS/function ledger.
+- `supabase/tests/`, `supabase/verification/`: direct SQL proof assets retained with the database boundary.
+- `planning/reviews/034G-product-and-database-source-manifest.json`: immutable source/blob/hash/deletion/transformation authority.
+- `scripts/test-product-database-integration-034G.mjs`: fixed 591-assertion integration verifier.
+- `planning/reviews/034G-product-and-database-integration.md`: plan and implementation review history plus AC decision.
 
 ## Decisions
 
-- Integrate repository/method configuration before Product/database work.
-- Keep the detailed class-scaled Fly doctrine authoritative inside an active flight while preserving the standalone Builder gate.
-- Retain eight explicit v18 local corrections against same-version refresh; allow a future method version to replace them.
-- Keep historical Product/planning evidence deferred to separately reviewed slices.
+- Keep Product/runtime/database atomic because role/RLS and evidence/enquiry contracts depend on the accepted schema chain.
+- Import immutable blobs rather than merge/cherry-pick continuity history.
+- Keep only seven coherent package commands; defer broad executable tooling to 034H.
+- Accept equivalent SQL/UI evidence when supporting runtimes are unavailable, without inferring remote/Production proof.
+- Treat same-origin callback redirect hardening as a reviewed sixth transformation.
 
 ## Risks / watch-items
 
-- Do not treat the continuity branch as merge-ready or Product-complete.
-- 034G must independently re-establish applicable Product/database scope and security boundaries.
-- A future method version may legitimately supersede the eight local corrections; review its doctrine before accepting the update.
+- Docker/local Postgres execution did not occur; remote schema application remains unproven.
+- The accepted lock reports 9 inherited audit findings (2 low, 7 high); forced automatic remediation is not appropriate.
+- Broader current Product suites/operator tooling and durable history remain 034H/034I.
+- Product Done and Production/publication readiness remain false.
 
 ## Open questions for the Architect
 
-1. Which exact Product/database subset from the continuity record remains applicable to then-current `main` for 034G?
-2. Which schema/RLS/Auth boundaries require critical-flight treatment in 034G?
-3. Which executable proof belongs in 034H after the accepted 034G implementation is known?
+1. Which exact current tests/operator tools provide the 034H executable proof set?
+2. Which npm audit findings are reachable and require a bounded upgrade?
+3. Which accepted historical decisions/evidence must 034I preserve?
 
 ## Evidence
 
-- Canonical guard: cwd/root exact, branch `codex/034F-repository-and-method-integration`, HEAD/base `5a70b6a9876e699eac2ab44f472c361e37bc2595`.
-- Three Node syntax checks: passed.
-- `node scripts/test-method-integration-034F.mjs`: 142 assertions passed, 0 failed; 29 manifest entries; Product drift 0; DOCX index 0.
-- Direct JSON substitute: 4 parsed, 0 failed because current `package.json` has no `validate:json` script.
-- Staged whitespace proof: exactly two expected Markdown hard breaks in the manifest-bound chat instructions, zero unexpected findings; all other staged paths pass `git diff --check`.
-- Independent cross-layer inspection: review 3 PASS; INSPECT-001 resolved.
-- Product/provider/Production/publication/remote writes: zero.
+- Canonical guard: exact cwd/root, branch `codex/034G-product-and-database-integration`, HEAD/base `fcbe38d94f1701c96095edd65bd3a636a476d4c1`.
+- Pack dry-run/application: exactly four safe files.
+- Source: 210 records, 156 materialised targets, 55 absences, six transformations, zero unapproved source paths.
+- `node scripts/test-product-database-integration-034G.mjs`: 591 passed, 0 failed.
+- `npm run typecheck`, `npm run lint`, `npm run build`: passed after final auth correction; 29 static pages generated.
+- Database substitution: Docker unavailable, local state unchanged; 25 migrations, 2 transactional pgTAP assets and 9 verification queries checked.
+- UI: public/sign-in 200; portal/data-entry/admin exact 307 redirects; calibrated 390px/1440px pages had no overflow/runtime exception/network failure.
+- `git diff --check`: passed; index/protected path/DOCX diff counts zero; temporary process/container/profile/helper artifacts zero.
+- Independent critical implementation re-inspection: PASS.
 
 ## Plan corrections
 
-Discovery expected a stale retained test, but current `main` contains no historical test; 034F added one current-interface focused test instead. Six manifest-listed Claude launchers lacked continuity Git blobs because they are intentionally ignored; four remained exact manifest-bound sources and two received bounded doctrine transformations. Independent inspection found a missing current root Architect starter, stale authorization wording, an overclaimed exact-source ledger, and incomplete falsifiers; the accepted correction added the starter, reconciled all authority layers, recorded the exact 17/6/4/2 source classification, and proved the exact eight-file delta plus v18 retention/v19 supersession. The repository's missing npm JSON alias was replaced by direct deterministic parsing of four JSON files. Publication staging exposed two intentional Markdown hard-break spaces that the earlier tracked-only diff could not see; the final proof preserves their exact source hash and allowlists only those two lines.
+The plan reviewer required exact assertion arithmetic and deterministic cleanup; the final target became 591 because the rename source is a required absence. Four continuity files needed extra EOF blank-line removal for clean whitespace proof. Docker and the in-app browser were unavailable, so the accepted equivalent SQL and headless-browser evidence paths were used. Independent inspection then found a backslash/network-path callback open redirect; same-origin sentinel normalization and executable hostile inputs corrected it before final PASS.
 
 ## Validation / test status
 
-**Tests:** 142 passing, 0 failing. All focused assertions, syntax checks, direct JSON parsing, manifest/hash checks, exact staged-whitespace classification, scope invariance and independent inspection passed. No Product build was required because the approved diff cannot reach Product/runtime/package content.
+**Tests:** 591 passing, 0 failing. Typecheck, lint, production build, JSON/config, manifest/hash, migration/auth/RLS/evidence/enquiry/commerce, local route/UI, whitespace, scope, cleanup and independent inspection passed. Npm audit findings remain a documented future risk, not silently remediated state.
 
 ## Recommended next Architect action
 
-**Do:** Start 034G discovery from then-current `main`, inspect only the applicable Product/database boundary, and create one separate reviewed Architect Pack.
+**Do:** Keep 034G publication separate. After explicit publication and then-current `main` confirmation, discover 034H and create one reviewed Pack for current executable tests/operator tooling and bounded dependency-risk analysis.
 
 **Owner:** Fresh Architect with the repository/platform owner.
 
-**Decision:** Do not infer Product integration, deployment, publication or Product Done from 034F; keep external actions and implementation gated by the future 034G scope.
+**Decision:** Do not infer remote schema application, Production readiness, publication or Product Done from the accepted local 034G integration.

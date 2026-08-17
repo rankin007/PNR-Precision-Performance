@@ -3,13 +3,14 @@
 import { redirect } from "next/navigation";
 import {
   assignMembershipLevelToUser,
+  claimInitialAdministrator,
+  getInitialAdminEligibility,
   getMembershipAdminSnapshot,
-  hasAnyAdminAssignment,
-  provisionApprovedApplicationAccess,
 } from "@/lib/auth/bootstrap";
 import { requireAdminAppContext, requireSignedInAppContext } from "@/lib/auth/session";
 import { hasSupabaseAdminEnv } from "@/lib/supabase/admin";
-import { revalidatePath } from "next/cache";
+
+const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 function readString(formData: FormData, key: string) {
   const value = formData.get(key);
@@ -23,26 +24,30 @@ export async function bootstrapInitialAdminAction() {
     redirect("/portal?bootstrap=service-role-missing");
   }
 
-  const hasAdmin = await hasAnyAdminAssignment();
-
-  if (hasAdmin) {
-    redirect("/portal?bootstrap=already-configured");
-  }
-
-  if (!context.appUserId) {
-    redirect("/portal?bootstrap=user-missing");
-  }
-
-  await assignMembershipLevelToUser({
-    userId: context.appUserId,
-    levelCode: "admin",
+  const eligibility = await getInitialAdminEligibility({
+    sessionPresent: Boolean(context.sessionUser),
+    appUserId: context.appUserId,
+    appUserStatus: context.appUserStatus,
+    memberProfilePresent: Boolean(context.memberProfileId),
+    memberProfileActive: context.memberProfileActive,
+    activeMembershipLevelCodes: context.membershipLevelCodes,
   });
+
+  if (!eligibility.eligible || !context.appUserId) redirect("/portal?bootstrap=denied");
+
+  if ((await claimInitialAdministrator()) !== "claimed") {
+    redirect("/portal?bootstrap=denied");
+  }
 
   redirect("/admin?bootstrapped=admin");
 }
 
 export async function assignMembershipLevelByEmailAction(formData: FormData) {
   await requireAdminAppContext("/admin/memberships");
+
+  if (!hasSupabaseAdminEnv()) {
+    redirect("/admin/memberships?error=service-role-missing");
+  }
 
   const email = readString(formData, "email").toLowerCase();
   const levelCode = readString(formData, "levelCode");
@@ -51,49 +56,31 @@ export async function assignMembershipLevelByEmailAction(formData: FormData) {
     redirect("/admin/memberships?error=missing-fields");
   }
 
+  if (!emailPattern.test(email)) {
+    redirect("/admin/memberships?error=invalid-email");
+  }
+
   const snapshot = await getMembershipAdminSnapshot();
+  const allowedLevel = snapshot.membershipLevels.find((level) => level.code === levelCode);
+
+  if (!allowedLevel) {
+    redirect("/admin/memberships?error=invalid-level");
+  }
+
   const targetUser = snapshot.users.find((user) => user.email.toLowerCase() === email);
 
   if (!targetUser) {
     redirect("/admin/memberships?error=user-not-found");
   }
 
-  await assignMembershipLevelToUser({
-    userId: targetUser.id,
-    levelCode,
-  });
-
-  redirect(`/admin/memberships?assigned=${encodeURIComponent(email)}&level=${encodeURIComponent(levelCode)}`);
-}
-
-export async function approveApplicationAccessAction(formData: FormData) {
-  await requireAdminAppContext("/admin/memberships");
-
-  if (!hasSupabaseAdminEnv()) {
-    redirect("/admin/memberships?error=service-role-missing");
-  }
-
-  const applicationId = readString(formData, "applicationId");
-  const levelCode = readString(formData, "levelCode") || "trainer";
-
-  if (!applicationId) {
-    redirect("/admin/memberships?error=application-missing");
-  }
-
   try {
-    const result = await provisionApprovedApplicationAccess({
-      applicationId,
+    await assignMembershipLevelToUser({
+      userId: targetUser.id,
       levelCode,
     });
-
-    revalidatePath("/admin/memberships");
-    revalidatePath("/admin/users");
-
-    redirect(
-      `/admin/memberships?approved=${encodeURIComponent(result.email)}&level=${encodeURIComponent(levelCode)}&invite=${result.inviteSent ? "sent" : "existing"}`,
-    );
-  } catch (error) {
-    const message = error instanceof Error ? error.message : "Approval failed";
-    redirect(`/admin/memberships?error=${encodeURIComponent(message)}`);
+  } catch {
+    redirect("/admin/memberships?error=assignment-failed");
   }
+
+  redirect(`/admin/memberships?assigned=${encodeURIComponent(email)}&level=${encodeURIComponent(levelCode)}`);
 }

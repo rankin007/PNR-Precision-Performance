@@ -1,10 +1,20 @@
 import type { Metadata } from "next";
-import { SiteChrome } from "@/components/layout/site-chrome";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "PNR Precision Performance",
-  description: "Racehorse-focused equine platform for data capture, member access, and operations.",
+  metadataBase: new URL("https://precisionperformance.com.au"),
+  title: {
+    default: "Equine Precision Performance",
+    template: "%s | Precision Performance",
+  },
+  description: "Equine biochemistry and recovery intelligence supporting informed trainer decisions.",
+  alternates: {
+    canonical: "/",
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 export default function RootLayout({
@@ -13,10 +23,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body>
-        <SiteChrome>{children}</SiteChrome>
-      </body>
+    <html lang="en-AU">
+      <body>{children}</body>
     </html>
   );
 }

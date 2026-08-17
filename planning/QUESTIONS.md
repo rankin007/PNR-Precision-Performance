@@ -1,11 +1,12 @@
 # Current Questions
 
-No user action is required for Sprint 034F.
+No user action is required to complete Sprint 034G.
 
 ## Forward questions
 
-1. Which exact Product/database subset from the continuity record remains applicable to the then-current `main` for separately reviewed Sprint 034G?
-2. Which current executable tests and operator tools are necessary after 034G, without importing obsolete historical harnesses?
-3. Which durable planning/evidence records are necessary to explain accepted slices without importing redundant history?
+1. Which current executable Product tests and operator tools are necessary for 034H, including auth callback, role/RLS, migration, enquiry, evidence, commerce and responsive-route proof?
+2. Which inherited npm audit findings are reachable in this application, and what is the narrowest non-breaking remediation set?
+3. Which accepted decisions, risks, acceptance state and evidence from the continuity record are necessary for 034I without importing redundant history?
+4. What separately controlled local/remote database and Production verification will be required after repository convergence?
 
-These questions authorize discovery only. They do not authorize Product/database changes, provider access, deployment, migration, commit, push or pull-request work.
+These questions permit discovery only. They do not perform publication, provider access, migration application, deployment, commit, push or pull-request work.
