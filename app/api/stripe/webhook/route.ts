@@ -1,30 +1,62 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import type Stripe from "stripe";
-import { syncCheckoutSessionToCommerce, syncStripeSubscriptionToCommerce } from "@/lib/stripe/commerce";
+import { syncCheckoutSessionToCommerce } from "@/lib/stripe/commerce";
 import { stripeEnv, hasStripeServerEnv, hasStripeWebhookEnv } from "@/lib/stripe/env";
 import { getStripeServerClient } from "@/lib/stripe/server";
+import { commercialAuthority } from "@/lib/commerce/commercial-authority";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-function readErrorMessage(error: unknown) {
-  if (error && typeof error === "object" && "message" in error) {
-    const message = (error as { message?: unknown }).message;
+const supportedCheckoutEvents = new Set([
+  "checkout.session.completed",
+  "checkout.session.async_payment_succeeded",
+  "checkout.session.async_payment_failed",
+  "checkout.session.expired",
+]);
 
-    if (typeof message === "string" && message.trim()) {
-      return message;
+function readSafeErrorCode(error: unknown) {
+  if (error && typeof error === "object") {
+    const candidate = error as { code?: unknown; type?: unknown; name?: unknown };
+
+    if (typeof candidate.code === "string" && candidate.code.trim()) {
+      return candidate.code;
+    }
+
+    if (typeof candidate.type === "string" && candidate.type.trim()) {
+      return candidate.type;
+    }
+
+    if (typeof candidate.name === "string" && candidate.name.trim()) {
+      return candidate.name;
     }
   }
 
-  if (typeof error === "string" && error.trim()) {
-    return error;
+  return "unknown";
+}
+
+function checkoutSessionId(value: unknown) {
+  if (value && typeof value === "object" && "id" in value) {
+    const id = (value as { id?: unknown }).id;
+    return typeof id === "string" ? id : null;
   }
 
-  return "Webhook verification failed.";
+  return null;
 }
 
 export async function POST(request: NextRequest) {
+  if (!commercialAuthority.checkoutEnabled) {
+    return NextResponse.json(
+      {
+        ok: false,
+        reason: commercialAuthority.reasonCode,
+        message: commercialAuthority.publicMessage,
+      },
+      { status: 503 },
+    );
+  }
+
   if (!hasStripeServerEnv() || !hasStripeWebhookEnv()) {
     return NextResponse.json(
       {
@@ -49,49 +81,61 @@ export async function POST(request: NextRequest) {
 
   const payload = await request.text();
   const stripe = getStripeServerClient();
+  let event: Stripe.Event;
 
   try {
-    const event = stripe.webhooks.constructEvent(
+    event = stripe.webhooks.constructEvent(
       Buffer.from(payload, "utf8"),
       signature,
       stripeEnv.webhookSecret!,
     );
-
-    switch (event.type) {
-      case "checkout.session.completed":
-      case "checkout.session.async_payment_succeeded":
-      case "checkout.session.async_payment_failed":
-      case "checkout.session.expired":
-        await syncCheckoutSessionToCommerce(event.data.object as Stripe.Checkout.Session);
-        break;
-      case "customer.subscription.created":
-      case "customer.subscription.updated":
-      case "customer.subscription.deleted":
-        await syncStripeSubscriptionToCommerce(event.data.object as Stripe.Subscription);
-        break;
-      default:
-        break;
-    }
-
-    return NextResponse.json({
-      ok: true,
-      received: event.type,
-      message: "Webhook signature verified and commerce records reconciled where applicable.",
-    });
   } catch (error) {
     console.error("Stripe webhook verification failed", {
-      message: readErrorMessage(error),
+      reason: readSafeErrorCode(error),
       signaturePresent: Boolean(signature),
       payloadLength: payload.length,
-      error,
+      webhookSecretConfigured: Boolean(stripeEnv.webhookSecret),
     });
 
     return NextResponse.json(
       {
         ok: false,
-        message: readErrorMessage(error),
+        message: "Webhook verification failed.",
       },
       { status: 400 },
     );
   }
+
+  if (!supportedCheckoutEvents.has(event.type)) {
+    return NextResponse.json({
+      ok: true,
+      received: event.type,
+      message: "Webhook signature verified; event type is not handled by commerce reconciliation.",
+    });
+  }
+
+  try {
+    await syncCheckoutSessionToCommerce(event.data.object as Stripe.Checkout.Session);
+  } catch (error) {
+    console.error("Stripe webhook reconciliation failed", {
+      eventType: event.type,
+      checkoutSessionId: checkoutSessionId(event.data.object),
+      reason: readSafeErrorCode(error),
+    });
+
+    return NextResponse.json(
+      {
+        ok: false,
+        received: event.type,
+        message: "Webhook verified but commerce reconciliation failed.",
+      },
+      { status: 500 },
+    );
+  }
+
+  return NextResponse.json({
+    ok: true,
+    received: event.type,
+    message: "Webhook signature verified and commerce records reconciled where applicable.",
+  });
 }

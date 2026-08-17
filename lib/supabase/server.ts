@@ -1,19 +1,15 @@
 import { cookies } from "next/headers";
 import { createServerClient } from "@supabase/ssr";
-import { isAdminBypassActive } from "@/lib/auth/bypass";
-import { createSupabaseAdminClient, hasSupabaseAdminEnv } from "@/lib/supabase/admin";
+import { createSupabaseApiKeyFetch } from "@/lib/supabase/api-key-fetch";
 import { assertSupabaseEnv, supabaseEnv } from "@/lib/supabase/env";
 
 export async function createSupabaseServerClient() {
   assertSupabaseEnv();
 
-  if ((await isAdminBypassActive()) && hasSupabaseAdminEnv()) {
-    return createSupabaseAdminClient();
-  }
-
   const cookieStore = await cookies();
 
   return createServerClient(supabaseEnv.url!, supabaseEnv.anonKey!, {
+    global: { fetch: createSupabaseApiKeyFetch(supabaseEnv.anonKey!) },
     cookies: {
       getAll() {
         return cookieStore.getAll();

@@ -5,6 +5,8 @@ import { redirect } from "next/navigation";
 import { requireAdminAppContext } from "@/lib/auth/session";
 import { createSupabaseAdminClient, hasSupabaseAdminEnv } from "@/lib/supabase/admin";
 
+const allowedUserStatuses = new Set(["active", "inactive"]);
+
 function readString(formData: FormData, key: string) {
   const value = formData.get(key);
   return typeof value === "string" ? value.trim() : "";
@@ -24,10 +26,22 @@ export async function updateUserStatusAction(formData: FormData) {
     redirect("/admin/users?error=missing-fields");
   }
 
-  const admin = createSupabaseAdminClient();
-  const { error } = await admin.from("users").update({ status: nextStatus }).eq("id", userId);
+  if (!allowedUserStatuses.has(nextStatus)) {
+    redirect("/admin/users?error=invalid-status");
+  }
 
-  if (error) {
+  const admin = createSupabaseAdminClient();
+  const { data, error } = await admin
+    .from("users")
+    .update({
+      status: nextStatus,
+      updated_at: new Date().toISOString(),
+    })
+    .eq("id", userId)
+    .select("id")
+    .maybeSingle();
+
+  if (error || !data) {
     redirect("/admin/users?error=update-failed");
   }
 

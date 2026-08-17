@@ -159,11 +159,42 @@ for update
 using (user_id = public.current_app_user_id() or public.is_admin())
 with check (user_id = public.current_app_user_id() or public.is_admin());
 
+create policy "membership_levels_self_or_admin_select"
+on public.membership_levels
+for select
+using (
+  public.is_admin()
+  or exists (
+    select 1
+    from public.user_membership_levels uml
+    where uml.membership_level_id = membership_levels.id
+      and uml.user_id = public.current_app_user_id()
+      and (uml.starts_at is null or uml.starts_at <= now())
+      and (uml.ends_at is null or uml.ends_at >= now())
+  )
+);
+
 create policy "membership_levels_admin_manage"
 on public.membership_levels
 for all
 using (public.is_admin())
 with check (public.is_admin());
+
+create policy "permissions_self_or_admin_select"
+on public.permissions
+for select
+using (
+  public.is_admin()
+  or exists (
+    select 1
+    from public.user_membership_levels uml
+    join public.membership_level_permissions mlp on mlp.membership_level_id = uml.membership_level_id
+    where mlp.permission_id = permissions.id
+      and uml.user_id = public.current_app_user_id()
+      and (uml.starts_at is null or uml.starts_at <= now())
+      and (uml.ends_at is null or uml.ends_at >= now())
+  )
+);
 
 create policy "permissions_admin_manage"
 on public.permissions
@@ -184,6 +215,21 @@ on public.user_membership_levels
 for all
 using (public.is_admin())
 with check (public.is_admin());
+
+create policy "membership_level_permissions_self_or_admin_select"
+on public.membership_level_permissions
+for select
+using (
+  public.is_admin()
+  or exists (
+    select 1
+    from public.user_membership_levels uml
+    where uml.membership_level_id = membership_level_permissions.membership_level_id
+      and uml.user_id = public.current_app_user_id()
+      and (uml.starts_at is null or uml.starts_at <= now())
+      and (uml.ends_at is null or uml.ends_at >= now())
+  )
+);
 
 create policy "membership_level_permissions_admin_manage"
 on public.membership_level_permissions

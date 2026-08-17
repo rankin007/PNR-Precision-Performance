@@ -1,12 +1,12 @@
 {
   "schemaVersion": 1,
   "phase": "sprint-closed",
-  "sprint": "034F-repository-and-method-integration",
-  "branch": "codex/034F-repository-and-method-integration",
-  "baseSha": "5a70b6a9876e699eac2ab44f472c361e37bc2595",
-  "workflowProfile": "standard",
+  "sprint": "034G-product-and-database-integration",
+  "branch": "codex/034G-product-and-database-integration",
+  "baseSha": "fcbe38d94f1701c96095edd65bd3a636a476d4c1",
+  "workflowProfile": "strict",
   "flightMode": "120x-fly",
-  "flightClass": "cross-layer",
+  "flightClass": "critical",
   "inspectionDecision": "pass",
   "updated": "2026-08-18"
 }

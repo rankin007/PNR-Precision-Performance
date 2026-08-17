@@ -1,14 +1,16 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { createServerClient } from "@supabase/ssr";
+import { normalizeAppRedirectPath } from "@/lib/auth/access";
 import { bootstrapAuthenticatedUser } from "@/lib/auth/bootstrap";
-import { normalizeNextPath } from "@/lib/auth/next-path";
+import { createSupabaseApiKeyFetch } from "@/lib/supabase/api-key-fetch";
 import { hasSupabaseEnv, supabaseEnv } from "@/lib/supabase/env";
 
 export async function GET(request: NextRequest) {
   const requestUrl = new URL(request.url);
   const code = requestUrl.searchParams.get("code");
-  const next = normalizeNextPath(requestUrl.searchParams.get("next"));
+  const authError = requestUrl.searchParams.get("error") ?? requestUrl.searchParams.get("error_code");
+  const next = normalizeAppRedirectPath(requestUrl.searchParams.get("next"));
 
   if (!hasSupabaseEnv()) {
     return NextResponse.redirect(
@@ -16,10 +18,17 @@ export async function GET(request: NextRequest) {
     );
   }
 
+  if (authError) {
+    return NextResponse.redirect(
+      new URL(`/sign-in?error=callback&next=${encodeURIComponent(next)}`, request.url),
+    );
+  }
+
   const redirectResponse = NextResponse.redirect(new URL(next, request.url));
 
   if (code) {
     const supabase = createServerClient(supabaseEnv.url!, supabaseEnv.anonKey!, {
+      global: { fetch: createSupabaseApiKeyFetch(supabaseEnv.anonKey!) },
       cookies: {
         getAll() {
           return request.cookies.getAll();
@@ -33,7 +42,13 @@ export async function GET(request: NextRequest) {
       },
     });
 
-    await supabase.auth.exchangeCodeForSession(code);
+    const { error: exchangeError } = await supabase.auth.exchangeCodeForSession(code);
+
+    if (exchangeError) {
+      return NextResponse.redirect(
+        new URL(`/sign-in?error=callback&next=${encodeURIComponent(next)}`, request.url),
+      );
+    }
 
     const {
       data: { user },
