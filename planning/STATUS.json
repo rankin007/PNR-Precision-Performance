@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "phase": "sprint-closed",
+  "sprint": "034F-repository-and-method-integration",
+  "branch": "codex/034F-repository-and-method-integration",
+  "baseSha": "5a70b6a9876e699eac2ab44f472c361e37bc2595",
+  "workflowProfile": "standard",
+  "flightMode": "120x-fly",
+  "flightClass": "cross-layer",
+  "inspectionDecision": "pass",
+  "updated": "2026-08-18"
+}

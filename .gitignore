@@ -24,3 +24,23 @@ pnpm-lock.yaml
 .railway
 
 .vercel
+
+# Sprint 034F repository and method hygiene
+.validation-logs/
+.logs/
+supabase/.temp/
+supabase/.temp-old-link/
+desktop.ini
+/.release-main/
+/.codex_work/
+/supabase/.branches/
+/planning/reviews/021M-supabase-support-escalation.md
+/.claude/*
+!/.claude/commands/
+/.claude/commands/*
+!/.claude/commands/architect.md
+!/.claude/commands/build.md
+!/.claude/commands/update.md
+!/.claude/commands/onboard.md
+!/.claude/commands/fly.md
+!/.claude/commands/fly-lean.md
