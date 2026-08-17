@@ -1,10 +1,10 @@
 # Current State
 
-Last updated: 2026-08-14
+Last updated: 2026-08-17
 
 ## Current position
 
-Sprint 036R is closed `resend-domain-bound-five-provider-authority-blocked-clean`; target not met. Exact focused `100/100` plus retained `1893/1893` equals `1993/1993`, and fresh final implementation/evidence inspection PASS. The authorized nested protected process reached the first masked Vercel credential prompt, but no pre-existing management credential was available and no value was entered. Sprint provider/DNS reads are `0/0`, durable sessions are `0`, cumulative provider reads remain `4`, and writes/mutations/business effects/residue/trainer actions are `0/0/0/0/0`. Accepted Sprint 036L remains the last durable live authority; no launch, trainer readiness or Product Done claim is made.
+Sprint 034E is closed `repository-continuity-remotely-backed-convergence-strategy-complete-clean`; its repository-continuity target is met. Scanner `21/21`, the exact four-commit/425-blob range has zero findings, all 55 CI boundaries are covered, first inspection FAIL was corrected within scope, and a second fresh inspection passed. A dedicated remote continuity branch now preserves the lineage; `main`, PR 3, Product, providers, Production and the Final Product Acceptance Matrix are unchanged. Accepted Sprint 036L remains the last durable live Product authority and Product Done remains false.
 
 
 Sprint 036M is closed `prelaunch-recovery-blocked-clean`. Its local controls passed same-Architect repair-diff review, but native consumer/old-deployment closure is unavailable and credential rotation, excluded-identity disposition, real-trainer delivery and fresh live/provider readback did not start.
@@ -34,7 +34,7 @@ Sprint 021AI remains closed `managed-role-journeys-and-owner-experience-local-co
 
 ## Current handoff boundary
 
-Sprint 036R is closed and must not be retried. Sprint 036S remains gated and unplanned. A fresh Architect may define a separate corrective Pack only for protected provisioning of a pre-existing Vercel management credential or a proven safe signed-in read-only alternative; five-provider authority must pass before any credential, deployment, identity or trainer action. Conditional 029R, 035S and 033C remain later; about four current-MVP outcomes, legal/customer/representative acceptance, Production completion and Product-wide Done remain open. Sprint 023Q remains future MVP 2.
+Sprint 034E is closed; preserve its continuity branch as a backup, not a merge recommendation. Any integration must start from then-current `main` under a separate Pack and use reviewable repository/method, Product/database, tests/tooling, then planning/evidence slices. Sprint 036R remains closed and must not be retried; 036S remains gated/unplanned. Conditional 029R, planned 035S and planned 033C remain later; about four current-MVP outcomes, legal/customer/representative acceptance, Production completion and Product-wide Done remain open. Sprint 023Q remains future MVP 2.
 ## Durable evidence
 
 - `planning/reviews/036K-pre-public-launch-credential-rotation-and-real-trainer-delivery-rehearsal.md`
@@ -78,3 +78,13 @@ Durable evidence:
 ## Sprint 036R closeout authority
 
 Sprint 036R is closed `resend-domain-bound-five-provider-authority-blocked-clean`, target not met. Domain `60/60`, transport `40/40`, focused `100/100`, retained `1893/1893`, combined `1993/1993` and fresh final inspection PASS. The fourth sanitized attempt started only the protected wrapper/child and local Vercel `need-authority` handshake, reached one masked credential prompt, accepted no value and released no provider frame. Durable sessions/Sprint provider reads/DNS reads are `0/0/0`; cumulative reads remain four; writes, mutations, business effects, residue and trainer actions remain zero. Cleanup proved owned processes/temp/evidence siblings zero. No Acceptance Matrix ID changed. Accepted Sprint 036L remains live, 036S is gated/unplanned, Product Done is false and about four current-MVP outcomes remain. A separately reviewed corrective authority is required for a pre-existing Vercel management credential or a proven safe signed-in read-only alternative; there is no 036R retry authority.
+
+## Sprint 034E closeout authority
+
+Sprint 034E is closed `repository-continuity-remotely-backed-convergence-strategy-complete-clean`. Its first fresh implementation inspection failed only on six missing direct scanner pattern groups; one bounded correction expanded detection and non-disclosure proof to `21/21`, and a second fresh Inspector passed. Exact range proof is `4` commits, `425` entries/blobs, `400` text, `25` expected images and `0` findings; 51 live plus four accepted unchanged substitutes cover all 55 CI boundaries.
+
+The opening lineage and final closeout were published only to `codex/034E-repository-convergence-and-publication` by ordinary non-force pushes. Final authority requires local/upstream/`ls-remote`/GitHub API equality, unchanged `main` and PR 3, zero PRs from the continuity branch, and a clean tracked/staged tree. The excluded DOCX remains untracked, absent from the index/final tree and content-unread.
+
+Credential recovery reused the already-active push-capable GitHub CLI account, removed only a stale repository-local username override and added one exact fetch-refspec mapping for upstream readback. No account switch, permission broadening or token disclosure occurred.
+
+This sprint changed no Product/runtime, provider, schema, Production, acceptance-matrix or delivery-road outcome. Product Done is false; 036L remains live; 036S remains gated/unplanned; 029R conditional; 035S and 033C planned; the same four current-MVP outcomes remain.

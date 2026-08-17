@@ -2,11 +2,11 @@
 
 > This is the detailed path from the current product state to the canonical Precision Performance Done state. It is a living estimate, not implementation authority. Architect Packs and applied sprint files remain the only Builder handoffs.
 
-**Last updated:** 2026-08-14
+**Last updated:** 2026-08-17
 
-**Current position:** Sprint 036R is closed `resend-domain-bound-five-provider-authority-blocked-clean`, target not met: focused 100/100, retained 1893/1893, combined 1993/1993 and fresh final inspection PASS. The fourth attempt reached only the first masked Vercel credential prompt; credentials handled/provider frames/Sprint provider reads/DNS reads/durable sessions were 0/0/0/0/0, cumulative reads remained 4 and all action/residue/trainer counters stayed zero. Exact five-provider authority, credential closure, identities, real-trainer and representative acceptance remain open; accepted 036L remains live and Product Done is false.
+**Current position:** Sprint 034E is closed `repository-continuity-remotely-backed-convergence-strategy-complete-clean`: scanner 21/21, exact four-commit range 425/425 with zero findings, all 55 CI boundaries covered, first inspection FAIL corrected in scope and fresh reinspection PASS. The formerly local-only lineage is backed by a dedicated remote branch; `main`, PR 3, Product, providers, Production and the Final Product Acceptance Matrix are unchanged. Accepted 036L remains live and Product Done is false.
 
-**Estimate:** About 4 remaining current-MVP named delivery outcomes, plus the explicit MVP 2 private-evidence placeholder and separately deferred future clinical guidance if later activated. No Sprint 036R retry or Sprint 036S execution is planned. A separately reviewed correction for a pre-existing Vercel credential or proven safe signed-in read-only alternative must complete five-provider authority first; 029R remains conditional.
+**Estimate:** About 4 remaining current-MVP named delivery outcomes, plus the explicit MVP 2 private-evidence placeholder and separately deferred future clinical guidance if later activated. No Sprint 036R retry or Sprint 036S execution is planned. A separately reviewed correction for a pre-existing Vercel credential or proven safe signed-in read-only alternative must complete five-provider authority first; 029R remains conditional, while 035S and 033C remain planned.
 
 **Done authority:** `planning/DEFINITION_OF_DONE.md` and `planning/FINAL_PRODUCT_ACCEPTANCE_MATRIX.md`
 
@@ -366,3 +366,15 @@ At the end of **every** sprint, the Builder must update this document before clo
 - Durable evidence: [Sprint 036R review](planning/reviews/036R-resend-domain-bound-five-provider-authority-completion.md) and [Builder report](evidence/professional-engineering/036R-resend-domain-bound-five-provider-authority-completion/SPRINT-036R-REPORT.md).
 
 | 2026-08-14 | Sprint 036R closed `resend-domain-bound-five-provider-authority-blocked-clean` | Recorded focused 100/100 plus retained 1893/1893 = combined 1993/1993, fresh final inspection PASS, attempt4 local prompt-only truth, Sprint/cumulative provider reads 0/4, DNS/durable sessions/actions/residue/trainer counts zero, accepted 036L unchanged and no matrix change. No 036R retry or 036S execution is planned; about four current-MVP outcomes remain. | [Sprint 036R review](planning/reviews/036R-resend-domain-bound-five-provider-authority-completion.md); [Builder report](evidence/professional-engineering/036R-resend-domain-bound-five-provider-authority-completion/SPRINT-036R-REPORT.md). |
+
+### 034E - Repository convergence and publication - closed clean
+
+- Closed `repository-continuity-remotely-backed-convergence-strategy-complete-clean` on 2026-08-17; target met for repository continuity only.
+- Scanner `21/21`; exact range `commits=4 entries=425 blobs=425 text=400 expected_images=25 findings=0`; 51 live plus four accepted unchanged substitutes cover all 55 CI boundaries.
+- Fresh inspection 1 failed on six missing high-confidence token families. One bounded correction added direct detection/non-disclosure proof; a second fresh Inspector passed the implementation.
+- Ordinary non-force publication created the scoped continuity branch at opening SHA and the final closeout push advanced only that branch; four-way ref readback, unchanged `main`/PR 3 and zero target PRs are required final proof.
+- The credential recovery reused the active push-capable GitHub CLI account, removed only a stale repository-local username override, and added only the exact branch fetch mapping needed for upstream readback. No account switch, permission broadening or token disclosure occurred.
+- No Final Product Acceptance Matrix ID changed. Product Done remains false; accepted 036L is live; 036S is gated/unplanned; 029R conditional; 035S and 033C planned. About four current-MVP outcomes remain.
+- Durable evidence: [Sprint 034E review](planning/reviews/034E-repository-convergence-and-publication.md) and [convergence/publication record](docs/REPOSITORY_CONVERGENCE_AND_PUBLICATION_034E.md).
+
+| 2026-08-17 | Sprint 034E closed `repository-continuity-remotely-backed-convergence-strategy-complete-clean` | Recorded exact four-commit/425-blob zero-finding proof, scanner 21/21, complete 55-boundary CI evidence, first inspection FAIL and fresh reinspection PASS, dedicated non-force branch publication, no matrix/Product/provider/Production/main/PR 3 change and the unchanged four-outcome MVP road. | [Sprint 034E review](planning/reviews/034E-repository-convergence-and-publication.md); [convergence/publication record](docs/REPOSITORY_CONVERGENCE_AND_PUBLICATION_034E.md). |

@@ -2,6 +2,13 @@
 
 ## Current governing evidence
 
+- `planning/reviews/034E-repository-convergence-and-publication.md` - strict critical plan, first inspection FAIL, bounded scanner correction, fresh reinspection PASS, exact 19-path closeout and preserved Product/provider/Production/main/PR 3/DOCX boundaries.
+- `docs/REPOSITORY_CONVERGENCE_AND_PUBLICATION_034E.md` - exact opening and final publication facts plus the separately reviewable four-slice convergence strategy.
+- `planning/sprints/034E-repository-convergence-and-publication/` - four-file durable Builder contract generated from the Architect Pack.
+- `scripts/scan-git-delta-secrets-034E.mjs` and `scripts/test-scan-git-delta-secrets-034E.mjs` - dependency-free range/staged scanner and exact `21/21` detection, non-disclosure, isolation and binary proof.
+- Publication proof: exact range `commits=4 entries=425 blobs=425 text=400 expected_images=25 findings=0`; 55 CI boundaries; first and final ordinary non-force pushes; four-way ref equality; unchanged `main`/PR 3; zero target PRs.
+- Sprint 034E changes no Final Product Acceptance Matrix ID or Product outcome: Product Done remains false, 036L live, 036S gated/unplanned, 029R conditional, 035S/033C planned and four current-MVP outcomes remain.
+
 - `planning/reviews/030B-commercial-trial-onboarding-and-support-authority.md` - critical PLAN-001..003 and inspection 1/3 PASS, AC-01 through AC-40, substitutions and preserved limitations.
 - `evidence/professional-engineering/030B-commercial-trial-onboarding-and-support-authority/SPRINT-030B-REPORT.md` - closed local commercial-authority outcome, exact 158/158 and no-user-action statement.
 - `evidence/professional-engineering/030B-commercial-trial-onboarding-and-support-authority/evidence.md` - authority/refusal/privacy, geometry, visual hashes, quality, substitute and 0/0/0 ledgers.

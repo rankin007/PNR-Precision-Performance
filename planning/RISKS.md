@@ -1,5 +1,14 @@
 # Current Risks
 
+## Sprint 034E closed repository continuity; integration and preservation risks remain
+
+- The continuity branch is a loss-prevention reference, not a merge recommendation, release candidate or Product-completion signal. It is intentionally 128 commits ahead and 55 behind `main`.
+- Do not force-update or delete the continuity branch. Later integration must start from then-current `main` and separate repository/method, Product/database, tests/tooling and planning/evidence decisions.
+- Pull request 3 remains open, draft and conflicting at its prior head. Do not enlarge or merge it and do not infer reviewability from backup publication.
+- The GitHub CLI credential-helper setup, removal of one stale repository-local username and exact fetch-refspec mapping are local Git corrections only. They grant no broader account, provider or Product authority.
+- Four unchanged historical-HEAD/dependency-bound CI gates use accepted substitute proof. Any change to those harness/package/lock boundaries invalidates the substitute and requires fresh executable proof.
+- Product Done remains false; accepted 036L remains live; 036S gated/unplanned; 029R conditional; 035S/033C planned; the same four current-MVP outcomes remain.
+
 ## Sprint 035R closed local-complete; timing, scale, activation and clinical-content risks remain
 
 - Migration `0024` and v2 runtime changes are locally proven but not remotely applied or deployed. Do not describe v2 as live or mutate Production without a separate exact Pack.
@@ -161,7 +170,7 @@ Historical and closed risks through Sprint 017F are preserved in `planning/histo
 | Duplicate/overlapping Cron invocations or duration exhaustion cause repeated or partial reconciliation. | Medium | High | Verify bearer `CRON_SECRET`, DB-backed concurrency lock, idempotent per-item transitions, bounded UTC batches, durable cursor/eligibility and next-run recovery; service-role access never replaces scope/state/audit. |
 | Optional device-keyboard dictation is mistaken for application voice or its availability/privacy/accuracy is overclaimed. | Medium | High | Keep typing always available, describe dictation as device-controlled, require review for non-empty notes, parse no structured fields, and require separate authority for any future application provider. |
 | Identifiable horse/stable/person evidence is published without authority. | Medium | High | Use anonymised/recreated assets and require explicit releases. |
-| Local commits are lost because no remote backup was authorized. | Medium | High | Treat current commits as local only; request separately scoped push/backup approval. |
+| The continuity branch is mistaken for reviewed integration or release readiness. | Medium | High | Preserve it as backup only; require separate current-`main` Architect Packs and focused PRs for four integration slices. |
 | Remote migration, deployment, or production mutation occurs from a local-readiness sprint. | Low | Critical | Maintain strict stop boundaries and explicit authorization requirements. |
 | CI/local commands drift or accidentally include remote harnesses. | Low | High | Keep explicit allowlists, orchestrator self-tests, and CI’s canonical command. |
 

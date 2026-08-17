@@ -1,0 +1,27 @@
+# Sprint 034E Acceptance
+
+- [ ] AC-01 Both canonical workspace checks equal the permanent repository before every mutation phase.
+- [ ] AC-02 Opening branch, HEAD, remote baseline and exact four-commit range match the Pack.
+- [ ] AC-03 `delivery_road_map.docx` remains byte-identical, untracked, unstaged, uncommitted, unpushed and uninspected.
+- [ ] AC-04 The Pack creates exactly four files in the Sprint 034E folder and Builder executes from them.
+- [ ] AC-05 A separate Builder context produces an exact file-by-file plan and task contract before implementation.
+- [ ] AC-06 A genuinely fresh critical Architect review passes the Builder plan before implementation.
+- [ ] AC-07 Git integrity and opening-range whitespace checks pass.
+- [ ] AC-08 The dependency-free scanner implements only explicit range and staged modes and scans Git blobs, not unrelated working-tree files.
+- [ ] AC-09 Scanner output never discloses a detected value, fragment, line or length.
+- [ ] AC-10 Safe-placeholder, synthetic credential, staged-boundary and binary-classification tests pass.
+- [ ] AC-11 The exact opening range is scanner-clean before any remote publication.
+- [ ] AC-12 Required type, JSON, test and static validation passes or stronger substitute proof is recorded.
+- [ ] AC-13 The target remote ref is proven absent immediately before publication.
+- [ ] AC-14 The target local branch is created at the exact opening HEAD without rewriting history.
+- [ ] AC-15 The first push is non-force and publishes exactly the opening HEAD to only the target branch.
+- [ ] AC-16 Local, upstream, `ls-remote` and GitHub API SHAs equal the opening HEAD after the first push.
+- [ ] AC-17 The convergence document records exact heads, the stalled/divergent state and a later four-slice integration strategy without performing integration.
+- [ ] AC-18 Pull request 3 and `main` remain unchanged; no new pull request is opened.
+- [ ] AC-19 Product, schema, dependencies, providers, deployment, Production, data and trainer/auth surfaces remain unchanged.
+- [ ] AC-20 Current planning truth is reconciled while `productDone` stays false and the four remaining current-MVP outcomes remain unchanged.
+- [ ] AC-21 Fresh independent inspection passes the implementation and all critical boundaries before closeout.
+- [ ] AC-22 Only owned paths are staged, and the staged scanner plus exact staged-scope checks pass.
+- [ ] AC-23 One intentional closeout commit is made and pushed only as a fast-forward to the scoped branch.
+- [ ] AC-24 Final local, upstream, `ls-remote` and GitHub API SHAs are equal and the tracked worktree is clean.
+- [ ] AC-25 The target outcome and proportional closeout records are complete with no secret/protected content.

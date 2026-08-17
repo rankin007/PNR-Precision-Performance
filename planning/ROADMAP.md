@@ -2,11 +2,11 @@
 
 > A living estimate, not a contract. Sprints may be added, split, reordered, or dropped as evidence changes. Roadmap rows do not authorize implementation, external mutation, deployment, staging, commit, or push.
 
-**About:** About 39 named sprints on the current road, including about 4 remaining current-MVP outcomes plus an explicit MVP 2 private-evidence placeholder
-**Last estimated:** 2026-08-14
-**Delivered since this roadmap was adopted:** 22 delivered sprints; the later blocked-clean fallback chain now extends through Sprint 036R. See the lifecycle ledger for the complete outcome list.
+**About:** About 40 named sprints on the current road, including about 4 remaining current-MVP outcomes plus an explicit MVP 2 private-evidence placeholder
+**Last estimated:** 2026-08-17
+**Delivered since this roadmap was adopted:** 23 delivered sprints; Sprint 034E now provides remote continuity for the formerly local-only lineage while the Product road remains unchanged. See the lifecycle ledger for the complete outcome list.
 **Closed fallbacks since the delivered count:** Sprint 029O remained inert after SMTP no-send failure; 029P/Q/S/T progressively proved local transport, dedicated authentication, identity-blind projection and command safety without readiness. Sprint 029U added the fail-closed public gate and recovered cleanly from Vercel drift/alias side effects. Sprint 029V repaired the exact CLI envelope and isolation controller, then stopped blocked-clean when the full read-only inventory shape failed the strict allowlist before freeze or mutation.
-**Next destination:** Sprint 036R is closed blocked-clean. No 036S execution is planned or authorized. A future corrective Pack must separately authorize a pre-existing Vercel management credential or prove a safe signed-in read-only alternative before five-provider authority can resume; conditional 029R, 035S and 033C remain later. About four current-MVP outcomes remain.
+**Next destination:** Sprint 034E is closed clean as repository continuity only. No 036S execution is planned or authorized. A future corrective Pack must separately authorize a pre-existing Vercel management credential or prove a safe signed-in read-only alternative before five-provider authority can resume; conditional 029R, planned 035S and planned 033C remain later. About four current-MVP outcomes remain.
 
 **Completed before this roadmap existed:** sprints 001-035K, including follow-ups (the record lives in planning/sprints/, planning/STATE.md, and planning/SPRINT_LIFECYCLE_LEDGER.md)
 
@@ -15,6 +15,7 @@
 | 034B | Canonical workspace and Mission Control realignment | Foundation | done | Established one permanent source of truth, adopted method v8 safely, and stopped tools reading or writing the wrong project folder. |
 | 034C | Delivery access and credential cleanup | Foundation | done | Established a non-secret delivery/operator access register, retained ambiguous access safely, and proved no external operational mutation was justified. |
 | 034D | Legacy worktree retirement and canonical authority finalisation | Foundation | done | Completed the approved 49-row retirement manifest, leaving zero legacy targets/registrations/stale metadata, one canonical registration and exact retained recovery proof. |
+| 034E | Repository convergence and publication | Foundation | done | Proved the exact four-commit, 425-blob lineage scanner-clean, published it by ordinary non-force pushes to a dedicated continuity branch, preserved `main` and PR 3, and recorded four later reviewable integration slices. |
 | 036 | Production promotion decision and live trainer acceptance | Release | done - rolled back | Exact candidate deployed Ready, but alias-control post-state was ambiguous; all five aliases were restored to the Ready rollback before human Production acceptance. |
 | 036B | Authoritative Production alias transition and live trainer acceptance | Release | done - preflight blocked clean | Unchanged-source validation and the exact five-alias rollback baseline passed; protected identity fields appeared during provider readback, so execution stopped before staging, alias mutation or human acceptance. |
 | 036C | Protected Production preflight and live trainer acceptance | Release | done - access unavailable clean | Identity-blind tooling and unchanged-application validation passed; no existing Management API credential was available, so execution stopped before provider request, Vercel baseline, staging or Production action. |
@@ -62,6 +63,7 @@
 
 - Table order is the current proposed sequence even where a follow-up keeps an earlier core sprint number.
 - `delivery_road_map.md` is the detailed companion and must be updated at every sprint close with outcome, evidence, acceptance changes, current position, remaining estimate and revision history.
+- Sprint 034E changed repository recoverability only: scanner `21/21`, exact range `4/425/400/25/0`, all 55 CI boundaries covered, first inspection FAIL corrected in scope, fresh reinspection PASS, no acceptance-matrix ID change, Product Done false, 036L live and the same four current-MVP outcomes remain.
 - Sprint 029O used a critical flight because it corrected an applied personal-data schema, used encrypted email delivery, applied additive Production migration 0023 and could have performed a five-alias Production release. It closed on the Pack's safe fallback after the SMTP readiness gate failed.
 - Sprints 034B, 034C, 034D, 036, 036B, 036C, 036D, 036E, 036F, 036G, 036H, 036I, 036J, 036L, 029O, 029P, 029Q, 029S, 029T, 029U, 029V, 029W, 036K, 036M, 036N, 036O, 036P and 036Q are closed. Sprint 036L remains the latest live Production truth. Excluded-identity, real-delivery and provider-authority completion remain later obligations requiring fresh Architect authority.
 - Historical sprints are not duplicated as done rows. The mid-flight statement and lifecycle ledger preserve that history.
